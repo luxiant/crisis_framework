@@ -1,0 +1,3 @@
+# Lake 빌드 산출물 및 의존 패키지 (Mathlib 포함, 7GB+)
+.lake/
+**/.lake/
