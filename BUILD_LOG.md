@@ -589,3 +589,101 @@ cd <repo>/crisis-framework
 lake exe cache get          # 최초 1회
 bash scripts/verify.sh      # 중복 사본 + 강제 재빌드 + 정적 검사 + 기준선 차분 + 변이 5개
 ```
+
+---
+
+## 15. 4차 세션 — 원장 검증기의 음성 대조
+
+검증일: 2026-09-19. 대상은 `scripts/check_wiki.py` 이며 `docs/decisions/SPEC.md` §2 의 검사
+스물넷을 구현한 것이다. 이 절은 그 검사들이 공허하지 않은지를 확인한 결과만 든다.
+
+### 15-1. 주입 방법
+
+주입 장치는 `Scratch/wiki_negative_control.py` 이고 다음 순서로 돈다.
+
+1. 리포 사본을 임시 디렉터리에 만든다. `.lake` 와 `.git` 은 뺀다
+2. 사본에 위반을 하나 주입한다. **원장 파일을 건드리지 않는다**
+3. `check_wiki.py --root <사본>` 을 돌린다
+4. 기준선(주입하지 않은 사본)의 출력과 견준다
+5. 사본을 지운다
+
+**판정 기준이 검사의 종류에 따라 갈린다.** 실패시키는 검사는 주입한 사본에서 `FAIL` 이 나는
+것만으로는 부족하고 **기준선에 없던 위반 줄이 새로 나야** 통과로 본다. 검사 7과 23이 기준선에서
+이미 실패하고 있어 판정을 `FAIL` 여부에만 걸면 그 둘의 대조가 공허해지기 때문이다. 보고만 하는
+검사 넷은 실패시키지 않으므로 **보고 줄이 기준선과 달라지고 주입한 항목이 그 안에 잡혀야**
+통과로 본다.
+
+### 15-2. 결과
+
+| 검사 | 단계 id | 주입한 위반 | 기준선 | 주입 후 | 잡았는가 |
+|---|---|---|---|---|---|
+| 1 | `wiki1-id-unique` | 같은 id 를 두 파일에 넣는다 | OK | FAIL | 예 |
+| 2 | `wiki2-origin-arc` | 없는 아크명을 적는다 | OK | FAIL | 예 |
+| 3 | `wiki3-origin-phase` | 선언되지 않은 페이즈를 적는다 | OK | FAIL | 예 |
+| 3-a | `wiki3a-phase-form` | 다른 아크의 페이즈명을 적는다 | OK | FAIL | 예 |
+| 4 | `wiki4-patch-grant` | 패치 없이 페이즈를 늘린다 | OK | FAIL | 예 |
+| 4-a | `wiki4a-patch-from` | 없는 페이즈를 `from` 에 적는다 | OK | FAIL | 예 |
+| 5 | `wiki5-closed-arc` | 닫힌 아크로 항목을 쓴다 | OK | FAIL | 예 |
+| 6 | `wiki6-tier-vocab` | `tactical` 을 적는다 | OK | FAIL | 예 |
+| 7 | `wiki7-invariant-check` | 없는 단계명을 적는다 | FAIL | FAIL | 예 |
+| 8 | `wiki8-retire-target` | 같은 대상을 두 번 폐기한다 | OK | FAIL | 예 |
+| 9 | `wiki9-retire-reason` | `reason` 을 비운다 | OK | FAIL | 예 |
+| 10 | `wiki10-ghost-ref` | 폐기된 id 를 `related` 에 넣는다 | OK | FAIL | 예 |
+| 11 | `wiki11-reopen-kind` | `kind` 를 비운다 | OK | FAIL | 예 |
+| 12 | `wiki12-reopen-ref` | 아크가 아닌 문자열을 `arc_phase` 에 적는다 | OK | FAIL | 예 |
+| 13 | `wiki13-dd-target` | 없는 id 를 주석에 적는다 | OK | FAIL | 예 |
+| 14 | `wiki14-dd-layer` | 회계층 파일에서 정의층 항목을 지목한다 | OK | FAIL | 예 |
+| 15 | `wiki15-names-unique` | 같은 규율 ID 를 두 항목에 적는다 | OK | FAIL | 예 |
+| 23 | `wiki23-rule-ghost` | 폐기된 규율 ID 를 근거로 적는다 | FAIL | FAIL | 예 |
+| 16 | `wiki16-trigger-fired` | 충족된 트리거를 등재한다 | REPORT | REPORT | 예 |
+| 17 | `wiki17-reopen-null` | `reopen_when` 을 `null` 로 둔 항을 늘린다 | REPORT | REPORT | 예 |
+| 18 | `wiki18-blocking-disposition` | `blocking` 구멍을 등재한다 | REPORT | REPORT | 예 |
+| 19 | `wiki19-id-gap` | 항목을 지워 결번을 만든다 | REPORT | REPORT | 예 |
+| 20 | `wiki20-arc-holes` | 해소도 이관도 안 된 구멍을 든 채 닫는다 | OK | FAIL | 예 |
+| 21 | `wiki21-arc-blocking` | 발화도 해소도 이월도 안 된 `blocking` 을 든다 | OK | FAIL | 예 |
+
+**검사 스물넷 전부가 자기 주입을 잡았다. 놓친 것이 0건이다.**
+
+주입이 실제로 무엇을 끌어냈는지는 아래 줄이 든다. 각 줄은 기준선에 없다가 주입 뒤에 새로
+나타난 위반 줄이며, 보고만 하는 넷은 달라진 보고 줄이다.
+
+```
+검사 1: id 중복 — CF-1 가 decisions 와 rejected 양쪽에 있다
+검사 2: CF-24: 아크 `nosucharc` 가 arcs.json 에 없다
+검사 3: CF-24: 페이즈 `charter-99` 가 아크 `charter` 에 선언되지 않았고 패치도 없다
+검사 3-a: CF-24: 페이즈 `primary-1` 가 아크 `charter` 의 형태가 아니다
+검사 4: CF-24: 페이즈 `charter-9` 를 늘리는 패치가 arcs.json 에 없다
+검사 4-a: 아크 `charter` 의 패치가 없는 페이즈 `charter-99` 에서 옮겼다고 적는다
+검사 5: CF-24: 닫힌 아크 `primary` 로 항목이 쓰였다
+검사 6: CF-24: tier 가 어휘 밖이다 — 'tactical'
+검사 7: CF-29: check `step9-nonexistent` 가 verify.sh 의 선언된 단계에 없다
+검사 8: CF-1 에 폐기가 둘이다 — CF-219 와 CF-9008
+검사 9: CF-219: reason 가 비었다
+검사 10: CF-24: related 가 폐기된 CF-1 를 든다
+검사 11: CF-148: kind 가 넷 밖이다 — ''
+검사 12: CF-166: arc_phase 의 ref `아크가 아닌 문자열` 가 arcs.json 의 아크가 아니다
+검사 13: CrisisFramework/Glossary/Core.lean:93: 표지가 없는 항목 CF-9999 를 가리킨다
+검사 14: CrisisFramework/Accounting/Aggregation.lean:203: CF-2 의 layer 가 `definition` 인데 파일이 그 층에 없다
+검사 15: 규율 ID `D-6` 이 CF-1 와 CF-2 양쪽에 붙었다
+검사 23: CF-24: basis 가 폐기된 규율 `D-6`(CF-1) 를 related 에 적지 않고 든다
+검사 16: 발화한 트리거 7건
+검사 17: reopen_when: null 6건
+검사 18: blocking 구멍 1건, 아크 1개
+검사 19: CF-1~CF-246, 계수 245, 결번 1건
+검사 20: CF-165: 해소도 이관도 되지 않은 채 아크 `charter` 가 닫힌다
+검사 21: CF-9021: 아크 `charter` 의 blocking 구멍이 발화도 해소도 이월도 되지 않았다
+```
+
+### 15-3. 주입의 결함이 드러난 자리
+
+**검사 20 의 첫 주입이 공허했다.** 아크의 `holes` 에 넣을 구멍을 「`reopen_when` 이 `null` 인
+이연 항목」으로만 골랐더니 `CF-18` 이 잡혔는데, 그 항목은 이미 폐기된 것이라 검사 20 이 해소된
+것으로 보고 넘어갔다. 주입을 「폐기되지 않은 항목」으로 좁혀 다시 돌린 결과가 위 표의 값이다.
+**검사의 결함이 아니라 주입의 결함이었으며, 3차 세션의 NC-6 과 같은 형이다.**
+
+### 15-4. 재현 절차
+
+```bash
+python3 scripts/check_wiki.py              # 원장 검증
+python3 Scratch/wiki_negative_control.py   # 음성 대조 (사본에 주입하며 원장을 건드리지 않는다)
+```
