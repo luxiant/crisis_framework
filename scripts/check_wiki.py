@@ -47,7 +47,7 @@ RULE_TOKEN = re.compile(
 ID_FORM = re.compile(r"^CF-(\d+)$")
 CF_TOKEN = re.compile(r"(?<![0-9A-Za-z-])CF-(\d+)(?![0-9A-Za-z-])")
 DD_TOKEN = re.compile(r"--\s*DD:\s*(\S+)")
-STEP_CALL = re.compile(r"^\s*step\s+\"([^\"]*)\"")
+STEP_CALL = re.compile(r"^\s*step\s+['\"]?([^\s'\"]+)")
 EXTRACTION_NO = re.compile(r"^E-(\d+)$")
 ARTIFACT_PATH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
 
@@ -130,17 +130,15 @@ class Ledger:
             if (root / "docs").is_dir() else []
 
     def _read_verify_steps(self) -> list[str]:
-        """`verify.sh` 가 선언한 단계 id. `step "<id> …"` 호출의 첫 토큰이다."""
+        """`verify.sh` 가 선언한 단계 id. `step <id> "<제목>"` 호출의 첫 인자다."""
         path = self.root / "scripts" / "verify.sh"
         if not path.is_file():
             return []
         out = []
         for line in path.read_text(encoding="utf-8").splitlines():
             m = STEP_CALL.match(line)
-            if m:
-                arg = m.group(1).strip()
-                if arg:
-                    out.append(arg.split()[0])
+            if m and m.group(1):
+                out.append(m.group(1))
         return out
 
     def dd_markers(self) -> list[tuple[Path, int, str]]:
@@ -384,6 +382,8 @@ def check_12(led: Ledger) -> Report:
             if not ARTIFACT_PATH.match(ref) or ".." in ref:
                 r.bad(f"{e.get('id')}: artifact 의 ref 가 리포 경로의 형식이 아니다 — {ref!r}")
         elif kind == "extraction":
+            # 번호를 강제하지 않는다. S-5 가 지목 참조한 편에 E-nn 이 배정될 자리를
+            # 두지 않으므로 형식을 요구하면 등재가 막힌다(SPEC §3.3).
             if not qflat:
                 r.bad(f"{e.get('id')}: reading-queue-v0.md 를 읽을 수 없어 extraction 을 해소하지 못한다")
             elif re.sub(r"\s+", "", ref) not in qflat:
@@ -448,8 +448,16 @@ def check_23(led: Ledger) -> Report:
                "statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고 폐기되지 않았는가",
                "fail")
     total = 0
-    for _, e in led.entries:
+    exempt = 0
+    for name, e in led.entries:
+        # 폐기 레코드는 통째로 유니버스 밖이다. statement 가 「D-6 을 폐기한다」 꼴이라
+        # 형태상 반드시 폐기되는 규율의 ID 를 들기 때문이다(SPEC §2.1).
+        if name == "retirements":
+            continue
         related = set(e.get("related", []) or [])
+        # 첫 적재는 related 를 전량 빈 배열로 두었고 원장이 수정 불가라 채울 길이 없다.
+        # 예외를 charter-6 으로 못 박으므로 그 뒤의 항목은 요건을 그대로 받는다(SPEC §2.1).
+        first_load = (e.get("origin") or {}).get("phase") == "charter-6"
         for f in ("statement", "basis"):
             for m in RULE_TOKEN.finditer(str(e.get(f) or "")):
                 tok = m.group(0)
@@ -458,9 +466,13 @@ def check_23(led: Ledger) -> Report:
                 if owner is None:
                     r.bad(f"{e.get('id')}: {f} 의 `{tok}` 이 어느 항목의 names 에도 없다")
                 elif owner in led.dead and owner not in related:
-                    r.bad(f"{e.get('id')}: {f} 가 폐기된 규율 `{tok}`({owner}) 를 "
-                          f"related 에 적지 않고 든다")
+                    if first_load:
+                        exempt += 1
+                    else:
+                        r.bad(f"{e.get('id')}: {f} 가 폐기된 규율 `{tok}`({owner}) 를 "
+                              f"related 에 적지 않고 든다")
     r.note(f"규율 ID 토큰 {total}건을 봤다. 계열은 {list(RULE_SERIES)}")
+    r.note(f"폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 {exempt}건")
     return r
 
 

@@ -215,7 +215,10 @@ def inj_15(root):
 
 
 def inj_23(root):
-    """폐기된 규율 ID 를 근거로 적는다. related 에 적지 않으므로 유령이다."""
+    """폐기된 규율 ID 를 근거로 적는다. related 에 적지 않으므로 유령이다.
+
+    첫 적재(`charter-6`)는 `related` 요건을 면하므로 주입은 그 뒤의 페이즈로 선 항목이어야
+    한다. 그래서 `charter-7` 로 선 항목을 새로 세워 거기에 지목을 넣는다."""
     dead_id = load(root, "retirements")["retirements"][0]["target"]
     dead_names = None
     for reg in ("decisions", "deferred"):
@@ -225,8 +228,19 @@ def inj_23(root):
     if not dead_names:
         raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 검사 23 의 주입 대상이 없다")
     tok = dead_names[0]
-    edit(root, "decisions", "CF-24",
-         lambda e: e.__setitem__("basis", e["basis"] + f" 이 항은 {tok} 을 근거로 든다."))
+    doc = load(root, "decisions")
+    doc["decisions"].append({
+        "id": "CF-9023",
+        "origin": {"arc": "charter", "phase": "charter-7",
+                   "kind": "decision_session", "date": "2026-09-19"},
+        "names": ["Z-9023"],
+        "statement": "음성 대조가 주입한 항이다.",
+        "basis": f"음성 대조가 주입한 항이며 {tok} 을 근거로 든다.",
+        "tier": "finding",
+        "layer": "meta",
+        "related": [],
+    })
+    save(root, "decisions", doc)
     return tok
 
 
