@@ -1,3 +1,7 @@
 # Lake 빌드 산출물 및 의존 패키지 (Mathlib 포함, 7GB+)
 .lake/
 **/.lake/
+
+# 결정 세션이 전달하는 지시서와 엔트리 카드 (리포 루트에 두되 추적하지 않는다)
+IMPLEMENTATION_PLAN_*.md
+ENTRY_CARD_*.json
