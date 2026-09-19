@@ -59,6 +59,7 @@ variable {ι : Type}
 `equity` 는 최소 화폐단위의 정수배다. 따라서 곱의 배율은 두 배율의 곱이며,
 집계 항등식이 동차이므로 양변에서 상쇄된다.
 -/
+-- DD:CF-130
 def creditSupply (cap equity : ℤ) : ℤ := cap * equity
 
 /--
@@ -74,6 +75,7 @@ def creditSupply (cap equity : ℤ) : ℤ := cap * equity
 **분모를 피한 것이 `ℤ` 이행의 전제다.** 평균을 직접 쓰면 나눗셈이 필요해
 정수 표현이 깨진다.
 -/
+-- DD:CF-130
 def aggregationError (S : Finset ι) (cap equity : ι → ℤ) : ℤ :=
   (S.card : ℤ) * (∑ i ∈ S, cap i * equity i)
     - (∑ i ∈ S, cap i) * (∑ i ∈ S, equity i)
@@ -96,6 +98,7 @@ def aggregationError (S : Finset ι) (cap equity : ι → ℤ) : ℤ :=
 **제약이 다르고 규모도 다를 때**다. 두 노드의 제약이 같거나 규모가 같으면
 그 쌍은 오차에 기여하지 않는다.
 -/
+-- DD:CF-130
 theorem two_mul_aggregationError_eq_pairwise
     (S : Finset ι) (cap equity : ι → ℤ) :
     2 * aggregationError S cap equity
@@ -140,6 +143,7 @@ theorem two_mul_aggregationError_eq_pairwise
 `[propext, Classical.choice, Quot.sound]` 로 돌아간다 (2×2 대조 측정: `BUILD_LOG.md` §11).
 수학적 내용이 아니라 전술·인스턴스 구현의 의존이다.
 -/
+-- DD:CF-59
 theorem aggregationError_eq_zero_of_constant_cap
     (S : Finset ι) (c : ℤ) (equity : ι → ℤ) :
     aggregationError S (fun _ => c) equity = 0 := by
@@ -156,6 +160,7 @@ theorem aggregationError_eq_zero_of_constant_cap
 **전술 주의:** 위와 동일 — 제한된 `simp only` + `omega`.
 차가 오른쪽 인자에 있으므로 `zero_mul` 자리에 `mul_zero` 를 쓴다.
 -/
+-- DD:CF-59
 theorem aggregationError_eq_zero_of_constant_equity
     (S : Finset ι) (cap : ι → ℤ) (e : ℤ) :
     aggregationError S cap (fun _ => e) = 0 := by

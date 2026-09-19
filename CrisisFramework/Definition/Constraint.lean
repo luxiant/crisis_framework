@@ -31,6 +31,7 @@ namespace CrisisFramework.Definition
 **수치 타입:** `Num` 으로 추상화한다. 정의층은 구체 수 체계를 언급하지 않는다(L-10).
 `Num` 의 실제 인스턴스화는 회계층에서 `ℚ` 로 이루어진다.
 -/
+-- DD:CF-130
 structure Constraint (Num Currency Asset : Type) where
   /-- 부채 측 한도. 통화 축별로 다른 값을 갖는다(L-12, 중앙은행의 비대칭). -/
   liabilityCap : Currency → Num
@@ -42,6 +43,7 @@ witness 인스턴스 (A-3).
 
 가장 단순한 비어 있지 않은 제약. 한도가 `Unit` 이고 모든 자산이 적격이다.
 -/
+-- DD:CF-31
 def Constraint.trivial : Constraint Unit Unit Unit where
   liabilityCap := fun _ => ()
   assetEligible := fun _ => True
@@ -60,6 +62,7 @@ def Constraint.trivial : Constraint Unit Unit Unit where
 노드를 법인으로 두는 안. 여러 법인의 현금을 단일 의사결정자가 관리하는 사례가 있어
 법인과 노드가 다대다이며, 소유 구조와 무관하게 분석이 성립한다는 것이 확인되었다.
 -/
+-- DD:CF-122
 structure NodeState (Num Currency Asset : Type) where
   /-- 자기자본. -/
   equity : Currency → Num
@@ -67,6 +70,7 @@ structure NodeState (Num Currency Asset : Type) where
   constraint : Constraint Num Currency Asset
 
 /-- witness (A-3). -/
+-- DD:CF-31
 def NodeState.trivial : NodeState Unit Unit Unit where
   equity := fun _ => ()
   constraint := Constraint.trivial
@@ -86,9 +90,11 @@ def NodeState.trivial : NodeState Unit Unit Unit where
 
 **인덱스가 `ℕ` 인 것은 L-10 위반이 아니다.** L-13의 명시적 예외다.
 -/
+-- DD:CF-50
 def NodeFamily (Node : Type) := ℕ → Finset Node
 
 /-- witness (A-3). -/
+-- DD:CF-31
 def NodeFamily.empty (Node : Type) : NodeFamily Node := fun _ => ∅
 
 end CrisisFramework.Definition

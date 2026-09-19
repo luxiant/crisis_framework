@@ -17,6 +17,7 @@ namespace CrisisFramework.Glossary
 
 집계 정리(J-9)에 필요한 최소 집합만 등재한다. 확장은 사용처가 생길 때 한다.
 -/
+-- DD:CF-76
 inductive Concept where
   /-- 의사결정 단위. 대차대조표 관리의 결정이 하나로 내려지는 최소 단위. 노드의 정의. -/
   | decisionUnit
@@ -42,6 +43,7 @@ inductive Concept where
 L-9의 의존 방향이 관측층 → 정의층이므로, 용어집이 관측층을 참조할 수 없다.
 그래서 태그와 명세가 분리된다. 이 분리는 층 구조가 강제한 것이지 설계 선택이 아니다.
 -/
+-- DD:CF-57
 inductive SourceTag where
   /-- 규제 공시 (10-K, 10-Q 등). -/
   | regulatoryFiling
@@ -61,6 +63,7 @@ V-2에 따라 정확히 넷이다. 다섯 번째 생성자를 추가하려면 �
 표현되지 않는다. 현재 구멍 목록에 등재되어 있고, 집계 정리는 이 문제에 걸리지 않으므로
 이번 단계에서는 개정하지 않는다.
 -/
+-- DD:CF-77
 inductive ConceptRel where
   /-- 정제: `special` 은 `general` 의 특수 사례다. -/
   | refines (special general : Concept)
@@ -79,6 +82,7 @@ inductive ConceptRel where
 제약이 부채 측과 자산 측 둘로 나뉜다는 것은 현재까지 확인된 두 종류일 뿐,
 셋째가 없다는 증명이 아니다.
 -/
+-- DD:CF-58
 def registry : List ConceptRel :=
   [ .partitions .constraint [.constraintLiabilityCap, .constraintAssetEligibility]
   , .excludes .constraintLiabilityCap .constraintAssetEligibility
