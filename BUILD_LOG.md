@@ -19,7 +19,6 @@
 의 값을 그대로 따랐다. 기존 설치(`leanprover/lean4:v4.33.1`)는 건드리지 않았고,
 elan 이 이 디렉터리에만 v4.32.2 를 내려받았다.
 
-프로젝트 루트: `/root/workspace/jjabtir_macro_model/crisis-framework`
 
 ## 2. `lake exe cache get`
 
@@ -191,7 +190,7 @@ Mutant.lean:139:47: error: unsolved goals
 
 ```bash
 export PATH=/root/.elan/bin:$PATH
-cd /root/workspace/jjabtir_macro_model/crisis-framework
+cd <리포 루트>
 lake exe cache get
 lake build
 ```
@@ -211,7 +210,7 @@ lake build
 ### 8-1. 원인 — 저장소에 같은 이름의 파일이 두 벌 있었다
 
 ```
-jjabtir_macro_model/
+<상위 디렉터리>/
 ├── Aggregation.lean                                  ← 낡은 초안. 빌드 타깃 밖.
 ├── Constraint.lean                                   ← 낡은 초안. 빌드 타깃 밖.
 ├── Core.lean                                         ← 낡은 초안. 빌드 타깃 밖.
@@ -312,7 +311,7 @@ Build completed successfully (997 jobs).
 
 ```bash
 export PATH=/root/.elan/bin:$PATH
-cd /root/workspace/jjabtir_macro_model/crisis-framework
+cd <리포 루트>
 lake exe cache get          # 최초 1회
 bash scripts/verify.sh      # 중복 사본 탐지 + 강제 재빌드 + 정적 검사 + 공리 + 변이 5개
 ```
@@ -686,4 +685,210 @@ bash scripts/verify.sh      # 중복 사본 + 강제 재빌드 + 정적 검사 +
 ```bash
 python3 scripts/check_wiki.py              # 원장 검증
 python3 scripts/wiki_negative_control.py   # 음성 대조 (사본에 주입하며 원장을 건드리지 않는다)
+```
+
+---
+
+## 16. 4차 세션 — 관측값
+
+검증일: 2026-09-19. 이 회차는 `charter` 아크 페이즈 7이며 원장을 세우고 그것을 검사하는 설비를
+붙였다. **음성 대조의 결과는 §15 가 들고 이 절은 나머지를 든다.**
+
+### 16-1. 빌드
+
+세 파일 전량 통과이고 `sorry` 와 실패가 없다.
+
+| 파일 | 결과 |
+|---|---|
+| `CrisisFramework/Glossary/Core.lean` | 통과 |
+| `CrisisFramework/Definition/Constraint.lean` | 통과 |
+| `CrisisFramework/Accounting/Aggregation.lean` | 통과 |
+
+`Build completed successfully (978 jobs)` 이며 error 0 warning 0 이다.
+
+### 16-2. 변경 내역
+
+회차의 커밋은 아래와 같다. 기준 커밋은 `5a38bb9` 다.
+
+| 커밋 | 카드 | 무엇을 바꾸었나 |
+|---|---|---|
+| `a95cb0e` | C-01 | `CLAUDE.md` §1-6 에 카드 병합 예외를 잇고 §14 「원장 병합 절차」를 신설 |
+| `1e50895` | (추가) | `SPEC.md` 수정분과 `charter-6-closure.md` 를 커밋으로 고정 |
+| `9799d8d` | (추가) | 지시서와 엔트리 카드를 `.gitignore` 에 넣고 index 에서 뺀다 |
+| `95ef424` | C-02 | 엔트리 카드 241건을 원장 넷에 병합 |
+| `c6f600d` | (운영자) | `SPEC.md` 에 컨테이너 조항과 검사 12·23 의 개정 |
+| `257e32a` | C-02 보정 | 해소된 미결 다섯(`CF-242`~`CF-246`)을 `decisions.json` 에 이음 |
+| `e429a0b` | C-04 | 원장 검증기 `scripts/check_wiki.py` 를 세움 |
+| `e414286` | C-05 | 음성 대조 장치와 그 결과(§15) |
+| `6313c46` | (추가) | `SPEC.md` 의 검사 23·12 와 검사 3·4 조항의 갱신분을 고정 |
+| `bd46cf7` | C-04 보정 | 검증기를 그 갱신분에 맞춤 |
+| `ab22208` | C-06 | `verify.sh` 를 기준선 파일과 검증기에 이음. 단계 여섯 |
+| `74bad37` | C-07 | CI 워크플로 `.github/workflows/verify.yml` |
+| `5046b2c` | C-08 | Lean 선언 열다섯에 `DD:` 표지 |
+
+**추가 커밋 셋은 지시서에 없던 조작이다.** `1e50895` 와 `9799d8d` 는 지시서를 쓴 쪽이 리포의 git
+상태를 확인하지 않아 생긴 결손을 메운 것이고, `6313c46` 은 명세 갱신분을 구현보다 먼저 커밋으로
+세운 것이다.
+
+`verify.sh` 의 변경이 다섯이다. ① `step()` 이 `[step:<id>]` 를 출력에 내고 호출의 첫 인자가 단계
+id 다. ② 4단계가 `docs/baseline.md` 의 기계 판독 블록에서 `ACCOUNTING_INT` 를 읽는다. 스크립트에
+박혀 있던 `BASELINE` 상수가 사라졌다. ③ 3단계의 `ℝ` 금지를 층별로 갈랐고 동학층은 건너뛴다.
+④ 6단계로 `check_wiki.py` 호출을 더했다. ⑤ 음성 대조 장치를 `Scratch/` 에서 `scripts/` 로 옮겼다.
+
+Lean 파일의 변경은 표지 열다섯 줄과 머리말 한 줄씩이다. **docstring 은 한 글자도 바뀌지 않았다.**
+
+### 16-3. 원장
+
+계수는 `check_wiki.py` 의 출력에서 읽었고 손으로 세지 않았다.
+
+```
+레지스터 entry: decisions 190 · deferred 33 · retirements 23 · rejected 0 · 총계 246
+```
+
+병합은 두 차례였다. 첫 병합이 241건이고 결정 세션이 검사 23 으로 유령 하나를 잡은 뒤 보정 병합이
+다섯을 더해 246건이 됐다.
+
+**등가 검증은 카드 파일 삭제보다 앞에서 돌았다.** 양쪽 entry 를 같은 매개변수로 직렬화해
+바이트열로 견주는 방식이며 차분으로 갈음하지 않았다. 246건 전부가 바이트로 같았고, 어느 한쪽에만
+있는 entry 가 없음을 두 방향으로 확인했다. 그 뒤에 카드 파일을 지웠다.
+
+| 축 | 값 |
+|---|---|
+| 카드 파일 md5 (첫 병합) | `90d948c844f662486148e0a22a8a3860` |
+| 카드 파일 md5 (보정 병합) | `585d3f066dd784ed108f7945bf3821cb` |
+| 바이트로 같음이 확인된 entry | 246건 |
+| id 범위·결번·중복 | `CF-1`~`CF-246`, 결번 0, 중복 0 |
+
+### 16-4. 공리 감사
+
+기준선을 이제 `docs/baseline.md` 에서 읽으며 그 값이 `[propext, Quot.sound]` 다. 회차 내내
+불변이었고 초과분이 없어 유입원 추적이 서지 않는다.
+
+```
+'baselineProbe' does not depend on any axioms
+'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+```
+
+### 16-5. 변이 검사
+
+진술 다섯을 검사했고 전부 거부됐다. 각각 error 1건이다. 표지와 머리말이 들어가 행 번호가 밀렸으며
+대상 수는 다섯으로 같다.
+
+| 행 | 결과 |
+|---|---|
+| 149 · 166 · 184 · 192 · 200 | 전부 거부 (각 1 error) |
+
+### 16-6. `DD:` 표지
+
+열다섯이 섰다. 이 회차 전에는 0이다.
+
+| 파일 | 표지 |
+|---|---|
+| `Glossary/Core.lean` | CF-76 · CF-57 · CF-77 · CF-58 |
+| `Definition/Constraint.lean` | CF-130 · CF-31 · CF-122 · CF-31 · CF-50 · CF-31 |
+| `Accounting/Aggregation.lean` | CF-130 · CF-130 · CF-130 · CF-59 · CF-59 |
+
+검사 13 이 열다섯을 보고 통과했고, 검사 14 는 `meta` 가 아닌 표지 **넷**을 판정해 통과했다.
+`glossary` 셋(CF-76 · CF-77 · CF-58)과 `definition` 하나(CF-50)다. 나머지 열하나는 원장이 `layer`
+를 `meta` 로 들어 검사 14 가 건너뛴다.
+
+표지는 docstring 의 닫는 `-/` 와 선언 줄 사이에 둔다. 그 자리에 줄 주석이 들어가도 docstring
+첨부가 끊기지 않음을 `Lean.findDocString?` 으로 미리 실측했다.
+
+### 16-7. 음성 대조
+
+§15 가 든다. **검사 스물넷 전부가 자기 주입을 잡았고 놓친 것이 0건이다.** 명세와 검증기와
+`verify.sh` 가 달라질 때마다 다시 돌렸으며 이 절이 드는 값은 마지막 실행의 것이다.
+
+### 16-8. CI 러너
+
+워크플로를 세운 뒤 두 차례 돌았고 둘 다 통과했다.
+
+| 실행 id | 커밋 | 결론 | 소요 | `DD:` 표지 |
+|---|---|---|---|---|
+| `35465603851` | `74bad37` | success | 1m51s | 0개 (표지 이전 판) |
+| `35466416805` | `5046b2c` | success | 2m17s | **15개** |
+
+`lake exe cache get` 이 러너에서 성공했다. 8639 파일을 받아 전부 풀었으며, 그 단계가 실패하면
+거기서 멈추고 로컬 전량 빌드로 넘기지 않는다는 조항이 발동할 일이 없었다.
+
+러너의 `verify.sh` 출력은 집행 환경의 것과 줄 단위로 같다. 다른 것은 뿌리 경로와 빌드 시간뿐이다.
+
+### 16-9. 수록 문면이 스스로 걸린 자리
+
+**Lean 세 파일의 머리말을 고치는 조작에서 검사 13 이 실패했다.** 처음 수록된 문면이 이랬다.
+
+> 원장: 선언마다 `-- DD:<id>` 표지가 든다. 목록은 `docs/decisions/` 가 정본이다.
+
+검사 13 이 `-- DD:<무엇>` 꼴을 표지로 잡으므로, **표지의 형태를 예시로 든 그 문장 자체가 표지로
+읽혔다.** 표지 계수가 열다섯이 아니라 열여덟로 잡혔고 세 파일이 각각 한 줄씩 걸렸다.
+
+```
+· CrisisFramework/Accounting/Aggregation.lean:28: 표지 `<id>`` 가 CF-<n> 형식이 아니다
+· CrisisFramework/Definition/Constraint.lean:8: 표지 `<id>`` 가 CF-<n> 형식이 아니다
+· CrisisFramework/Glossary/Core.lean:10: 표지 `<id>`` 가 CF-<n> 형식이 아니다
+```
+
+**이 형태는 이 프로젝트에서 두 번째다.** `CLAUDE.md` §5-5 가 근거로 든 첫 사례는 3차 세션에서
+헤더에 적은 「`sorry` 0」 같은 설명 문구가 금지 구문 검사에 스스로 걸린 것이었다. 그때는 검사가
+주석을 제거한 뒤에 돌게 해서 해소됐는데, **검사 13 은 표지 자체가 주석이라 주석 제거로는 같은
+해소가 되지 않는다.**
+
+집행은 문면도 검증기도 고치지 않고 그 자리에서 멈춰 보고했다. 결정 세션이 문면을 표지 꼴이
+들어가지 않는 문장으로 바꾸어 해소했다.
+
+> 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
+
+검사 13 이 열다섯으로 돌아왔다. **검사 13 의 유니버스를 줄 주석으로 좁히는 정밀화는 이 해소와
+별개로 따로 이루어진다.** R-6 의 문면이 이미 줄 주석 형태를 들고 있어 그것이 명세를 정확히
+구현하는 것이며, 문면 교체로 이미 통과한 뒤에 하므로 통과를 위한 조치가 아니다.
+
+## 17. 해석 (관측값 아님)
+
+- **원장이 수정 불가라는 규율이 이 회차에서 두 번 값을 치렀다.** 첫 병합 뒤에 검사 23 이 유령을
+  잡았을 때 고칠 수 있는 길이 「항목을 더하는 것」뿐이었고, 첫 적재의 `related` 가 전량 비어
+  있다는 것이 드러났을 때도 채우는 길이 막혀 명세에 예외를 두는 쪽으로 갔다. **수정 불가의 비용이
+  실측으로 드러난 자리이며 그 비용을 치를 값어치가 있는지는 이 문서가 판정하지 않는다.**
+- **사전 검사와 증거의 구별이 실증됐다.** 결정 세션이 검사 열다섯을 미리 돌려 전량 통과를 얻었으나
+  그 구현이 검사 23 의 조항을 절반만 담고 있었고, 집행 환경에서 처음 돌렸을 때 43줄이 걸렸다.
+  W-8 이 사전 검사를 필터로만 두는 근거가 여기서 실증됐다.
+- **문면이 검사의 대상이 되는 자리가 늘었다.** 검사가 소스를 문자열로 읽는 한 설명 문구와 검사
+  대상이 같은 표면에 있고, 그 둘을 가르는 것이 검사 설계의 상시 항목이 된다. §16-9 가 두 번째
+  사례다.
+- **CI 가 이제 원장까지 본다.** 6단계가 `check_wiki.py` 를 부르므로 원장의 정합이 빌드와 같은
+  자리에서 판정된다. 원장이 코드가 아닌데 코드와 같은 관문을 지나는 것이 이 설계의 요지다.
+
+## 18. 진술을 바꿔야만 통과할 것 같은 지점
+
+**없다.** 이 회차는 `theorem` 과 `def` 의 진술을 하나도 세우지 않았고 기존 진술도 건드리지 않았다.
+변경은 주석 열다섯 줄과 머리말 세 줄이며 진술 변경 0건이다.
+
+## 19. 사람의 판단이 필요해 보이는 것 (실행하지 않음)
+
+1. **검사 14 의 대상이 넷이다.** 지시서의 기대는 다섯이었다. 다섯째가 되려면 `Core.lean` 의
+   `SourceTag` 가 지목하는 CF-57(D-5)이 `glossary` 여야 하는데 원장이 그것을 `meta` 로 든다.
+   배정을 바꾸는 것은 원장 수정이라 폐기 레코드를 요구한다.
+2. **`docs/baseline.md` §2 의 미측정 칸.** 4단계가 그 문서를 읽는데 블록의 키가 `ACCOUNTING_INT`
+   와 `ACCOUNTING_RAT` 둘뿐이다. 정의층·관측층·용어집·동학층이 미측정이라 그 층의 파일이 서면
+   차분할 기준선이 없다. 지금은 대상 파일 셋이 전부 회계층 기준선으로 판정된다.
+3. **검사 16 이 `artifact` 여섯의 발화를 보고한다.** 전부 `CrisisFramework/Glossary/Core.lean`
+   을 가리키며 그 파일이 이미 실재한다. 발화 탐지가 그것을 읽는 쪽을 요구하는데 지금은 보고만
+   난다.
+4. **검사 3 과 검사 4 가 같은 조건을 다른 각도에서 본다.** `SPEC.md` 가 그 관계를 명문화했으므로
+   결손은 아니나, 둘을 독립으로 실패시킬 입력이 없다는 사실은 남는다.
+
+## 재현 절차 (4차 세션)
+
+```bash
+export PATH=/root/.elan/bin:$PATH
+cd <리포 루트>
+lake exe cache get                          # 최초 1회
+bash scripts/verify.sh                      # 여섯 단계 전량
+python3 scripts/check_wiki.py               # 원장 검증만 따로
+python3 scripts/wiki_negative_control.py    # 음성 대조 (사본에 주입하며 원장을 건드리지 않는다)
 ```

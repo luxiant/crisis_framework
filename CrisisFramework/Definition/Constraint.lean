@@ -5,7 +5,7 @@
       L-13(정의층 대상은 시점 인덱스를 갖는 족),
       A-3(witness 의무), D-1·D-2(docstring 3항목).
 
-원장: (미배정)
+원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
 
 import Mathlib.Data.Finset.Basic

@@ -7,7 +7,7 @@
 이 파일은 네 형식층 전체의 선행 조건이며 어떤 층도 아니다.
 따라서 수를 쓰지 않고, 다른 어떤 CrisisFramework 모듈도 import 하지 않는다.
 
-원장: (미배정 — R-1에 따라 첫 병합 전 발행 필요)
+원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
 
 namespace CrisisFramework.Glossary

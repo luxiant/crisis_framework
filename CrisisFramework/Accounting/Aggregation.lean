@@ -25,7 +25,7 @@ J-9의 첫 형식화 대상.
 (`Finset` 합을 포함한 자명한 `ℤ` 정의 기준. `Scratch/VerifyBuilt.lean`).
 이 파일의 정의·정리 전부가 그 기준선과 같다.
 
-원장: (미배정)
+원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
 
 import Mathlib.Algebra.BigOperators.Ring.Finset
