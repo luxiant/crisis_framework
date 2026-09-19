@@ -196,6 +196,10 @@ def inj_12(root):
 
 
 def inj_13(root):
+    """없는 id 를 **줄 주석**에 적는다.
+
+    검사 13 의 유니버스가 줄 주석으로 좁혀졌으므로 주입도 줄 주석이어야 걸린다. 블록 주석에
+    같은 줄을 적으면 잡히지 않는 것이 좁힘의 뜻이다(SPEC §2.1)."""
     f = root / "CrisisFramework" / "Glossary" / "Core.lean"
     f.write_text(f.read_text(encoding="utf-8") + "\n-- DD:CF-9999\n", encoding="utf-8")
 
@@ -312,7 +316,7 @@ CASES = [
     ("10",  "wiki10-ghost-ref",            "폐기된 id 를 related 에 넣는다",               inj_10,  None, None),
     ("11",  "wiki11-reopen-kind",          "kind 를 비운다",                               inj_11,  None, None),
     ("12",  "wiki12-reopen-ref",           "아크가 아닌 문자열을 arc_phase 에 적는다",     inj_12,  None, None),
-    ("13",  "wiki13-dd-target",            "없는 id 를 주석에 적는다",                     inj_13,  None, None),
+    ("13",  "wiki13-dd-target",            "없는 id 를 줄 주석에 적는다",                  inj_13,  None, None),
     ("14",  "wiki14-dd-layer",             "회계층 파일에서 정의층 항목을 지목한다",       inj_14,  None, None),
     ("15",  "wiki15-names-unique",         "같은 규율 ID 를 두 항목에 적는다",             inj_15,  None, None),
     ("23",  "wiki23-rule-ghost",           "폐기된 규율 ID 를 근거로 적는다",              inj_23,  None, None),

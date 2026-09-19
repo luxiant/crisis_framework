@@ -142,13 +142,32 @@ class Ledger:
         return out
 
     def dd_markers(self) -> list[tuple[Path, int, str]]:
-        """Lean 파일의 `-- DD:<id>` 표지 전량."""
+        """Lean **줄 주석**의 `-- DD:<id>` 표지 전량.
+
+        R-6 의 문면이 `-- DD:<id>` 이므로 줄 주석이 규율에 박혀 있고, `/- -/` 블록 주석 안의
+        문면은 표지가 아니다(SPEC §2.1). 블록 안을 읽으면 표지의 형태를 예시로 든 산문이 표지로
+        잡히며 그 일이 실제로 났다. `CLAUDE.md` §5-5 가 근거로 든 형의 두 번째다.
+        """
         out = []
         for f in self.lean_files:
+            depth = 0
             for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
-                m = DD_TOKEN.search(line)
-                if m:
-                    out.append((f, i, m.group(1)))
+                at_top = (depth == 0)
+                # 그 줄이 시작될 때 블록 주석 밖이었고 줄이 `--` 로 시작할 때만 표지로 읽는다.
+                if at_top and line.lstrip().startswith("--"):
+                    m = DD_TOKEN.search(line)
+                    if m:
+                        out.append((f, i, m.group(1)))
+                # 다음 줄의 깊이를 센다. Lean 의 `/- -/` 는 중첩된다.
+                j = 0
+                while j < len(line):
+                    if line.startswith("/-", j):
+                        depth += 1; j += 2; continue
+                    if line.startswith("-/", j) and depth:
+                        depth -= 1; j += 2; continue
+                    if depth == 0 and line.startswith("--", j):
+                        break          # 줄 주석이므로 그 줄의 나머지는 세지 않는다
+                    j += 1
         return out
 
 
@@ -396,7 +415,7 @@ def check_12(led: Ledger) -> Report:
 
 def check_13(led: Ledger) -> Report:
     r = Report("13", "wiki13-dd-target",
-               "Lean 의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가", "fail")
+               "Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가", "fail")
     marks = led.dd_markers()
     r.note(f"DD: 표지 {len(marks)}개")
     for f, ln, ref in marks:
