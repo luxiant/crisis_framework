@@ -1,0 +1,650 @@
+{
+ "spec": "docs/decisions/SPEC.md",
+ "deferred": [
+  {
+   "id": "CF-18",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-12"
+   ],
+   "statement": "문턱 이동폭이 경유하는 비원장 스칼라의 결정 공백을 탐구 미결로 들던 항.",
+   "basis": "탐구 절차 v3 의 `charter-2` 에서 섰고 `charter-2` 안에서 폐기됐다. 전수 대조가 그것이 구멍 둘을 뭉친 것임을 드러냈다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": []
+  },
+  {
+   "id": "CF-148",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-3"
+   ],
+   "statement": "자국통화 무제약의 한계. 방향은 확보했다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Hierarchy.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-149",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-4"
+   ],
+   "statement": "스왑라인 엣지 타입. 엣지가 생성 문법이 되면서 합성으로 표현 가능해 보이나 확인이 필요하다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Edge.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-150",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-7"
+   ],
+   "statement": "위계와 통화 등급의 층위 대응. J-8의 통합 방향에 따른 과제다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Hierarchy.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-151",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-8"
+   ],
+   "statement": "단계 열거의 시대 의존성. 7단계는 2007년 이전 미국 증권화 구조의 기술이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Observation/"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-152",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-9"
+   ],
+   "statement": "\"실제 위험\"의 측정 대응. 측정된 위험 두 종류는 확정됐으나 실제 위험에 소스가 없다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "Danielsson·Shin·Zigrand"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-153",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-11"
+   ],
+   "statement": "그림자금융 정의의 일치 여부. 공적 보증 강도 기준과 만기 불일치 기준이 같은 집합을 지시하는지가 미확인이다 폐기 (v4):.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-155",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-02"
+   ],
+   "statement": "\"실제 위험\"에 측정 소스가 없음 / Danielsson·Shin·Zigrand",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "Danielsson·Shin·Zigrand"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-156",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-03"
+   ],
+   "statement": "부도확률 불변 ≠ VaR/E 불변 (H-02 의존) / 위와 동일",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "Danielsson·Shin·Zigrand"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-159",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-06"
+   ],
+   "statement": "헤어컷이 자기자본비율이면서 헤어컷. D-4 판정",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-165",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-12"
+   ],
+   "statement": "λ 시변의 지위. 2013년 판이 2008년 판의 특수 사례인가",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. 판정에 필요한 재료가 이미 있고 대조 작업만 남았다. 사건이 아니라 미수행 작업이며 트리거를 쓸 수 없다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": []
+  },
+  {
+   "id": "CF-166",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-13"
+   ],
+   "statement": "네트워크가 전파하는 것은 손실이 아니라 담보 가용성. 다만 \"규모가 연결 구조에 비례\"는 PH-4까지 `미형식화`",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 부분만 닫혔다. 남은 부분이 statement 에 든다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "network"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-168",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-15"
+   ],
+   "statement": "무위험 부채 가정이 화폐성 위계를 평평하게 만듦",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Hierarchy.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-169",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-16"
+   ],
+   "statement": "런의 두 유형(조정 실패 / 제약 타이트닝)이 같은 개념인가",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. 위와 같다. Morris·Shin 을 읽은 뒤라 재료가 서 있다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": []
+  },
+  {
+   "id": "CF-172",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-19"
+   ],
+   "statement": "경제적 자본과 자기자본의 차이가 선택 변수",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Node.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-173",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-20"
+   ],
+   "statement": "담보 축은 확정. 마진 3용법(레포 헤어컷/개시/변동)은 미판정",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 부분만 닫혔다. 남은 부분이 statement 에 든다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Margin.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-176",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-23"
+   ],
+   "statement": "핵심/비핵심 분할이 잔여적이고 나라마다 다른 범주 집합",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-177",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-24"
+   ],
+   "statement": "레버리징 모드가 2개인가 3개인가 (V-3 실례)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. 원 기록이 V-3 실례로 적었는데 V-3 이 폐기되고 V-7 이 섰으므로 그 지목이 헛돈다. 판정 재료는 서 있다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-181",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-28"
+   ],
+   "statement": "시점 인덱스로 형식은 처리. 시점에 따라 타입 자체가 바뀌는 문제는 남음. 스테이블코인·CBDC 편입 시 직접 부딪힘",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 부분만 닫혔다. 남은 부분이 statement 에 든다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Observation/"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-182",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-29"
+   ],
+   "statement": "엣지가 제약의 함수. 네트워크 위상이 내생",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "network"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-183",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-30"
+   ],
+   "statement": "화폐성이 스펙트럼. V-2의 관계 4종으로 표현 불가",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. 재개 조건이 구멍 자신이다. V-2 에 다섯 번째 관계를 더할지가 곧 이 구멍이므로 그것을 사건으로 적을 수 없다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": []
+  },
+  {
+   "id": "CF-192",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-39"
+   ],
+   "statement": "안전자산 부족이 층 구조에 자리 없음. \"왜 이런 구조인가\"의 조건",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Hierarchy.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-193",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-40"
+   ],
+   "statement": "현금등가물의 두 기준(액면가 약속 / 가치변동 미미) 일치 여부",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-194",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-41"
+   ],
+   "statement": "그림자금융 정의 둘(보증 강도 / 만기 불일치) 일치 여부",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Glossary/Core.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-203",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-50"
+   ],
+   "statement": "부도가 위계 하단으로 밀려남. 초석 명제 정밀화 후보",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Hierarchy.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-207",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-54"
+   ],
+   "statement": "그림자 가격이 관측 가능해도 `ℝ` 이라 회계층 진입 불가. 관측 가능성과 층 배정이 분리됨",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 부분만 닫혔다. 남은 부분이 statement 에 든다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "propagation"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-209",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-56"
+   ],
+   "statement": "가격 관측으로 총액 복원을 부분 우회. 회계층 항등식에는 여전히 총액 필요",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 부분만 닫혔다. 남은 부분이 statement 에 든다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Observation/"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-213",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-60"
+   ],
+   "statement": "검증 가능성이 관계 상대적이다. 같은 발동조건이 한 당사자 쌍에게는 검증 가능하고 다른 쌍에게는 아니다. 신호 평가 `ρ`를 노드 쌍으로 색인해야 하는가. 색인하면 청구권 그래프의 엣지마다 평가가 달라진다",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Accounting/Claim.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-214",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-61"
+   ],
+   "statement": "재량 조항을 외생 신호로 두면 상관 구조를 잃는다. MAC 조항의 발동은 위기 시 기관 간에 상관되는데, 외생화하면 그 상관이 모형 밖으로 나간다. 판정가능성은 보존되나 전파 메커니즘의 한 축이 사라짐",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "network"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-215",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-62"
+   ],
+   "statement": "노드에 결정 시계 필드가 없다. PSS의 왜곡은 `d > 1/2`에서만 발생하며 조달-자산 만기 불일치와 다른 축이다. Q-2 노드 타입 수정 필요 (PH-R1 역류)",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/Node.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-216",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-63"
+   ],
+   "statement": "문턱 이동폭 = (비원장 스칼라) × (원장 비율)의 일반성 미판정. 두 논문 세 사례에서 성립. 일반 명제인지 두 저자의 모형화 관습인지 확인되지 않음. 일반 명제라면 회계층/동학층 경계의 정본 규칙이 된다",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다. 문턱 이동폭 모양의 일반성을 무엇이 판정하는지가 서지 않는다. 판정 주체가 없어 사건을 적을 수 없다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": []
+  },
+  {
+   "id": "CF-217",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-64"
+   ],
+   "statement": "위기 정의의 분해가 단일 노드 모형에서 나왔다. `θ`가 노드마다 다를 때 \"위기\"는 노드별 사건의 어떤 집계인가. 집계 정리는 제약 동질성 조건을 요구하는데 `θ`는 노드마다 다르다",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "network"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-218",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-65"
+   ],
+   "statement": "`σ` 없는 채널이 `γ`(가격충격)를 경유한다는 것이 두 편에서 확인됐으나, `γ` 자체의 결정이 없다. PSS는 외생 상수, Morris·Shin은 손상 기울기 `δ`로 외생화. 시장 유동성의 내생화가 공백",
+   "basis": "`ph2-01` 의 Plantin·Sapra·Shin 과 Morris·Shin 독해에서 열렸다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "propagation"
+   },
+   "related": []
+  }
+ ]
+}

@@ -1,0 +1,373 @@
+{
+ "spec": "docs/decisions/SPEC.md",
+ "retirements": [
+  {
+   "id": "CF-219",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-1",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "용어집 등록이 곧 정의 작성이 되어 자기순환.",
+   "replaced_by": "CF-58",
+   "statement": "D-6 를 폐기한다.",
+   "basis": "세션 지시 §3.12-1 이 정본이던 레코드이며 v1 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-220",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-2",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "관측 문제 여섯 건이 세 층 어디에도 들어가지 않음.",
+   "replaced_by": "CF-45",
+   "statement": "L-1 를 폐기한다.",
+   "basis": "세션 지시 §3.12-2 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-221",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-3",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "관측층 신설로 방향이 네 단계.",
+   "replaced_by": "CF-46",
+   "statement": "L-2 를 폐기한다.",
+   "basis": "세션 지시 §3.12-3 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-222",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-4",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "관측층 수 체계 미규정 + 정의층 시점 인덱스 도입.",
+   "replaced_by": "CF-47",
+   "statement": "L-3 를 폐기한다.",
+   "basis": "세션 지시 §3.12-4 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-223",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-5",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "폐기된 L-2를 참조.",
+   "replaced_by": "CF-48",
+   "statement": "L-6 를 폐기한다.",
+   "basis": "세션 지시 §3.12-5 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-224",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-6",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다.",
+   "reason": "통화별로 닫는 것만으로는 총액 정보가 소멸.",
+   "replaced_by": "CF-49",
+   "statement": "L-7 를 폐기한다.",
+   "basis": "세션 지시 §3.12-6 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-225",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-7",
+   "original": "원문이 기록되지 않았다. 규율 v1~v3 판의 문서가 리포에 없고 한 줄형 레코드가 사유와 대체만 담았다. `primary-2-closure` §3-1 이 「A-4 는 `propext` 와 `Quot.sound` 로 제한한다」로 서술한다.",
+   "reason": "목적(논증의 고전논리 의존 차단)과 기제(화이트리스트)가 어긋남. Lean core `Rat` 이 화이트리스트를 통과하지 못함.",
+   "replaced_by": "CF-33",
+   "statement": "A-4 를 폐기한다.",
+   "basis": "세션 지시 §3.12-7 이 정본이던 레코드이며 v3 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-226",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-8",
+   "original": "완전한 구성성은 정의층·회계층·관측층에서만 달성 가능하며, 동학층에서 `ℝ` 을 도입하는 순간 `Classical.choice` 가 전파된다.",
+   "reason": "전파 경계를 `ℝ` 로 서술했으나 실제로는 `ℚ` 에서 시작. 수 표현 의존과 논증 의존을 구분하지 않음.",
+   "replaced_by": "CF-10",
+   "statement": "C-4 를 폐기한다.",
+   "basis": "세션 지시 §3.12-8 이 정본이던 레코드이며 v3 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-227",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-9",
+   "original": "\"A-3의 witness가 `example` 로 작성된 경우 변이 검사로 실제 검사됨을 확증한다.\"",
+   "reason": "적용 범위가 `example` 로 한정되어 명명된 정리가 규율 밖에 있었다. 실무에서 이미 정리까지 확대해 검사하고 있었으므로 규율이 실무를 따라가지 못하는 상태였다. 또한 두 경우가 **서로 다른 실패를 잡는다**는 점이 원문에 없었다",
+   "replaced_by": "CF-34",
+   "statement": "A-7 를 폐기한다.",
+   "basis": "세션 지시 §3.12-9 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-228",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-10",
+   "original": "\"`Classical.choice` 의존에는 **두 종류가 있으며** 구분해 기록한다. (수 표현의 의존 / 논증의 의존)\"",
+   "reason": "종류가 둘이 아니라 셋이다. 회계층 ℤ 이행 검증에서 **전술·인스턴스 해결의 의존**이 제3의 종류로 확인됐다. `linarith` 는 `ℤ` 위의 자명한 목표에서도 `Classical.choice` 를 끌어오고(`omega` 는 아니다), 전면 `simp` 는 `mul_eq_zero` 가 요구하는 `NoZeroDivisors ℤ` 인스턴스를 통해 끌어온다. 수학적 내용이 고전논리를 요구하지 않으므로 논증의 의존이 아니고, 수 체계에서 오는 것도 아니다",
+   "replaced_by": "CF-40",
+   "statement": "C-7 를 폐기한다.",
+   "basis": "세션 지시 §3.12-10 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-229",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-11",
+   "original": "\"분할의 완전성은 형식층에서 증명되지 않는다. 단 **회계 항등식의 형식적 귀결인 분할은 예외.**\"",
+   "reason": "예외의 근거를 회계 항등식에 묶은 것이 좁다. Morris·Shin의 신용위험 분해는 회계 항등식의 귀결이 아니라 실패 사건을 두 조건으로 쪼갠 **사건 대수의 형식적 귀결**이며, 완전성(총 = 지급불능 + 비유동성)이 정의만으로 따라 나온다. 원문대로라면 이 분할이 예외에 들지 못한다",
+   "replaced_by": "CF-81",
+   "statement": "V-3 를 폐기한다.",
+   "basis": "세션 지시 §3.12-11 이 정본이던 레코드이며 v5 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-230",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-12",
+   "original": "\"모든 정의·정리는 짭란티어 결정원장 ID를 참조한다.\"",
+   "reason": "짭란티어 원장과의 참조를 끊었으므로 지목 대상이 사라졌다. 그리고 R 계열이 성격 다른 둘을 한 묶음으로 들고 있었음이 그때 드러났다. R-1~R-3은 자기 원장을 규율하고 R-4~R-5는 건너가는 산출물을 규율하는데, 앞 셋이 짭란티어를 가리키고 있어 그 구분이 문면으로 서지 않았다",
+   "replaced_by": "CF-67",
+   "statement": "R-1 를 폐기한다.",
+   "basis": "세션 지시 §3.12-12 이 정본이던 레코드이며 v6 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-231",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-13",
+   "original": "\"정의 구멍은 `decisions` 또는 `deferred` 로 역유입한다.\"",
+   "reason": "지목 대상이 사라진 것과 더불어, **재개 트리거 요건이 없었다.** 구멍 스물여덟에 트리거를 써 본 실측에서 셋이 구멍이 아니라 미수행 작업임이 드러났고, 하나는 분류 오류였으며 하나는 이미 소진돼 있었다. 트리거 없는 등재는 구멍 계수를 부풀린다",
+   "replaced_by": "CF-68",
+   "statement": "R-2 를 폐기한다.",
+   "basis": "세션 지시 §3.12-13 이 정본이던 레코드이며 v6 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-232",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-14",
+   "original": "\"기각된 정의 후보는 `rejected` 에 사유와 함께 등재한다.\"",
+   "reason": "지목 대상이 사라졌다. 그리고 D-2 3항과 같은 대상인데 둘의 분업이 적혀 있지 않아 어느 쪽이 사유를 드는지가 갈리지 않았다",
+   "replaced_by": "CF-69",
+   "statement": "R-3 를 폐기한다.",
+   "basis": "세션 지시 §3.12-14 이 정본이던 레코드이며 v6 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-233",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-15",
+   "original": "\"지시 단위는 정리 단위다. 한 지시서는 진술 하나와 그것이 강제하는 정의 묶음까지를 담는다.\"",
+   "reason": "**지시 단위와 재유입 단위를 같은 것으로 적었다.** 아크와 페이즈를 도입하면 이 조항이 페이즈를 정리 하나로 묶고, 그러면 정리마다 왕복이 한 번씩 생겨 왕복 비용이 작업 비용을 넘는다. 재유입 단위가 정리 단위라는 것은 R-4가 따로 들고 있으므로 중복이기도 했다",
+   "replaced_by": "CF-87",
+   "statement": "W-2 를 폐기한다.",
+   "basis": "세션 지시 §3.12-15 이 정본이던 레코드이며 v6 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-234",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-16",
+   "original": "\"정책 처방은 추출 대상이 아니다. 메커니즘 설계 단계에서 중앙은행은 노드가 아니다.\"",
+   "reason": "손실 배분처 중 화폐보유자·납세자 경로가 정책 주체 없이 표현되지 않는다. 통화 축 별도화로 제약의 통화별 비대칭이라는 표현이 확보되어 배제의 실익이 사라졌다",
+   "replaced_by": "CF-97",
+   "statement": "B-4 를 폐기한다.",
+   "basis": "세션 지시 §4.11-1 이 정본이던 레코드이며 v1 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-235",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-17",
+   "original": "\"연속 3편의 논문이 §5 템플릿에 새 원소를 추가하지 않고 기존 원소의 사례만 추가하면 해당 단계의 읽기를 종료한다.\"",
+   "reason": "필독(★) 지정과 충돌한다. ★는 뭉치 구조상 반드시 읽어야 하는 편이므로 포화 판정의 대상이 될 수 없고, 실제로 ★ 5편이 모두 새 원소를 추가해 포화가 성립할 여지가 없었다. 규율이 작동하지 않는 구간에 걸려 있었다",
+   "replaced_by": "CF-115",
+   "statement": "S-1 를 폐기한다.",
+   "basis": "세션 지시 §4.11-2 이 정본이던 레코드이며 O-1 ★ 종료 시점 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-236",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-21",
+   "original": "\"노드는 신용중개 연쇄의 한 단계를 수행하는 기관유형이다. 법인은 여러 노드를 소유하는 속성으로 둔다.\"",
+   "reason": "(a) 현금풀처럼 하나의 노드가 여러 법인을 가로지르는 사례가 있어 일대다가 성립하지 않는다. (b) 노드 분해 기준이 단계·발행 청구권·의사결정 단위로 셋이 되어 충돌했다. (c) 집계 정리가 \"제약의 동질성\"이라는 판정 기준을 주었고, 그에 가장 직접 대응하는 것이 의사결정 단위다",
+   "replaced_by": "CF-122",
+   "statement": "J-1 를 폐기한다.",
+   "basis": "세션 지시 §4.11-3 이 정본이던 레코드이며 v2 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-237",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-18",
+   "original": "「`γ` 의 결정. 문턱 이동폭이 비원장 스칼라를 경유한다는 것은 두 편에서 확인됐으나 그 스칼라 자체의 결정이 없다.」",
+   "reason": "**구멍 둘을 하나로 뭉쳐 잘못된 네임스페이스에 넣었다.** 문턱 이동폭 모양의 일반성 미판정과 `γ` 자체의 결정 공백은 다른 대상이고 둘 다 이미 Q-4에 등재돼 있다. K는 탐구 방향의 미결을 들고 H는 정의의 결손을 드는데, 그 경계를 넘었다",
+   "replaced_by": null,
+   "statement": "K-12 를 폐기한다.",
+   "basis": "세션 지시 §4.11-4 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-238",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-20",
+   "original": "「원장 적재 전의 검증 — 결정 세션이 사전 검사한다. … 검증기가 순수 텍스트 처리라 Claude Code 호출 없이 쓸 수 있다는 것이 실측됐으므로, 이 작업이 `charter-7` 에서 `charter-6` 으로 옮겨진다.」",
+   "reason": "실측은 옳으나 결론이 틀렸다. **검사를 돌릴 수 있다는 것과 리포에 검증기를 쓰는 것을 같은 것으로 적었다.** 앞은 결정 세션의 컨테이너에서 임시로 돌리는 사전 검사이고 뒤는 리포에 커밋되는 코드다. 리포 코드는 Claude Code의 몫이다",
+   "replaced_by": "CF-143",
+   "statement": "J-25 를 폐기한다.",
+   "basis": "세션 지시 §4.11-5 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-239",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-19",
+   "original": "「지시서의 거처 — 세션. 리포에 두지 않는다. 지시서가 그 페이즈로 소진되는 문서인데 추적하면 도달 가능한 문면이 되어 다음 페이즈가 그것을 근거로 쓰게 되기 때문이다.」",
+   "reason": "**근거는 옳고 결론이 과했다.** 근거 문장이 이미 「추적하면」을 들고 있으므로 판별선은 추적 여부인데, 결론이 「리포에 두지 않는다」로 한 칸 더 나갔다. 엔트리 카드가 병합 대상이라 파일로 실재해야 하므로 그 결론으로는 카드를 세울 수 없다",
+   "replaced_by": "CF-144",
+   "statement": "J-11 를 폐기한다.",
+   "basis": "세션 지시 §4.11-6 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-240",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-23",
+   "original": "「역유입의 첫 단위 — 규율과 확정 결정 먼저. 미결과 구멍은 아크별로 넣고, 아크가 열릴 때 그 아크에 걸린 구멍만 트리거를 단다.」",
+   "reason": "미루는 근거가 「트리거를 못 쓰는 항에서 막힌다」였는데 R-7이 `reopen_when: null` 을 허용하므로 막히지 않는다. 그리고 미루면 **Q-4의 정본이 리포의 문서에 남아** 그 문서의 수명에 원장이 매달린다",
+   "replaced_by": "CF-145",
+   "statement": "J-23 를 폐기한다.",
+   "basis": "세션 지시 §4.11-7 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  },
+  {
+   "id": "CF-241",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "target": "CF-22",
+   "original": "「아크 개막 문서 — 별도로 둔다. 아크의 판별선과 페이즈 분할과 구멍 배정이 한자리에 서야 하고, 그것을 첫 페이즈의 산출 문서가 겸하면 판별선이 여럿인 아크가 생긴다.」",
+   "reason": "**근거는 옳고 매체가 틀렸다.** 「한자리」가 필요한 것은 맞으나 그것이 문서일 이유가 없다. 원장과 `arcs.json` 이 이미 낙착과 값을 드는데 개막 문서가 그 둘을 산문으로 다시 들면 같은 것이 세 자리에 산다",
+   "replaced_by": "CF-147",
+   "statement": "J-17 를 폐기한다.",
+   "basis": "세션 지시 §4.11-8 이 정본이던 레코드이며 v4 에서 섰다.",
+   "related": []
+  }
+ ]
+}

@@ -1,0 +1,3154 @@
+{
+ "spec": "docs/decisions/SPEC.md",
+ "decisions": [
+  {
+   "id": "CF-1",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-6"
+   ],
+   "statement": "정의를 작성하기 전에 그 개념을 용어집에 등록하게 하던 조항.",
+   "basis": "규율 v1 에서 섰고 같은 판에서 폐기됐다. 원문이 기록되지 않았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-2",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-1"
+   ],
+   "statement": "정의층이 무차원이어야 한다고 정하던 조항. 형식층이 셋이던 시절의 것이다.",
+   "basis": "규율 v1 에서 섰고 v2 에서 폐기됐다. 원문이 기록되지 않았으며, 추출 기록 E-07·E-09·E-10 이 「정의층은 무차원」으로 지목한다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": []
+  },
+  {
+   "id": "CF-3",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-2"
+   ],
+   "statement": "형식층 셋 사이의 의존 방향을 정하던 조항.",
+   "basis": "규율 v1 에서 섰고 v2 에서 폐기됐다. 원문이 기록되지 않았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-4",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-3"
+   ],
+   "statement": "형식층 셋의 수 체계를 고정하던 조항.",
+   "basis": "규율 v1 에서 섰고 v2 에서 폐기됐다. 원문이 기록되지 않았으며, 추출 기록 E-02 가 「`ℚ` 유지 가능하므로 L-3 위반은 아님」으로 지목한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-5",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-6"
+   ],
+   "statement": "층 간 경계를 디렉터리로 강제하되 폐기된 L-2 를 참조하던 조항.",
+   "basis": "규율 v1 에서 섰고 v2 에서 폐기됐다. 원문이 기록되지 않았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-6",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-7"
+   ],
+   "statement": "회계층 항등식을 통화별로 닫게 하던 조항.",
+   "basis": "규율 v1 에서 섰고 v2 에서 폐기됐다. 원문이 기록되지 않았으며, 추출 기록 E-05·E-12 가 「회계층에서 통화 간 환산을 금지하고 통화별로 항등식을 닫는다」로 서술한다.",
+   "tier": "policy",
+   "layer": "accounting",
+   "related": []
+  },
+  {
+   "id": "CF-7",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-4"
+   ],
+   "statement": "주요 정리의 `#print axioms` 출력을 화이트리스트로 제한하던 조항.",
+   "basis": "규율 v1 에서 섰고 v3 에서 폐기됐다. 원문이 기록되지 않았으며, `verification-01` §3-1 이 「A-4 는 `propext` 와 `Quot.sound` 로 제한한다」로 서술한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-8",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-4"
+   ],
+   "statement": "완전한 구성성의 경계를 `ℝ` 에 두던 조항.",
+   "basis": "규율 v1 에서 섰고 v3 에서 폐기됐다. 원문이 `verification-01` §3-4 에 블록인용으로 남아 있다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-9",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-7"
+   ],
+   "statement": "A-3 의 witness 가 `example` 로 쓰인 경우에만 변이 검사를 요구하던 조항.",
+   "basis": "규율 v3 에서 섰고 v4 에서 폐기됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-10",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-7"
+   ],
+   "statement": "`Classical.choice` 의존을 수 표현과 논증 둘로 갈라 기록하게 하던 조항.",
+   "basis": "규율 v3 에서 섰고 v4 에서 폐기됐다. 회계층 `ℤ` 이행 검증이 제3의 종류를 드러냈다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-11",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-3"
+   ],
+   "statement": "분할 완전성의 예외를 회계 항등식의 귀결로 한정하던 조항.",
+   "basis": "규율 v2 에서 섰고 v5 에서 폐기됐다. Morris·Shin 독해가 사건 대수의 귀결이라는 제2의 형을 드러냈다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-12",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-1"
+   ],
+   "statement": "모든 정의·정리가 짭란티어 결정원장 ID 를 참조하게 하던 조항.",
+   "basis": "규율 v1 에서 섰고 v6 에서 폐기됐다. `charter-4` 가 짭란티어 원장과의 참조를 끊었다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-13",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-2"
+   ],
+   "statement": "정의 구멍을 짭란티어 원장의 두 레지스터로 역유입하게 하던 조항.",
+   "basis": "규율 v1 에서 섰고 v6 에서 폐기됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-14",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-3"
+   ],
+   "statement": "기각된 정의 후보를 짭란티어 원장에 등재하게 하던 조항.",
+   "basis": "규율 v1 에서 섰고 v6 에서 폐기됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-15",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-2"
+   ],
+   "statement": "지시 단위를 정리 단위로 정하던 조항.",
+   "basis": "규율 v5 의 `charter-1` 에서 섰고 `charter-3` 에서 폐기됐다. 아크와 페이즈의 도입이 그 계기다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-16",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "B-4"
+   ],
+   "statement": "정책 처방을 추출 대상에서 빼고 중앙은행을 노드에서 제외하던 조항.",
+   "basis": "탐구 방향 v1 에서 섰고 같은 판에서 폐기됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-17",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-1"
+   ],
+   "statement": "연속 세 편이 새 원소를 추가하지 않으면 읽기를 종료하게 하던 조항.",
+   "basis": "탐구 방향 v1 에서 섰고 O-1 ★ 종료 시점에 폐기됐다. 경위의 원 기록은 `reading-queue-v0` §0 이 든다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-19",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-11"
+   ],
+   "statement": "지시서를 리포에 두지 않기로 하던 결정.",
+   "basis": "`charter-1` 에서 섰고 `charter-6` 에서 폐기됐다. 엔트리 카드가 병합 대상이라 파일로 실재해야 하는 것이 계기다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-20",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-25"
+   ],
+   "statement": "원장 검증기를 결정 세션이 쓰기로 하던 결정.",
+   "basis": "`charter-5` 에서 섰고 `charter-6` 에서 폐기됐다. 리포 코드의 소관이 Claude Code 임이 확인됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-21",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "statement": "노드를 신용중개 연쇄의 한 단계를 수행하는 기관유형으로 정의하던 J-1 의 원안.",
+   "basis": "탐구 방향 v1 에서 섰고 v2 에서 정정됐다. `names` 를 비우는 이유는 `J-1` 이 현행 결정에 배정돼 있어 검사 15 에 걸리기 때문이다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": []
+  },
+  {
+   "id": "CF-22",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-17"
+   ],
+   "statement": "아크 개막 문서를 별도로 두기로 하던 결정.",
+   "basis": "`charter-3` 에서 섰고 `charter-6` 에서 폐기됐다. 개막 문서가 원장과 `arcs.json` 이 이미 드는 것을 산문으로 다시 든다는 것이 계기다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-23",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-23"
+   ],
+   "statement": "미결과 구멍을 아크별로 역유입하기로 하던 결정.",
+   "basis": "`charter-4` 에서 섰고 `charter-6` 에서 폐기됐다. 미루면 Q-4 의 정본이 리포 문서에 남아 원장이 그 수명에 매달린다는 것이 계기다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-24",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "P-1"
+   ],
+   "statement": "주 목적은 정의 구멍 노출이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-25",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "P-2"
+   ],
+   "statement": "제약 조건은 실행 가능성이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-26",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "P-3"
+   ],
+   "statement": "상대적 무모순성은 목적이 아니라 P-1·P-2의 부산물이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-27",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "P-4"
+   ],
+   "statement": "우선순위는 P-1 > P-2 > P-3.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-28",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "P-5"
+   ],
+   "statement": "형식화 실패는 폐기 대상이 아니라 기록 대상이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-29",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-1"
+   ],
+   "statement": "`axiom` 선언을 금지한다. 예외 없음.",
+   "basis": "Lean 이 공리 집합의 무모순성을 검사하지 않으므로 공리 선언이 검증의 외관만 만든다는 것이 근거다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step3-forbidden",
+   "related": []
+  },
+  {
+   "id": "CF-30",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-2"
+   ],
+   "statement": "개념은 `structure` / `inductive` / `def` 로 정의한다.",
+   "basis": "A-1 이 `axiom` 을 금지한 것의 짝이다. 성질을 공리로 두지 않으려면 필드이거나 증명할 정리여야 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-31",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-3"
+   ],
+   "statement": "모든 `structure`는 witness 인스턴스를 갖는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-32",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-5"
+   ],
+   "statement": "`sorry` 는 작업 중 허용하되 main 병합을 차단한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step3-forbidden",
+   "related": []
+  },
+  {
+   "id": "CF-33",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-6"
+   ],
+   "statement": "주요 정리의 `#print axioms` 출력이 해당 층의 기준선을 초과하지 않게 하고, 초과하면 유입원을 추적해 기록한다.",
+   "basis": "`charter` 이전 3차 세션의 집계 정리 검증에서 A-4 위반이 관측됐다. 발원지가 증명이 아니라 Lean core `Rat.normalize` 였고, 화이트리스트라는 기제가 목적과 어긋난다는 것이 그때 드러나 A-4를 폐기하고 이 조항이 섰다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step4-baseline",
+   "related": []
+  },
+  {
+   "id": "CF-34",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "A-8"
+   ],
+   "statement": "모든 진술에 변이 검사를 수행한다. 결론을 부정한 사본이 컴파일에 실패해야 한다.",
+   "basis": "2차 세션이 변이 검사를 진술 다섯으로 확대해 돌렸고 전부 거부됐다. A-7이 `example` 로만 한정돼 실무를 따라가지 못하는 상태였음이 그때 드러났다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step5-mutation",
+   "related": []
+  },
+  {
+   "id": "CF-35",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-1"
+   ],
+   "statement": "`noncomputable` 을 금지한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step3-forbidden",
+   "related": []
+  },
+  {
+   "id": "CF-36",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-2"
+   ],
+   "statement": "`Classical.choice`, `Classical.em`, `open Classical` 를 직접 사용하는 것을 금지한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step3-forbidden",
+   "related": []
+  },
+  {
+   "id": "CF-37",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-3"
+   ],
+   "statement": "모든 판정 술어는 `Decidable` 인스턴스를 갖는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-38",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-5"
+   ],
+   "statement": "비구성적 요소는 동학층에 격리한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "dynamics",
+   "related": []
+  },
+  {
+   "id": "CF-39",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-6"
+   ],
+   "statement": "승인 절차: (a) 구성적 대안 검토, (b) 실패 사유, (c) 격리 범위를 docstring에 명시.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-40",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-8"
+   ],
+   "statement": "기준선 초과 공리의 유입원을 수 표현·전술과 인스턴스 해결·논증 셋으로 분류해 기록한다.",
+   "basis": "3차 세션의 회계층 `ℤ` 이행에서 `mul_eq_zero` 자체는 무의존인데 그것이 요구하는 `NoZeroDivisors ℤ` 인스턴스가 기준선을 오염시킨 것이 실측됐다. 종류가 둘이 아니라 셋임이 그때 확정됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-41",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-9"
+   ],
+   "statement": "정의층·회계층·관측층에서 전면 `simp` 호출을 금지한다. `simp only [...]` 로 보조정리를 명시 고정한다.",
+   "basis": "위와 같은 실측이 근거다. 음성 대조 NC-5 가 제한 `simp only` 를 전면 `simp` 로 바꾸면 4단계가 기준선 초과를 잡는다는 것을 확인했다. `ph2-01` §5 에서 개정 후보로 제안되어 `charter-1` 에서 승인됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-42",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "C-10"
+   ],
+   "statement": "조건부 청구권의 발동조건은 `Prop` 상의 술어가 아니라 검증 가능 신호 위의 문법으로 정의하고, 의미를 `Bool` 반환 계산 함수로 준다.",
+   "basis": "Plantin·Sapra·Shin 과 Morris·Shin 독해에서 계약 가능 정보가 법원 검증 가능 정보이고 그것이 감사된 회계수치라는 것이 확인됐다. `ph2-01` §3 이 제안하고 `charter-1` 이 승인했다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-43",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-4"
+   ],
+   "statement": "`ℝ` 이 회계층에 진입하면 위반이다.",
+   "basis": "기술적 근거는 A-6 기준선이고, `charter-1` 에서 경제학적 근거가 더해졌다. 역사적 원가는 문턱을 원장에 고정하고 시가평가는 시장에 고정하는데 시가평가의 불안정화가 그 매달림에서 나온다.",
+   "tier": "invariant",
+   "layer": "accounting",
+   "check": "step3-forbidden",
+   "related": []
+  },
+  {
+   "id": "CF-44",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-5"
+   ],
+   "statement": "동학은 `ℕ → State` 이산시간 점화식으로 표현한다.",
+   "basis": "`charter-5` 에서 제재의 층 배정을 판정하면서 판별 시험이 더해졌다. 모형이 그 값을 계산하는가 받는가로 가르며, 시간에 따라 변한다는 것 자체는 판별선이 아니다.",
+   "tier": "policy",
+   "layer": "dynamics",
+   "related": []
+  },
+  {
+   "id": "CF-45",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-8"
+   ],
+   "statement": "형식층을 정의층·회계층·동학층·관측층 넷으로 나눈다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-46",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-9"
+   ],
+   "statement": "의존 방향은 관측층 → 동학층 → 회계층 → 정의층 단방향이다.",
+   "basis": "규율 v2 에서 관측층을 신설하면서 L-2 를 폐기하고 섰다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-47",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-10"
+   ],
+   "statement": "수 체계를 층별로 고정한다.",
+   "basis": "규율 v2 에서 L-3 을 폐기하면서 L-13 과 함께 섰다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-48",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-11"
+   ],
+   "statement": "층 간 경계는 디렉터리로 강제한다.",
+   "basis": "규율 v2 에서 L-6 을 폐기하면서 섰다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-49",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-12"
+   ],
+   "statement": "회계층에서 통화 간 환산을 금지하고 항등식을 총액 기준으로 유지한다. 순액으로 닫는 것을 금지한다.",
+   "basis": "E-12 추출에서 순액으로 닫으면 총액 정보가 소멸한다는 것이 확인됐고, 통화별로만 닫던 L-7 을 폐기하면서 이 조항이 섰다.",
+   "tier": "policy",
+   "layer": "accounting",
+   "related": []
+  },
+  {
+   "id": "CF-50",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-13"
+   ],
+   "statement": "정의층 대상은 시점 인덱스를 갖는 족으로 정의한다.",
+   "basis": "E-10 추출에서 위계상 거리가 시간에 따라 변한다는 것이 확인됐다. 준국채가 평시에 국채와 거의 같고 위기시에 벌어지므로 정적 분류로는 표현되지 않는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": []
+  },
+  {
+   "id": "CF-51",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-14"
+   ],
+   "statement": "관측층은 값을 담지 않고 사상의 명세만 담는다.",
+   "basis": "관측층 신설과 함께 섰다. `charter-1` 에서 인상이 정정됐는데, 관측층에 등재되는 **소스 없음** 이 프레임워크의 주요 산출물 가운데 하나다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": []
+  },
+  {
+   "id": "CF-52",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "L-15"
+   ],
+   "statement": "회계층의 기본 수 체계는 `ℤ` 다. 최소 화폐단위의 정수배로 금액을, 스케일된 정수로 비율을 표현한다.",
+   "basis": "3차 세션의 회계층 `ℤ` 이행에서 `ℤ` 기준선이 `[propext, Quot.sound]` 이고 `ℚ` 기준선이 `Classical.choice` 를 포함한다는 것이 실측됐다. `charter-1` 에서 실무 조항이 더해졌다.",
+   "tier": "policy",
+   "layer": "accounting",
+   "related": []
+  },
+  {
+   "id": "CF-53",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-1"
+   ],
+   "statement": "모든 정의는 docstring을 갖는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-54",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-2"
+   ],
+   "statement": "docstring에 대응 비형식 개념과 배제하는 구체 사례와 기각한 대체 정의를 담는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-55",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-3"
+   ],
+   "statement": "배제 사례는 실제 역사 사례여야 한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-56",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-4"
+   ],
+   "statement": "하나의 정의가 둘 이상의 비형식 개념에 대응하면 분할한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-57",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-5"
+   ],
+   "statement": "용어집 매핑만 사용한다.",
+   "basis": "원 문헌에서 어간 아홉이 다의어임이 확인됐고, `charter-1` 에서 `discount` 와 `impairment` 가 더해져 열하나가 됐다. 두 논문이 같은 기호로 다른 대상을 가리킨 것이 근거다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-58",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "D-7"
+   ],
+   "statement": "성질을 갖는 정의는 작성 전에 개념이 용어집에 등록되어 있어야 한다.",
+   "basis": "규율 v1 에서 D-6 을 폐기하면서 섰다. 용어집 등록이 곧 정의 작성이 되어 자기순환이던 것을 끊었다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-59",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-1"
+   ],
+   "statement": "정리는 조립 가능한 최소 단위로 쪼갠다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-60",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-2"
+   ],
+   "statement": "모든 정리는 \"이 명제가 거짓이려면 무엇이 관측되어야 하는가\" 를 docstring에 적는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-61",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-3"
+   ],
+   "statement": "정의를 전개하기만 하면 증명되는 명제는 보조 보정으로 분류하고 기여 목록에서 제외한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-62",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-4"
+   ],
+   "statement": "모든 가정은 정리 진술문에 명시한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-63",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-5"
+   ],
+   "statement": "가정을 추가해 증명을 통과시킨 경우 그 가정과 배제 사례를 기록한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-64",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "T-6"
+   ],
+   "statement": "시스템 수준 제약이 개별 노드 상태를 결정하지 않는 경우 정리를 존재 형태로 진술한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-65",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-4"
+   ],
+   "statement": "재유입 단위는 정리 단위다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-66",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-5"
+   ],
+   "statement": "미완(A-3) 및 미형식화(N-2) 항목은 재유입 대상에서 제외한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-67",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-6"
+   ],
+   "statement": "모든 정의·정리는 `-- DD:<id>` 표지로 이 프로젝트 원장의 항목을 참조한다.",
+   "basis": "`charter-4` 에서 원장을 설계하면서 섰다. 참조 구현이 종류를 접두사에 박아 같은 계열이 두 레지스터에 걸친 것이 실측됐으므로 종류를 필드가 들게 했다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-68",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-7"
+   ],
+   "statement": "정의 구멍은 원장의 이연 레지스터에 등재하며 재개 트리거를 갖는다.",
+   "basis": "`charter-4` 에서 섰고 `charter-6` 에서 `blocking` 이 더해졌다. 구멍 스물여덟에 트리거를 써 본 실측에서 셋이 구멍이 아니라 미수행 작업이고 하나가 분류 오류이며 하나가 이미 소진된 것이 드러났다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-69",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-8"
+   ],
+   "statement": "기각한 정의 후보는 원장의 기각 레지스터에 사유와 함께 등재한다.",
+   "basis": "`charter-4` 에서 섰다. D-2 3항과 같은 대상인데 R-3 이 둘의 분업을 적지 않아 어느 쪽이 사유를 드는지가 갈리지 않았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-70",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-9"
+   ],
+   "statement": "원장 항목을 수정하지 않는다. 폐기는 폐기 레코드를 새로 쓰는 것이며 원 항목을 건드리지 않는다.",
+   "basis": "`charter-4` 에서 섰다. 참조 구현의 supersede 가 상태 필드를 고치는 기제이고 그것이 설계가 아니라 원장 소실 뒤의 번호 재매핑에서 나왔다는 것이 확인됐다. 상태를 고치는 것은 추가로 위장한 수정이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-71",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "R-10"
+   ],
+   "statement": "원장 항목의 티어를 invariant·policy·finding 셋으로 한다.",
+   "basis": "`charter-4` 에서 섰다. `ph2-01` 의 내용 대부분이 발견이고 규율 개정은 다섯뿐이었으므로, 티어가 그 비율을 못 담으면 원장이 발견을 결정으로 승격시킨다는 것이 근거다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-72",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "N-1"
+   ],
+   "statement": "산문층과 형식층을 분리하되 양방향 참조를 유지한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-73",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "N-2"
+   ],
+   "statement": "형식층에 대응물이 없는 산문 주장은 `미형식화`로 표시한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-74",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "N-3"
+   ],
+   "statement": "P-5의 실패 기록을 산문층 부록으로 유지한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-75",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "N-4"
+   ],
+   "statement": "산문층은 형식층의 증명을 재서술하지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-76",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-1"
+   ],
+   "statement": "용어집은 Lean 파일이며 개념의 존재와 관계만 담는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-77",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-2"
+   ],
+   "statement": "관계는 넷으로 제한한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-78",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-4"
+   ],
+   "statement": "모든 분할은 D-3의 실제 역사 사례를 갖는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-79",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-5"
+   ],
+   "statement": "측정 대응이 다르지 않은 두 개념은 분할하지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-80",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-6"
+   ],
+   "statement": "용어집의 개념은 A-3의 적용 대상이 아니다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-81",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "V-7"
+   ],
+   "statement": "분할의 완전성은 형식층에서 증명되지 않는다.",
+   "basis": "Morris·Shin 의 신용위험 분해가 회계 항등식이 아니라 사건 대수의 귀결이며 완전성이 정의만으로 따라 나온다는 것이 확인됐다. V-3 의 예외 근거가 좁다는 것이 그때 드러났다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-82",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-1"
+   ],
+   "statement": "진술과 타입과 docstring은 결정 세션이 쓰고, 증명과 전술과 import는 Claude Code가 쓴다.",
+   "basis": "`charter-1` 에서 섰다. 근거가 둘이며, P-1 이 진술로 정의를 강제하게 하고 D-3 이 배제 사례를 실제 역사 사례로 요구하므로 논문 뭉치를 읽은 쪽만 docstring 을 쓸 수 있다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-83",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-3"
+   ],
+   "statement": "`scripts/verify.sh` 의 출력 원문과 커밋 SHA가 첨부되지 않은 보고는 판정의 근거로 쓰지 않는다. 요약과 재서술은 근거가 아니다.",
+   "basis": "2차 세션에서 검토자가 연 파일에 1차 보고의 수정이 하나도 없었고, 원인이 저장소에 같은 이름의 파일이 두 벌 있었던 것이었다. 결정 세션이 리포를 손에 쥐지 않게 되면서 그때는 우연이던 것이 구조적 상시 위험이 됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-84",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-4"
+   ],
+   "statement": "`CLAUDE.md` 의 모든 조항은 규율 ID 또는 이 문서의 절 번호로 역추적되거나, `← 자체` 로 자기 정본임을 표시한다. 각 절 끝에 출처를 단다.",
+   "basis": "`charter-1` 에서 섰고 `charter-6` 에서 `← 자체` 가 더해졌다. v6 감사가 정방향으로 유령 둘을, 역방향으로 L-13 의 요구가 허용으로 약해진 것과 원장 불변 조항이 통째로 빠진 것을 잡았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-85",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-5"
+   ],
+   "statement": "Claude Code의 \"진술을 바꾸어야만 통과할 것 같은 지점\" 보고는 실패 기록이 아니라 P-1 산출물이다. 결정 세션이 그것을 구멍 목록에 H 번호로 등재한다.",
+   "basis": "`charter-1` 에서 섰다. P-5 가 형식화 실패를 기록 대상으로 정한 것과 같은 축이며, 다른 점은 그 실패가 다른 주체의 보고로 도착한다는 것이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-86",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-6"
+   ],
+   "statement": "자동 검사가 불가능한 항목의 리뷰 주체는 결정 세션이고, 주기는 핸드오프 복귀 시점이다. 대상은 C-8의 분류와 D-3과 L-15의 사유 기록과 T-4와 T-6과 N-2와 V-5와 V-7이다.",
+   "basis": "`charter-1` 에서 섰고 규율의 존속 미결이던 「리뷰 체크리스트의 실행 주체 및 주기」를 해소했다. Claude Code 가 판단을 금지당했으므로 주체가 결정 세션 말고 없고 주기의 자연 경계가 핸드오프뿐이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-87",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-7"
+   ],
+   "statement": "지시 단위는 페이즈이고 재유입 단위는 정리이며 둘은 다르다.",
+   "basis": "`charter-3` 에서 W-2 를 폐기하고 섰다. 아크와 페이즈를 도입하면 W-2 가 페이즈를 정리 하나로 묶어 왕복 비용이 작업 비용을 넘는다는 것이 그때 드러났다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-88",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-8"
+   ],
+   "statement": "결정 세션은 리포를 읽기 전용으로 받아, 건네기 전에 기계 검사를 통과하는지 확인한다.",
+   "basis": "`charter-6` 에서 실측으로 섰다. 공개 리포의 `git clone` 은 되고 Lean 툴체인은 환경에 없으며 캐시 호스트가 차단돼 있다. `SPEC.md` §2 의 검사가 전부 Lean 빌드를 요구하지 않는다는 것도 함께 확인됐다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-89",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "W-9"
+   ],
+   "statement": "리포에 들어가는 코드는 전부 Claude Code가 쓰고 결정 세션은 명세를 쓴다.",
+   "basis": "`charter-6` 에서 섰다. W-3 이 유일한 증거 경로를 리포의 `verify.sh` 출력과 커밋 SHA 로 정했는데, 결정 세션이 리포 코드를 쓰면 그 코드를 스스로 검증할 수 없어 순환이 선다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-90",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "Q-1"
+   ],
+   "statement": "용어집. 한국어 개념과 Lean 식별자의 매핑이다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-91",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "Q-2"
+   ],
+   "statement": "원소 목록. 메커니즘 구성물과 형식층 배정이다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-92",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "Q-3"
+   ],
+   "statement": "형식화 판정. 구성적 정의 가능 여부와 막히는 지점이다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-93",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "Q-4"
+   ],
+   "statement": "구멍 목록. P-1의 수확이며 원장으로 역유입한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-94",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "B-1"
+   ],
+   "statement": "대상은 Shin · Adrian · Pozsar 세 저자의 논문 뭉치로 한정한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-95",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "B-2"
+   ],
+   "statement": "세 저자 간 차이는 봉합 대상이 아니라 기록 대상이다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-96",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "B-3"
+   ],
+   "statement": "실증 결과(계수, 유의성, 표본)는 추출 대상이 아니다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-97",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "B-5"
+   ],
+   "statement": "중앙은행은 노드다. 제약이 축별로 비대칭이라는 점에서 구별된다.",
+   "basis": "탐구 방향 v1 에서 B-4 를 폐기하면서 섰다. 손실 배분처 가운데 화폐보유자와 납세자 경로가 정책 주체 없이 표현되지 않는다는 것이 근거다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-98",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R1"
+   ],
+   "statement": "단계는 순차 진행하되 후속 단계에서 선행 단계로의 역류를 허용한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-99",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R2"
+   ],
+   "statement": "PH-1·PH-2 산출물만 재유입(R-4) 대상으로 삼는다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-100",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R3"
+   ],
+   "statement": "PH-1의 중심 구조물은 화폐성 위계다. 노드 위의 부분순서로 정의되며 시점 인덱스를 갖는다(L-13).",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-101",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R4"
+   ],
+   "statement": "PH-2의 주 연구 과제는 담보 중복 계상이다. 해법 확보: 소유권 장부와 담보 장부를 분리하면 각각 닫힌다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-102",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R5"
+   ],
+   "statement": "관측층은 별도 단계가 아니라 각 단계에서 병행한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-103",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R6"
+   ],
+   "statement": "PH-1은 `ph1-reconciliation-v0` 정산을 거쳐 종료 조건에 도달했고 `ph1-closure` 로 봉인됐다. 봉인 이후의 수정은 폐기·재발행으로만 한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-104",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "PH-R7"
+   ],
+   "statement": "한 단계 안에서 하위 층의 작업이 먼저 오는 것은 역류가 아니다. L-9의 import 방향이 단방향이므로 회계층 대상을 세우려면 그것이 딛는 정의층 대상이 먼저 서야 한다.",
+   "basis": "`charter-2` 에서 섰다. L-9 의 import 방향이 단방향이라 회계층 대상을 세우려면 그것이 딛는 정의층 대상이 먼저 서야 하며, PH-2 의 첫 산출이 정의층 파일인 것이 그 형이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-105",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "O-1"
+   ],
+   "statement": "핵심 루프 먼저. Adrian-Shin 계열의 제약-레버리지 순환. (★ 완료: E-01 ~ E-05).",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-106",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "O-2"
+   ],
+   "statement": "그다음 배관. Pozsar 계열의 신용중개 연쇄, 위계, 담보, 현금풀. (★ 완료: E-06 ~ E-09 · 비★ E-10 ~ E-11).",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-107",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "O-3"
+   ],
+   "statement": "마지막으로 확장한다. Shin 계열의 통화 차원과 국경 간 청구권이며 ★ 가 완료됐다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-108",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "G-1"
+   ],
+   "statement": "측정 방법이 다르면 다른 개념이다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-109",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "G-2"
+   ],
+   "statement": "같은 데이터로 측정되면 분할하지 않는다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-110",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "G-3"
+   ],
+   "statement": "G-1·G-2 어느 쪽으로도 판정되지 않으면 분할하지 말고 Q-4에 올린다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-111",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "G-4"
+   ],
+   "statement": "분할된 각 개념은 실제 역사 사례로 배제 사례를 갖는다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-112",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "G-5"
+   ],
+   "statement": "분할 결과는 V-2의 네 관계로만 표현한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-113",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-2"
+   ],
+   "statement": "포화 후 남은 미해결 슬롯은 Q-4로 이관하고 읽기로 해결하려 하지 않는다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-114",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-3"
+   ],
+   "statement": "단계 종료 시 Q-1~Q-4를 봉인하고 원장으로 역유입한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-115",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-4"
+   ],
+   "statement": "포화 판정은 비★ 구간에만 적용한다.",
+   "basis": "O-1 ★ 구간 종료 시점에 S-1 을 폐기하면서 섰다. ★ 다섯 편이 모두 새 원소를 추가해 포화가 성립할 여지가 없었던 것이 근거다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-116",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-5"
+   ],
+   "statement": "특정 구멍 해결에 직결되는 논문은 O-구간 순서와 무관하게 지목 참조한다.",
+   "basis": "위와 같다. 특정 구멍에 직결되는 편을 구간 순서와 무관하게 여는 경로가 필요했다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-117",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "S-6"
+   ],
+   "statement": "프로젝트의 종료 조건은 `CQ-fin` 전량이 정의 공백을 벗어나는 것이다. 정의 공백으로 끝내 남는 항은 구멍으로 기록하고 그것도 산출물로 센다.",
+   "basis": "`charter-5` 에서 착지점이 서면서 함께 섰다. v3 까지는 종료 조건이 전부 읽기 포화와 단계 봉인으로만 서 있어 무엇에 답했는지로 서 있는 조건이 하나도 없었다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-118",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "F-1"
+   ],
+   "statement": "요약으로 전락하는 실패를 추출 템플릿의 마지막 두 슬롯으로 방지한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-119",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "F-2"
+   ],
+   "statement": "무한 분할의 실패를 G-2로 방지한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-120",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "F-3"
+   ],
+   "statement": "저자 간 차이를 봉합하는 실패를 B-2로 금지하고 리뷰에서 확인한다.",
+   "basis": "탐구 방향 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 원 문서 `inquiry-direction-v2` 가 이력을 폐기 레지스터로만 들어 폐기되지 않은 조항의 경위가 남아 있지 않다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-121",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "F-4"
+   ],
+   "statement": "집행 보고의 액면 수용. 결정 세션이 리포를 손에 쥐지 않으므로 보고서를 그대로 믿으면 검증 없는 판정이 선다.",
+   "basis": "`charter-1` 의 작업 분담이 낳았다. 결정 세션이 리포를 손에 쥐지 않으므로 보고서를 그대로 믿으면 검증 없는 판정이 선다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-122",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-1"
+   ],
+   "statement": "노드 입도 — 의사결정 단위. 노드는 의사결정 단위로 정의하고 기관유형·단계·데스크·법인은 관측 투영으로 둔다. 근거:.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-123",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-2"
+   ],
+   "statement": "통화 차원 — 별도 축이되 비대칭.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-124",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-3"
+   ],
+   "statement": "부외 항목 — 포함.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-125",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-4"
+   ],
+   "statement": "정책 주체 — 중앙은행은 노드.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-126",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-5"
+   ],
+   "statement": "용어집의 물리적 형태 — Lean. 파생 규칙은 규율 V 계열과 D-6 폐기 및 D-7과 D-3 완화 금지다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-127",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-6"
+   ],
+   "statement": "관측층 — 신설. 규율 L-8에 따라 형식층을 넷으로 한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-128",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-7"
+   ],
+   "statement": "정의층 시점 인덱스 — 도입. 규율 L-13이 그것이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-129",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-8"
+   ],
+   "statement": "위계와 통화 등급 — 통합 방향. 청구권 위계(부분순서, 시점 인덱스)와 통화 자금조달 등급(부분순서, 시점 인덱스)을 하나의 구조로 통합하는 것을 방향으로 한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-130",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-9"
+   ],
+   "statement": "첫 형식화 대상을 집계 정리로 정했고 그 대상은 완료됐다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-131",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-10"
+   ],
+   "statement": "규율 전문의 리포 수록 — 하지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-132",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-12"
+   ],
+   "statement": "CI — `scripts/verify.sh` 를 올린다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-133",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-13"
+   ],
+   "statement": "규율 개정 5건 — 승인. §3.0의 v5 변경 요지가 그 목록이다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-134",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-14"
+   ],
+   "statement": "탐구 방향의 거처 — 이 문서의 §4. 흡수한다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-135",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-15"
+   ],
+   "statement": "값 정본의 형식 — `docs/baseline.md`. 마크다운이며 기계 판독 블록을 둔다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-136",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-16"
+   ],
+   "statement": "한국어 서술 지침의 적용 대상 — Lean docstring과 주석 포함. §7.1이 근거와 범위를 든다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-137",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-18"
+   ],
+   "statement": "페이즈 분할의 시점 — 개막 시 전량. 이동과 변경은 패치가 받는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-138",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-19"
+   ],
+   "statement": "지시 단위 — 페이즈. 재유입 단위와 다르다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-139",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-20"
+   ],
+   "statement": "마커 체계 — 신설. `CF-<n>` 단조 증가이고 종류는 필드가 든다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-140",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-21"
+   ],
+   "statement": "짭란티어 원장 참조 — 끊는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-141",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-22"
+   ],
+   "statement": "티어 어휘 — 셋이되 세 번째가 다르다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-142",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-24"
+   ],
+   "statement": "원장 항목의 폐기 — 레코드 추가. 상태 필드를 고치는 방식을 쓰지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-143",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-26"
+   ],
+   "statement": "원장 검증기의 거처 — Claude Code가 쓴다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-144",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-27"
+   ],
+   "statement": "소진 문서의 거처 — 리포 루트에 놓되 추적하지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-145",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-28"
+   ],
+   "statement": "역유입의 범위 — 전량. 규율과 확정 결정과 미결과 구멍 전량을 첫 적재에 넣는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-146",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-29"
+   ],
+   "statement": "원장 항목의 외부 지목 — 두지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-147",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "J-30"
+   ],
+   "statement": "아크 문서 — 두지 않는다.",
+   "basis": "규율 초판에서 섰고 그것을 낳은 관측이 기록되지 않았다. 이 프로젝트에 규율 v1~v4 판의 문서가 없기 때문이며, 소급 적재의 한계를 문면에 남긴다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-154",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-01"
+   ],
+   "statement": "제약을 부등식으로. 표현 선택이 층을 정한다",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-157",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-04"
+   ],
+   "statement": "자기자본 외생성. 배제 사례: 2008년 이후 대규모 자본확충",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 T-5 에 따라 가정으로 기록하고 닫았다. 해결이 아니라 명시적 기록이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-158",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-05"
+   ],
+   "statement": "노드 = 의사결정 단위. 나머지는 관측 투영",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-160",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-07"
+   ],
+   "statement": "제약을 부등식으로. 표현 선택이 층을 정한다",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-161",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-08"
+   ],
+   "statement": "D-5 근거 확보 (저자 표기 차용 금지)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-162",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-09"
+   ],
+   "statement": "되먹임은 시장 비유동성(수동 투자자의 우하향 수요)에 의존",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 T-5 에 따라 가정으로 기록하고 닫았다. 해결이 아니라 명시적 기록이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-163",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-10"
+   ],
+   "statement": "노드 = 의사결정 단위. 나머지는 관측 투영",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-164",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-11"
+   ],
+   "statement": "같은 구멍이었음. 자산 측 적격성 제약 하나로 처리",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-167",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-14"
+   ],
+   "statement": "디폴트 없는 증폭. 초석 명제를 \"상환 실패\"에서 \"상환 실패 가능성에 대한 평가 변화\" 로 수정",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 이 초석 명제 수정으로 처분했다. 원장 역유입 대기였던 항이며 이 적재가 그것을 닫는다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-170",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-17"
+   ],
+   "statement": "마진은 위계의 자산 축을 측정. 제도 의존은 정의의 일부",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-171",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-18"
+   ],
+   "statement": "담보 중복 계상 = 부채수용력 발산 조건",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-174",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-21"
+   ],
+   "statement": "관측층 신설",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-175",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-22"
+   ],
+   "statement": "위기의 정의가 셋 (내부 상태 / 관측 문턱값 / 그림자 가격) / Morris·Shin 2016",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. `ph2-01` 이 Morris·Shin 독해로 해소했으므로 이연이 아니라 소진분이다. 정본은 K-10 해소가 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-178",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-25"
+   ],
+   "statement": "마진은 위계의 자산 축을 측정. 제도 의존은 정의의 일부",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-179",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-26"
+   ],
+   "statement": "엣지 패턴에서 유도",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-180",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-27"
+   ],
+   "statement": "엣지 생성 문법",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-184",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-31"
+   ],
+   "statement": "노드 = 의사결정 단위. 나머지는 관측 투영",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-185",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-32"
+   ],
+   "statement": "위계 최상단의 기능적 정의 (최종딜러)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-186",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-33"
+   ],
+   "statement": "O-1과 O-2의 실증적 충돌. 신용 급증의 원천이 은행 간인가 비은행 자금인가",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 봉인 시점에 열려 있었다. B-2 가 저자 간 차이의 봉합을 금지하므로 해소 대상이 아니다. 영구 기록이며 `decisions` 가 맞는 자리다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-187",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-34"
+   ],
+   "statement": "엣지 패턴에서 유도",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-188",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-35"
+   ],
+   "statement": "그래프가 둘",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-189",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-36"
+   ],
+   "statement": "이중 관할권 (소재지/국적)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-190",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-37"
+   ],
+   "statement": "같은 구멍이었음. 자산 측 적격성 제약 하나로 처리",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-191",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-38"
+   ],
+   "statement": "노드 = 의사결정 단위. 나머지는 관측 투영",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-195",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-42"
+   ],
+   "statement": "정의층 시점 인덱스 (L-13)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-196",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-43"
+   ],
+   "statement": "중앙은행 제약의 축별 비대칭 (통화 + 유동성/지급능력)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-197",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-44"
+   ],
+   "statement": "엣지 생성 문법",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-198",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-45"
+   ],
+   "statement": "정의층 시점 인덱스 (L-13)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-199",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-46"
+   ],
+   "statement": "총액 보존 (L-12)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-200",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-47"
+   ],
+   "statement": "노드 = 의사결정 단위. 나머지는 관측 투영",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-201",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-48"
+   ],
+   "statement": "관측층 신설",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-202",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-49"
+   ],
+   "statement": "통화 축 증폭은 UIP 실패에 의존. 저자들도 범위 밖이라 명시",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 T-5 에 따라 가정으로 기록하고 닫았다. 해결이 아니라 명시적 기록이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-204",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-51"
+   ],
+   "statement": "O-3의 정의층 기여는 구조 쪽에 크다",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-205",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-52"
+   ],
+   "statement": "존재 형태 진술 (T-6)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-206",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-53"
+   ],
+   "statement": "자금조달 통화 등급",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-208",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-55"
+   ],
+   "statement": "자금조달 통화 등급",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-210",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-57"
+   ],
+   "statement": "기준선 차분 (A-6)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-211",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-58"
+   ],
+   "statement": "오염원 3분류 (C-8)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-212",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "H-59"
+   ],
+   "statement": "회계층 `ℤ` (L-15)",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 해소 방식이 statement 에 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  }
+ ]
+}
