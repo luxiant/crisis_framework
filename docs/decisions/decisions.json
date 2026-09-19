@@ -3149,6 +3149,91 @@
    "tier": "finding",
    "layer": "meta",
    "related": []
+  },
+  {
+   "id": "CF-242",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-1"
+   ],
+   "statement": "위계 순서의 강도를 부분순서로 확정했다. 전순서는 근거가 없다.",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 화폐성 위계가 전순서라는 근거가 뭉치 어디에도 없었다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-243",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-2"
+   ],
+   "statement": "신용중개 연쇄의 단계 열거를 7단계로 확정했다. 시대 의존성은 K-8 로 이관했다.",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 7단계가 2007년 이전 미국 증권화 구조의 기술이라는 점은 별개 미결로 갈렸다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-244",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-5"
+   ],
+   "statement": "담보 중복 계상의 회계층 표현을 장부 분리로 해소했다. 소유권 장부와 담보 장부를 나누면 각각 닫힌다.",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. J-3 이 같은 낙착을 부외 항목 쪽에서 들고, 회계층에 담보 속도가 비율로 선다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-245",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-6"
+   ],
+   "statement": "제약 함수의 공역은 표현 선택이 층을 정한다. 정본은 상한 표현이며 교차곱 정수 부등식으로 쓴다.",
+   "basis": "PH-0·PH-1 의 추출에서 열렸고 `primary-1` 에서 해소됐다. 레버리지 상한으로 쓰면 `ℚ` 이고 분위수로 쓰면 `ℝ` 이라 공역 선택이 층을 정한다는 것이 그때 확정됐다. L-15 가 회계층 기본을 `ℤ` 로 정한 뒤 상한 표현이 교차곱 정수 부등식이 됐다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-246",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-6",
+    "kind": "decision_session",
+    "date": "2026-09-19"
+   },
+   "names": [
+    "K-10"
+   ],
+   "statement": "위기의 정의를 확정했다. 위기는 사건이고 원장 술어로 정의하며 위험은 그 사건의 사전 확률이다.",
+   "basis": "`ph2-01` 의 Morris·Shin 독해에서 해소됐다. 후보로 꼽히던 셋이 경쟁 후보가 아니라 하나의 분해였고, 셋째는 앞의 둘을 잇는 다리가 아니라 차이 그 자체였다. 이 분리가 층 배정까지 준다. 사건은 회계층이고 확률은 동학층이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
   }
  ]
 }
