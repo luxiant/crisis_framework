@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # 재현 가능한 전량 검증 스크립트.
 #
-#   1. 빌드 타깃 밖 중복 사본 탐지 (검증된 파일 ≠ 손에 든 파일 사고 방지)
-#   2. 프로젝트 olean 강제 삭제 후 lake build (디스크 내용 기준 재검증)
-#   3. 금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / ℝ)
-#   4. olean 기준 공리 의존 출력 + 회계층 기준선 차분 (기대값 대조)
-#   5. 변이 검사 — 정리·example 5개 진술을 하나씩 뒤집어 반드시 실패함을 확인
+#   step1-duplicate  빌드 타깃 밖 중복 사본 탐지 (검증된 파일 ≠ 손에 든 파일 사고 방지)
+#   step2-build      프로젝트 olean 강제 삭제 후 lake build (디스크 내용 기준 재검증)
+#   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
+#   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
+#   step5-mutation   변이 검사 — 정리·example 5개 진술을 하나씩 뒤집어 반드시 실패함을 확인
+#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 스물넷)
+#
+# 각 단계는 선언된 단계 id 를 [step:<id>] 로 출력에 낸다. 원장의 tier: invariant
+# 항목이 그 id 를 check 필드로 들고 검사 7 이 둘을 대조한다.
 #
 # 실행: bash scripts/verify.sh
 set -uo pipefail
@@ -22,11 +26,11 @@ TARGETS=(
 AGG=CrisisFramework/Accounting/Aggregation.lean
 
 fail=0
-step() { printf '\n\033[1m== %s\033[0m\n' "$*"; }
+step() { printf '\n\033[1m== %s\033[0m\n' "$*"; printf '[step:%s]\n' "$1"; }
 ok()   { printf '  \033[32mOK\033[0m   %s\n' "$*"; }
 bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$*"; fail=1; }
 
-step "1. 빌드 타깃 밖 중복 사본 탐지"
+step step1-duplicate "빌드 타깃 밖 중복 사본 탐지"
 # 저장소 전체를 훑는다. crisis-framework/ 안만 보면 상위 디렉터리에 놓인
 # 낡은 초안 사본을 놓친다 (1차 검증 직후 실제로 발생한 사고).
 SCAN="$(git rev-parse --show-toplevel 2>/dev/null || echo "$ROOT")"
@@ -47,7 +51,7 @@ for t in "${TARGETS[@]}"; do
 done
 [ "$dup" -eq 0 ] && ok "저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음"
 
-step "2. 프로젝트 olean 삭제 후 전량 재빌드"
+step step2-build "olean 삭제 후 전량 재빌드"
 rm -rf .lake/build/lib/lean/CrisisFramework .lake/build/lib/lean/CrisisFramework.[oit]*
 if lake build 2>&1 | tee /tmp/verify_build.log | tail -5; then
   if grep -qE 'error|warning' /tmp/verify_build.log; then
@@ -60,7 +64,7 @@ else
   bad "lake build 실패"
 fi
 
-step "3. 금지 구문 정적 검사 (주석 제외)"
+step step3-forbidden '금지 구문 정적 검사 (층별 `ℝ` 포함)'
 # 주석·docstring 을 먼저 제거한다. 그러지 않으면 헤더에 적은
 # "`sorry` 0" 같은 설명 문구가 스스로 걸린다 (실제로 발생했다).
 # Lean 의 /- -/ 는 중첩 가능하므로 깊이를 세어 제거하고, -- 는 줄 끝까지 지운다.
@@ -99,18 +103,39 @@ check_absent 'sorry'          '\bsorry\b'
 check_absent 'axiom 선언'      '^[[:space:]]*axiom[[:space:]]'
 check_absent 'noncomputable'  '\bnoncomputable\b'
 check_absent 'Classical'      '\bClassical\b'
-check_absent 'ℝ (L-4)'        'ℝ'
 check_absent 'admit/native_decide' '\b(admit|native_decide)\b'
+
+# `ℝ` 금지는 층별로 갈린다. 동학층은 허용이고 나머지 넷은 금지다 (L-4).
+# CLAUDE.md §2 의 표가 정본이며 디렉터리가 층을 결정한다.
+real_hits=0
+for t in "${TARGETS[@]}"; do
+  case "$t" in
+    CrisisFramework/Dynamics/*) continue ;;
+  esac
+  hits=$(cd "$CODE" && grep -nE 'ℝ' "$t" 2>/dev/null)
+  if [ -n "$hits" ]; then
+    real_hits=1
+    bad "층별 \`ℝ\` 금지 위반: $t"; printf '%s\n' "$hits" | sed 's/^/       /'
+  fi
+done
+[ "$real_hits" -eq 0 ] && ok "\`ℝ\` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)"
 rm -rf "$CODE"
 
-step "4. olean 기준 공리 의존 + 회계층 기준선 차분"
-# 회계층 기대 기준선 — 2026-09-12 `ℚ → ℤ` 이행 시점에 실측한 값.
-#   갱신 전 (ℚ 회계층): [propext, Classical.choice, Quot.sound]
-#   갱신 후 (ℤ 회계층): [propext, Quot.sound]
+step step4-baseline '공리 의존 + `docs/baseline.md` 기준선 차분'
+# 회계층 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
+# 전사하면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다 (baseline.md 머리말).
 # 화이트리스트가 아니라 차분이다. 기준선 자체는 매 실행마다
 # Scratch/VerifyBuilt.lean 의 baselineProbe / baselineProbeSum 이 다시 찍는다.
 # Finset 합을 쓰는 baselineProbeSum 쪽이 실효 기준선이다.
-BASELINE='[propext, Quot.sound]'
+BASELINE_DOC=docs/baseline.md
+BASELINE=$(sed -n '/<!-- BASELINE:BEGIN -->/,/<!-- BASELINE:END -->/p' "$BASELINE_DOC" \
+           | sed -n 's/^ACCOUNTING_INT=//p')
+if [ -z "$BASELINE" ]; then
+  bad "$BASELINE_DOC 의 기계 판독 블록에서 ACCOUNTING_INT 를 읽지 못함 — 형식 확인 필요"
+  BASELINE='(읽지 못함)'
+else
+  ok "기준선을 $BASELINE_DOC 에서 읽음: ACCOUNTING_INT=$BASELINE"
+fi
 
 vb_out=$(lake env lean Scratch/VerifyBuilt.lean 2>&1); vb_rc=$?
 printf '%s\n' "$vb_out" | sed 's/^/  /'
@@ -126,7 +151,7 @@ if [ -z "$measured" ]; then
 elif [ "$measured" = "$BASELINE" ]; then
   ok "실효 기준선 실측 = $measured (기대값과 일치)"
 else
-  bad "실효 기준선이 기대값과 다름: 측정 $measured / 기대 $BASELINE — 스크립트의 BASELINE 갱신은 사람의 결정"
+  bad "실효 기준선이 기대값과 다름: 측정 $measured / 기대 $BASELINE — docs/baseline.md 의 갱신은 사람의 결정"
 fi
 
 for c in creditSupply aggregationError two_mul_aggregationError_eq_pairwise \
@@ -145,7 +170,7 @@ for c in creditSupply aggregationError two_mul_aggregationError_eq_pairwise \
   fi
 done
 
-step "5. 변이 검사 (진술 5개, 각각 뒤집으면 실패해야 함)"
+step step5-mutation "변이 검사"
 mapfile -t anchors < <(grep -nE '(≠|=) 0 := by' "$AGG" | cut -d: -f1)
 if [ "${#anchors[@]}" -ne 5 ]; then
   bad "변이 대상 5개를 기대했으나 ${#anchors[@]}개 발견 — 스크립트 갱신 필요"
@@ -166,6 +191,13 @@ else
     fi
   done
   rm -rf "$tmp"
+fi
+
+step step6-ledger '`check_wiki.py` 호출'
+if python3 scripts/check_wiki.py; then
+  ok "원장 검증 전량 통과"
+else
+  bad "원장 검증 실패 — 위 [check:*] 줄이 어느 검사인지 든다 (SPEC.md §2)"
 fi
 
 printf '\n'

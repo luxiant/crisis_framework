@@ -5,7 +5,7 @@
 주입을 잡는지 본다. **주입은 사본에서 하고 원장을 건드리지 않는다.** 사본은 임시 디렉터리에
 만들며 검사가 끝나면 지운다.
 
-    python3 Scratch/wiki_negative_control.py [--keep]
+    python3 scripts/wiki_negative_control.py [--keep]
 
 판정 기준이 둘로 갈린다. 실패시키는 검사(열여덟과 아크 종료 둘)는 **주입한 사본에서 FAIL 이
 나고 기준선에 없던 위반 줄이 새로 나야** 통과다. 기준선에서 이미 실패하는 검사가 있으므로

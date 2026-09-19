@@ -599,7 +599,7 @@ bash scripts/verify.sh      # 중복 사본 + 강제 재빌드 + 정적 검사 +
 
 ### 15-1. 주입 방법
 
-주입 장치는 `Scratch/wiki_negative_control.py` 이고 다음 순서로 돈다.
+주입 장치는 `scripts/wiki_negative_control.py` 이고 다음 순서로 돈다.
 
 1. 리포 사본을 임시 디렉터리에 만든다. `.lake` 와 `.git` 은 뺀다
 2. 사본에 위반을 하나 주입한다. **원장 파일을 건드리지 않는다**
@@ -685,5 +685,5 @@ bash scripts/verify.sh      # 중복 사본 + 강제 재빌드 + 정적 검사 +
 
 ```bash
 python3 scripts/check_wiki.py              # 원장 검증
-python3 Scratch/wiki_negative_control.py   # 음성 대조 (사본에 주입하며 원장을 건드리지 않는다)
+python3 scripts/wiki_negative_control.py   # 음성 대조 (사본에 주입하며 원장을 건드리지 않는다)
 ```
