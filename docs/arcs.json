@@ -36,7 +36,8 @@
         "charter-13",
         "charter-14",
         "charter-15",
-        "charter-16"
+        "charter-16",
+        "charter-17"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -198,6 +199,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-16",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-17",
+      "what": "생성과 지목의 규율 여덟과 상대 지목의 꼬리 마흔하나와 그 스키마 하나를 받는 페이즈",
+      "why": "페이즈를 절대 이름으로만 지목하는 조항이 서면서, 그 조항이 소급하지 않으므로 이미 실린 마흔한 항목의 상대 지목 일흔여덟을 뒤에서 푸는 꼬리가 필요해졌다. 아크가 둘 이상이 되면 서수 지목이 아크를 잃으므로 미루면 쌓인다. 규율 여덟은 유니버스를 넓히는 대신 생성을 닫는 쪽이다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-17",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
