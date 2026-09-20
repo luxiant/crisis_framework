@@ -36,9 +36,9 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | 3차 세션 (2026-09-12) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | 1차 세션 |
-| 정의층 | 무차원 + `ℕ` | **미측정** | |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | 6차 세션 (2026-09-20) |
 | 관측층 | 무차원 | **미측정** | |
-| 용어집 | 없음 | **미측정** | |
+| 용어집 | 없음 | `[]` | 6차 세션 (2026-09-20) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -50,8 +50,17 @@
 ### 2-1. 측정 프로브
 
 기준선은 프로브 정의의 `#print axioms` 출력으로 잰다. 프로브는 `Scratch/VerifyBuilt.lean`에
-있으며 `baselineProbe`와 `baselineProbeSum` 둘이다. 뒤가 `Finset` 합을 포함하는 실효 기준선을
-낸다.
+있으며 층마다 둘씩이다. 뒤가 그 층이 실제로 쓰는 용기를 포함하는 실효 기준선을 낸다.
+
+| 층 | 최소 | 실효 |
+|---|---|---|
+| 회계층 | `baselineProbe` | `baselineProbeSum` (`Finset` 합) |
+| 용어집 | `glossaryProbe` | `glossaryProbeList` (`List`) |
+| 정의층 | `definitionProbe` | `definitionProbeFamily` (`ℕ → Finset`) |
+
+**공리 감사의 대상은 선언 열다섯 전량이다.** 회계층 다섯과 용어집 넷과 정의층 여섯이며 각 층의
+선언을 그 층의 실효 기준선과 차분한다. 그 전에는 회계층 다섯만 재고 나머지 열은 그물 밖에
+있었으며, 그 사실이 이 표의 「미측정」 칸으로만 서 있었다. 관측층과 동학층은 파일이 아직 없다.
 
 ### 2-2. 기준선을 초과했을 때
 
@@ -115,6 +124,8 @@ MATHLIB_SHA=905b95818eb32af7874a58b427f50c1711a5e96c
 TOOLCHAIN=leanprover/lean4:v4.32.2
 ACCOUNTING_INT=[propext, Quot.sound]
 ACCOUNTING_RAT=[propext, Classical.choice, Quot.sound]
+GLOSSARY=[]
+DEFINITION=[propext, Quot.sound]
 <!-- BASELINE:END -->
 
 미측정 층은 위 블록에 키를 두지 않는다. 키가 없는 것과 값이 빈 것은 다른 사실이며, 빈 값을

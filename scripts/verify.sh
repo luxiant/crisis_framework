@@ -169,6 +169,84 @@ for c in creditSupply aggregationError two_mul_aggregationError_eq_pairwise \
     bad "$c: 기준선 초과 — $got / 기준선 $BASELINE. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)"
   fi
 done
+AUDITED=5
+AUDIT_DETAIL="회계층 5"
+
+# 용어집 넷과 정의층 여섯을 각 층의 실효 기준선과 차분한다 (A-6). 회계층만 보던
+# 그물을 선언 열다섯 전량으로 넓힌 자리다. 각 층의 기준선은 docs/baseline.md 의
+# 기계 판독 블록이 들고, 실효 기준선 자체는 그 층의 프로브가 매 실행마다 다시 찍는다.
+
+# 이름 하나의 공리 목록을 낸다. 무의존이면 [] 를 내고 찾지 못하면 빈 문자열을 낸다.
+axioms_of() {
+  local n=$1 g
+  g=$(printf '%s' "$norm" | grep -o "'$n' depends on axioms: \[[^]]*\]" | sed "s/.*axioms: //")
+  if [ -n "$g" ]; then printf '%s' "$g"; return; fi
+  if printf '%s' "$norm" | grep -q "'$n' does not depend on any axioms"; then printf '[]'; return; fi
+  printf ''
+}
+
+# 기준선을 넘은 공리만 낸다. 부분집합 대조이므로 기준선 이하도 통과시킨다.
+excess_of() {
+  python3 -c "
+import sys
+def p(s): return set(t.strip() for t in s.strip().strip('[]').split(',') if t.strip())
+ex=sorted(p(sys.argv[1])-p(sys.argv[2]))
+print('['+', '.join(ex)+']' if ex else '[]')
+" "$1" "$2"
+}
+
+audit_layer() {
+  local label=$1 key=$2 probe=$3; shift 3
+  local base measured c got ex n=0
+  base=$(sed -n '/<!-- BASELINE:BEGIN -->/,/<!-- BASELINE:END -->/p' "$BASELINE_DOC" \
+         | sed -n "s/^$key=//p")
+  if [ -z "$base" ]; then
+    bad "$BASELINE_DOC 의 기계 판독 블록에서 $key 를 읽지 못함 — 형식 확인 필요"
+    AUDIT_DETAIL="$AUDIT_DETAIL · $label 0"
+    return
+  fi
+  ok "기준선을 $BASELINE_DOC 에서 읽음: $key=$base"
+  measured=$(axioms_of "$probe")
+  if [ -z "$measured" ]; then
+    bad "$label 기준선 프로브 출력을 찾지 못함 ($probe) — Scratch/VerifyBuilt.lean 확인 필요"
+  elif [ "$measured" = "$base" ]; then
+    ok "$label 실효 기준선 실측 = $measured (기대값과 일치)"
+  else
+    bad "$label 실효 기준선이 기대값과 다름: 측정 $measured / 기대 $base — docs/baseline.md 의 갱신은 사람의 결정"
+  fi
+  for c in "$@"; do
+    got=$(axioms_of "$c")
+    AUDITED=$((AUDITED + 1)); n=$((n + 1))
+    if [ -z "$got" ]; then
+      bad "$c: 공리 출력을 찾지 못함"
+      continue
+    fi
+    ex=$(excess_of "$got" "$base")
+    if [ "$ex" = "[]" ]; then
+      if [ "$got" = "$base" ]; then ok "$c: $got (기준선과 동일)"
+      else ok "$c: $got (기준선 이하)"; fi
+    else
+      bad "$c: 기준선 초과 — $got / 기준선 $base / 초과분 $ex. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)"
+    fi
+  done
+  AUDIT_DETAIL="$AUDIT_DETAIL · $label $n"
+}
+
+audit_layer 용어집 GLOSSARY glossaryProbeList \
+  CrisisFramework.Glossary.Concept \
+  CrisisFramework.Glossary.SourceTag \
+  CrisisFramework.Glossary.ConceptRel \
+  CrisisFramework.Glossary.registry
+
+audit_layer 정의층 DEFINITION definitionProbeFamily \
+  CrisisFramework.Definition.Constraint \
+  CrisisFramework.Definition.Constraint.trivial \
+  CrisisFramework.Definition.NodeState \
+  CrisisFramework.Definition.NodeState.trivial \
+  CrisisFramework.Definition.NodeFamily \
+  CrisisFramework.Definition.NodeFamily.empty
+
+ok "공리 감사 대상 선언 $AUDITED ($AUDIT_DETAIL)"
 
 step step5-mutation "변이 검사"
 mapfile -t anchors < <(grep -nE '(≠|=) 0 := by' "$AGG" | cut -d: -f1)
