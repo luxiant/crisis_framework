@@ -329,12 +329,31 @@ def check_04a(led: Ledger) -> Report:
 
 
 def check_05(led: Ledger) -> Report:
-    r = Report("5", "wiki5-closed-arc", "status: closed 인 아크에 항목이 드는가", "fail")
+    r = Report("5", "wiki5-closed-arc", "status: closed 인 아크에 새 항목이 드는가", "fail")
+    # 「새 항목」을 날짜로 가른다. 닫힌 아크의 항목 가운데 origin.date 가 그 아크의
+    # closed 보다 뒤인 것만 잡는다. 닫힌 아크에 새 페이즈가 생기는 것은 검사 3 이 이미
+    # 보므로, 이 검사의 고유한 몫은 선언된 페이즈 안에서 닫힌 뒤에 쓰인 항목뿐이고
+    # 날짜가 유일한 신호다. 같은 날의 항목은 빠져나가며 스키마의 입도가 날짜이므로
+    # 그 한계는 그대로 남는다. `← SPEC.md §2.1`
+    n = 0
     for _, e in led.entries:
-        arc = (e.get("origin") or {}).get("arc")
+        origin = e.get("origin") or {}
+        arc = origin.get("arc")
         a = led.arcs.get(arc)
-        if a is not None and a.get("status") == "closed":
-            r.bad(f"{e.get('id')}: 닫힌 아크 `{arc}` 로 항목이 쓰였다")
+        if a is None or a.get("status") != "closed":
+            continue
+        n += 1
+        closed = a.get("closed")
+        if not closed:
+            r.bad(f"{e.get('id')}: 아크 `{arc}` 가 닫혔는데 closed 가 비어 있어 가를 수 없다")
+            continue
+        date = origin.get("date")
+        if not date:
+            r.bad(f"{e.get('id')}: 닫힌 아크 `{arc}` 의 항목인데 origin.date 가 없어 가를 수 없다")
+            continue
+        if date > closed:
+            r.bad(f"{e.get('id')}: 닫힌 아크 `{arc}` 에 닫힌 날({closed}) 뒤의 항목이 쓰였다 — {date}")
+    r.note(f"닫힌 아크를 가리키는 항목 {n}건")
     return r
 
 

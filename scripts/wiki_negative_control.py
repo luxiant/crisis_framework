@@ -7,10 +7,14 @@
 
     python3 scripts/wiki_negative_control.py [--keep]
 
-판정 기준이 둘로 갈린다. 실패시키는 검사(열여덟과 아크 종료 둘)는 **주입한 사본에서 FAIL 이
+판정 기준이 셋으로 갈린다. 실패시키는 검사(열여덟과 아크 종료 둘)는 **주입한 사본에서 FAIL 이
 나고 기준선에 없던 위반 줄이 새로 나야** 통과다. 기준선에서 이미 실패하는 검사가 있으므로
 FAIL 여부만 보면 공허해지기 때문이다. 보고만 하는 검사 넷은 실패시키지 않으므로 **보고 줄이
 기준선과 달라지고 주입한 항목이 그 안에 잡혀야** 통과다.
+
+셋째는 **잡히지 않아야 하는 항**이며 `CASES` 의 일곱째 자리에 `"nocatch"` 를 둔 항이 그것이다.
+새 위반 줄이 나지 않아야 통과다. 검사 5 가 날짜로 가르므로 닫힌 날 이전 날짜의 항목은 잡히지
+않아야 하고, 그 방향을 재지 않으면 「날짜를 보지 않고 여전히 전량을 잡는다」와 갈리지 않는다.
 """
 
 from __future__ import annotations
@@ -22,6 +26,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import date as _date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -164,11 +169,51 @@ def inj_04a(root):
     save_arcs(root, doc)
 
 
+def _closed_arc(root):
+    """닫힌 아크 하나와 그 closed 날짜를 낸다."""
+    for x in arcs(root)["arcs"]:
+        if x.get("status") == "closed" and x.get("closed"):
+            return x["name"], x["closed"]
+    raise SystemExit("음성 대조: 닫힌 아크가 없어 검사 5 의 조건을 만들 수 없다")
+
+
+def _shift(day: str, delta: int) -> str:
+    y, m, d = (int(v) for v in day.split("-"))
+    return (_date(y, m, d) + timedelta(days=delta)).isoformat()
+
+
 def inj_05(root):
+    """닫힌 날보다 **뒤**의 날짜로 항목을 쓴다. 잡혀야 한다.
+
+    날짜를 함께 옮기지 않으면 조건이 서지 않는다. 검사 5 가 닫힌 아크를 가리키는
+    항목을 전부 잡던 판에서는 아크와 페이즈만 옮겨도 걸렸으나, 날짜로 가르게 된
+    뒤에는 같은 날의 항목이 빠져나가므로 그 주입이 공허해진다.
+    """
+    name, closed = _closed_arc(root)
+    after = _shift(closed, 1)
+
     def f(e):
-        e["origin"]["arc"] = "primary"
-        e["origin"]["phase"] = "primary-1"
+        e["origin"]["arc"] = name
+        e["origin"]["phase"] = f"{name}-1"
+        e["origin"]["date"] = after
     edit(root, "decisions", "CF-24", f)
+    return after
+
+
+def inj_05_before(root):
+    """닫힌 날보다 **앞**의 날짜로 항목을 쓴다. 잡히지 않아야 한다.
+
+    반대 방향이 없으면 「날짜를 보지 않고 여전히 전량을 잡는다」와 갈리지 않는다.
+    """
+    name, closed = _closed_arc(root)
+    before = _shift(closed, -1)
+
+    def f(e):
+        e["origin"]["arc"] = name
+        e["origin"]["phase"] = f"{name}-1"
+        e["origin"]["date"] = before
+    edit(root, "decisions", "CF-24", f)
+    return before
 
 
 def inj_06(root):
@@ -364,7 +409,8 @@ CASES = [
     ("3-a", "wiki3a-phase-form",           "다른 아크의 페이즈명을 적는다",                inj_03a, None, None),
     ("3",   "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None, None),
     ("4-a", "wiki4a-patch-from",           "없는 페이즈를 from 에 적는다",                 inj_04a, None, None),
-    ("5",   "wiki5-closed-arc",            "닫힌 아크로 항목을 쓴다",                      inj_05,  None, None),
+    ("5",   "wiki5-closed-arc",            "닫힌 날 뒤의 날짜로 항목을 쓴다",              inj_05,  None, None),
+    ("5",   "wiki5-closed-arc",            "닫힌 날 앞의 날짜로 항목을 쓴다",              inj_05_before, None, None, "nocatch"),
     ("6",   "wiki6-tier-vocab",            "tactical 을 적는다",                           inj_06,  None, None),
     ("7",   "wiki7-invariant-check",       "없는 단계명을 적는다",                         inj_07,  None, None),
     ("8",   "wiki8-retire-target",         "같은 대상을 두 번 폐기한다",                   inj_08,  None, None),
@@ -406,7 +452,10 @@ def main() -> int:
         base_plain = run_checker(make_copy(tmp / "base"))
         base_arc = run_checker(make_copy(tmp / "base-arc"), arc_close="charter")
 
-        for (num, step, desc, fn, marker, arc), cid in zip(CASES, case_id):
+        for case, cid in zip(CASES, case_id):
+            num, step, desc, fn, marker, arc = case[:6]
+            # 기대 방향이다. 기본은 잡히는 것이고 "nocatch" 는 잡히지 않아야 하는 항이다.
+            expect = case[6] if len(case) > 6 else "catch"
             work = make_copy(tmp / f"case-{num.replace('-', '')}")
             extra = fn(work)
             got = run_checker(work, arc_close=arc)
@@ -419,6 +468,11 @@ def main() -> int:
                 hit = any((marker or "") in n for n in new_notes)
                 ok = bool(new_notes) and hit
                 detail = new_notes[0] if new_notes else "보고 줄에 변화 없음"
+            elif expect == "nocatch":
+                new_v = [v for v in g["violations"] if v not in b["violations"]]
+                ok = not new_v
+                detail = ("잡히지 않았다 (기대대로)" if ok
+                          else "잡히지 않아야 하는데 잡혔다 — " + new_v[0])
             else:
                 new_v = [v for v in g["violations"] if v not in b["violations"]]
                 ok = g["verdict"] == "FAIL" and bool(new_v)
@@ -434,7 +488,7 @@ def main() -> int:
             print(f"사본을 남겼다: {tmp}")
 
     print()
-    print("| 주입 항 | 검사 | 주입한 위반 | 기준선 | 주입 후 | 잡았는가 |")
+    print("| 주입 항 | 검사 | 주입한 위반 | 기준선 | 주입 후 | 기대대로인가 |")
     print("|---|---|---|---|---|---|")
     for cid, num, desc, bv, gv, ok, _ in rows:
         print(f"| `{cid}` | {num} | {desc} | {bv} | {gv} | {'예' if ok else '**아니오**'} |")
@@ -443,9 +497,10 @@ def main() -> int:
         print(f"{cid}: {detail}")
     bad = [r for r in rows if not r[5]]
     print()
-    print(f"주입 항 {len(rows)}개 가운데 주입을 잡은 것 {len(rows)-len(bad)}개, 놓친 것 {len(bad)}개")
+    print(f"주입 항 {len(rows)}개 가운데 기대대로인 것 {len(rows)-len(bad)}개, "
+          f"어긋난 것 {len(bad)}개")
     if bad:
-        print("놓친 항: " + ", ".join(r[0] for r in bad))
+        print("어긋난 항: " + ", ".join(r[0] for r in bad))
         return 1
     return 0
 

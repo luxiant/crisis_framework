@@ -6,7 +6,8 @@
 #   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
 #   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
 #   step5-mutation   변이 검사 — 정리·example 5개 진술을 하나씩 뒤집어 반드시 실패함을 확인
-#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 스물넷)
+#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 스물다섯)
+#                    아크 종료 검사 둘은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
 #
 # 각 단계는 선언된 단계 id 를 [step:<id>] 로 출력에 낸다. 원장의 tier: invariant
 # 항목이 그 id 를 check 필드로 들고 검사 7 이 둘을 대조한다.
