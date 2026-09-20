@@ -35,7 +35,8 @@
         "charter-12",
         "charter-13",
         "charter-14",
-        "charter-15"
+        "charter-15",
+        "charter-16"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -184,6 +185,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-15",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-16",
+      "what": "프롬프트의 상시 지시와 역추적의 범위와 유니버스의 확정과 종료 조건을 받는 페이즈",
+      "why": "열다섯 번째 페이즈가 리포의 추적 파일을 전량 열고도 호출 프롬프트가 유니버스 밖에 남았다. 유니버스를 「어디에 있는가」로 그으면 리포 밖이 빠지고 「조항을 담는가」로 그으면 값과 코드가 빠지므로, 「집행의 행동을 바꾸는가」로 다시 긋는다. 미전사분을 발생원으로 가르니 다섯이고 도구 결손만 끝나지 않으므로 그것을 종료 조건에서 뺀다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-16",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
