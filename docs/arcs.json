@@ -38,7 +38,9 @@
         "charter-15",
         "charter-16",
         "charter-17",
-        "charter-18"
+        "charter-18",
+        "charter-19",
+        "charter-20"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -226,6 +228,34 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-18",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "from": null,
+      "phase": "charter-19",
+      "what": "집행 문면에 명세의 결손을 가르는 판별선과 보고한 결함의 처분을 세우는 페이즈",
+      "why": "결함 여섯 가운데 검증기가 잡을 수 있는 것이 하나도 없었다. 검증기는 리포 안만 보는데 지시서는 추적되지 않는다. 그 여섯을 전부 원장에 실으면 원장이 결함 목록이 되므로 문턱을 세웠다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-20",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "from": null,
+      "phase": "charter-20",
+      "what": "`charter-19` 를 아크 레지스터에 소급 선언하고 `CF-566` 을 폐기한 뒤 아크를 닫는 페이즈",
+      "why": "`charter-19` 가 원장에 아무것도 싣지 않아 검사 3 이 볼 것이 없었고 선언 없이 통과했다. 아크를 닫기 전에 값 정본을 실물과 맞춘다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-20",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
