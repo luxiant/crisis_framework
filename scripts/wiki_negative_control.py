@@ -265,6 +265,45 @@ def inj_23(root):
     return tok
 
 
+def inj_24_missing(root):
+    """상주 문서에 없는 규율 ID 를 적는다. 미실재는 선언으로 면제되지 않는다.
+
+    토큰은 검사 23·24 의 계열에 들면서 어느 항목의 `names` 에도 없는 것이어야 한다. 계열 밖의
+    글자를 쓰면 애초에 규율 ID 로 읽히지 않아 주입이 조건을 만들지 못한다."""
+    f = root / "CLAUDE.md"
+    f.write_text(f.read_text(encoding="utf-8")
+                 + "\n음성 대조가 주입한 줄이며 Q-99 를 든다.\n", encoding="utf-8")
+
+
+def inj_24_retired(root):
+    """선언되지 않은 폐기 규율을 적는다. CLAUDE.md 는 폐기 지목 선언을 두지 않는다."""
+    dead_id = load(root, "retirements")["retirements"][0]["target"]
+    tok = None
+    for reg in ("decisions", "deferred"):
+        for e in load(root, reg)[reg]:
+            if e["id"] == dead_id and e.get("names"):
+                tok = e["names"][0]
+    if not tok:
+        raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 주입 대상이 없다")
+    f = root / "CLAUDE.md"
+    f.write_text(f.read_text(encoding="utf-8")
+                 + f"\n음성 대조가 주입한 줄이며 {tok} 을 근거로 든다.\n", encoding="utf-8")
+    return tok
+
+
+def inj_25(root):
+    """최상위 선언 하나의 표지를 지운다."""
+    f = root / "CrisisFramework" / "Glossary" / "Core.lean"
+    lines = f.read_text(encoding="utf-8").split("\n")
+    for i, ln in enumerate(lines):
+        if ln.strip().startswith("-- DD:"):
+            del lines[i]
+            break
+    else:
+        raise SystemExit("지울 표지가 없다")
+    f.write_text("\n".join(lines), encoding="utf-8")
+
+
 def inj_16(root):
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
@@ -323,7 +362,7 @@ CASES = [
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
     ("3",   "wiki3-origin-phase",          "선언되지 않은 페이즈를 적는다",                inj_03,  None, None),
     ("3-a", "wiki3a-phase-form",           "다른 아크의 페이즈명을 적는다",                inj_03a, None, None),
-    ("3-p", "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None, None),
+    ("3",   "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None, None),
     ("4-a", "wiki4a-patch-from",           "없는 페이즈를 from 에 적는다",                 inj_04a, None, None),
     ("5",   "wiki5-closed-arc",            "닫힌 아크로 항목을 쓴다",                      inj_05,  None, None),
     ("6",   "wiki6-tier-vocab",            "tactical 을 적는다",                           inj_06,  None, None),
@@ -337,6 +376,9 @@ CASES = [
     ("14",  "wiki14-dd-layer",             "회계층 파일에서 정의층 항목을 지목한다",       inj_14,  None, None),
     ("15",  "wiki15-names-unique",         "같은 규율 ID 를 두 항목에 적는다",             inj_15,  None, None),
     ("23",  "wiki23-rule-ghost",           "폐기된 규율 ID 를 근거로 적는다",              inj_23,  None, None),
+    ("24",  "wiki24-doc-rule-ghost",       "상주 문서에 없는 규율 ID 를 적는다",           inj_24_missing,  None, None),
+    ("24",  "wiki24-doc-rule-ghost",       "선언되지 않은 폐기 규율을 적는다",             inj_24_retired,  None, None),
+    ("25",  "wiki25-marker-missing",       "최상위 선언 하나의 표지를 지운다",             inj_25,          None, None),
     ("16",  "wiki16-trigger-fired",        "충족된 트리거를 등재한다",                     inj_16,  "CF-9016", None),
     ("17",  "wiki17-reopen-null",          "reopen_when 을 null 로 둔 항을 늘린다",        inj_17,  "CF-9017", None),
     ("18",  "wiki18-blocking-disposition", "blocking 구멍을 등재한다",                     inj_18,  "CF-9018", None),
@@ -353,18 +395,24 @@ def main() -> int:
 
     tmp = Path(tempfile.mkdtemp(prefix="wiki-nc-"))
     rows = []
+    # 항의 이름은 `<단계 id>#<차례>` 다. 검사 번호에 접미를 붙이면 실재하는 검사 3-a·4-a 와
+    # 같은 꼴이 되어 항인지 검사인지 갈리지 않는다. 단계 id 는 네임스페이스가 다르다.
+    seen_step: dict = {}
+    case_id = []
+    for _num, _step, *_ in CASES:
+        seen_step[_step] = seen_step.get(_step, 0) + 1
+        case_id.append(f"{_step}#{seen_step[_step]}")
     try:
         base_plain = run_checker(make_copy(tmp / "base"))
         base_arc = run_checker(make_copy(tmp / "base-arc"), arc_close="charter")
 
-        for num, step, desc, fn, marker, arc in CASES:
+        for (num, step, desc, fn, marker, arc), cid in zip(CASES, case_id):
             work = make_copy(tmp / f"case-{num.replace('-', '')}")
             extra = fn(work)
             got = run_checker(work, arc_close=arc)
             base = base_arc if arc else base_plain
-            key = num.split("-p")[0] if num.endswith("-p") else num
-            b = base["checks"].get(key, {"verdict": "?", "violations": [], "notes": []})
-            g = got["checks"].get(key, {"verdict": "?", "violations": [], "notes": []})
+            b = base["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
+            g = got["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
 
             if num in ("16", "17", "18", "19"):
                 new_notes = [n for n in g["notes"] if n not in b["notes"]]
@@ -377,7 +425,7 @@ def main() -> int:
                 detail = new_v[0] if new_v else "새 위반 줄 없음"
                 if extra:
                     detail = detail.replace(str(extra), str(extra))
-            rows.append((num, step, desc, b["verdict"], g["verdict"], ok, detail))
+            rows.append((cid, num, desc, b["verdict"], g["verdict"], ok, detail))
             shutil.rmtree(work)
     finally:
         if not args.keep:
@@ -386,18 +434,18 @@ def main() -> int:
             print(f"사본을 남겼다: {tmp}")
 
     print()
-    print("| 검사 | 단계 id | 주입한 위반 | 기준선 | 주입 후 | 잡았는가 |")
+    print("| 주입 항 | 검사 | 주입한 위반 | 기준선 | 주입 후 | 잡았는가 |")
     print("|---|---|---|---|---|---|")
-    for num, step, desc, bv, gv, ok, _ in rows:
-        print(f"| {num} | `{step}` | {desc} | {bv} | {gv} | {'예' if ok else '**아니오**'} |")
+    for cid, num, desc, bv, gv, ok, _ in rows:
+        print(f"| `{cid}` | {num} | {desc} | {bv} | {gv} | {'예' if ok else '**아니오**'} |")
     print()
-    for num, step, desc, bv, gv, ok, detail in rows:
-        print(f"검사 {num}: {detail}")
+    for cid, num, desc, bv, gv, ok, detail in rows:
+        print(f"{cid}: {detail}")
     bad = [r for r in rows if not r[5]]
     print()
-    print(f"검사 {len(rows)}개 가운데 주입을 잡은 것 {len(rows)-len(bad)}개, 놓친 것 {len(bad)}개")
+    print(f"주입 항 {len(rows)}개 가운데 주입을 잡은 것 {len(rows)-len(bad)}개, 놓친 것 {len(bad)}개")
     if bad:
-        print("놓친 검사: " + ", ".join(r[0] for r in bad))
+        print("놓친 항: " + ", ".join(r[0] for r in bad))
         return 1
     return 0
 
