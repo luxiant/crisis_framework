@@ -7102,6 +7102,1310 @@
     "CF-497",
     "CF-502"
    ]
+  },
+  {
+   "id": "CF-506",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "유니버스의 경계를 넓히는 것으로는 생성기에 박힌 값의 부류가 잡히지 않는다.",
+   "basis": "이 아크의 결손 다섯에 축을 셋 걸어 재었다. 「집행의 조작을 바꾸는가」와 「조작이나 보고를 바꾸는가」와 「틀렸을 때 산출물이 틀리는가」이며, **셋 다 넷을 잡고 하나를 놓친다.** 넓혀서 얻는 것은 판별선 문면 하나뿐이고, 지시서 머리의 페이즈 번호는 셋 다 놓친다. 그것이 틀려도 산출물이 틀리지 않기 때문이다. **경계를 옮길 때마다 그 밖에 하나가 남는 형이 반복된다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-486",
+    "CF-497"
+   ]
+  },
+  {
+   "id": "CF-507",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서 생성기의 상수는 틀리면 즉시 터지거나 단언이 지키거나 구조적으로 불변인 것만 남기고, 그 셋에 들지 않는 값은 리포 실물이나 카드 대장에서 뽑는다.",
+   "basis": "생성기의 박힌 상수 열넷을 자리마다 열어 가르니 열하나가 자기 방어를 한다. 파일 경로는 틀리면 파일이 안 열려 터지고, 단언이 걸린 값은 그 단언이 지키며, 프롬프트의 페이즈 구조는 다섯으로 고정이다. **남는 셋이 카드 계수와 앞선 페이즈의 지목과 그 계수이며 전부 회차마다 낡는다.** 유니버스를 묻는 대신 생성을 닫는 쪽이며, 단언을 늘리면 그 값이 둘째 부류로 옮겨간다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-481",
+    "CF-504",
+    "CF-506"
+   ]
+  },
+  {
+   "id": "CF-508",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서는 앞선 페이즈의 경위를 서술하지 않는다. 그 페이즈가 무엇을 하는지만 들고 왜 그런지는 카드가 원장으로 나른다.",
+   "basis": "경위를 지시서가 다시 들면 전사이며, 실물에서 뽑을 수도 단언할 수도 없어 회차마다 낡는다. **조항의 논증은 세션 지시가 들고 그것이 선 경위는 원장이 든다**는 분업이 이미 있고 지시서는 그 어느 쪽도 아니다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-324",
+    "CF-507"
+   ]
+  },
+  {
+   "id": "CF-509",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "페이즈는 아크 이름과 번호를 붙인 절대 이름으로만 지목하고 상대 지목을 쓰지 않는다.",
+   "basis": "「앞 페이즈」와 「앞 회차」와 서수 지목은 기준점이 문면과 함께 옮겨 가지 않으므로, 그 문면이 원장에 실리거나 뒤 회차가 읽을 때 무엇을 가리키는지가 사라진다. **아크가 둘 이상이 되면 서수 지목은 아크를 잃는다.** 원장 오백다섯 가운데 상대 지목이 든 항목이 마흔하나이고 지목의 출현이 일흔여덟이다. 예외는 셋이며, 출처 필드가 그 자리를 드는 「이 페이즈」와 이 프로젝트에 한 번뿐인 「첫 적재」(`charter-6`)와 기준점이 문면 안에 있는 지목이다. **소급하지 않는다.** 원장이 수정 불가이므로 이미 실린 문면은 그대로 두고 앞으로 쓰는 문면에만 건다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-446",
+    "CF-508"
+   ]
+  },
+  {
+   "id": "CF-510",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "집행은 작업을 시작하기 전에 리포 파일의 검증값을 대조하고, 갈래가 다루는 대상을 뺀 나머지가 하나라도 다르면 멈춰 보고한다.",
+   "basis": "받은 파일이 보낸 그 파일인가를 가르는 조항이 이미 있으나 그 대상은 명세 두 파일이고 근거가 「받은 파일」이다. 리포의 나머지는 받은 파일이 아니라 현행 상태이며, 그 대조가 가르는 것은 **「리포가 결정 세션이 전제한 그 상태인가」**로 물음이 다르다. 집행이 매 회차 그것을 했는데 근거가 회차마다 지시서와 호출 프롬프트였고 둘 다 소진 문서다. 같은 논증이 아니므로 조건을 넓히지 않고 항목을 새로 세운다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-385",
+    "CF-489"
+   ]
+  },
+  {
+   "id": "CF-511",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "예외를 드는 조항이 본칙 없이 설 수 있고 그것이 본칙 누락의 신호다.",
+   "basis": "갈래의 조항이 「그 갈래가 다루는 대상은 조작 전 검증값의 멈춤 대상에서 뺀다」를 드는데, 무엇이 멈춤 대상인지를 세우는 조항이 없었다. 예외가 본칙을 전제하고 그 전제가 원장에 없으므로 읽는 쪽이 본칙을 소진 문서에서 찾게 된다. **낱말로 찾으면 그 조항이 적중하므로 덮인 것처럼 보이고, 한 일을 조항과 맞대야 본칙 자체가 없다는 것이 드러난다.** 원장에서 「~에서 뺀다」와 「~는 예외다」를 훑어 그 본칙이 있는지 보면 같은 부류가 잡힌다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-384",
+    "CF-474",
+    "CF-510"
+   ]
+  },
+  {
+   "id": "CF-512",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "굵은 문장 단위로 뽑으면 굵지 않은 문단이 빠진다.",
+   "basis": "여덟 회차의 호출 프롬프트에서 상시 지시를 뽑을 때 강조된 문장만 셌다. 검증값 대조가 두 문단에 걸쳐 있었고 앞 문단만 강조돼 있어 뒤 문단이 후보가 되지 못했다. **경계의 결손이 아니라 뽑는 방법의 결손이며 앞의 넷과 부류가 다르다.** 앞의 넷은 유니버스가 좁아 한 덩어리가 통째로 빠진 것이었다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-485",
+    "CF-510"
+   ]
+  },
+  {
+   "id": "CF-513",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "세션 지시의 수동 개정이 한 조항이 걸친 네 자리 가운데 하나만 고쳤다.",
+   "basis": "한 문서의 처분이 흡수 표와 그 문단과 문서 성격 표와 종료 문서 문단 넷에 걸쳐 있었는데 표 하나만 고쳐져 나머지 셋이 낡은 채로 남았다. 그리고 새로 더한 항이 자기 규율을 따르지 않은 자리와 예외가 본칙과 부딪히는 자리가 함께 났다. **개정은 고칠 자리를 전수로 확인한 뒤에 하고, 새 문면이 든 것과 낡은 문면이 없는 것을 함께 잰다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-429",
+    "CF-509"
+   ]
+  },
+  {
+   "id": "CF-514",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-256 의 상대 지목 1 을 절대 이름으로 푼다. 「다음 페이즈」는 그 페이즈 뒤의 임의의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-256"
+   ],
+   "clarifies": "CF-256",
+   "resolves": [
+    {
+     "phrase": "다음 페이즈",
+     "absolute": "그 페이즈 뒤의 임의의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-515",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-257 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 페이즈」는 charter-7.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-257"
+   ],
+   "clarifies": "CF-257",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-7"
+    }
+   ]
+  },
+  {
+   "id": "CF-516",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-265 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 회차」는 charter-7.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-265"
+   ],
+   "clarifies": "CF-265",
+   "resolves": [
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-7"
+    }
+   ]
+  },
+  {
+   "id": "CF-517",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-268 의 상대 지목 1 을 절대 이름으로 푼다. 「뒤 페이즈」는 charter-8 뒤의 임의의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-268"
+   ],
+   "clarifies": "CF-268",
+   "resolves": [
+    {
+     "phrase": "뒤 페이즈",
+     "absolute": "charter-8 뒤의 임의의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-518",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-278 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 페이즈」는 charter-8.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-278"
+   ],
+   "clarifies": "CF-278",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-8"
+    }
+   ]
+  },
+  {
+   "id": "CF-519",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-280 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 페이즈」는 charter-8 앞의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-280"
+   ],
+   "clarifies": "CF-280",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-8 앞의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-520",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-282 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 페이즈」는 charter-8.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-282"
+   ],
+   "clarifies": "CF-282",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-8"
+    }
+   ]
+  },
+  {
+   "id": "CF-521",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-284 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 회차」는 charter-8.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-284"
+   ],
+   "clarifies": "CF-284",
+   "resolves": [
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-8"
+    }
+   ]
+  },
+  {
+   "id": "CF-522",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-297 의 상대 지목 1 을 절대 이름으로 푼다. 「다음 페이즈」는 charter-10 뒤의 임의의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-297"
+   ],
+   "clarifies": "CF-297",
+   "resolves": [
+    {
+     "phrase": "다음 페이즈",
+     "absolute": "charter-10 뒤의 임의의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-523",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-340 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 두 페이즈」는 charter-9 와 charter-10.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-340"
+   ],
+   "clarifies": "CF-340",
+   "resolves": [
+    {
+     "phrase": "앞 두 페이즈",
+     "absolute": "charter-9 와 charter-10"
+    }
+   ]
+  },
+  {
+   "id": "CF-524",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-346 의 상대 지목 2 을 절대 이름으로 푼다. 「열한 번째 페이즈」는 charter-11 · 「열 번째 페이즈」는 charter-10.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-346"
+   ],
+   "clarifies": "CF-346",
+   "resolves": [
+    {
+     "phrase": "열한 번째 페이즈",
+     "absolute": "charter-11"
+    },
+    {
+     "phrase": "열 번째 페이즈",
+     "absolute": "charter-10"
+    }
+   ]
+  },
+  {
+   "id": "CF-525",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-349 의 상대 지목 3 을 절대 이름으로 푼다. 「열 번째 페이즈」는 charter-10 · 「열한 번째가」는 charter-11 · 「열한 번째 페이즈」는 charter-11.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-349"
+   ],
+   "clarifies": "CF-349",
+   "resolves": [
+    {
+     "phrase": "열 번째 페이즈",
+     "absolute": "charter-10"
+    },
+    {
+     "phrase": "열한 번째가",
+     "absolute": "charter-11"
+    },
+    {
+     "phrase": "열한 번째 페이즈",
+     "absolute": "charter-11"
+    }
+   ]
+  },
+  {
+   "id": "CF-526",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-350 의 상대 지목 2 을 절대 이름으로 푼다. 「열한 번째 페이즈」는 charter-11 · 「앞 판」는 그 페이즈의 앞선 지시서 판.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-350"
+   ],
+   "clarifies": "CF-350",
+   "resolves": [
+    {
+     "phrase": "열한 번째 페이즈",
+     "absolute": "charter-11"
+    },
+    {
+     "phrase": "앞 판",
+     "absolute": "그 페이즈의 앞선 지시서 판"
+    }
+   ]
+  },
+  {
+   "id": "CF-527",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-351 의 상대 지목 3 을 절대 이름으로 푼다. 「뒤 페이즈」는 그 페이즈 뒤의 페이즈 · 「열 번째 페이즈」는 charter-10 · 「열한 번째」는 charter-11.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-351"
+   ],
+   "clarifies": "CF-351",
+   "resolves": [
+    {
+     "phrase": "뒤 페이즈",
+     "absolute": "그 페이즈 뒤의 페이즈"
+    },
+    {
+     "phrase": "열 번째 페이즈",
+     "absolute": "charter-10"
+    },
+    {
+     "phrase": "열한 번째",
+     "absolute": "charter-11"
+    }
+   ]
+  },
+  {
+   "id": "CF-528",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-353 의 상대 지목 1 을 절대 이름으로 푼다. 「열한 번째 페이즈」는 charter-11.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-353"
+   ],
+   "clarifies": "CF-353",
+   "resolves": [
+    {
+     "phrase": "열한 번째 페이즈",
+     "absolute": "charter-11"
+    }
+   ]
+  },
+  {
+   "id": "CF-529",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-354 의 상대 지목 1 을 절대 이름으로 푼다. 「열두 번째 페이즈」는 charter-12.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-354"
+   ],
+   "clarifies": "CF-354",
+   "resolves": [
+    {
+     "phrase": "열두 번째 페이즈",
+     "absolute": "charter-12"
+    }
+   ]
+  },
+  {
+   "id": "CF-530",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-383 의 상대 지목 3 을 절대 이름으로 푼다. 「열두 번째 페이즈」는 charter-12 · 「아홉 번째 페이즈」는 charter-9 · 「열두 번째」는 charter-12.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-383"
+   ],
+   "clarifies": "CF-383",
+   "resolves": [
+    {
+     "phrase": "열두 번째 페이즈",
+     "absolute": "charter-12"
+    },
+    {
+     "phrase": "아홉 번째 페이즈",
+     "absolute": "charter-9"
+    },
+    {
+     "phrase": "열두 번째",
+     "absolute": "charter-12"
+    }
+   ]
+  },
+  {
+   "id": "CF-531",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-384 의 상대 지목 2 을 절대 이름으로 푼다. 「열두 번째 페이즈」는 charter-12 · 「앞 두 페이즈」는 charter-11 과 charter-12.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-384"
+   ],
+   "clarifies": "CF-384",
+   "resolves": [
+    {
+     "phrase": "열두 번째 페이즈",
+     "absolute": "charter-12"
+    },
+    {
+     "phrase": "앞 두 페이즈",
+     "absolute": "charter-11 과 charter-12"
+    }
+   ]
+  },
+  {
+   "id": "CF-532",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-385 의 상대 지목 1 을 절대 이름으로 푼다. 「열두 번째 페이즈」는 charter-12.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-385"
+   ],
+   "clarifies": "CF-385",
+   "resolves": [
+    {
+     "phrase": "열두 번째 페이즈",
+     "absolute": "charter-12"
+    }
+   ]
+  },
+  {
+   "id": "CF-533",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-386 의 상대 지목 2 을 절대 이름으로 푼다. 「열세 번째 페이즈」는 charter-13 · 「앞 페이즈」는 charter-12.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-386"
+   ],
+   "clarifies": "CF-386",
+   "resolves": [
+    {
+     "phrase": "열세 번째 페이즈",
+     "absolute": "charter-13"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-12"
+    }
+   ]
+  },
+  {
+   "id": "CF-534",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-415 의 상대 지목 1 을 절대 이름으로 푼다. 「다음 페이즈」는 그 페이즈 뒤의 임의의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-415"
+   ],
+   "clarifies": "CF-415",
+   "resolves": [
+    {
+     "phrase": "다음 페이즈",
+     "absolute": "그 페이즈 뒤의 임의의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-535",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-448 의 상대 지목 1 을 절대 이름으로 푼다. 「열세 번째 페이즈」는 charter-13.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-448"
+   ],
+   "clarifies": "CF-448",
+   "resolves": [
+    {
+     "phrase": "열세 번째 페이즈",
+     "absolute": "charter-13"
+    }
+   ]
+  },
+  {
+   "id": "CF-536",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-449 의 상대 지목 2 을 절대 이름으로 푼다. 「열네 번째 페이즈」는 charter-14 · 「앞 페이즈」는 charter-13.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-449"
+   ],
+   "clarifies": "CF-449",
+   "resolves": [
+    {
+     "phrase": "열네 번째 페이즈",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-13"
+    }
+   ]
+  },
+  {
+   "id": "CF-537",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-471 의 상대 지목 1 을 절대 이름으로 푼다. 「열네 번째 페이즈」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-471"
+   ],
+   "clarifies": "CF-471",
+   "resolves": [
+    {
+     "phrase": "열네 번째 페이즈",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-538",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-474 의 상대 지목 1 을 절대 이름으로 푼다. 「열네 번째 페이즈」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-474"
+   ],
+   "clarifies": "CF-474",
+   "resolves": [
+    {
+     "phrase": "열네 번째 페이즈",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-539",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-477 의 상대 지목 9 을 절대 이름으로 푼다. 「앞 페이즈」는 그 생성기가 옮겨 온 앞선 페이즈 · 「앞 판」는 앞선 페이즈의 생성기 판 · 「열네 번째」는 charter-14 · 「열다섯 번째」는 charter-15 · 「열세 번째」는 charter-13 · 「열네 번째」는 charter-14 · 「열세 번째 페이즈」는 charter-13 · 「앞 회차」는 charter-14 앞의 회차 · 「열다섯 번째」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-477"
+   ],
+   "clarifies": "CF-477",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "그 생성기가 옮겨 온 앞선 페이즈"
+    },
+    {
+     "phrase": "앞 판",
+     "absolute": "앞선 페이즈의 생성기 판"
+    },
+    {
+     "phrase": "열네 번째",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "열다섯 번째",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "열세 번째",
+     "absolute": "charter-13"
+    },
+    {
+     "phrase": "열네 번째",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "열세 번째 페이즈",
+     "absolute": "charter-13"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14 앞의 회차"
+    },
+    {
+     "phrase": "열다섯 번째",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-540",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-479 의 상대 지목 2 을 절대 이름으로 푼다. 「열네 번째 페이즈」는 charter-14 · 「열세 번째 페이즈」는 charter-13.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-479"
+   ],
+   "clarifies": "CF-479",
+   "resolves": [
+    {
+     "phrase": "열네 번째 페이즈",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "열세 번째 페이즈",
+     "absolute": "charter-13"
+    }
+   ]
+  },
+  {
+   "id": "CF-541",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-480 의 상대 지목 5 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15 · 「앞 회차」는 charter-14 · 「앞 회차」는 charter-14 · 「앞 회차」는 charter-14 · 「앞 페이즈」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-480"
+   ],
+   "clarifies": "CF-480",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-542",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-481 의 상대 지목 2 을 절대 이름으로 푼다. 「앞 판」는 앞선 페이즈의 생성기 판 · 「앞 회차」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-481"
+   ],
+   "clarifies": "CF-481",
+   "resolves": [
+    {
+     "phrase": "앞 판",
+     "absolute": "앞선 페이즈의 생성기 판"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-543",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-482 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 페이즈」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-482"
+   ],
+   "clarifies": "CF-482",
+   "resolves": [
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-544",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-483 의 상대 지목 3 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15 · 「앞 페이즈」는 charter-14 · 「앞 회차들」는 charter-10 부터 charter-14 까지.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-483"
+   ],
+   "clarifies": "CF-483",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 회차들",
+     "absolute": "charter-10 부터 charter-14 까지"
+    }
+   ]
+  },
+  {
+   "id": "CF-545",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-484 의 상대 지목 3 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15 · 「앞 회차」는 charter-14 · 「앞 페이즈」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-484"
+   ],
+   "clarifies": "CF-484",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-546",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-485 의 상대 지목 1 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-485"
+   ],
+   "clarifies": "CF-485",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-547",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-487 의 상대 지목 1 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-487"
+   ],
+   "clarifies": "CF-487",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-548",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-489 의 상대 지목 2 을 절대 이름으로 푼다. 「열네 번째 페이즈」는 charter-14 · 「열다섯 번째」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-489"
+   ],
+   "clarifies": "CF-489",
+   "resolves": [
+    {
+     "phrase": "열네 번째 페이즈",
+     "absolute": "charter-14"
+    },
+    {
+     "phrase": "열다섯 번째",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-549",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-493 의 상대 지목 1 을 절대 이름으로 푼다. 「열다섯 번째 페이즈」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-493"
+   ],
+   "clarifies": "CF-493",
+   "resolves": [
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-550",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-500 의 상대 지목 2 을 절대 이름으로 푼다. 「앞 회차」는 charter-16 앞의 회차 · 「앞 페이즈」는 charter-16 앞의 페이즈.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-500"
+   ],
+   "clarifies": "CF-500",
+   "resolves": [
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-16 앞의 회차"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-16 앞의 페이즈"
+    }
+   ]
+  },
+  {
+   "id": "CF-551",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-502 의 상대 지목 2 을 절대 이름으로 푼다. 「앞 회차들」는 charter-10 부터 charter-13 까지 · 「열다섯 번째 페이즈」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-502"
+   ],
+   "clarifies": "CF-502",
+   "resolves": [
+    {
+     "phrase": "앞 회차들",
+     "absolute": "charter-10 부터 charter-13 까지"
+    },
+    {
+     "phrase": "열다섯 번째 페이즈",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-552",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-503 의 상대 지목 4 을 절대 이름으로 푼다. 「열세 번째」는 charter-13 · 「열다섯 번째」는 charter-15 · 「열다섯 번째」는 charter-15 · 「앞 회차」는 charter-14.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-503"
+   ],
+   "clarifies": "CF-503",
+   "resolves": [
+    {
+     "phrase": "열세 번째",
+     "absolute": "charter-13"
+    },
+    {
+     "phrase": "열다섯 번째",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "열다섯 번째",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-14"
+    }
+   ]
+  },
+  {
+   "id": "CF-553",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-504 의 상대 지목 1 을 절대 이름으로 푼다. 「앞 회차」는 charter-15.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-504"
+   ],
+   "clarifies": "CF-504",
+   "resolves": [
+    {
+     "phrase": "앞 회차",
+     "absolute": "charter-15"
+    }
+   ]
+  },
+  {
+   "id": "CF-554",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "CF-505 의 상대 지목 3 을 절대 이름으로 푼다. 「열여섯 번째 페이즈」는 charter-16 · 「앞 페이즈」는 charter-15 · 「열 번째」는 열 번째 패치. 페이즈가 아니다.",
+   "basis": "페이즈를 절대 이름으로만 지목하는 조항이 소급하지 않으므로 원 항목을 고치지 않고 뒤에서 읽는 법을 단다. 원 항목의 출처 필드가 기준점을 주고 문면을 열어 판정했다. **폐기가 아니므로 원 항목은 살아 있다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-509",
+    "CF-505"
+   ],
+   "clarifies": "CF-505",
+   "resolves": [
+    {
+     "phrase": "열여섯 번째 페이즈",
+     "absolute": "charter-16"
+    },
+    {
+     "phrase": "앞 페이즈",
+     "absolute": "charter-15"
+    },
+    {
+     "phrase": "열 번째",
+     "absolute": "열 번째 패치. 페이즈가 아니다"
+    }
+   ]
+  },
+  {
+   "id": "CF-555",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "`charter` 아크에 `charter-17` 을 더해 생성과 지목의 규율 여덟과 상대 지목의 꼬리 마흔하나를 병합한다.",
+   "basis": "꼬리는 원장의 다섯째 레지스터가 아니라 결정 레지스터의 항목으로 두고 대상과 푼 값을 필드로 든다. 폐기 레코드는 대상을 죽이는데 여기서는 조항 자체가 틀리지 않았고 표기만 상대이므로 그 기제가 맞지 않는다. 계획 변경의 값은 아크 레지스터의 열한 번째 패치가 든다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-509"
+   ]
+  },
+  {
+   "id": "CF-556",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-17",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "상대 지목을 푸는 꼬리는 결정 레지스터의 항목으로 두고 `clarifies` 와 `resolves` 두 선택 필드를 쓴다. 그 둘을 읽는 검사를 함께 세운다.",
+   "basis": "폐기 레코드의 대상 필드와 이름이 겹치지 않게 `clarifies` 로 둔다. 겹치면 폐기 정합을 보는 검사와 규율 ID를 보는 검사가 결정 레지스터의 항목을 폐기 레코드로 읽을 여지가 생긴다. **원장의 필드를 늘리면 그것을 읽는 검사를 함께 세운다는 조항이 이미 있고, 지금 명세에 알 수 없는 필드를 막는 검사가 없어 그 둘이 검사 없이 통과한다.** 세울 검사는 둘이며, `clarifies` 가 실재하고 폐기되지 않은 항목을 가리키는가와, `resolves` 의 각 항이 `phrase` 와 `absolute` 를 갖고 그 `phrase` 가 대상 항목의 산문 필드에 실제로 있는가다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-455",
+    "CF-456",
+    "CF-509"
+   ]
   }
  ]
 }
