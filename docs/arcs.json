@@ -37,7 +37,8 @@
         "charter-14",
         "charter-15",
         "charter-16",
-        "charter-17"
+        "charter-17",
+        "charter-18"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -212,6 +213,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-17",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-18",
+      "what": "꼬리의 두 필드를 읽는 검사 둘과 그 경위를 받는 페이즈",
+      "why": "필드를 늘리면 그것을 읽는 검사를 함께 세우라는 조항이 둘 있는데 앞 페이즈가 필드만 세웠다. 미룸을 허락하는 조항이 없으므로 그 조항이 선 순간부터 충족되지 않은 채로 섰고, 아크의 종료 조건이 그 상태를 세지 않는다. 결정 세션이 검사를 모의로 세워 돌렸고 결함 셋이 나와 함께 싣는다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-18",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
