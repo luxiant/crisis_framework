@@ -103,6 +103,20 @@
         "kind": "decision_session",
         "date": "2026-09-19"
       }
+    },
+    {
+      "arc": "charter",
+      "op": "move",
+      "from": "charter-9",
+      "phase": "charter-10",
+      "what": "세션 지시 §5 의 원장 적재와 `project-setup-v0` 이관 후 삭제",
+      "why": "charter-9 에서 `project-setup-v0` 의 삭제 조건을 대조하다가 세션 지시 §5 의 조항들이 첫 적재에서 통째로 빠진 것이 드러났다. 그 문서가 낳은 셋(식별자 언어 정책·Mathlib 핀 정책·정리 명명 규약)이 원장에 없으므로 §0.4 가 요구하는 원장 반영이 아직 안 됐고 삭제 조건이 아니다. §5 전량이 서른 안팎이라 charter-9 에 얹으면 그 페이즈가 과해지며, charter-10 이 병합 전용이므로 전사를 받기에 맞다. 적재는 새 낙착이 아니라 이미 선 조항을 옮기는 것이라 그 페이즈의 요건과 부딪히지 않는다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-9",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
     }
   ]
 }
