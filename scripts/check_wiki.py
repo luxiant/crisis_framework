@@ -771,7 +771,58 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
-         "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21"]
+         "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27"]
+
+
+def check_26(led: Ledger) -> Report:
+    r = Report("26", "wiki26-clarify-target",
+               "꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가",
+               "fail")
+    n = 0
+    for name, e in led.entries:
+        tgt = e.get("clarifies")
+        if tgt is None:
+            continue
+        n += 1
+        if tgt not in led.by_id:
+            r.bad(f"{e.get('id')}: clarifies 의 `{tgt}` 이 원장에 없다")
+        elif tgt in led.dead:
+            r.bad(f"{e.get('id')}: clarifies 의 `{tgt}` 이 폐기된 항목이다")
+    r.note(f"꼬리 {n}건")
+    return r
+
+
+def check_27(led: Ledger) -> Report:
+    r = Report("27", "wiki27-clarify-resolves",
+               "꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 "
+               "대상 항목의 산문 필드에 실제로 있는가",
+               "fail")
+    n = 0
+    pairs = 0
+    for name, e in led.entries:
+        if "clarifies" not in e:
+            continue
+        n += 1
+        res = e.get("resolves")
+        if not isinstance(res, list) or not res:
+            r.bad(f"{e.get('id')}: resolves 가 비어 있거나 배열이 아니다")
+            continue
+        # 대상의 실재와 비폐기는 검사 26 의 몫이다. 여기서 또 잡으면 한 주입이 두 검사를
+        # 실패시켜 어느 검사가 무엇을 잡는지가 갈리지 않는다(§3.10-1).
+        if e.get("clarifies") not in led.by_id or e.get("clarifies") in led.dead:
+            continue
+        tgt = led.by_id[e["clarifies"]]
+        prose = str(tgt.get("statement") or "") + str(tgt.get("basis") or "")
+        for item in res:
+            pairs += 1
+            if not isinstance(item, dict) or set(item) != {"phrase", "absolute"}:
+                r.bad(f"{e.get('id')}: resolves 의 항이 phrase·absolute 만 갖지 않는다")
+                continue
+            if item["phrase"] not in prose:
+                r.bad(f"{e.get('id')}: `{item['phrase']}` 가 "
+                      f"{e.get('clarifies')} 의 산문에 없다")
+    r.note(f"꼬리 {n}건 · 지목 {pairs}건")
+    return r
 
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
@@ -783,6 +834,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_14(led), check_15(led), check_23(led), check_24(led), check_25(led),
         check_16(led), check_17(led), check_18(led), check_19(led),
         check_20(led, arc_close), check_21(led, arc_close),
+        check_26(led), check_27(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
     reports.sort(key=lambda r: order[r.number])
