@@ -69,7 +69,7 @@ inductive ConceptRel where
   | refines (special general : Concept)
   /-- 배타: 두 개념은 겹치지 않는다. -/
   | excludes (a b : Concept)
-  /-- 분할: `whole` 이 `parts` 로 나뉜다. 완전성은 증명되지 않는다(V-3). -/
+  /-- 분할: `whole` 이 `parts` 로 나뉜다. 완전성은 증명되지 않는다(V-7). 정의만으로 따라 나오는 분할은 예외이며 그 경우 어느 귀결인지를 명시한다. -/
   | partitions (whole : Concept) (parts : List Concept)
   /-- 측정 대응: 해당 개념이 이 소스로 측정된다. 명세는 관측층. -/
   | measuredBy (c : Concept) (s : SourceTag)
@@ -78,7 +78,8 @@ inductive ConceptRel where
 /--
 등록된 관계.
 
-**주의:** `partitions` 의 완전성은 V-3에 따라 가정이며 기여 목록에 계상하지 않는다.
+**주의:** `partitions` 의 완전성은 V-7에 따라 가정이며 기여 목록에 계상하지 않는다.
+정의만으로 따라 나오는 분할은 예외인데 아래 등록분은 거기에 들지 않는다.
 제약이 부채 측과 자산 측 둘로 나뉜다는 것은 현재까지 확인된 두 종류일 뿐,
 셋째가 없다는 증명이 아니다.
 -/
