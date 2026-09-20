@@ -44,6 +44,20 @@ RULE_SERIES = ("PH-R", "P", "A", "C", "L", "D", "T", "R", "N", "V", "W", "Q", "B
 RULE_TOKEN = re.compile(
     r"(?<![0-9A-Za-z-])(" + "|".join(RULE_SERIES) + r")-(\d+)(?![0-9A-Za-z-])")
 
+# 검사 24 의 유니버스. SPEC §2.1 이 상주 문서 다섯과 Lean 주석을 든다.
+RESIDENT_DOCS = (
+    "CLAUDE.md",
+    "docs/baseline.md",
+    "docs/decisions/SPEC.md",
+    "docs/reading-queue-v0.md",
+    "docs/bundle-inventory-v0.md",
+)
+# 기록하는 자리는 유니버스 밖이다. 그 문면은 그 시점의 앎을 담으므로 낡은 지목이 정당하다.
+# `docs/arcs.json` 도 내용이 `patches` 이므로 같은 사유로 훑지 않는다.
+HISTORY_PATHS = ("BUILD_LOG.md", "docs/phases/", "docs/extractions/", "docs/arcs.json")
+# 폐기 지목의 면제 선언. 문서 머리에 이 형으로 한 줄을 두고 면제되는 ID 를 열거한다.
+DECLARE_LINE = re.compile(r"^\s*\*\*폐기 지목:\*\*(.*)$")
+
 ID_FORM = re.compile(r"^CF-(\d+)$")
 CF_TOKEN = re.compile(r"(?<![0-9A-Za-z-])CF-(\d+)(?![0-9A-Za-z-])")
 DD_TOKEN = re.compile(r"--\s*DD:\s*(\S+)")
@@ -89,6 +103,23 @@ class Report:
         if not quiet:
             for line in self.notes:
                 print(f"    - {line}")
+
+
+def _lean_comments(src: str) -> str:
+    """Lean 소스에서 주석만 남기고 코드를 지운다. `/- -/` 는 중첩되고 `--` 는 줄 끝까지다."""
+    out, i, depth, n = [], 0, 0, len(src)
+    while i < n:
+        if src.startswith("/-", i):
+            depth += 1; i += 2; out.append("  "); continue
+        if src.startswith("-/", i) and depth:
+            depth -= 1; i += 2; out.append("  "); continue
+        if depth:
+            out.append(src[i]); i += 1; continue
+        if src.startswith("--", i):
+            j = src.find("\n", i)
+            out.append(src[i:n if j < 0 else j]); i = n if j < 0 else j; continue
+        out.append("\n" if src[i] == "\n" else " "); i += 1
+    return "".join(out)
 
 
 class Ledger:
@@ -144,6 +175,21 @@ class Ledger:
             m = STEP_CALL.match(line)
             if m and m.group(1):
                 out.append(m.group(1))
+        return out
+
+    def rule_scan_targets(self) -> list[tuple[str, str]]:
+        """검사 24 가 훑을 (표시 경로, 훑을 텍스트) 목록.
+
+        상주 문서는 전문을 훑고 Lean 파일은 주석만 훑는다. 식별자는 영어라 규율 ID 꼴이 코드에
+        서지 않으나, SPEC 이 유니버스를 「Lean 주석」으로 들므로 그대로 좁힌다.
+        """
+        out = []
+        for rel in RESIDENT_DOCS:
+            f = self.root / rel
+            if f.is_file():
+                out.append((rel, f.read_text(encoding="utf-8")))
+        for f in self.lean_files:
+            out.append((str(f.relative_to(self.root)), _lean_comments(f.read_text(encoding="utf-8"))))
         return out
 
     def dd_markers(self) -> list[tuple[Path, int, str]]:
@@ -500,6 +546,42 @@ def check_23(led: Ledger) -> Report:
     return r
 
 
+def check_24(led: Ledger) -> Report:
+    r = Report("24", "wiki24-doc-rule-ghost",
+               "상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가",
+               "fail")
+    total = missing = retired = declared = 0
+    for rel, text in led.rule_scan_targets():
+        # 문서 머리의 선언 줄을 읽어 거기 열거된 ID 의 폐기 지목을 면제한다.
+        allow: set = set()
+        for line in text.splitlines():
+            m = DECLARE_LINE.match(line)
+            if m:
+                allow |= {x.group(0) for x in RULE_TOKEN.finditer(m.group(1))}
+        for i, line in enumerate(text.splitlines(), 1):
+            if DECLARE_LINE.match(line):
+                continue                      # 선언 줄 자신은 면제의 근거이지 지목이 아니다
+            for m in RULE_TOKEN.finditer(line):
+                tok = m.group(0)
+                total += 1
+                owner = led.name_owner.get(tok)
+                if owner is None:
+                    missing += 1
+                    r.bad(f"{rel}:{i}: `{tok}` 이 어느 항목의 names 에도 없다")
+                elif owner in led.dead:
+                    if tok in allow:
+                        declared += 1
+                    else:
+                        retired += 1
+                        r.bad(f"{rel}:{i}: 폐기된 규율 `{tok}`({owner}) 를 드는데 "
+                              f"문서 머리의 폐기 지목 선언에 없다")
+    r.note(f"규율 ID 토큰 {total}건. 미실재 {missing} · 선언 없는 폐기 지목 {retired} · "
+           f"선언으로 면제된 폐기 지목 {declared}")
+    r.note(f"유니버스: 상주 문서 {len(RESIDENT_DOCS)} · Lean {len(led.lean_files)}. "
+           f"유니버스 밖: {list(HISTORY_PATHS)}")
+    return r
+
+
 def check_16(led: Ledger) -> Report:
     r = Report("16", "wiki16-trigger-fired", "reopen_when 이 충족된 이연 항목", "report")
     fired = []
@@ -629,7 +711,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
-         "11", "12", "13", "14", "15", "23", "16", "17", "18", "19", "20", "21"]
+         "11", "12", "13", "14", "15", "23", "24", "16", "17", "18", "19", "20", "21"]
 
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
@@ -638,7 +720,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_01(led), check_02(led), check_03(led), check_03a(led),
         check_04a(led), check_05(led), check_06(led), check_07(led), check_08(led),
         check_09(led), check_10(led), check_11(led), check_12(led), check_13(led),
-        check_14(led), check_15(led), check_23(led),
+        check_14(led), check_15(led), check_23(led), check_24(led),
         check_16(led), check_17(led), check_18(led), check_19(led),
         check_20(led, arc_close), check_21(led, arc_close),
     ]
