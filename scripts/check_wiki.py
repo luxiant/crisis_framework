@@ -116,6 +116,11 @@ class Ledger:
 
         # 폐기된 id. 살아 있음은 저장하지 않고 유도한다(SPEC §0.2).
         self.dead = {e["target"] for e in self.reg["retirements"] if e.get("target")}
+        # 폐기된 항목 → 그것을 폐기한 레코드의 id. 검사 23 의 승인 경로가 이것을 요구한다.
+        self.retired_by: dict = {}
+        for e in self.reg["retirements"]:
+            if e.get("target"):
+                self.retired_by.setdefault(e["target"], e.get("id"))
 
         # 규율 ID → 그것을 드는 항목의 원장 id
         self.name_owner: dict = {}
@@ -464,7 +469,8 @@ def check_15(led: Ledger) -> Report:
 
 def check_23(led: Ledger) -> Report:
     r = Report("23", "wiki23-rule-ghost",
-               "statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고 폐기되지 않았는가",
+               "statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, "
+               "폐기됐으면 그 폐기 레코드를 related 가 드는가",
                "fail")
     total = 0
     exempt = 0
@@ -484,12 +490,18 @@ def check_23(led: Ledger) -> Report:
                 owner = led.name_owner.get(tok)
                 if owner is None:
                     r.bad(f"{e.get('id')}: {f} 의 `{tok}` 이 어느 항목의 names 에도 없다")
-                elif owner in led.dead and owner not in related:
-                    if first_load:
+                elif owner in led.dead:
+                    # 승인 경로는 폐기 레코드 지목이다. 폐기된 항목의 id 가 아니라 그것을
+                    # 폐기한 레코드의 id 를 related 에서 찾는다. 앞을 요구하면 검사 10 이
+                    # 그 id 를 산 참조로 잡아 두 검사가 정면으로 부딪힌다(SPEC §2.1).
+                    retirer = led.retired_by.get(owner)
+                    if retirer in related:
+                        pass
+                    elif first_load:
                         exempt += 1
                     else:
                         r.bad(f"{e.get('id')}: {f} 가 폐기된 규율 `{tok}`({owner}) 를 "
-                              f"related 에 적지 않고 든다")
+                              f"그것을 폐기한 레코드 {retirer} 를 related 에 적지 않고 든다")
     r.note(f"규율 ID 토큰 {total}건을 봤다. 계열은 {list(RULE_SERIES)}")
     r.note(f"폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 {exempt}건")
     return r
