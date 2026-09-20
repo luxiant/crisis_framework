@@ -5323,6 +5323,896 @@
     "CF-352",
     "CF-354"
    ]
+  },
+  {
+   "id": "CF-387",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "한 페이즈에서 집행을 부르는 것은 최후의 단 한 번으로 제약한다. 상한이지 하한이 아니다.",
+   "basis": "결정만으로 닫히는 페이즈는 호출이 없다. 이 아크의 열넷 가운데 여럿이 그 부류였다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-388",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "그 페이즈의 모든 결정을 반영해 집행이 추가 판단이나 질문 없이 작업할 자기완결적 명세를 쓸 수 있게 되기 전까지는 지시서를 쓰지 않는다.",
+   "basis": "명세가 자기완결이 아니면 집행이 멈추거나 지어내고, 지어낸 문면은 어느 결정도 승인하지 않은 채 남는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-389",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서는 엔트리 카드 파일과 짝을 이룬다. 지시서가 자리를 지시하고 카드가 문면을 든다.",
+   "basis": "둘을 한 문서에 담으면 같은 문면이 두 자리에 살고, 카드가 자라도 지시서가 따라오지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-390",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "정지점은 호출이 아니다. 한 호출 안에 여러 정지점이 설 수 있다.",
+   "basis": "이 프로젝트의 정지점은 판단 지점보다 막힘이 더 자주 세울 것으로 본다. 막힘은 주 목적의 산출이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-391",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "집행 프롬프트는 다섯 페이즈로 나뉜다. 자리의 목록이지 채워야 할 할당량이 아니며, 산출이 없는 페이즈는 비우되 그 사실과 근거와 달라지는 기대값을 지시서가 든다.",
+   "basis": "적응과 병합과 구현과 착지 후 갱신과 최종 검토다. 비우는 것과 빠뜨리는 것이 문면상 구별되지 않으므로 비운 사유를 적는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-392",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "병합이 구현보다 앞서야 한다.",
+   "basis": "새 결정이 코드에 표지를 남기는데 검증기가 미실재 참조를 실패로 붙인다. 순서를 뒤집으면 그 커밋이 실패한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-393",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "착지 후 갱신을 별도 페이즈로 세운다.",
+   "basis": "값의 정본이 측정값을 담으므로 구현이 끝나기 전에 갱신하면 낡은 값이 서고, 건너뛰면 문서가 실물과 어긋난 채로 남는다. **구현에 흡수시키면 코드를 접촉하지 않는 페이즈에서 통째로 누락된다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-394",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "원장만 바뀌어도 착지 후 갱신이 필요할 수 있다.",
+   "basis": "집행 문면이 원장 계수를 담으므로 코드를 한 줄도 건드리지 않는 국면에서도 그렇다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-395",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "집행 문면 안에 다른 페이즈의 산출에 걸리는 문면이 있으면 그 갱신의 하한은 그 산출이 나온 뒤의 페이즈이고 상한은 그 문면을 읽는 페이즈보다 앞이다.",
+   "basis": "첫 페이즈는 그 자리를 건드리지 않고 남긴다. 둘이 겹치면 자리가 하나로 정해진다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-396",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "하한과 상한이 겹치지 않으면 지시서를 쓸 수 없다는 신호다. 그 경우 페이즈를 나누거나 사안으로 올린다.",
+   "basis": "겹치지 않는데 억지로 자리를 고르면 그 문면이 읽히는 시점에 낡아 있거나 아직 서지 않은 산출을 담는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-397",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(1) 참조 무결성. 선행 페이즈의 지시서와 카드 파일로의 참조가 없어야 하며 판별선은 디렉터리가 아니라 추적 여부다.",
+   "basis": "추적되는 파일은 페이즈가 끝나도 리포에 남아 도달 가능하고, 추적하지 않는 파일은 이관되어 도달 불가가 된다. **선행 지시서의 문면이 필요하면 참조하지 말고 그대로 수록한다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-398",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(2) 무모순성은 양방향이다. 지시서가 지목한 카드가 카드 파일에 전량 있고, 카드 파일의 카드가 지시서의 병합 지시에 전량 잡혀 있어야 한다.",
+   "basis": "한 방향만 재면 누락과 유령이 갈리지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-399",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(3) 되돌릴 수 없는 조작마다 조작 전 상태의 보존 수단과 그 검증값, 조작 후의 등가 검증, 되돌리는 명령 셋을 카드가 함께 든다.",
+   "basis": "되돌릴 수 없는 조작인지는 그것을 되돌리는 명령을 한 줄로 적을 수 있는지로 판별한다. **이 판별은 금지가 아니라 생성이다.** 되돌림 명령을 적으려면 보존 수단이 먼저 있어야 하므로 조항 자체가 보존 수단을 만들게 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-400",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(3) 셋 중 하나라도 적을 수 없으면 지시서를 쓸 수 없다는 신호다. 조작을 더 잘게 나누거나 사안으로 올린다.",
+   "basis": "적을 수 없는 채로 진행하면 그 조작이 어긋났을 때 되돌릴 수단이 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-401",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(3) 되돌리는 명령은 리포 안 명령에 한정되지 않는다. 보존 수단이 리포 밖에 있으면 운영자가 수행하는 절차로 적는다.",
+   "basis": "카드 파일의 보존 수단은 운영자의 이관본이며, 되돌리는 명령은 그것을 원래 자리에 다시 놓는 절차다. **리포 안 명령이 아니라는 것이 그 자리를 비우는 근거가 되지 않는다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-402",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(3) 되돌림 명령은 그 카드가 실제로 만진 파일을 전량 열거하고 디렉터리를 통째로 들지 않는다.",
+   "basis": "그 디렉터리에 같은 페이즈의 다른 카드가 만지는 파일이 있으면 그 조작까지 함께 되돌아간다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-403",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(4) 카드가 규칙이나 술어나 분기를 세우면 그 규칙이 미치는 대상을 전량 열거하고 대상마다 전제의 성립 여부를 리포 실물로 확인해 적는다.",
+   "basis": "확인할 수 있는 대상에는 그 규칙을 실제로 돌려 본다. 대상 하나라도 전제가 성립하지 않으면 그 카드는 아직 쓸 수 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-404",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(5) 그 페이즈가 세울 정리와 정의의 진술이 전부 지시서에 있어야 한다.",
+   "basis": "집행은 진술을 쓰지 않으므로 진술이 빠지면 그 자리에서 집행이 멈춘다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-405",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(6) docstring 의 필수 3항목과 반증 조건이 전부 채워져 있어야 한다.",
+   "basis": "배제 사례가 실제 역사 사례여야 하므로 논문 뭉치를 읽은 쪽만 쓸 수 있다. **비워 두면 집행이 지어내거나 그 자리에서 멈춘다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-406",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(7) 카드가 조작을 지시하면 그 조작을 집행하는 데 필요한 재료를 카드가 전량 든다. 판별은 「이것 없이 집행이 멈추거나 지어내야 하는가」다.",
+   "basis": "재료는 조작할 문면과 명령의 인자값과 조작이 남길 표지의 개수와 위치처럼 집행 시점에 지어낼 수 없고 결정이 정해야 하는 것이다. 멈추면 정지점이 늘고, 지어내면 어느 결정도 승인하지 않은 문면이 남는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-407",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(7) 대조의 단위는 자리가 아니라 조작이다.",
+   "basis": "자리를 전량 열거해 「채웠다」를 적는 것은 슬롯의 존재를 세는 일이며 그 자리에 무엇이 들어가야 하는지는 세지 않는다. 열거를 마친 뒤에 조작을 하나씩 짚어 「집행이 아무것도 지어내지 않고 끝까지 할 수 있는가」를 묻는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-408",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(7) 재료가 실재하는가와 그 재료가 충분한가는 다른 물음이다.",
+   "basis": "카드가 지목한 자리를 열어 실물이 있는 것을 확인해도, 그 실물이 조작을 끝까지 끌고 가는지는 따로 물어야 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-409",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(7) 수록하는 문면은 내용과 경계를 함께 든다. 앵커 뒤에 잇는 조작은 선두 개행의 수를, 파일을 세우는 조작은 말미 개행의 유무를 문면 옆에 적는다.",
+   "basis": "문면을 코드 블록으로 게시하면 선두와 말미의 개행이 블록 경계에 먹히므로 게시본만으로는 그것을 어디에 어떻게 잇는지가 서지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-410",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(8) 그 페이즈가 상주 문서의 서술이 딛는 실물을 바꿨으면 지시서가 그 갱신을 카드로 세우고, 행마다 바꿨는지를 적는다.",
+   "basis": "바꾸지 않았으면 바꾸지 않았음을 적으며, **적지 않은 행이 하나라도 있으면 그것은 지시서를 쓸 수 없다는 신호다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-411",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "(9) 그 페이즈가 낼 기준선과 변이 검사 대상 수와 빌드 결과의 기대값을 미리 적는다.",
+   "basis": "적지 않으면 착지 후 실측이 기대와 어긋났는지를 가를 수 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-412",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "정지점을 두는 기준은 그 사이의 작업 공수가 집행이 맥락을 잃지 않고 작업할 수 있는 분량인가이다.",
+   "basis": "작업 범위가 크면 중간에 정지점을 두어 중간 검토가 가능하게 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-413",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "되돌릴 수 없는 조작이 있으면 그 앞과 뒤가 서로 다른 정지점 구간에 놓이도록 자른다.",
+   "basis": "되돌릴 수 있는 단계와 없는 단계 사이에 정지점이 있어야 운영자가 그 경계에서 판정할 수 있고, 판정 없이 넘어간 뒤에는 되돌릴 수단이 남지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-414",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드 파일을 읽어야 하는 검증은 그 파일의 삭제와 같은 정지점 구간 안에 삭제보다 앞서 둔다.",
+   "basis": "등가 검증이 「카드의 값과 바이트로 같은가」를 묻는 이상 차분으로 갈음할 수 없고, 그 검증의 재료가 그 시점에 실재해야 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-415",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "엔트리 카드 파일은 그 페이즈가 원장에 더할 문면 전량을 담는 파일이며 지시서와 짝을 이루어 리포 루트에 놓인다. 추적하지 않고 페이즈가 끝나면 함께 이관한다.",
+   "basis": "추적되면 도달 가능한 문면이 되어 다음 페이즈가 그것을 근거로 쓰게 된다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-416",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서와 카드를 갈라 두면 전사 구간이 둘에서 하나로 준다.",
+   "basis": "결정 세션이 마크다운으로 옮겨 적고 집행이 그것을 다시 JSON 으로 옮겨 적는 두 번째 구간이 사라진다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-417",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드의 ID 는 원장 entry ID 를 그대로 쓴다.",
+   "basis": "별도의 ID 공간을 두면 지시서와 카드 파일 사이에 대응표가 하나 더 생기고, 그 표는 문서가 자라는 동안 조용히 낡는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-418",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드 파일의 형식은 최상위 키 하나이며 그 키가 레지스터 이름을 키로 하고 신규 entry 배열을 값으로 든다.",
+   "basis": "스키마의 정본은 원장의 명세 문서가 든다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-419",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "기존 entry 의 필드를 고치는 기제를 카드에 두지 않는다.",
+   "basis": "그 설계가 필요한 것은 상태 필드를 고치는 기제를 쓰는 경우인데, 이 프로젝트는 원장 수정 불가로 그것을 버렸으므로 들 자리가 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-420",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드의 교차 참조는 사실상 단방향이다. A 가 B 를 가리키려면 A 를 쓸 때 B 가 이미 있어야 하며 적재 순서를 그에 맞춘다.",
+   "basis": "나중에 항목을 더할 수 없으므로 뒤에 선 항목이 앞을 가리키는 것만 된다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-421",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드는 지시서를 지목할 수 없다. 카드의 어느 필드도 지시서의 파일명과 카드 번호와 절 번호를 담지 않는다.",
+   "basis": "카드의 내용은 원장으로 전사되어 영구히 남는데 지시서는 이관되어 도달 불가가 되므로, **영구한 쪽이 사라지는 쪽을 지목하면 원장에 열 수 없는 참조가 남는다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-422",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서가 지시하는 것은 문면이 아니라 자리다. 카드의 ID 와 목적 레지스터와 병합 순서를 들고 문면은 들지 않는다.",
+   "basis": "문면을 지시서에도 실으면 같은 문면이 두 자리에 살게 된다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-423",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "상주 문서에 넣을 문장은 카드가 들 수 없고 지시서의 카드가 든다.",
+   "basis": "카드는 레지스터 entry 만 담으므로 그 밖의 문면은 담을 자리가 없다. **지시서가 그것을 들지 않으면 집행이 문장을 짓게 되고, 지은 문면은 어느 결정도 승인하지 않은 채 상주 문서에 남는다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-424",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "병합 뒤에 선 낙착은 새 카드 파일을 세우지 않고 미전사분으로 두며 수취인은 「그 뒤에 원장에 카드를 병합하는 첫 회차」다. 페이즈의 이름으로 적지 않는다.",
+   "basis": "새 카드 파일을 세우면 한 페이즈에 병합이 둘이 되어 되돌림 명령이 걸리는 대상과 계수 기대가 갈린다. 이름으로 적으면 페이즈가 하나 더 서거나 아크가 바뀌는 순간 낡고, 마지막 페이즈에서는 지목할 이름이 아예 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-425",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "엔트리 카드 파일을 지시서보다 먼저 쓴다.",
+   "basis": "카드의 내용은 전사라 판단이 가장 적고 부피가 가장 크다. 지시서가 드는 계수가 전부 카드 파일에서 나오므로 지시서를 먼저 쓰면 그 계수를 손으로 세게 되고, 병합 전 손질은 전부 카드 파일 안에서 일어난다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-426",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "지시서 본문에는 계수를 넣지 않는다. 계수의 거처는 지시서 부록 한 자리이며 거기서 카드 파일을 읽어 한 번만 선다.",
+   "basis": "본문이 계수를 들면 낙착이 하나 늘 때마다 낡는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-427",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "파생 표는 옮겨 적지 않고 카드 대장에서 생성한다. 대장은 카드마다 식별자와 목적과 대상 지점과 근거 결정과 등가 검증과 집행 페이즈와 정지점 구간과 그 카드가 지시하는 조작의 목록을 담는다.",
+   "basis": "조작의 목록을 담는 이유는 조작 단위의 대조를 요구하기 때문이며, 대장에 조작이 없으면 그 대조표만 손으로 만들게 된다. **대장은 산출물이 아니라 작업 자료이므로 거처와 형식을 정하지 않는다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-428",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드의 대상 지점은 그 카드가 바꾸는 파일만 든다.",
+   "basis": "걸리는 모듈이나 읽는 파일을 적으면 집행이 조작 없는 자리를 찾다가 멈춘다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-429",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "수는 한 자리에만 두고 다른 자리는 그 자리를 지목한다.",
+   "basis": "같은 수를 여러 자리에 담으면 한 자리를 고칠 때 나머지가 조용히 낡는다. **이 조항이 원장 밖에 있는 동안 결정 세션이 카드 대장에 수를 박아 카드가 자라도 따라오지 않는 결손을 냈고, 집행이 갈린 자리 여덟을 잡았다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-347",
+    "CF-348"
+   ]
+  },
+  {
+   "id": "CF-430",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "뒤에 선 낙착으로 낡을 수는 고치지 않고 뺀다.",
+   "basis": "문면이 수와 범위를 함께 들면 낙착이 하나 더 설 때마다 낡고, 수를 옳은 값으로 고치면 그 형이 살아남아 다음 낙착에서 다시 낡는다. 뺄 수 있는 것은 그 문면이 알려야 하는 것이 「이 범위가 전부가 아니다」 하나이고 몇인지의 정본이 다른 자리에 있을 때다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-431",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "산출을 직접 고치지 않고 재생성으로 잰다. 마감하기 전에 한 번 더 뽑아 디스크의 것과 대조하고, 다르면 그 차이가 곧 직접 고친 자리다.",
+   "basis": "표를 대장에서 뽑는 이상 산출은 파생물이므로 고칠 것이 있으면 대장을 고치고 다시 뽑는다. **판별은 기억이 아니라 재생성이 한다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-432",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "대조를 산문으로 적지 않고 네 형의 표로 적는다.",
+   "basis": "산문으로 적으면 대조를 한 것과 값을 한 경로로만 낸 것이 같은 문장으로 읽히고, 두 경우의 문면이 같으면 어긴 자리가 산출물에 드러나지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-433",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "한 변만 있는 행은 대조가 아니라 계측이며 실측 명령 표가 받는다.",
+   "basis": "값을 한 경로로만 낸 것을 대조표에 실으면 맞댄 상대가 없는 행이 통과로 보인다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-434",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "형 A 의 두 경로는 서로 독립이어야 하고 같은 명령을 두 번 돌린 것은 한 경로다. 불일치가 나오면 어느 쪽이 이기는지와 근거를 같은 행에 적고 진 쪽을 지우지 않는다.",
+   "basis": "진 쪽이 남아 있어야 다음 회차가 같은 착각을 반복했는지 알 수 있다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-435",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "형 B 의 답이 아니오가 하나라도 있으면 지시서를 쓸 수 없다. 조작의 열거는 대장의 조작 목록에서 뽑고 자리 목록에서 유도하지 않는다.",
+   "basis": "자리에서 유도하면 그 표가 조작이 아니라 슬롯을 세게 된다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-436",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "형 B 의 「그 자리의 실물」 열은 손으로 채우지 않고 그 자리를 실제로 열어 기계로 잰다.",
+   "basis": "재료의 자리를 적는 것과 그 자리에 실물이 있는 것은 다른 사실이며, 앞만 물으면 이 표가 지목의 존재를 세고 재료의 존재를 세지 않는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-437",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "형 C 는 미포착과 유령이 둘 다 0 이어야 그 행이 닫힌다. 한 방향만 채운 행은 미완이다.",
+   "basis": "**이 표가 잡는 것이 형 B 와 다르다.** 형 B 는 조작마다 재료가 있는지를 묻고 형 C 는 쓰이지 않는 재료를 묻는다. 실제로 수록 문면 한 항을 어느 조작도 지목하지 않는 자리를 이 표가 유령으로 잡았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-340"
+   ]
+  },
+  {
+   "id": "CF-438",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "형 D 는 근거로 쓴 자리와 그 명제가 걸린 자리가 같으면 대조가 아니라 계측이므로 싣지 않는다. 「열었는가」가 아니오이면 그 서술을 쓸 수 없다.",
+   "basis": "선행 문서에서 본 결정을 새 문서에서 내용으로 서술할 때는 그 자리를 직접 열어 대조해야 한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-439",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "판정 기준의 정본이 코드에 있으면 그 코드가 내리는 판정을 호출한 것만 경로로 센다.",
+   "basis": "정본에서 조각만 가져와 그 위에 판정을 얹은 것은 독립 경로가 아니라 전사이며, **명령을 실제로 돌렸다는 사실이 그 어긋남을 가려 버린다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-440",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "카드와 지시서를 마감하기 전에 네 형의 표를 전량 사용자에게 보인다. 보이지 않은 채 마감한 것은 대조를 하지 않은 것과 같이 다룬다.",
+   "basis": "손으로 적은 행이 있으면 그 사실을 그 행에 적는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-441",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "표에 요구할 것은 성실의 선언이 아니라 맞댈 상대의 존재다.",
+   "basis": "한 회차의 자기완결성 루프가 닫은 결함 열셋을 무엇이 잡았는지로 가르면, 조작을 하나씩 물었을 때와 되돌림 명령을 실제로 쓰려 했을 때와 계수를 다시 쟀을 때와 산출을 재생성해 맞대 봤을 때가 전부이고 **조항을 다시 읽어서 나온 것은 없었다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-442",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "보고의 형식은 집행 문면이 정본으로 들고 세션 지시는 결정 세션 쪽의 처리만 정한다.",
+   "basis": "둘이 같은 것을 들면 한쪽을 고칠 때 나머지가 조용히 낡는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-443",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "보고를 받으면 관측값과 해석을 갈라 읽고, 섞여 있으면 그 사실을 먼저 지적한 뒤 관측값만 뽑아 판정한다.",
+   "basis": "해석이 섞인 채로 판정하면 집행의 읽기를 실측으로 받게 된다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-444",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "보고를 받은 뒤 막힘 보고를 구멍 목록에 등재하고 자동 검사 불가 항목을 리뷰하며 기준선 초과분의 3분류를 확정한다.",
+   "basis": "막힘은 주 목적의 산출이고, 분류의 판정은 판단이므로 결정 세션의 몫이다. 집행은 유입원의 관측값과 소견만 보고한다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-445",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "한국어 서술 지침의 적용 대상은 Lean 파일의 docstring 과 주석 전량과 문서에 새로 쓰는 문면과 원장 항목의 산문 필드와 지시서와 보고다.",
+   "basis": "docstring 의 필수 3항목이 이 프로젝트의 1차 산출물이며 사람이 읽는 논증이고, 주석의 의미가 흐리면 그 흐림이 그대로 판정의 흐림이 된다. **식별자와 커밋 메시지는 제외한다.**",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-446",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "서술 지침은 소급하지 않는다. 이미 작성된 문면은 다른 사유로 편집하게 될 때 함께 정리한다.",
+   "basis": "기록으로 남긴 문면을 나중에 고치면 그 기록이 작성된 시점에 무엇을 알고 있었는지를 확인할 수 없게 된다. 적용 시점을 전후로 문체가 갈리는 것은 결함이 아니라 의도한 결과다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-447",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "프로젝트 술어를 정하고 다의어는 좁은 뜻으로만 쓴다. 층은 형식층과 용어집을, 구멍은 정의의 결손을, 기준선은 공리 기준선을 가리킬 때만 쓴다.",
+   "basis": "추상화 단계나 문서의 누락이나 비교의 출발점은 각각 다른 어휘로 푼다. 같은 낱말이 둘을 가리키면 계수가 갈리는 자리에서 그 둘이 섞인다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-448",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "기대값을 두지 않기로 한 자리에서 방향만 단언하면 실측이 어긋남으로 서고 조정할 압력이 생긴다.",
+   "basis": "열세 번째 페이즈의 지시서가 한 검사의 토큰 계수에 기대값을 두지 않겠다고 밝히면서 「움직인다」는 방향은 적었다. 결정 세션이 병합분을 열어 재지 않고 단언한 것이며, 실측은 불변이었고 그 불변이 오히려 이 적재의 성격을 증명했다. **값을 비운 자리에서는 부호도 비운다.**",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-449",
+   "origin": {
+    "arc": "charter",
+    "phase": "charter-14",
+    "kind": "decision_session",
+    "date": "2026-09-20"
+   },
+   "statement": "`charter` 아크에 열네 번째 페이즈를 더해 세션 지시 §6 과 §7 의 조항 예순하나와 앞 페이즈의 미전사분 하나를 병합한다.",
+   "basis": "§6 과 §7 의 조항 예순셋을 원장의 후보 백마흔하나와 전량 맞대어 예순하나가 밖에 있음을 확인했다. 덮인 것은 출력 원문의 갈음 조건과 인용에 지침을 적용하지 않는다는 것 둘뿐이다. **작업 카드의 대장과 대조표 넷과 자기완결성 아홉 조건이 이 프로젝트에서 매 페이즈 쓰이는 방법인데 원장에 한 줄도 없었다.** 계획 변경의 값은 아크 레지스터의 여덟 번째 패치가 든다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-348",
+    "CF-352"
+   ]
   }
  ]
 }
