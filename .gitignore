@@ -5,3 +5,7 @@
 # 결정 세션이 전달하는 지시서와 엔트리 카드 (리포 루트에 두되 추적하지 않는다)
 IMPLEMENTATION_PLAN_*.md
 ENTRY_CARD_*.json
+
+# 파이썬 바이트코드 (검증기 실행의 산출물)
+__pycache__/
+*.pyc
