@@ -45,3 +45,47 @@ example (S : Finset ℕ) (cap equity : ℕ → ℤ) :
         (fun _ => 2) (fun i => if i = 0 then 1 else 2)
 #eval aggregationError (Finset.univ : Finset (Fin 2))
         (fun i => if i = 0 then 2 else 3) (fun _ => 1)
+
+/-! ### 용어집 층 기준선 실측 (수 체계 없음)
+
+용어집은 수를 쓰지 않으므로 기준선은 열거형만 언급하는 자명한 정의의 출력이다.
+`registry` 가 `List ConceptRel` 이므로 `List` 를 포함한 쪽이 실효 기준선이다.
+-/
+
+def glossaryProbe (c : CrisisFramework.Glossary.Concept) :
+    CrisisFramework.Glossary.Concept := c
+#print axioms glossaryProbe
+
+def glossaryProbeList (c : CrisisFramework.Glossary.Concept) :
+    List CrisisFramework.Glossary.Concept := [c]
+#print axioms glossaryProbeList
+
+/-! ### 정의층 기준선 실측 (무차원 + 시점 인덱스 `ℕ`)
+
+정의층은 구체 수 타입을 쓰지 않고 시점 인덱스 `ℕ` 만 예외로 허용한다.
+`NodeFamily` 가 `ℕ → Finset Node` 이므로 `Finset` 을 포함한 쪽이 실효 기준선이다.
+-/
+
+def definitionProbe (t : ℕ) : ℕ := t
+#print axioms definitionProbe
+
+def definitionProbeFamily (Node : Type) : ℕ → Finset Node := fun _ => ∅
+#print axioms definitionProbeFamily
+
+/-! ### 층별 선언 감사
+
+공리 감사가 회계층 다섯만 보고 용어집 넷과 정의층 여섯을 재지 않았다.
+그 층들의 기준선이 미측정이라 차분할 대상이 없었기 때문이다. 열다섯을 전량 찍는다.
+-/
+
+#print axioms CrisisFramework.Glossary.Concept
+#print axioms CrisisFramework.Glossary.SourceTag
+#print axioms CrisisFramework.Glossary.ConceptRel
+#print axioms CrisisFramework.Glossary.registry
+
+#print axioms CrisisFramework.Definition.Constraint
+#print axioms CrisisFramework.Definition.Constraint.trivial
+#print axioms CrisisFramework.Definition.NodeState
+#print axioms CrisisFramework.Definition.NodeState.trivial
+#print axioms CrisisFramework.Definition.NodeFamily
+#print axioms CrisisFramework.Definition.NodeFamily.empty
