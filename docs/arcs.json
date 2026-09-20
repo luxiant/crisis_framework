@@ -33,7 +33,8 @@
         "charter-10",
         "charter-11",
         "charter-12",
-        "charter-13"
+        "charter-13",
+        "charter-14"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -156,6 +157,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-13",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-14",
+      "what": "세션 지시 §6·§7 의 조항 예순하나와 앞 페이즈의 미전사분 하나를 받는 페이즈",
+      "why": "§6 과 §7 의 조항 예순셋을 원장의 후보 백마흔하나와 전량 맞대어 예순하나가 밖에 있음을 확인했다. 덮인 것이 둘뿐이며, 작업 카드의 대장과 대조표 넷과 자기완결성 아홉 조건이 매 페이즈 쓰이는 방법인데 원장에 한 줄도 없었다. ID 를 갖지 않는 절이 원장 밖에 있다는 발견의 가장 큰 실측이다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-14",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
