@@ -32,7 +32,8 @@
         "charter-9",
         "charter-10",
         "charter-11",
-        "charter-12"
+        "charter-12",
+        "charter-13"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -142,6 +143,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-12",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-13",
+      "what": "세션 지시 §0·§2 의 조항 스물여덟과 앞 페이즈의 미전사분 셋을 받는 페이즈",
+      "why": "§0 과 §1 과 §2 의 조항 마흔셋을 원장의 후보 백아홉과 전량 맞대어 스물여덟이 밖에 있음을 확인했다. ID 를 갖지 않는 절이 원장 밖에 있다는 발견의 실측이며, §1 은 전량 덮여 있었다. §6 과 §7 은 아직 재지 않았고 §6 이 아홉 절이라 그보다 클 것으로 보아 그 적재는 뒤가 받는다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-13",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
