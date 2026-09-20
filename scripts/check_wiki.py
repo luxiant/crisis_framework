@@ -53,8 +53,11 @@ RESIDENT_DOCS = (
     "docs/bundle-inventory-v0.md",
 )
 # 기록하는 자리는 유니버스 밖이다. 그 문면은 그 시점의 앎을 담으므로 낡은 지목이 정당하다.
-# `docs/arcs.json` 도 내용이 `patches` 이므로 같은 사유로 훑지 않는다.
-HISTORY_PATHS = ("BUILD_LOG.md", "docs/phases/", "docs/extractions/", "docs/arcs.json")
+HISTORY_PATHS = ("BUILD_LOG.md", "docs/phases/", "docs/extractions/",
+                 "docs/arcs.json 의 patches 배열")
+# `arcs.json` 은 `patches` 배열만 빠지고 나머지는 유니버스에 든다. 그 파일의 `note` 가 규율을
+# 지목하므로 파일 전체를 빼면 그 지목이 검사되지 않는다(SPEC §2.1).
+ARCS_DOC = "docs/arcs.json"
 # 폐기 지목의 면제 선언. 문서 머리에 이 형으로 한 줄을 두고 면제되는 ID 를 열거한다.
 DECLARE_LINE = re.compile(r"^\s*\*\*폐기 지목:\*\*(.*)$")
 
@@ -64,6 +67,8 @@ DD_TOKEN = re.compile(r"--\s*DD:\s*(\S+)")
 STEP_CALL = re.compile(r"^\s*step\s+['\"]?([^\s'\"]+)")
 EXTRACTION_NO = re.compile(r"^E-(\d+)$")
 ARTIFACT_PATH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
+# 검사 25 의 유니버스. 최상위 선언만 보며 생성자와 필드는 자기를 담은 선언의 표지를 딛는다.
+TOP_DECL = re.compile(r"^(def|theorem|inductive|structure)\s+([^\s({\[:]+)")
 
 
 class Report:
@@ -180,7 +185,8 @@ class Ledger:
     def rule_scan_targets(self) -> list[tuple[str, str]]:
         """검사 24 가 훑을 (표시 경로, 훑을 텍스트) 목록.
 
-        상주 문서는 전문을 훑고 Lean 파일은 주석만 훑는다. 식별자는 영어라 규율 ID 꼴이 코드에
+        상주 문서는 전문을 훑고 Lean 파일은 주석만 훑는다. `arcs.json` 은 `patches` 배열을 뺀
+        나머지를 훑는다. 식별자는 영어라 규율 ID 꼴이 코드에
         서지 않으나, SPEC 이 유니버스를 「Lean 주석」으로 들므로 그대로 좁힌다.
         """
         out = []
@@ -188,6 +194,11 @@ class Ledger:
             f = self.root / rel
             if f.is_file():
                 out.append((rel, f.read_text(encoding="utf-8")))
+        f = self.root / ARCS_DOC
+        if f.is_file():
+            doc = json.loads(f.read_text(encoding="utf-8"))
+            doc.pop("patches", None)
+            out.append((ARCS_DOC, json.dumps(doc, ensure_ascii=False, indent=1)))
         for f in self.lean_files:
             out.append((str(f.relative_to(self.root)), _lean_comments(f.read_text(encoding="utf-8"))))
         return out
@@ -577,8 +588,38 @@ def check_24(led: Ledger) -> Report:
                               f"문서 머리의 폐기 지목 선언에 없다")
     r.note(f"규율 ID 토큰 {total}건. 미실재 {missing} · 선언 없는 폐기 지목 {retired} · "
            f"선언으로 면제된 폐기 지목 {declared}")
-    r.note(f"유니버스: 상주 문서 {len(RESIDENT_DOCS)} · Lean {len(led.lean_files)}. "
+    r.note(f"유니버스: 상주 문서 {len(RESIDENT_DOCS) + 1} · Lean {len(led.lean_files)}. "
            f"유니버스 밖: {list(HISTORY_PATHS)}")
+    return r
+
+
+def check_25(led: Ledger) -> Report:
+    r = Report("25", "wiki25-marker-missing",
+               "Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가",
+               "fail")
+    marks = led.dd_markers()
+    n_decl = n_mark = missing = 0
+    for f in led.lean_files:
+        lines = f.read_text(encoding="utf-8").splitlines()
+        decls = [(i, m.group(1), m.group(2))
+                 for i, ln in enumerate(lines, 1)
+                 for m in [TOP_DECL.match(ln)] if m]
+        # 그 파일의 표지가 선 줄. 검사 13 과 같은 유니버스라 블록 주석은 들지 않는다.
+        mark_lines = sorted(ln for g, ln, _ in marks if g == f)
+        n_decl += len(decls)
+        n_mark += len(mark_lines)
+        prev = 0
+        for line_no, kind, name in decls:
+            # 앞 선언과 이 선언 사이에 선 표지가 이 선언의 것이다.
+            if any(prev < m < line_no for m in mark_lines):
+                pass
+            else:
+                missing += 1
+                r.bad(f"{f.relative_to(led.root)}:{line_no}: 최상위 {kind} `{name}` 에 "
+                      f"DD: 표지가 없다")
+            prev = line_no
+    r.note(f"최상위 선언 {n_decl} · 표지 {n_mark} · 누락 {missing}")
+    r.note("example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)")
     return r
 
 
@@ -711,7 +752,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
-         "11", "12", "13", "14", "15", "23", "24", "16", "17", "18", "19", "20", "21"]
+         "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21"]
 
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
@@ -720,7 +761,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_01(led), check_02(led), check_03(led), check_03a(led),
         check_04a(led), check_05(led), check_06(led), check_07(led), check_08(led),
         check_09(led), check_10(led), check_11(led), check_12(led), check_13(led),
-        check_14(led), check_15(led), check_23(led), check_24(led),
+        check_14(led), check_15(led), check_23(led), check_24(led), check_25(led),
         check_16(led), check_17(led), check_18(led), check_19(led),
         check_20(led, arc_close), check_21(led, arc_close),
     ]
