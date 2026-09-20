@@ -32,9 +32,9 @@
         "charter-9",
         "charter-10"
       ],
-      "status": "closed",
+      "status": "open",
       "opened": "2026-09-19",
-      "closed": "2026-09-20",
+      "closed": null,
       "holes": [],
       "cq": []
     },
