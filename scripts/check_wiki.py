@@ -225,12 +225,17 @@ def _undeclared(led: Ledger) -> list[tuple[dict, str, str]]:
 
 
 def check_03(led: Ledger) -> Report:
-    r = Report("3", "wiki3-origin-phase", "origin.phase 가 그 아크의 phases 에 있는가", "fail")
+    r = Report("3", "wiki3-origin-phase",
+               "origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가", "fail")
+    granted = 0
     for e, arc, phase in _undeclared(led):
         if _granting_patch(led, arc, phase) is None:
             r.bad(f"{e.get('id')}: 페이즈 `{phase}` 가 아크 `{arc}` 에 선언되지 않았고 패치도 없다")
         else:
+            granted += 1
             r.note(f"{e.get('id')}: 페이즈 `{phase}` 가 미선언이나 패치가 권한을 준다")
+    # 검사 4 를 폐기하고 이 검사 하나로 두었으므로 권한이 쓰인 건수를 여기서 낸다(SPEC §2.1).
+    r.note(f"패치가 권한을 준 항목 {granted}건")
     return r
 
 
@@ -244,18 +249,6 @@ def check_03a(led: Ledger) -> Report:
             continue
         if not re.fullmatch(re.escape(arc) + r"-\d+", phase):
             r.bad(f"{e.get('id')}: 페이즈 `{phase}` 가 아크 `{arc}` 의 형태가 아니다")
-    return r
-
-
-def check_04(led: Ledger) -> Report:
-    r = Report("4", "wiki4-patch-grant",
-               "3 이 실패할 때 arcs.json 의 patches 가 그 페이즈에 권한을 주는가", "fail")
-    und = _undeclared(led)
-    if not und:
-        r.note("검사 3 이 잡은 미선언 페이즈가 없어 이 검사의 대상이 비었다")
-    for e, arc, phase in und:
-        if _granting_patch(led, arc, phase) is None:
-            r.bad(f"{e.get('id')}: 페이즈 `{phase}` 를 늘리는 패치가 arcs.json 에 없다")
     return r
 
 
@@ -635,14 +628,14 @@ def check_21(led: Ledger, arc: str | None) -> Report:
     return r
 
 
-ORDER = ["1", "2", "3", "3-a", "4", "4-a", "5", "6", "7", "8", "9", "10",
+ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "16", "17", "18", "19", "20", "21"]
 
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
-        check_01(led), check_02(led), check_03(led), check_03a(led), check_04(led),
+        check_01(led), check_02(led), check_03(led), check_03a(led),
         check_04a(led), check_05(led), check_06(led), check_07(led), check_08(led),
         check_09(led), check_10(led), check_11(led), check_12(led), check_13(led),
         check_14(led), check_15(led), check_23(led),

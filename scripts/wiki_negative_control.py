@@ -137,8 +137,25 @@ def inj_03a(root):
     edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", "primary-1"))
 
 
-def inj_04(root):
-    edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", "charter-9"))
+def inj_03p(root):
+    """권한을 준 패치를 지운다.
+
+    검사 4 를 폐기하고 검사 3 하나로 두었으므로(SPEC §2.1) 이 검사가 잡아야 할 것이 둘이다.
+    앞은 선언되지 않은 페이즈를 적는 것이고 뒤가 이것이다. 먼저 미선언 페이즈에 권한을 주는
+    패치를 세워 정당한 상태를 만들고, 그 패치만 걷어 낸다."""
+    edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", "charter-11"))
+    doc = arcs(root)
+    doc["patches"].append({
+        "arc": "charter", "op": "add", "from": None, "phase": "charter-11",
+        "what": "", "why": "음성 대조가 세운 항이다.",
+        "origin": {"arc": "charter", "phase": "charter-8",
+                   "kind": "decision_session", "date": "2026-09-20"},
+    })
+    save_arcs(root, doc)
+    # 여기까지가 정당한 상태다. 아래가 주입이며 권한을 준 패치를 지운다.
+    doc = arcs(root)
+    doc["patches"] = [q for q in doc["patches"] if q.get("phase") != "charter-11"]
+    save_arcs(root, doc)
 
 
 def inj_04a(root):
@@ -306,7 +323,7 @@ CASES = [
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
     ("3",   "wiki3-origin-phase",          "선언되지 않은 페이즈를 적는다",                inj_03,  None, None),
     ("3-a", "wiki3a-phase-form",           "다른 아크의 페이즈명을 적는다",                inj_03a, None, None),
-    ("4",   "wiki4-patch-grant",           "패치 없이 페이즈를 늘린다",                    inj_04,  None, None),
+    ("3-p", "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None, None),
     ("4-a", "wiki4a-patch-from",           "없는 페이즈를 from 에 적는다",                 inj_04a, None, None),
     ("5",   "wiki5-closed-arc",            "닫힌 아크로 항목을 쓴다",                      inj_05,  None, None),
     ("6",   "wiki6-tier-vocab",            "tactical 을 적는다",                           inj_06,  None, None),
@@ -345,8 +362,9 @@ def main() -> int:
             extra = fn(work)
             got = run_checker(work, arc_close=arc)
             base = base_arc if arc else base_plain
-            b = base["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
-            g = got["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
+            key = num.split("-p")[0] if num.endswith("-p") else num
+            b = base["checks"].get(key, {"verdict": "?", "violations": [], "notes": []})
+            g = got["checks"].get(key, {"verdict": "?", "violations": [], "notes": []})
 
             if num in ("16", "17", "18", "19"):
                 new_notes = [n for n in g["notes"] if n not in b["notes"]]
