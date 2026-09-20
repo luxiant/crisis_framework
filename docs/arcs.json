@@ -34,7 +34,8 @@
         "charter-11",
         "charter-12",
         "charter-13",
-        "charter-14"
+        "charter-14",
+        "charter-15"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -170,6 +171,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-14",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-15",
+      "what": "리포의 남은 조항 스물둘과 앞 페이즈의 미전사분 여섯을 받는 페이즈",
+      "why": "리포의 추적 파일 마흔아홉을 전량 열어 아홉 부류로 가르고 각 부류가 조항을 담는지 판정했으며 분류 밖이 없다. 앞 회차들이 절마다 미루면서 유니버스를 한 번도 세지 않았고, 원장의 명세 문서와 집행 문면의 자기 정본 조항과 검증 스크립트와 워크플로의 주석과 참고자료 목록이 전부 밖에 있었다. 이 적재 뒤에 개봉하지 않은 문면이 0 이 된다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-15",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
