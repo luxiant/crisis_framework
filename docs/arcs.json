@@ -30,7 +30,8 @@
         "charter-7",
         "charter-8",
         "charter-9",
-        "charter-10"
+        "charter-10",
+        "charter-11"
       ],
       "status": "open",
       "opened": "2026-09-19",
@@ -114,6 +115,19 @@
       "origin": {
         "arc": "charter",
         "phase": "charter-9",
+        "kind": "decision_session",
+        "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "charter",
+      "op": "add",
+      "phase": "charter-11",
+      "what": "미전사분의 병합과 아크 종료를 받는 페이즈",
+      "why": "열 번째 페이즈가 집행 중에 미전사분을 둘 낳았고 그 뒤 결정 세션이 두 세션을 훑어 여섯을 모았다. 아크의 마지막 페이즈는 병합만 하고 새 낙착을 낳지 않아야 하므로 그 페이즈가 아크를 닫을 수 없다. 아크 종료가 한 번 성립했다가 되돌려졌으며, 되돌림이 아크의 상태만 물리고 검사 설비와 그 실측은 남겼다. 열한 번째가 그 여섯을 병합하고 닫는다.",
+      "origin": {
+        "arc": "charter",
+        "phase": "charter-11",
         "kind": "decision_session",
         "date": "2026-09-20"
       }
