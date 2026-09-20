@@ -18,6 +18,41 @@ export PATH=/root/.elan/bin:$PATH
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# 자기 출력의 정규화 해시를 마지막 줄에 낸다. 갈음한 보고에서도 판 사이 대조가
+# 기계로 서게 하는 앵커이며, 판정이 아니므로 종료 코드를 이 값으로 가르지 않는다.
+# 검사 결과가 바뀌면 값이 달라지는 것이 당연하고 그것은 실패가 아니다.
+#
+# 정규화는 판 사이에 달라지는 것만 지운다. 지우는 것은 넷이며 터미널 색 코드와
+# 절대 경로와 소요 시간 표기와 빌드 진행 표시다. 그 밖은 한 글자도 바꾸지 않는다.
+# 같은 환경의 두 판에서 실제로 움직이는 것은 뒤의 둘이고, 앞의 둘은 환경이 다를 때
+# 움직인다. 해시가 값을 내는 자리가 바로 그 자리이므로 넷을 다 지운다.
+#
+# 이 줄 자신은 해시의 입력에서 뺀다. 자기 해시를 입력에 넣으면 값이 정해지지 않는다.
+if [ -z "${VERIFY_DIGEST_CHILD:-}" ]; then
+  digest_log=$(mktemp)
+  VERIFY_DIGEST_CHILD=1 bash "$0" "$@" 2>&1 | tee "$digest_log"
+  digest_rc=${PIPESTATUS[0]}
+  printf 'OUTPUT_DIGEST=%s\n' "$(
+    python3 - "$digest_log" "$ROOT" "${HOME:-}" <<'NORMALIZE' | sha256sum | cut -c1-12
+import re, sys
+
+log, root, home = sys.argv[1], sys.argv[2], sys.argv[3]
+s = open(log, encoding='utf-8', errors='replace').read()
+
+s = re.sub(r'\x1b\[[0-9;]*m', '', s)                       # 터미널 색 코드
+s = s.replace(root, '<ROOT>')                              # 절대 경로
+if home and home != '/':
+    s = s.replace(home, '<HOME>')
+s = re.sub(r'\[\d+/\d+\]', '[<progress>]', s)              # 빌드 진행 표시
+s = re.sub(r'\((\d+(?:\.\d+)?m?s)\)', '(<time>)', s)        # 소요 시간 표기
+
+sys.stdout.write(s)
+NORMALIZE
+  )"
+  rm -f "$digest_log"
+  exit "$digest_rc"
+fi
+
 TARGETS=(
   CrisisFramework/Glossary/Core.lean
   CrisisFramework/Definition/Constraint.lean
