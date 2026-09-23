@@ -430,13 +430,17 @@ def check_10(led: Ledger) -> Report:
     for f, ln, ref in led.dd_markers():
         if ref in dead:
             r.bad(f"{f.relative_to(led.root)}:{ln}: DD: 표지가 폐기된 {ref} 를 가리킨다")
-    # docs/ 산문
+    # docs/ 산문. 역사 기록은 유니버스 밖이다. 그 문면은 그 시점의 앎을 담으므로 낡은 지목이
+    # 정당하고 소급해 고치지 않는다. 검사 24 가 쓰는 `HISTORY_PATHS` 를 같이 쓴다(SPEC §2.1).
     for f in led.doc_files:
+        rel = str(f.relative_to(led.root))
+        if any(rel.startswith(h) for h in HISTORY_PATHS):
+            continue
         for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
             for m in CF_TOKEN.finditer(line):
                 if m.group(0) in dead:
                     r.bad(f"{f.relative_to(led.root)}:{i}: 산문이 폐기된 {m.group(0)} 를 든다")
-    r.note(f"폐기된 id {len(dead)}건을 유니버스로 훑었다")
+    r.note(f"폐기된 id {len(dead)}건을 유니버스로 훑었다. 유니버스 밖: {list(HISTORY_PATHS)}")
     return r
 
 
@@ -665,10 +669,13 @@ def check_16(led: Ledger) -> Report:
                 if flat and flat in re.sub(r"[^a-z0-9]", "", f.stem.lower()):
                     hit, why = True, f"추출 기록 `{f.name}` 이 섰다"
                     break
-        elif kind in ("arc_phase", "blocking"):
+        elif kind == "arc_phase":
             a = led.arcs.get(ref)
             hit = bool(a) and a.get("status") == "open"
             why = f"아크 `{ref}` 가 열려 있다"
+        # `blocking` 은 여기서 보지 않는다. 아크가 열려 있다는 것으로는 누가 실제로 부딪힌 것과
+        # 아크가 그냥 열려 있는 것이 갈리지 않아 늘 발화로 뜨고, 그러면 이 보고를 읽는 쪽이
+        # 곧 넘기게 되어 검사 16 을 두는 사유가 무너진다. 그 몫은 검사 18 이 든다(SPEC §2.2).
         if hit:
             fired.append(f"{e.get('id')} ({kind}) — {why}")
     r.note(f"발화한 트리거 {len(fired)}건")
@@ -743,7 +750,7 @@ def check_20(led: Ledger, arc: str | None) -> Report:
 
 def check_21(led: Ledger, arc: str | None) -> Report:
     r = Report("21", "wiki21-arc-blocking",
-               "그 아크에 걸린 blocking 구멍마다 발화했거나 해소됐거나 이월됐는가", "arc_close")
+               "그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가", "arc_close")
     if arc is None:
         r.ran = False
         r.note("아크 종료 커밋이 아니므로 수행하지 않는다")

@@ -54,11 +54,9 @@ NORMALIZE
   exit "$digest_rc"
 fi
 
-TARGETS=(
-  CrisisFramework/Glossary/Core.lean
-  CrisisFramework/Definition/Constraint.lean
-  CrisisFramework/Accounting/Aggregation.lean
-)
+# 검사 대상은 훑어서 잡는다. 박아 두면 새 파일이 금지 구문과 공리 감사와 변이 검사의 그물
+# 밖에 남으며, `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다.
+mapfile -t TARGETS < <(find CrisisFramework -name '*.lean' -type f | LC_ALL=C sort)
 AGG=CrisisFramework/Accounting/Aggregation.lean
 
 fail=0
