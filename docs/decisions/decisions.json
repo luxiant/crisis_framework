@@ -8767,6 +8767,215 @@
     "CF-213",
     "CF-579"
    ]
+  },
+  {
+   "id": "CF-581",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "관측층의 선언은 시점과 금액과 영역 타입을 전부 매개변수로 받고 수 타입을 언급하지 않는다.",
+   "basis": "`claim-2` 의 사전 검사에서 앞서 스케치된 CQ 서명이 시점을 `ℕ` 으로 금액을 `ℤ` 로 들고 있는 것이 드러났다. L-10 은 시점 인덱스의 `ℕ` 예외를 정의층에만 주고 L-14 는 관측층이 값을 담지 않게 하므로 그 서명은 조항과 부딪힌다. `verify.sh` 의 금지 구문 단계가 `ℝ` 만 보기 때문에 기계에 걸리지 않고 남아 있었다. 정의층이 수 체계를 `Num` 매개변수로 추상화한 선례를 그대로 따르며, 금액의 수 체계는 회계층이 L-15 에 따라 정한다. 부수 효과로 관측층 파일이 아무것도 import 하지 않게 되어 재유입할 때 그 선언만 떼어 갈 수 있다. 세션 지시가 존속 미결로 들고 있던 관측층 사상의 시점 인덱스 문제가 이 결정으로 해소되며, 답은 갖되 그 인덱스의 타입이 매개변수라는 것이다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-571"
+   ]
+  },
+  {
+   "id": "CF-582",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "CQ 열하나의 거처는 `CrisisFramework/Observation/CompetencyQuestion.lean` 이며, CQ 마다 `structure` 하나와 witness 하나를 두고 `CQ` 네임스페이스로 묶는다.",
+   "basis": "하나의 `structure` 에 열한 필드를 담는 안과 견주었다. CQ 마다 영역 타입이 다르므로 묶으면 매개변수가 전부 한 선언에 붙고, A-3 의 witness 가 하나뿐이라 어느 CQ 가 비었는지 선언에서 드러나지 않으며, R-6 의 표지도 하나뿐이라 CQ 마다 그것을 낳은 결정을 가리킬 수 없다. 네임스페이스를 따로 두는 것은 답 타입의 이름과 구조물의 이름이 겹치는 것을 막기 위해서다. 최상위 선언이 스물일곱 늘어나며 공통 답 타입 다섯과 구조물 열하나와 witness 열하나다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-571",
+    "CF-581"
+   ]
+  },
+  {
+   "id": "CF-583",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "판정 불가의 까닭에 반사실 미평가를 세 번째로 둔다.",
+   "basis": "`claim-2` 가 Morris·Shin 2016 을 다시 읽어 세운 추출 기록 E-17 에서 나왔다. 그 편의 비유동성 위험은 런이 없었다면 생존했을 은행이 런으로 실패할 확률로 정의되어 반사실을 품는다. 측정 소스가 없어서 못 재는 것은 조달로 풀리지만 잴 대상이 실현되지 않아서 못 재는 것은 풀리지 않으므로 해소 경로가 다르다. 저자들이 사후에도 런이 부실한 기관의 실패를 앞당긴 것인지 건전한 기관을 무너뜨린 것인지 가리기 어렵다고 적는 대목이 뒤를 가리킨다. 답 공간에 칸을 더하는 것은 답의 완전성이라는 전제를 바꾸어 비보수적인데, 고정하는 행위 자체가 `claim-2` 이므로 지금 넣는 것은 확장이 아니라 최초 선언이다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-571",
+    "CF-575"
+   ]
+  },
+  {
+   "id": "CF-584",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "CQ-fin-9 의 답 타입에서 조정 칸의 근거는 Morris·Shin 의 분해가 아니라 제약과 레버리지의 순환을 다루는 편들이다.",
+   "basis": "추출 기록 E-17 에서 나왔다. 그 편은 대차대조표를 주어진 것으로 놓아 은행이 결정을 내리지 않으며 저자들이 각주로 그것을 인정한다. 그래서 그 분해는 실패한 경우를 지급불능과 비유동성으로 가르기만 하고 실패하지 않은 경우의 조정을 담지 않는다. 답 타입이 실패하지 않은 경우에 대차대조표를 줄여 조정했는지를 함께 묻는 것은 초석 명제가 위계 상단의 노드는 디폴트하지 않고 조정한다고 들기 때문이며, 그 칸의 근거가 어디에 있는지를 D-2 의 3항이 적는다.",
+   "tier": "finding",
+   "layer": "observation",
+   "related": [
+    "CF-571",
+    "CF-583"
+   ]
+  },
+  {
+   "id": "CF-585",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "`docs/baseline.md` 가 CQ 열하나의 고정 절을 들고 `verify.sh` 가 Lean 선언과 대조한다.",
+   "basis": "CF-571 이 서명과 docstring 의 대조를 `claim-2` 에 맡겼으나 그 설비가 없었다. 고정 절은 CQ 마다 한 줄이며 번호와 구조물 이름과 답 타입과 docstring 다이제스트를 든다. 서명은 짧고 사람이 읽으므로 값으로 싣고 docstring 은 길어서 다이제스트로만 싣는다. 산문을 두 벌 두면 전사가 되어 한쪽을 고칠 때 나머지가 낡는데, 다이제스트는 문면이 바뀌면 대조가 그 자리에서 잡으므로 조용히 낡지 않는다.",
+   "tier": "invariant",
+   "layer": "observation",
+   "check": "step7-cqfin",
+   "related": [
+    "CF-571"
+   ]
+  },
+  {
+   "id": "CF-586",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "`arcs.json` 의 `cq` 필드를 읽는 검사 셋을 28 과 29 와 30 으로 세운다.",
+   "basis": "CF-573 이 읽는 검사 셋을 `claim-2` 에 맡겼다. 28 은 `cq` 의 값이 고정 절에 실재하는 CQ 를 가리키는지 보고 실패시킨다. 29 는 아크가 닫힐 때 그 아크의 CQ 마다 처분이 섰는지 보며 아크 종료 검사다. 30 은 어느 아크에도 걸리지 않은 CQ 의 계수를 보고만 한다. 4 와 22 가 비어 있으나 검사 번호는 불변 앵커이고 `wiki<n>-` 꼴의 검사 id 와 `SPEC.md` 의 표가 그것을 딛으므로 재사용하지 않는다.",
+   "tier": "invariant",
+   "layer": "meta",
+   "check": "step6-ledger",
+   "related": [
+    "CF-573",
+    "CF-585"
+   ]
+  },
+  {
+   "id": "CF-587",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "검사 10 의 유니버스는 원장의 산문과 Lean 의 표지와 상주 문서이며 역사 기록은 밖이다.",
+   "basis": "`claim-1` 이 명세와 구현의 어긋남으로 넘긴 것이다. 명세는 유니버스로 `related` 와 `reopen_when.ref` 와 Lean 표지와 `docs/` 산문 넷을 드는데, 구현은 원장 entry 의 `statement` 와 `basis` 와 `reason` 과 `candidate` 와 `for` 다섯 필드도 훑고 있었다. 넓은 쪽이 옳으므로 명세를 구현에 맞춘다. 그리고 `docs/` 산문을 훑을 때 역사 기록 경로를 뺀다. 검증기에 `HISTORY_PATHS` 상수가 이미 서 있고 검사 24 가 그것으로 유니버스를 좁히는데 검사 10 만 그 상수를 쓰지 않아서, 같은 원칙이 한 검사에만 걸려 있었다. 그 상수가 드는 사유는 기록하는 자리의 문면이 그 시점의 앎을 담으므로 낡은 지목이 정당하다는 것이다. 이 결정으로 `claim-1` 이 기지의 실패로 적어 둔 검사 10 의 실패 넷이 해소되고 `verify.sh` 가 통과 상태로 돌아온다. 넷은 전부 `docs/phases/charter-20-closure.md` 안에 있다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-588",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "검사 16 에서 `blocking` 가지를 빼고 그 보고를 검사 18 에 맡긴다.",
+   "basis": "구현이 `blocking` 을 `arc_phase` 와 같은 줄에서 처리해 아크가 열려 있으면 발화로 셌다. 그래서 `CF-579` 가 아크를 연 순간부터 발화로 보고되고, 누가 실제로 부딪힌 것과 아크가 그냥 열려 있는 것이 갈리지 않는다. 검사 16 을 두는 사유가 트리거를 써 놓고 아무도 안 보면 구멍이 영영 잔다는 것인데, 늘 발화로 뜨는 항목은 읽는 쪽이 곧 넘기게 되므로 그 사유가 무너진다. 검사 18 이 이미 아크별로 `blocking` 구멍을 아크의 상태와 함께 내므로 잃는 정보가 없다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-68"
+   ]
+  },
+  {
+   "id": "CF-589",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "검사 21 의 통과 상태는 해소와 이월 둘이며 발화는 통과 상태가 아니다.",
+   "basis": "명세가 통과 상태를 셋으로 적고 구현은 둘이다. 구현은 폐기 레코드가 있으면 해소로, 트리거의 `ref` 가 다른 아크를 가리키면 이월로 통과시키고 그 밖은 실패시킨다. 발화한 채 처분되지 않은 구멍을 통과시키면 아크가 열린 구멍을 품은 채 닫히므로 구현이 더 엄하고 구현이 옳다. 명세를 구현에 맞춘다. 이 결정으로 `claim` 은 `CF-579` 를 폐기하거나 다음 아크로 이월하지 않으면 닫히지 않으며, 모의로 아크를 닫아 돌려 보면 검사 21 이 지금 그것을 잡는다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-68",
+    "CF-579"
+   ]
+  },
+  {
+   "id": "CF-590",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "`claim-1` 의 closure 가 검사 21 이 아크 종료의 관문으로 발화 판정을 쓴다고 적은 것은 틀렸다.",
+   "basis": "검사 21 은 발화 판정 함수를 부르지 않는다. 아크가 열려 있으면 발화로 세는 근사는 검사 16 안에만 산다. `claim-2` 가 검증기를 열어 대조하면서 드러났고, 모의로 아크를 닫아 돌려 보니 검사 21 이 `CF-579` 를 잡고 실패한다. closure 는 역사 기록이라 고치지 않으므로 이 항목이 정정을 든다. 원인은 결정 세션이 구현을 열지 않고 closure 의 서술을 그대로 받아 적은 것이며, 근거로 쓴 자리와 명제가 걸린 자리가 다르면 열어야 한다는 것을 딛는 자리 대조표가 이미 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-589"
+   ]
+  },
+  {
+   "id": "CF-591",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "엔트리 카드의 키 순서는 레지스터마다 원장의 현행 관례를 따른다.",
+   "basis": "`claim-1` 의 미전사분이며 병합 뒤에 선 낙착이라 그 회차의 카드에 들어갈 자리가 없었다. 카드가 원장과 다른 키 순서로 쓰여서 집행이 순서를 관례로 돌리고 등가 검증을 원시 바이트가 아니라 표준형 바이트로 해야 했다. 값과 키 집합은 열두 entry 전부가 같았고 대조도 통과했으나, 등가 검증을 바이트로 같은지로 드는 집행 문면과 곧이곧대로는 양립하지 않았다. 바이트 대조가 더 강한 검사이므로 고칠 쪽은 카드이며, 그러면 지시서가 키 순서를 말할 필요도 없어진다. 실측한 현행 관례는 결정 레지스터가 id·origin·names·statement·basis·tier·layer·check·related 이고 이연 레지스터가 id·origin·names·statement·basis·layer·reopen_when·related 이며, names 와 check 는 없으면 자리째 빠진다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-592",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "`verify.sh` 의 검사 대상은 `CrisisFramework/` 아래의 `.lean` 전량을 훑어 잡는다.",
+   "basis": "대상이 세 파일로 박혀 있는 것이 `claim-2` 의 사전 검사에서 드러났다. `lakefile.toml` 의 glob 이 새 파일을 빌드는 하므로 빌드 단계는 잡지만 금지 구문 단계와 공리 감사 단계와 변이 검사 단계는 그 파일을 보지 않는다. 새 파일을 세울 때마다 사람이 배열을 고쳐야 하는 것 자체가 빠뜨릴 자리이며, 박아 둔 값은 리포 실물에서 뽑는다는 것이 이미 조항으로 서 있다. 원장 검증기는 이미 그 디렉터리를 훑어 잡으므로 표지 검사와 층 검사는 이 결손에 걸리지 않았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-593",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-2",
+    "kind": "decision_session",
+    "date": "2026-09-23"
+   },
+   "statement": "witness 의 docstring 이 D-2 의 3항목을 채우지 않는 관례가 리포에 서 있다.",
+   "basis": "`Definition/Constraint.lean` 의 `Constraint.trivial` 과 `NodeState.trivial` 과 `NodeFamily.empty` 가 한 줄 안팎의 docstring 만 갖는다. D-2 는 `def` 전량에 세 항목을 요구하고 집행 문면도 그렇게 적는데, D-1 과 D-2 를 보는 검사가 아직 서지 않아 드러나지 않았다. `claim-2` 가 witness 열하나를 더하면서 같은 관례를 따랐으므로 어긋난 자리가 셋에서 열넷이 된다. 관례를 고칠지 조항을 고칠지는 이 페이즈가 정하지 않으며, 그 판정을 받을 아크의 개막 결정이 든다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-582"
+   ]
   }
  ]
 }
