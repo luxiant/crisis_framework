@@ -26,7 +26,7 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | 논문 | 대상 구멍 | 기대 재료 |
 |---|---|---|
 | Danielsson · Shin · Zigrand (2012), *Procyclical Leverage and Endogenous Risk* | **H-02** (실제 위험에 측정 대응 없음) | 측정 위험 ↔ 실제 위험의 되먹임을 정면으로 다루는 유일한 편. H-03(부도확률 불변 ≠ VaR/E 불변)도 여기 걸림 |
-| Morris · Shin (2016), *Illiquidity Component of Credit Risk* | **H-22** (해소됨) · 기록 소실 복구 | 지급불능 / 유동성 분해. 앞서 읽었으나 그 기록이 붙어 있던 문서가 삭제되어 사라졌다. §5의 첫 항으로 다시 읽고 S-7 에 따라 추출 기록을 세운다 |
+| Morris · Shin (2016), *Illiquidity Component of Credit Risk* | **H-22** (해소됨) · 기록 소실 복구 · **소진** | 지급불능 / 유동성 분해. **소진됐다.** 다시 읽어 S-7 에 따라 세운 추출 기록이 `docs/extractions/extraction-17-morris-shin-2016.md` (E-17) 이다 |
 | Danielsson · Shin · Zigrand (2004), *The Impact of Risk Regulation on Price Dynamics* | H-09 (되먹임이 가정에 의존) | 규제 제약 → 가격 동학. 동학층 진입 시 |
 
 ---

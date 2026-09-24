@@ -89,3 +89,10 @@ def definitionProbeFamily (Node : Type) : ℕ → Finset Node := fun _ => ∅
 #print axioms CrisisFramework.Definition.NodeState.trivial
 #print axioms CrisisFramework.Definition.NodeFamily
 #print axioms CrisisFramework.Definition.NodeFamily.empty
+
+-- 관측층. 무차원이며 용기는 `Prod` 하나다. 뒤가 실효 기준선을 낸다.
+def observationProbe : Unit := ()
+#print axioms observationProbe
+
+def observationProbeProd : Unit × Unit := ((), ())
+#print axioms observationProbeProd
