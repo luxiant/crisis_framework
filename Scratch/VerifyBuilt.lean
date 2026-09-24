@@ -9,6 +9,9 @@
 (`ℚ` 로 두면 `aggregationError` 에 적용되지 않아 이 파일이 컴파일되지 않는다).
 -/
 import CrisisFramework.Accounting.Aggregation
+-- 관측층은 L-9 에서 회계층 위에 있으므로 `Aggregation` 이 끌어오지 않는다. 이 파일은 빌드
+-- 타깃 밖이라 import 방향 검사의 대상이 아니다.
+import CrisisFramework.Observation.CompetencyQuestion
 
 open CrisisFramework.Accounting
 
@@ -75,7 +78,7 @@ def definitionProbeFamily (Node : Type) : ℕ → Finset Node := fun _ => ∅
 /-! ### 층별 선언 감사
 
 공리 감사가 회계층 다섯만 보고 용어집 넷과 정의층 여섯을 재지 않았다.
-그 층들의 기준선이 미측정이라 차분할 대상이 없었기 때문이다. 열다섯을 전량 찍는다.
+그 층들의 기준선이 미측정이라 차분할 대상이 없었기 때문이다. 마흔둘을 전량 찍는다.
 -/
 
 #print axioms CrisisFramework.Glossary.Concept
@@ -89,6 +92,33 @@ def definitionProbeFamily (Node : Type) : ℕ → Finset Node := fun _ => ∅
 #print axioms CrisisFramework.Definition.NodeState.trivial
 #print axioms CrisisFramework.Definition.NodeFamily
 #print axioms CrisisFramework.Definition.NodeFamily.empty
+#print axioms CrisisFramework.Observation.UndeterminedReason
+#print axioms CrisisFramework.Observation.ObservedTruth
+#print axioms CrisisFramework.Observation.ObservedValue
+#print axioms CrisisFramework.Observation.PaymentMethodShareChange
+#print axioms CrisisFramework.Observation.RepaymentOutcome
+#print axioms CrisisFramework.Observation.CQ.TradePaymentComposition
+#print axioms CrisisFramework.Observation.CQ.TradePaymentComposition.trivial
+#print axioms CrisisFramework.Observation.CQ.TradeFinanceCurrency
+#print axioms CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial
+#print axioms CrisisFramework.Observation.CQ.SanctionTextCut
+#print axioms CrisisFramework.Observation.CQ.SanctionTextCut.trivial
+#print axioms CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence
+#print axioms CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial
+#print axioms CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind
+#print axioms CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial
+#print axioms CrisisFramework.Observation.CQ.SwapLineReach
+#print axioms CrisisFramework.Observation.CQ.SwapLineReach.trivial
+#print axioms CrisisFramework.Observation.CQ.ClaimsByDecisionUnit
+#print axioms CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial
+#print axioms CrisisFramework.Observation.CQ.MonetaryHierarchyOrder
+#print axioms CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial
+#print axioms CrisisFramework.Observation.CQ.RepaymentAndAdjustment
+#print axioms CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial
+#print axioms CrisisFramework.Observation.CQ.PledgedClaimsAndStock
+#print axioms CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial
+#print axioms CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors
+#print axioms CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial
 
 -- 관측층. 무차원이며 용기는 `Prod` 하나다. 뒤가 실효 기준선을 낸다.
 def observationProbe : Unit := ()

@@ -772,13 +772,14 @@ def check_21(led: Ledger, arc: str | None) -> Report:
             continue                                   # 해소
         if rw.get("ref") != arc:
             continue                                   # 이월
-        r.bad(f"{e.get('id')}: 아크 `{arc}` 의 blocking 구멍이 발화도 해소도 이월도 되지 않았다")
+        r.bad(f"{e.get('id')}: 아크 `{arc}` 의 blocking 구멍이 해소도 이월도 되지 않았다")
     r.note(f"아크 `{arc}` 의 blocking 구멍 {n}건")
     return r
 
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
-         "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27"]
+         "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
+         "28", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -832,6 +833,82 @@ def check_27(led: Ledger) -> Report:
     return r
 
 
+# 검사 28·29·30 이 읽는 CQ 고정 절. `docs/baseline.md` §5 의 `CQFIN` 블록이며 정본은 같은 파일의 §6 이다.
+CQFIN_BLOCK = re.compile(r"<!-- CQFIN:BEGIN -->\n(.*?)<!-- CQFIN:END -->", re.S)
+CQFIN_LINE = re.compile(r"^CQFIN=(\d+)\|")
+CQ_REF = re.compile(r"^CQ-fin-(\d+)$")
+
+
+def cq_fixed(led: Ledger) -> list[int]:
+    """고정 절 블록이 드는 CQ 번호. 파일이나 블록이 없으면 빈 목록이다."""
+    p = led.root / "docs" / "baseline.md"
+    m = CQFIN_BLOCK.search(p.read_text(encoding="utf-8")) if p.is_file() else None
+    if not m:
+        return []
+    return [int(x.group(1)) for x in map(CQFIN_LINE.match, m.group(1).splitlines()) if x]
+
+
+def check_28(led: Ledger) -> Report:
+    r = Report("28", "wiki28-cq-exists",
+               "arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가", "fail")
+    fixed = set(cq_fixed(led))
+    # 블록이 비어 있으면 통과가 아니라 실패다. 가리킬 대상이 없는데 통과시키면 이 검사가 공허해진다.
+    if not fixed:
+        r.bad("docs/baseline.md 의 CQFIN 블록이 없거나 비어 있다")
+    n = 0
+    for name, a in led.arcs.items():
+        for ref in a.get("cq") or []:
+            n += 1
+            m = CQ_REF.match(str(ref))
+            if not m:
+                r.bad(f"아크 `{name}` 의 cq `{ref}` 가 CQ-fin-<n> 형식이 아니다")
+            elif int(m.group(1)) not in fixed:
+                r.bad(f"아크 `{name}` 의 cq `{ref}` 가 고정 절에 없다")
+    r.note(f"고정 절의 CQ {len(fixed)}건 · 아크가 든 cq {n}건")
+    return r
+
+
+def check_29(led: Ledger, arc: str | None) -> Report:
+    r = Report("29", "wiki29-arc-cq",
+               "그 아크의 cq 마다 그 아크에서 나온 원장 항목이 statement 나 basis 에 그 CQ 를 드는가",
+               "arc_close")
+    if arc is None:
+        r.ran = False
+        r.note("아크 종료 커밋이 아니므로 수행하지 않는다")
+        return r
+    a = led.arcs.get(arc)
+    if a is None:
+        r.bad(f"아크 `{arc}` 가 arcs.json 에 없다")
+        return r
+    # 처분이 정의 공백을 벗어났는지는 기계가 판정하지 못한다. 결정 세션의 판정이 원장에
+    # 기록됐는지만 본다. 검사 21 과 같은 형이다(SPEC §2.3).
+    own = [e for _, e in led.entries
+           if isinstance(e.get("origin"), dict) and e["origin"].get("arc") == arc]
+    cqs = a.get("cq") or []
+    for ref in cqs:
+        tok = re.compile(r"(?<![0-9A-Za-z-])" + re.escape(str(ref)) + r"(?![0-9])")
+        if not any(tok.search(str(e.get("statement") or "")) or tok.search(str(e.get("basis") or ""))
+                   for e in own):
+            r.bad(f"{ref}: 아크 `{arc}` 에서 나온 원장 항목 가운데 그 처분을 드는 것이 없다")
+    r.note(f"아크 `{arc}` 의 cq {len(cqs)}건 · 그 아크에서 나온 원장 항목 {len(own)}건")
+    return r
+
+
+def check_30(led: Ledger) -> Report:
+    r = Report("30", "wiki30-cq-unclaimed", "어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호", "report")
+    claimed = set()
+    for a in led.arcs.values():
+        for ref in a.get("cq") or []:
+            m = CQ_REF.match(str(ref))
+            if m:
+                claimed.add(int(m.group(1)))
+    rest = [n for n in cq_fixed(led) if n not in claimed]
+    r.note(f"아크에 걸리지 않은 CQ {len(rest)}건")
+    if rest:
+        r.note(", ".join(f"CQ-fin-{n}" for n in rest))
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -842,6 +919,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_16(led), check_17(led), check_18(led), check_19(led),
         check_20(led, arc_close), check_21(led, arc_close),
         check_26(led), check_27(led),
+        check_28(led), check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
     reports.sort(key=lambda r: order[r.number])
@@ -867,7 +945,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 스물넷)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21 을 그 아크에 대해 돌린다")

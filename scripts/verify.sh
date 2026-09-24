@@ -6,8 +6,9 @@
 #   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
 #   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
 #   step5-mutation   변이 검사 — 정리·example 5개 진술을 하나씩 뒤집어 반드시 실패함을 확인
-#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 스물다섯)
+#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 서른)
 #                    아크 종료 검사 둘은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
+#   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)
 #
 # 각 단계는 선언된 단계 id 를 [step:<id>] 로 출력에 낸다. 원장의 tier: invariant
 # 항목이 그 id 를 check 필드로 들고 검사 7 이 둘을 대조한다.
@@ -280,6 +281,35 @@ audit_layer 정의층 DEFINITION definitionProbeFamily \
   CrisisFramework.Definition.NodeFamily \
   CrisisFramework.Definition.NodeFamily.empty
 
+audit_layer 관측층 OBSERVATION observationProbeProd \
+  CrisisFramework.Observation.UndeterminedReason \
+  CrisisFramework.Observation.ObservedTruth \
+  CrisisFramework.Observation.ObservedValue \
+  CrisisFramework.Observation.PaymentMethodShareChange \
+  CrisisFramework.Observation.RepaymentOutcome \
+  CrisisFramework.Observation.CQ.TradePaymentComposition \
+  CrisisFramework.Observation.CQ.TradePaymentComposition.trivial \
+  CrisisFramework.Observation.CQ.TradeFinanceCurrency \
+  CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial \
+  CrisisFramework.Observation.CQ.SanctionTextCut \
+  CrisisFramework.Observation.CQ.SanctionTextCut.trivial \
+  CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence \
+  CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial \
+  CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind \
+  CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial \
+  CrisisFramework.Observation.CQ.SwapLineReach \
+  CrisisFramework.Observation.CQ.SwapLineReach.trivial \
+  CrisisFramework.Observation.CQ.ClaimsByDecisionUnit \
+  CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial \
+  CrisisFramework.Observation.CQ.MonetaryHierarchyOrder \
+  CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial \
+  CrisisFramework.Observation.CQ.RepaymentAndAdjustment \
+  CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial \
+  CrisisFramework.Observation.CQ.PledgedClaimsAndStock \
+  CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial \
+  CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors \
+  CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial
+
 ok "공리 감사 대상 선언 $AUDITED ($AUDIT_DETAIL)"
 
 step step5-mutation "변이 검사"
@@ -310,6 +340,13 @@ if python3 scripts/check_wiki.py; then
   ok "원장 검증 전량 통과"
 else
   bad "원장 검증 실패 — 위 [check:*] 줄이 어느 검사인지 든다 (SPEC.md §2)"
+fi
+
+step step7-cqfin 'CQ 고정 절 대조'
+if python3 scripts/check_cqfin.py; then
+  ok "CQ 고정 절과 관측층 선언이 일치한다"
+else
+  bad "CQ 고정 절과 관측층 선언이 어긋난다 — docs/baseline.md §6"
 fi
 
 printf '\n'

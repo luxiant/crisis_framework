@@ -37,7 +37,7 @@
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | 3차 세션 (2026-09-12) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | 1차 세션 |
 | 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | 6차 세션 (2026-09-20) |
-| 관측층 | 무차원 | **미측정** | |
+| 관측층 | 무차원 | `[]` | `claim-2` (2026-09-24) |
 | 용어집 | 없음 | `[]` | 6차 세션 (2026-09-20) |
 | 동학층 | `ℝ` | **미측정** | |
 
@@ -57,14 +57,16 @@
 | 회계층 | `baselineProbe` | `baselineProbeSum` (`Finset` 합) |
 | 용어집 | `glossaryProbe` | `glossaryProbeList` (`List`) |
 | 정의층 | `definitionProbe` | `definitionProbeFamily` (`ℕ → Finset`) |
+| 관측층 | `observationProbe` | `observationProbeProd` (`Prod`) |
 
 **용어집에서는 두 프로브가 같은 값을 낸다.** `List` 가 공리를 하나도 더하지 않기 때문이며 실효
 기준선이라는 지위는 그대로다. 최소와 실효의 구별이 값으로 드러나는 것은 그 층의 용기가 공리를
 더할 때뿐이고 정의층의 `Finset` 이 그 경우다.
 
-**공리 감사의 대상은 선언 열다섯 전량이다.** 회계층 다섯과 용어집 넷과 정의층 여섯이며 각 층의
-선언을 그 층의 실효 기준선과 차분한다. 그 전에는 회계층 다섯만 재고 나머지 열은 그물 밖에
-있었으며, 그 사실이 이 표의 「미측정」 칸으로만 서 있었다. 관측층과 동학층은 파일이 아직 없다.
+**공리 감사의 대상은 선언 마흔둘 전량이다.** 회계층 다섯과 용어집 넷과 정의층 여섯과 관측층
+스물일곱이며 각 층의 선언을 그 층의 실효 기준선과 차분한다. 그 전에는 회계층 다섯만 재고 나머지
+열은 그물 밖에 있었으며, 그 사실이 이 표의 「미측정」 칸으로만 서 있었다. 동학층은 파일이 아직
+없다.
 
 ### 2-2. 기준선을 초과했을 때
 
@@ -119,7 +121,7 @@ C-8이 정하며 세 가지다. 분류의 판정은 결정 세션이 하고 Clau
 
 ## 5. 기계 판독 블록
 
-아래 두 블록은 `scripts/verify.sh`와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
+아래 세 블록은 `scripts/verify.sh`와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
 `KEY=VALUE` 형태를 유지하며, 한 줄에 하나씩 적는다.
 
 <!-- BASELINE:BEGIN -->
@@ -130,6 +132,7 @@ ACCOUNTING_INT=[propext, Quot.sound]
 ACCOUNTING_RAT=[propext, Classical.choice, Quot.sound]
 GLOSSARY=[]
 DEFINITION=[propext, Quot.sound]
+OBSERVATION=[]
 <!-- BASELINE:END -->
 
 미측정 층은 위 블록에 키를 두지 않는다. 키가 없는 것과 값이 빈 것은 다른 사실이며, 빈 값을
@@ -148,3 +151,36 @@ intermediation
 discount
 impairment
 <!-- STEMS:END -->
+
+<!-- CQFIN:BEGIN -->
+CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+<!-- CQFIN:END -->
+
+---
+
+## 6. CQ 고정 절 (CF-571)
+
+이 절이 잠그는 것은 `CQ-fin` 열하나의 **서명과 docstring** 이며, 그 선언의 거처는
+`CrisisFramework/Observation/CompetencyQuestion.lean` 이다. 고정 절의 값은 §5 의 `CQFIN` 블록이
+든다.
+
+한 줄의 형식은 `CQFIN=<번호>|<구조물 이름>|<답 함수의 타입>|<docstring 다이제스트>` 다.
+
+**서명은 값으로 싣고 docstring 은 다이제스트로만 싣는다.** 산문을 두 벌 두면 전사가 되어 한쪽을
+고칠 때 나머지가 낡는다. 다이제스트를 실으면 문면이 바뀌는 순간 그 자리에서 대조가 어긋남을
+잡는다.
+
+고정한 뒤의 개변은 세 자리에서만 들어간다. 새 CQ 를 더하는 것과, 답이 함수로 받는 열거에 원소를
+더하는 것과, 판정 불가의 까닭을 세분하는 것이다.
+
+대조는 `scripts/verify.sh` 의 `step7-cqfin` 단계가 수행한다.
