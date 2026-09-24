@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 스물넷을 돈다. 실패시키는 것 열여덟과 보고만 하는 것 넷과
-아크 종료 시에만 도는 것 둘이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
+`docs/decisions/SPEC.md` §2 의 검사 서른을 돈다. 실패시키는 것 스물둘과 보고만 하는 것 다섯과
+아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
 
 `--root` 는 원장과 부속 파일을 읽을 뿌리를 바꾼다. 음성 대조가 사본에 위반을 주입한 뒤 그
 사본을 뿌리로 지목하므로, 이 선택지가 없으면 주입이 원장을 건드리게 된다.
 
-`--arc-close` 는 아크 종료 시에만 도는 검사 20 과 21 을 그 아크에 대해 돌린다. 그것을 주지
+`--arc-close` 는 아크 종료 시에만 도는 검사 20 과 21 과 29 를 그 아크에 대해 돌린다. 그것을 주지
 않으면 둘은 수행되지 않았음을 출력에 내고 판정에 들지 않는다.
 
 **이 검증기를 고쳐 통과시키지 않는다.** 검사가 실패하면 그 실패가 산출물이다(SPEC §4).
@@ -948,7 +948,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
-                    help="아크 종료 시에만 도는 검사 20·21 을 그 아크에 대해 돌린다")
+                    help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
     ap.add_argument("--quiet", action="store_true", help="보고 줄을 줄인다")
     args = ap.parse_args()
     root = Path(args.root).resolve() if args.root \
