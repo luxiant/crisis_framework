@@ -35,12 +35,6 @@ example (S : Finset ℕ) (cap equity : ℕ → ℤ) :
       = ∑ i ∈ S, ∑ j ∈ S, (cap i - cap j) * (equity i - equity j) :=
   two_mul_aggregationError_eq_pairwise S cap equity
 
-#print axioms creditSupply
-#print axioms aggregationError
-#print axioms two_mul_aggregationError_eq_pairwise
-#print axioms aggregationError_eq_zero_of_constant_cap
-#print axioms aggregationError_eq_zero_of_constant_equity
-
 -- 반례의 실제 값 (ℤ 는 계산 가능하므로 직접 확인한다)
 #eval aggregationError (Finset.univ : Finset (Fin 2))
         (fun i => if i = 0 then 2 else 3) (fun i => if i = 0 then 1 else 2)
@@ -77,48 +71,13 @@ def definitionProbeFamily (Node : Type) : ℕ → Finset Node := fun _ => ∅
 
 /-! ### 층별 선언 감사
 
-공리 감사가 회계층 다섯만 보고 용어집 넷과 정의층 여섯을 재지 않았다.
-그 층들의 기준선이 미측정이라 차분할 대상이 없었기 때문이다. 마흔둘을 전량 찍는다.
+층별 선언을 찍는 `#print axioms` 는 이 파일에 두지 않는다. 목록을 박아 두면 새 선언이 그물
+밖에 남고, `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다.
+
+그 목록은 `scripts/verify.sh` 의 `step4-baseline` 이 `CrisisFramework` 아래 최상위 선언을
+훑어 임시 프로브 파일로 생성한다. 이 파일에 남는 것은 층별 기준선을 내는 프로브 여덟과
+산출물 검사 하나다.
 -/
-
-#print axioms CrisisFramework.Glossary.Concept
-#print axioms CrisisFramework.Glossary.SourceTag
-#print axioms CrisisFramework.Glossary.ConceptRel
-#print axioms CrisisFramework.Glossary.registry
-
-#print axioms CrisisFramework.Definition.Constraint
-#print axioms CrisisFramework.Definition.Constraint.trivial
-#print axioms CrisisFramework.Definition.NodeState
-#print axioms CrisisFramework.Definition.NodeState.trivial
-#print axioms CrisisFramework.Definition.NodeFamily
-#print axioms CrisisFramework.Definition.NodeFamily.empty
-#print axioms CrisisFramework.Observation.UndeterminedReason
-#print axioms CrisisFramework.Observation.ObservedTruth
-#print axioms CrisisFramework.Observation.ObservedValue
-#print axioms CrisisFramework.Observation.PaymentMethodShareChange
-#print axioms CrisisFramework.Observation.RepaymentOutcome
-#print axioms CrisisFramework.Observation.CQ.TradePaymentComposition
-#print axioms CrisisFramework.Observation.CQ.TradePaymentComposition.trivial
-#print axioms CrisisFramework.Observation.CQ.TradeFinanceCurrency
-#print axioms CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial
-#print axioms CrisisFramework.Observation.CQ.SanctionTextCut
-#print axioms CrisisFramework.Observation.CQ.SanctionTextCut.trivial
-#print axioms CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence
-#print axioms CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial
-#print axioms CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind
-#print axioms CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial
-#print axioms CrisisFramework.Observation.CQ.SwapLineReach
-#print axioms CrisisFramework.Observation.CQ.SwapLineReach.trivial
-#print axioms CrisisFramework.Observation.CQ.ClaimsByDecisionUnit
-#print axioms CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial
-#print axioms CrisisFramework.Observation.CQ.MonetaryHierarchyOrder
-#print axioms CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial
-#print axioms CrisisFramework.Observation.CQ.RepaymentAndAdjustment
-#print axioms CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial
-#print axioms CrisisFramework.Observation.CQ.PledgedClaimsAndStock
-#print axioms CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial
-#print axioms CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors
-#print axioms CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial
 
 -- 관측층. 무차원이며 용기는 `Prod` 하나다. 뒤가 실효 기준선을 낸다.
 def observationProbe : Unit := ()

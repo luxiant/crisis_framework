@@ -10,7 +10,7 @@
 사본을 뿌리로 지목하므로, 이 선택지가 없으면 주입이 원장을 건드리게 된다.
 
 `--arc-close` 는 아크 종료 시에만 도는 검사 20 과 21 과 29 를 그 아크에 대해 돌린다. 그것을 주지
-않으면 둘은 수행되지 않았음을 출력에 내고 판정에 들지 않는다.
+않으면 셋은 수행되지 않았음을 출력에 내고 판정에 들지 않는다.
 
 **이 검증기를 고쳐 통과시키지 않는다.** 검사가 실패하면 그 실패가 산출물이다(SPEC §4).
 """
@@ -837,6 +837,8 @@ def check_27(led: Ledger) -> Report:
 CQFIN_BLOCK = re.compile(r"<!-- CQFIN:BEGIN -->\n(.*?)<!-- CQFIN:END -->", re.S)
 CQFIN_LINE = re.compile(r"^CQFIN=(\d+)\|")
 CQ_REF = re.compile(r"^CQ-fin-(\d+)$")
+# 검사 29 가 읽는 `cq_disposition` 의 `kind` 레지스터. S-6 의 종료 조건 둘이다(SPEC §3.2).
+CQ_DISPOSITION_KINDS = ("cleared", "hole")
 
 
 def cq_fixed(led: Ledger) -> list[int]:
@@ -870,7 +872,7 @@ def check_28(led: Ledger) -> Report:
 
 def check_29(led: Ledger, arc: str | None) -> Report:
     r = Report("29", "wiki29-arc-cq",
-               "그 아크의 cq 마다 그 아크에서 나온 원장 항목이 statement 나 basis 에 그 CQ 를 드는가",
+               "그 아크의 cq 마다 그 아크에서 나온 원장 항목이 cq_disposition 으로 그 CQ 를 드는가",
                "arc_close")
     if arc is None:
         r.ran = False
@@ -882,15 +884,42 @@ def check_29(led: Ledger, arc: str | None) -> Report:
         return r
     # 처분이 정의 공백을 벗어났는지는 기계가 판정하지 못한다. 결정 세션의 판정이 원장에
     # 기록됐는지만 본다. 검사 21 과 같은 형이다(SPEC §2.3).
+    # 판정은 산문이 아니라 필드를 읽는다. 아크의 개막 결정이 자기 CQ 를 이름으로 적으므로
+    # 산문 대조로는 처분이 없어도 통과한다(CF-597).
     own = [e for _, e in led.entries
            if isinstance(e.get("origin"), dict) and e["origin"].get("arc") == arc]
+    fixed = set(cq_fixed(led))
+    disposed: set[str] = set()
+    n_with = 0
+    for e in own:
+        items = e.get("cq_disposition")
+        if items is None:
+            continue
+        n_with += 1
+        if not isinstance(items, list):
+            r.bad(f"{e.get('id')}: cq_disposition 이 배열이 아니다")
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                r.bad(f"{e.get('id')}: cq_disposition 의 원소가 {{cq, kind}} 가 아니다")
+                continue
+            ref, kind = item.get("cq"), item.get("kind")
+            m = CQ_REF.match(str(ref))
+            ok_ref = bool(m) and int(m.group(1)) in fixed
+            if not m:
+                r.bad(f"{e.get('id')}: cq_disposition 의 cq `{ref}` 가 CQ-fin-<n> 형식이 아니다")
+            elif not ok_ref:
+                r.bad(f"{e.get('id')}: cq_disposition 의 cq `{ref}` 가 고정 절에 없다")
+            if kind not in CQ_DISPOSITION_KINDS:
+                r.bad(f"{e.get('id')}: cq_disposition 의 kind `{kind}` 가 레지스터 "
+                      f"{list(CQ_DISPOSITION_KINDS)} 밖이다")
+            elif ok_ref:
+                disposed.add(str(ref))
     cqs = a.get("cq") or []
     for ref in cqs:
-        tok = re.compile(r"(?<![0-9A-Za-z-])" + re.escape(str(ref)) + r"(?![0-9])")
-        if not any(tok.search(str(e.get("statement") or "")) or tok.search(str(e.get("basis") or ""))
-                   for e in own):
-            r.bad(f"{ref}: 아크 `{arc}` 에서 나온 원장 항목 가운데 그 처분을 드는 것이 없다")
-    r.note(f"아크 `{arc}` 의 cq {len(cqs)}건 · 그 아크에서 나온 원장 항목 {len(own)}건")
+        if str(ref) not in disposed:
+            r.bad(f"{ref}: 아크 `{arc}` 에서 나온 원장 항목 가운데 cq_disposition 으로 그 처분을 드는 것이 없다")
+    r.note(f"아크 `{arc}` 의 cq {len(cqs)}건 · 그 아크에서 나온 항목 가운데 cq_disposition 을 든 것 {n_with}건")
     return r
 
 

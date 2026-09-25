@@ -5,7 +5,11 @@
 #   step2-build      프로젝트 olean 강제 삭제 후 lake build (디스크 내용 기준 재검증)
 #   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
 #   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
-#   step5-mutation   변이 검사 — 정리·example 5개 진술을 하나씩 뒤집어 반드시 실패함을 확인
+#                    감사 대상 선언은 매 실행마다 훑어 잡아 임시 프로브 파일로 찍는다
+#   step8-layertype  층별 수 타입 정적 검사 (CLAUDE.md §2 의 층별 금지 표)
+#   step9-propfree   정의층 structure 필드와 inductive 생성자의 Prop 금지
+#   step5-mutation   변이 검사 — 결론이 `= 0`·`≠ 0` 인 진술을 하나씩 뒤집어 반드시 실패함을 확인
+#                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
 #   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 서른)
 #                    아크 종료 검사 셋은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
 #   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)
@@ -58,12 +62,12 @@ fi
 # 검사 대상은 훑어서 잡는다. 박아 두면 새 파일이 금지 구문과 공리 감사와 변이 검사의 그물
 # 밖에 남으며, `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다.
 mapfile -t TARGETS < <(find CrisisFramework -name '*.lean' -type f | LC_ALL=C sort)
-AGG=CrisisFramework/Accounting/Aggregation.lean
 
 fail=0
 step() { printf '\n\033[1m== %s\033[0m\n' "$*"; printf '[step:%s]\n' "$1"; }
 ok()   { printf '  \033[32mOK\033[0m   %s\n' "$*"; }
 bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$*"; fail=1; }
+rep()  { printf '  \033[36mREPORT\033[0m %s\n' "$*"; }
 
 step step1-duplicate "빌드 타깃 밖 중복 사본 탐지"
 # 저장소 전체를 훑는다. crisis-framework/ 안만 보면 상위 디렉터리에 놓인
@@ -157,59 +161,73 @@ done
 rm -rf "$CODE"
 
 step step4-baseline '공리 의존 + `docs/baseline.md` 기준선 차분'
-# 회계층 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
+# 층별 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
 # 전사하면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다 (baseline.md 머리말).
-# 화이트리스트가 아니라 차분이다. 기준선 자체는 매 실행마다
-# Scratch/VerifyBuilt.lean 의 baselineProbe / baselineProbeSum 이 다시 찍는다.
-# Finset 합을 쓰는 baselineProbeSum 쪽이 실효 기준선이다.
+# 화이트리스트가 아니라 차분이다. 실효 기준선 자체는 매 실행마다
+# Scratch/VerifyBuilt.lean 의 층별 프로브가 다시 찍는다.
 BASELINE_DOC=docs/baseline.md
-BASELINE=$(sed -n '/<!-- BASELINE:BEGIN -->/,/<!-- BASELINE:END -->/p' "$BASELINE_DOC" \
-           | sed -n 's/^ACCOUNTING_INT=//p')
-if [ -z "$BASELINE" ]; then
-  bad "$BASELINE_DOC 의 기계 판독 블록에서 ACCOUNTING_INT 를 읽지 못함 — 형식 확인 필요"
-  BASELINE='(읽지 못함)'
-else
-  ok "기준선을 $BASELINE_DOC 에서 읽음: ACCOUNTING_INT=$BASELINE"
-fi
 
 vb_out=$(lake env lean Scratch/VerifyBuilt.lean 2>&1); vb_rc=$?
 printf '%s\n' "$vb_out" | sed 's/^/  /'
 if [ "$vb_rc" -eq 0 ]; then ok "VerifyBuilt 통과 (DecidableEq 없이 적용됨)"
 else bad "VerifyBuilt 실패"; fi
 
-# `#print axioms` 는 목록이 길면 줄바꿈해 출력하므로 공백을 접어서 대조한다.
-norm=$(printf '%s' "$vb_out" | python3 -c "import sys,re;print(re.sub(r'\s+',' ',sys.stdin.read()))")
-
-measured=$(printf '%s' "$norm" | grep -o "'baselineProbeSum' depends on axioms: \[[^]]*\]" | sed "s/.*axioms: //")
-if [ -z "$measured" ]; then
-  bad "기준선 프로브 출력을 찾지 못함 — Scratch/VerifyBuilt.lean 확인 필요"
-elif [ "$measured" = "$BASELINE" ]; then
-  ok "실효 기준선 실측 = $measured (기대값과 일치)"
-else
-  bad "실효 기준선이 기대값과 다름: 측정 $measured / 기대 $BASELINE — docs/baseline.md 의 갱신은 사람의 결정"
-fi
-
-for c in creditSupply aggregationError two_mul_aggregationError_eq_pairwise \
-         aggregationError_eq_zero_of_constant_cap aggregationError_eq_zero_of_constant_equity; do
-  got=$(printf '%s' "$norm" | grep -o "'CrisisFramework.Accounting.$c' depends on axioms: \[[^]]*\]" | sed "s/.*axioms: //")
-  if [ -z "$got" ]; then
-    if printf '%s' "$norm" | grep -q "'CrisisFramework.Accounting.$c' does not depend on any axioms"; then
-      ok "$c: 무의존 (기준선 이하)"
-    else
-      bad "$c: 공리 출력을 찾지 못함"
-    fi
-  elif [ "$got" = "$BASELINE" ]; then
-    ok "$c: $got (기준선과 동일)"
-  else
-    bad "$c: 기준선 초과 — $got / 기준선 $BASELINE. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)"
-  fi
+# 감사 대상 선언은 목록을 박지 않고 매 실행마다 훑어 잡는다. 박아 두면 새 선언이 그물 밖에
+# 남고, `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다 (CF-595).
+# 주석을 지운 뒤 줄머리의 inductive·structure·def·theorem·abbrev·instance 뒤 이름을 뽑고
+# 그 자리에서 열려 있는 namespace 를 앞에 붙인다. example 은 이름이 없어 대상이 아니다.
+# 뽑은 이름마다 `#print axioms` 한 줄을 내는 프로브 파일을 임시 디렉터리에 만들어 돌린다.
+AUDIT=$(mktemp -d)
+for t in "${TARGETS[@]}"; do
+  mkdir -p "$AUDIT/code/$(dirname "$t")"
+  strip_comments "$t" > "$AUDIT/code/$t"
 done
-AUDITED=5
-AUDIT_DETAIL="회계층 5"
+python3 - "$AUDIT" "${TARGETS[@]}" <<'PYEOF'
+import os, re, sys
+audit, files = sys.argv[1], sys.argv[2:]
+DECL = re.compile(r"^(inductive|structure|def|theorem|abbrev|instance)\s+([^\s({\[:]+)")
+ANON = re.compile(r"^instance\b(?!\s+[^\s({\[:]+)")
+OPEN = re.compile(r"^(namespace|section)\b[ \t]*(\S*)")
+END = re.compile(r"^end\b")
+rows, anon = [], []
+for f in files:
+    stack = []
+    code = open(os.path.join(audit, "code", f), encoding="utf-8").read()
+    for i, ln in enumerate(code.split("\n"), 1):
+        m = OPEN.match(ln)
+        if m:
+            stack.append((m.group(1), m.group(2))); continue
+        if END.match(ln):
+            if stack: stack.pop()
+            continue
+        m = DECL.match(ln)
+        if m:
+            ns = ".".join(n for k, n in stack if k == "namespace" and n)
+            rows.append((f.split("/")[1], f"{ns}.{m.group(2)}" if ns else m.group(2)))
+        elif ANON.match(ln):
+            anon.append(f"{f}:{i}")
+with open(os.path.join(audit, "decls.tsv"), "w", encoding="utf-8") as out:
+    for d, n in rows:
+        out.write(f"{d}\t{n}\n")
+with open(os.path.join(audit, "anon.txt"), "w", encoding="utf-8") as out:
+    out.write("".join(a + "\n" for a in anon))
+with open(os.path.join(audit, "Probe.lean"), "w", encoding="utf-8") as out:
+    for f in files:
+        out.write("import " + f[:-len(".lean")].replace("/", ".") + "\n")
+    out.write("\n")
+    for _, n in rows:
+        out.write(f"#print axioms {n}\n")
+PYEOF
+pr_out=$(lake env lean "$AUDIT/Probe.lean" 2>&1); pr_rc=$?
+printf '%s\n' "$pr_out" | sed 's/^/  /'
+if [ "$pr_rc" -eq 0 ]; then ok "선언 감사 프로브 통과 (임시 파일, 선언 $(wc -l < "$AUDIT/decls.tsv"))"
+else bad "선언 감사 프로브 실패"; fi
+while IFS= read -r a; do
+  [ -n "$a" ] && bad "이름 없는 instance 는 이름으로 감사할 수 없다: $a"
+done < "$AUDIT/anon.txt"
 
-# 용어집 넷과 정의층 여섯을 각 층의 실효 기준선과 차분한다 (A-6). 회계층만 보던
-# 그물을 선언 열다섯 전량으로 넓힌 자리다. 각 층의 기준선은 docs/baseline.md 의
-# 기계 판독 블록이 들고, 실효 기준선 자체는 그 층의 프로브가 매 실행마다 다시 찍는다.
+# `#print axioms` 는 목록이 길면 줄바꿈해 출력하므로 공백을 접어서 대조한다.
+norm=$(printf '%s\n%s' "$vb_out" "$pr_out" | python3 -c "import sys,re;print(re.sub(r'\s+',' ',sys.stdin.read()))")
 
 # 이름 하나의 공리 목록을 낸다. 무의존이면 [] 를 내고 찾지 못하면 빈 문자열을 낸다.
 axioms_of() {
@@ -230,6 +248,8 @@ print('['+', '.join(ex)+']' if ex else '[]')
 " "$1" "$2"
 }
 
+AUDITED=0
+AUDIT_DETAIL=()
 audit_layer() {
   local label=$1 key=$2 probe=$3; shift 3
   local base measured c got ex n=0
@@ -237,7 +257,7 @@ audit_layer() {
          | sed -n "s/^$key=//p")
   if [ -z "$base" ]; then
     bad "$BASELINE_DOC 의 기계 판독 블록에서 $key 를 읽지 못함 — 형식 확인 필요"
-    AUDIT_DETAIL="$AUDIT_DETAIL · $label 0"
+    AUDIT_DETAIL+=("$label 0")
     return
   fi
   ok "기준선을 $BASELINE_DOC 에서 읽음: $key=$base"
@@ -264,72 +284,181 @@ audit_layer() {
       bad "$c: 기준선 초과 — $got / 기준선 $base / 초과분 $ex. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)"
     fi
   done
-  AUDIT_DETAIL="$AUDIT_DETAIL · $label $n"
+  AUDIT_DETAIL+=("$label $n")
 }
 
-audit_layer 용어집 GLOSSARY glossaryProbeList \
-  CrisisFramework.Glossary.Concept \
-  CrisisFramework.Glossary.SourceTag \
-  CrisisFramework.Glossary.ConceptRel \
-  CrisisFramework.Glossary.registry
+# 디렉터리가 층을 결정한다. 층마다 docs/baseline.md 의 키와 실효 기준선을 내는 프로브가
+# 짝을 이룬다. 이 표에 없는 디렉터리에 선언이 서면 차분할 기준선이 없으므로 실패시킨다.
+LAYERS=(
+  "Accounting|회계층|ACCOUNTING_INT|baselineProbeSum"
+  "Glossary|용어집|GLOSSARY|glossaryProbeList"
+  "Definition|정의층|DEFINITION|definitionProbeFamily"
+  "Observation|관측층|OBSERVATION|observationProbeProd"
+)
+known=""
+for row in "${LAYERS[@]}"; do
+  IFS='|' read -r dir label key probe <<< "$row"
+  known="$known $dir"
+  mapfile -t names < <(awk -F'\t' -v d="$dir" '$1 == d { print $2 }' "$AUDIT/decls.tsv")
+  audit_layer "$label" "$key" "$probe" "${names[@]}"
+done
+while IFS=$'\t' read -r dir name; do
+  case " $known " in *" $dir "*) ;; *) bad "층 기준선이 정해지지 않은 자리의 선언: $dir 의 $name" ;; esac
+done < "$AUDIT/decls.tsv"
+rm -rf "$AUDIT"
 
-audit_layer 정의층 DEFINITION definitionProbeFamily \
-  CrisisFramework.Definition.Constraint \
-  CrisisFramework.Definition.Constraint.trivial \
-  CrisisFramework.Definition.NodeState \
-  CrisisFramework.Definition.NodeState.trivial \
-  CrisisFramework.Definition.NodeFamily \
-  CrisisFramework.Definition.NodeFamily.empty
+detail=$(printf '%s · ' "${AUDIT_DETAIL[@]}"); detail=${detail% · }
+ok "공리 감사 대상 선언 $AUDITED ($detail)"
 
-audit_layer 관측층 OBSERVATION observationProbeProd \
-  CrisisFramework.Observation.UndeterminedReason \
-  CrisisFramework.Observation.ObservedTruth \
-  CrisisFramework.Observation.ObservedValue \
-  CrisisFramework.Observation.PaymentMethodShareChange \
-  CrisisFramework.Observation.RepaymentOutcome \
-  CrisisFramework.Observation.CQ.TradePaymentComposition \
-  CrisisFramework.Observation.CQ.TradePaymentComposition.trivial \
-  CrisisFramework.Observation.CQ.TradeFinanceCurrency \
-  CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial \
-  CrisisFramework.Observation.CQ.SanctionTextCut \
-  CrisisFramework.Observation.CQ.SanctionTextCut.trivial \
-  CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence \
-  CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial \
-  CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind \
-  CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial \
-  CrisisFramework.Observation.CQ.SwapLineReach \
-  CrisisFramework.Observation.CQ.SwapLineReach.trivial \
-  CrisisFramework.Observation.CQ.ClaimsByDecisionUnit \
-  CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial \
-  CrisisFramework.Observation.CQ.MonetaryHierarchyOrder \
-  CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial \
-  CrisisFramework.Observation.CQ.RepaymentAndAdjustment \
-  CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial \
-  CrisisFramework.Observation.CQ.PledgedClaimsAndStock \
-  CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial \
-  CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors \
-  CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial
+step step8-layertype '층별 수 타입 정적 검사 (L-10)'
+# CLAUDE.md §2 의 층별 금지 표를 주석을 지운 코드에서 대조한다. 디렉터리가 층을 결정한다.
+# 정의층의 ℕ·Nat 은 L-13 의 명시적 예외라 잡지 않는다. 회계층의 ℝ 는 step3-forbidden 이
+# 보므로 여기서 다시 세지 않는다. 회계층의 ℚ·Rat 은 L-15 의 판정이 docstring 의 사유를
+# 읽어야 서므로 실패가 아니라 보고로 낸다.
+LT=$(mktemp -d)
+for t in "${TARGETS[@]}"; do
+  mkdir -p "$LT/$(dirname "$t")"
+  strip_comments "$t" > "$LT/$t"
+done
+lt_out=$(python3 - "$LT" "${TARGETS[@]}" <<'PYEOF'
+import os, re, sys
+root, files = sys.argv[1], sys.argv[2:]
+# 디렉터리: (층, 금지 기호, 금지 영문명, 수치 리터럴 금지, 처분)
+RULES = {
+    "Glossary":    ("용어집", "ℚℤℝℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
+    "Definition":  ("정의층", "ℚℤℝ",  ("Rat", "Int", "Real"),        False, "FAIL"),
+    "Accounting":  ("회계층", "ℚ",    ("Rat",),                      False, "REPORT"),
+    "Observation": ("관측층", "ℚℤℝℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
+}
+# 영문명은 토큰 경계를 요구하고 대소문자를 구별한다. `intermediation` 의 Int 나 `Rational` 의
+# Rat 이 걸리지 않게 한다. 수치 리터럴은 식별자의 일부가 아닌 독립 정수·소수이며 첨자는 들지 않는다.
+LIT = re.compile(r"(?<![\w'.])[0-9]+(?:\.[0-9]+)?(?![\w'])")
+scanned = {d: 0 for d in RULES}
+other = 0
+for f in files:
+    d = f.split("/")[1] if f.count("/") >= 2 else ""
+    if d not in RULES:
+        other += 1
+        continue
+    layer, syms, names, no_lit, verdict = RULES[d]
+    scanned[d] += 1
+    tok = re.compile("[" + syms + "]|(?<![\\w'.])(?:" + "|".join(names) + ")(?![\\w'])")
+    for i, ln in enumerate(open(os.path.join(root, f), encoding="utf-8").read().split("\n"), 1):
+        hits = [m.group(0) for m in tok.finditer(ln)]
+        if no_lit:
+            hits += [f"리터럴 {m.group(0)}" for m in LIT.finditer(ln)]
+        if hits:
+            print(f"{verdict}\t{layer}\t{f}:{i}\t{', '.join(hits)}\t{ln.strip()}")
+for d, (layer, *_rest) in RULES.items():
+    print(f"SCAN\t{layer}\t{scanned[d]}")
+print(f"OTHER\t{other}")
+PYEOF
+)
+rm -rf "$LT"
+declare -A lt_fail=() lt_rep=()
+while IFS=$'\t' read -r kind layer where what line; do
+  case "$kind" in
+    FAIL)   bad "금지 수 타입·수치 리터럴 ($layer): $where ($what)"; printf '       %s\n' "$line"
+            lt_fail[$layer]=$(( ${lt_fail[$layer]:-0} + 1 )) ;;
+    REPORT) rep "ℚ·Rat 사용 ($layer): $where ($what). L-15 의 사유가 docstring 에 적혀 있는지 사람이 확인한다"
+            printf '       %s\n' "$line"
+            lt_rep[$layer]=$(( ${lt_rep[$layer]:-0} + 1 )) ;;
+  esac
+done <<< "$lt_out"
+while IFS=$'\t' read -r kind layer n; do
+  case "$kind" in
+    SCAN)
+      if [ "$layer" = 회계층 ]; then ok "$layer: 파일 $n · ℚ·Rat 보고 ${lt_rep[$layer]:-0}줄"
+      elif [ -z "${lt_fail[$layer]:-}" ]; then ok "$layer: 파일 $n · 금지 수 타입·수치 리터럴 없음"; fi ;;
+    OTHER) ok "대상 밖 파일 $layer (동학층과 층 디렉터리 밖)" ;;
+  esac
+done <<< "$lt_out"
 
-ok "공리 감사 대상 선언 $AUDITED ($AUDIT_DETAIL)"
+step step9-propfree '발동조건 문법의 `Prop` 금지 (C-10)'
+# 정의층의 structure 필드와 inductive 생성자는 타입 서명에 Prop 를 담지 않는다. 자료 구조에서
+# Prop 를 몰아내면 발동조건의 의미가 Bool 반환 계산 함수로 선다는 요구가 타입으로 선다.
+# 최상위 def·abbrev·theorem 의 서명은 대상이 아니다. 구조에 들어가지 않는 보조 술어는
+# 발동조건의 판정 경로에 있지 않기 때문이다. 필드와 생성자는 선언 머리의 where 뒤에 선다.
+PF=$(mktemp -d)
+mapfile -t DEF_TARGETS < <(printf '%s\n' "${TARGETS[@]}" | grep '^CrisisFramework/Definition/')
+for t in "${DEF_TARGETS[@]}"; do
+  mkdir -p "$PF/$(dirname "$t")"
+  strip_comments "$t" > "$PF/$t"
+done
+pf_out=$(python3 - "$PF" "${DEF_TARGETS[@]}" <<'PYEOF'
+import os, re, sys
+root, files = sys.argv[1], sys.argv[2:]
+HEAD = re.compile(r"^(structure|inductive)\s+([^\s({\[:]+)")
+TOP = re.compile(r"^\S")
+WHERE = re.compile(r"\bwhere\b")
+PROP = re.compile(r"(?<![\w'.])Prop(?![\w'])")
+n = {"structure": 0, "inductive": 0}
+for f in files:
+    lines = open(os.path.join(root, f), encoding="utf-8").read().split("\n")
+    for i, ln in enumerate(lines):
+        m = HEAD.match(ln)
+        if not m:
+            continue
+        kind, name = m.groups()
+        n[kind] += 1
+        body = False
+        j = i
+        while j < len(lines) and (j == i or not TOP.match(lines[j])):
+            seg = lines[j]
+            if not body:
+                w = WHERE.search(seg)
+                if w:
+                    body, seg = True, seg[w.end():]
+                elif kind == "inductive" and seg.lstrip().startswith("|"):
+                    body = True
+                else:
+                    j += 1
+                    continue
+            if not seg.strip().startswith("deriving") and PROP.search(seg):
+                part = "필드" if kind == "structure" else "생성자"
+                print(f"FAIL\t{f}:{j + 1}\t{kind} {name} 의 {part}\t{lines[j].strip()}")
+            j += 1
+print(f"SCAN\t{len(files)}\t{n['structure']}\t{n['inductive']}")
+PYEOF
+)
+rm -rf "$PF"
+pf_bad=0
+while IFS=$'\t' read -r kind a b c; do
+  case "$kind" in
+    FAIL) pf_bad=1; bad "Prop 를 담은 $b: $a"; printf '       %s\n' "$c" ;;
+    SCAN) [ "$pf_bad" -eq 0 ] && ok "정의층 파일 $a · structure $b · inductive $c 의 필드와 생성자에 Prop 없음" ;;
+  esac
+done <<< "$pf_out"
 
 step step5-mutation "변이 검사"
-mapfile -t anchors < <(grep -nE '(≠|=) 0 := by' "$AGG" | cut -d: -f1)
-if [ "${#anchors[@]}" -ne 5 ]; then
-  bad "변이 대상 5개를 기대했으나 ${#anchors[@]}개 발견 — 스크립트 갱신 필요"
+# 대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡으며 계수를 박지 않는다. 목록을 박아 두면
+# 새 진술이 그물 밖에 남는다 (CF-595). 뽑는 패턴은 결론이 `= 0`·`≠ 0` 인 진술이다.
+# 변이 사본은 파일별로 임시 디렉터리에 만들어 원본을 건드리지 않고 돌린 뒤 지운다.
+mut_targets=()
+for t in "${TARGETS[@]}"; do
+  while IFS= read -r ln; do
+    [ -n "$ln" ] && mut_targets+=("$t:$ln")
+  done < <(grep -nE '(≠|=) 0 := by' "$t" | cut -d: -f1)
+done
+if [ "${#mut_targets[@]}" -eq 0 ]; then
+  ok "변이 대상 0 — 결론이 \`= 0\`·\`≠ 0\` 인 진술이 CrisisFramework 아래에 없다"
 else
+  per_file=$(printf '%s\n' "${mut_targets[@]}" | cut -d: -f1 | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
+  ok "변이 대상 ${#mut_targets[@]} ($per_file)"
   tmp=$(mktemp -d)
-  for ln in "${anchors[@]}"; do
-    src=$(sed -n "${ln}p" "$AGG")
+  for tl in "${mut_targets[@]}"; do
+    t=${tl%:*}; ln=${tl##*:}
+    src=$(sed -n "${ln}p" "$t")
     if printf '%s' "$src" | grep -q '≠ 0 := by'; then
       mut=$(printf '%s' "$src" | sed 's/≠ 0 := by/= 0 := by/')
     else
       mut=$(printf '%s' "$src" | sed 's/= 0 := by/≠ 0 := by/')
     fi
-    awk -v n="$ln" -v r="$mut" 'NR==n{print r; next}{print}' "$AGG" > "$tmp/Mutant.lean"
-    if lake env lean "$tmp/Mutant.lean" >"$tmp/out.$ln" 2>&1; then
-      bad "L${ln} 변이가 통과함 — 해당 진술은 공허한 검사다: ${src## }"
+    awk -v n="$ln" -v r="$mut" 'NR==n{print r; next}{print}' "$t" > "$tmp/Mutant.lean"
+    if lake env lean "$tmp/Mutant.lean" >"$tmp/out" 2>&1; then
+      bad "$t:$ln 변이가 통과함 — 해당 진술은 공허한 검사다: ${src## }"
     else
-      ok "L${ln} 변이 거부됨 ($(grep -cE 'error' "$tmp/out.$ln") error) — 실검사 확인"
+      ok "$t:$ln 변이 거부됨 ($(grep -cE 'error' "$tmp/out") error) — 실검사 확인"
     fi
   done
   rm -rf "$tmp"
