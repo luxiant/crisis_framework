@@ -3616,3 +3616,1526 @@ K7 이 그 디렉터리를 세운 순간 깨어났다. 구간 2 에서는 K4 가
    셋에서 열넷이 됐다.
 4. **검사 16 의 `artifact` 발화가 아홉이다.** 이번에 깨어난 셋(`CF-151` · `CF-181` · `CF-209`)은
    관측층 파일이 선 것에 반응했다. 그 셋이 가리키는 구멍을 어느 아크가 받을지는 원장에 없다.
+
+---
+
+## 70. `claim-3` — 관측값
+
+검증일: 2026-09-25. 이 회차는 `claim` 아크의 페이즈 3이며, **조건부 청구권의 발동조건 문법을
+정의층에 세우고 그것을 지키는 정적 검사 둘을 `verify.sh` 에 더하는 것**이 판별선의 「언제」다.
+`CF-580` 이 셋째 페이즈에 맡긴 몫이 이것이다.
+
+### 70-1. 빌드
+
+다섯 파일 전량이 통과했고 `sorry` 와 실패가 없다. `Build completed successfully (980 jobs)` 이며
+error 0 warning 0 이다. 늘어난 1 job 은 새 파일 `CrisisFramework/Definition/Trigger.lean` 이다.
+
+| 파일 | 결과 |
+|---|---|
+| `CrisisFramework/Glossary/Core.lean` | 통과 |
+| `CrisisFramework/Definition/Constraint.lean` | 통과 |
+| `CrisisFramework/Definition/Trigger.lean` | 통과 (새 파일) |
+| `CrisisFramework/Accounting/Aggregation.lean` | 통과 |
+| `CrisisFramework/Observation/CompetencyQuestion.lean` | 통과 |
+
+**`Trigger.lean` 이 지시서의 전문 그대로 한 번에 컴파일됐다.** 집행이 정한 것은 import 두 줄뿐이며
+`Constraint.lean` 과 같은 `Mathlib.Data.Finset.Basic` 과 `CrisisFramework.Glossary.Core` 다.
+용어집은 아무것도 import 하지 않으므로 그것만으로는 `ℕ` 표기가 서지 않는다.
+
+### 70-2. 변경 내역
+
+받은 커밋은 `3e2e20e` 이다. 구간마다 커밋을 하나씩 두었다.
+
+| 커밋 | 구간 | 카드 | 무엇을 바꾸었나 |
+|---|---|---|---|
+| `5daa694` | 1 | K1 · K2 | `CLAUDE.md` §5 머리말의 정지점 구간 의무와 §1-7 추출 기록 덧붙임 규율 |
+| `d1a2521` | 2 | K3 | 카드의 결정 entry 스물넷을 `decisions.json` 끝에 병합 |
+| `332632c` | 3 | K4 ~ K8 | 카드 파일 삭제, `step8-layertype` 과 `step9-propfree`, 감사·변이 대상 훑기, 검사 29 의 필드 판정 |
+| `d9fe0ad` | 4 | K9 ~ K13 · K19 | 용어집 개념 넷, `assetEligible` 의 `Bool`, `Trigger.lean`, 관측층 표지, `ObservedValue` 사례, NC-9 |
+| (이 커밋) | 5 | K20 · K15 ~ K18 · K14 | `step8` 의 `ℝ` 중복 제거, `baseline.md` §2-1, `CLAUDE.md` 일곱 자리, 추출 기록 §10, 읽기 대기열 행 둘, 이 절 |
+
+**지시서가 세 번 재발행됐다.** 구간 1 의 보고가 병합 계수의 갈림(20 · 21 · 551 · 554)과 음성
+대조를 돌릴 수 없는 자리를 들어 구간 2 에 착수하지 않고 멈췄으며, 결정 세션이 카드를 스물넷으로
+키워 다시 냈다. 나머지 두 번은 카드를 하나씩(K19, K20) 더하면서 낸 것이다. 재발행마다 앞 판을
+세션 기록에서 복원해 새 판과 맞대었고, 그 구간의 조작 문면과 앵커가 바이트로 같음을 확인한 뒤에
+진행했다. 마지막 판의 카드는 스물이고 조작은 마흔이다.
+
+**K14 를 대장의 순서보다 뒤에 썼다.** 이 절이 구간 5 의 `verify.sh` 출력을 들어야 하므로 K20 과
+K15 ~ K18 을 먼저 하고 그 판을 돌린 다음에 썼다.
+
+### 70-3. 원장 병합과 등가 검증
+
+| 레지스터 | 병합 전 | 카드 | 병합 후 |
+|---|---|---|---|
+| decisions | 533 | 24 | **557** |
+| deferred | 34 | 0 | 34 |
+| retirements | 26 | 0 | 26 |
+| rejected | 0 | 0 | 0 |
+| 합 | 593 | 24 | **617** |
+
+카드 파일의 sha256 은 `c795554c8006ec28…` 이다. 병합 전 `decisions.json` 의 sha256 은
+`ccc394603d087b7a…` 이고 병합 후는 `38f42b69e0938ffa…` 다. 차분은 추가 391 행이고 삭제 0 행이며,
+기존 바이트 가운데 바뀐 것은 마지막 entry 뒤에 붙은 쉼표 하나뿐이다. 검사 19 는 `CF-1~CF-617` 에
+결번 0 건을 낸다.
+
+**등가 검증은 표준형으로 내려 바이트로 맞댔다.** 병합된 배열의 마지막 스물넷과 카드의
+`new.decisions` 를 `json.dumps(ensure_ascii=False, indent=1)` 로 직렬화해 맞댔고, 구간 2 의 병합
+직후와 구간 3 의 카드 삭제 앞에서 둘 다 `a2467f76fb920b83…` 을 냈다. 키 순서가 원장의 관례와 같아
+재배열은 없었다. **원시 바이트는 들여쓰기만 다르다.** 카드 파일은 `indent=2` 표준형과 바이트로
+같고, 원장 안의 병합 구역은 같은 entry 의 `indent=1` 표준형과 바이트로 같다. 카드 파일은 등가
+검증을 다시 한 뒤에 구간 3 에서 지웠다.
+
+### 70-4. 공리 감사
+
+**감사 대상은 이제 매 실행마다 훑어 잡는다(`CF-595`).** `step4-baseline` 이 주석을 지운 코드에서
+줄머리의 `inductive` · `structure` · `def` · `theorem` · `abbrev` · `instance` 뒤 이름을 뽑고 그
+자리의 `namespace` 를 앞에 붙인 다음, 임시 디렉터리에 프로브 파일을 만들어 돌린다. 네 층을 모두
+같은 부분집합 대조로 차분한다.
+
+| 층 | 선언 | 실효 기준선 실측 | 초과 |
+|---|---|---|---|
+| 회계층 | 5 | `[propext, Quot.sound]` | 0 |
+| 용어집 | 4 | `[]` | 0 |
+| 정의층 | 15 | `[propext, Quot.sound]` | 0 |
+| 관측층 | 27 | `[]` | 0 |
+| 합 | **51** | | **0** |
+
+정의층의 증분 9 가 `Trigger.lean` 의 최상위 선언이며 **아홉 전부 무의존**이다. 층별 실효 기준선은
+네 층 모두 불변이다. 기준선 초과분이 없으므로 분류할 대상도 없다.
+
+`Scratch/VerifyBuilt.lean` 의 `#print axioms` 명령 줄이 쉰에서 여덟으로 줄었다. 줄머리의 명령으로
+셌으며 주석 안의 같은 글자는 세지 않았다. 지운 마흔둘은 층별 선언을 찍던 줄이고, 남은 여덟은
+층별 기준선을 내는 프로브에 딸린 줄이다. 지운 자리에는 지시서가 준 문면을 두었으며 그 문면이
+`` `#print axioms` `` 라는 글자를 한 번 든다.
+
+**회계층의 차분 방식이 바뀌었다.** 전에는 기준선과 같거나 무의존이어야 통과했고, 지금은 기준선을
+넘는 공리가 있을 때만 실패시킨다. A-6 의 문면이 「초과하지 않아야 한다」이므로 결정 세션이
+승인했다.
+
+### 70-5. 변이 검사
+
+대상 5 가 전부 거부됐다. 대상은 `CrisisFramework` 아래 `.lean` 전량에서 뽑으며 이번에는 전부
+`Aggregation.lean` 에 있다(L149 · L166 · L184 · L192 · L200). 계수를 박아 둔 단언을 걷었고, 보고
+줄이 파일명과 줄 번호를 함께 든다. 이 회차가 세운 Lean 선언에는 `theorem` 과 `example` 이 없으므로
+새 대상도 없다.
+
+### 70-6. 새 검사 둘과 음성 대조
+
+`step8-layertype` 은 `CLAUDE.md` §2 의 층별 금지 표를 주석을 지운 코드에서 대조하고,
+`step9-propfree` 는 정의층 `structure` 필드와 `inductive` 생성자의 서명에서 `Prop` 를 찾는다.
+`verify.sh` 의 단계는 일곱에서 아홉이 됐다. 구간 5 의 K20 이 `step8` 의 세 층에서 `ℝ` 기호를
+걷어, 그 기호는 이제 `step3-forbidden` 만 센다. 영문명 `Real` 은 `step8` 이 계속 잡는다.
+
+음성 대조는 모두 리포 밖 사본에서 했고 확인한 뒤에 사본을 지웠다. `verify.sh` 에서 그 단계의
+구역과 보조 함수를 그대로 뽑아 사본 위에서 돌렸다.
+
+| | 구간 | 주입 | 결과 |
+|---|---|---|---|
+| NC-8a | 3 | 정의층 `def probeInt : Int := 0` | 실패 |
+| NC-8b | 3 | 관측층 `def probeLit : Unit := (fun _ => ()) 3` | 실패 (리터럴 `3`) |
+| NC-8c | 3 | 회계층 `def probeRat : Rat := 0` | 실패 0 · 보고 1줄 |
+| NC-9a | 4 | `Env` 에 `probe : Num → Prop` 필드 | 실패 |
+| NC-9b | 4 | 최상위 `def probePred (n : Nat) : Prop := n = n` | 통과 |
+| NC-8d | 5 | 정의층 `def probeReal : ℝ := 0` | `step3` 만 실패하고 `step8` 은 통과 |
+
+여섯이 모두 기대대로 났다. 지시서가 요구하지 않은 대조도 더 했다. 영문명의 경계
+(`intermediationRational` 과 첨자 `x₁`)와 정의층의 `Nat`·`ℕ` 은 통과했고, 용어집의 `Nat` 과
+관측층의 `ℤ` 와 정의층의 `Real` 은 실패했다. 검사 29 는 `--arc-close claim` 으로 다섯 경우를
+돌렸다. 처분이 없거나, `kind` 가 레지스터 밖이거나, `cq` 가 고정 절에 없거나, 다른 아크의 항목만
+처분을 들면 실패했고, 두 CQ 가 모두 유효하게 처분됐을 때만 통과했다.
+
+**NC-9 는 검사를 세운 구간 3 이 아니라 구간 4 에서 돌렸다(`CF-617`).** 구간 3 에서는 주입 대상인
+`Trigger.lean` 이 없었고, `step9-propfree` 가 `assetEligible` 때문에 이미 실패하고 있었다.
+
+### 70-7. 구간마다의 `verify.sh`
+
+| 구간 | 결과 | 실패 | `OUTPUT_DIGEST` |
+|---|---|---|---|
+| 받은 커밋 | 전량 통과 | 없음 | `f19316d6b387` |
+| 1 | 전량 통과 | 없음 | `f19316d6b387` |
+| 2 | 전량 통과 | 없음 | `fd2accd8421e` |
+| 3 | 실패 | `step9-propfree` (지시서가 기대한 실패) | `d8f162cf46f3` |
+| 4 | 전량 통과 | 없음 | `561e974c5a3e` |
+| 5 | 전량 통과 | 없음 | `e5289437b413` |
+
+구간 1 의 판은 받은 커밋의 판과 정규화 차분이 없다. 구간 2 에서는 원장 계수를 내는 네 줄만
+움직였다. 구간 3 에서 단계가 아홉이 되고 공리 감사의 출력 형식이 바뀌었다. 구간 4 에서
+`Trigger.lean` 이 서면서 선언과 표지가 51 이 되었고 `step9` 가 통과로 돌아섰다. 구간 5 에서는
+검사 24 의 규율 ID 토큰(259 → 273)만 움직였다.
+
+**검사 16 의 발화 아홉이 이 회차 내내 불변이었다.** 받은 커밋과 다섯 구간의 여섯 판에서 발화한
+항목의 구성까지 같았다. 검사 18 이 드는 `claim` 아크의 `blocking` 구멍도 `CF-579` 하나 그대로다.
+
+아래는 구간마다의 출력 원문이다. 터미널 색 코드만 지웠고 나머지는 바꾸지 않았다. 색 코드는
+`OUTPUT_DIGEST` 를 정규화할 때도 지우는 부분이다.
+
+#### 구간 1 (`5daa694`)
+
+```
+
+== step1-duplicate 빌드 타깃 밖 중복 사본 탐지
+[step:step1-duplicate]
+  OK   저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음
+
+== step2-build olean 삭제 후 전량 재빌드
+[step:step2-build]
+✔ [876/979] Built CrisisFramework.Glossary.Core (447ms)
+✔ [976/979] Built CrisisFramework.Observation.CompetencyQuestion (763ms)
+✔ [977/979] Built CrisisFramework.Definition.Constraint (1.1s)
+✔ [978/979] Built CrisisFramework.Accounting.Aggregation (1.1s)
+Build completed successfully (979 jobs).
+  OK   lake build 전량 통과, error/warning 0 (979 job)
+
+== step3-forbidden 금지 구문 정적 검사 (층별 `ℝ` 포함)
+[step:step3-forbidden]
+  OK   코드에 없음: sorry
+  OK   코드에 없음: axiom 선언
+  OK   코드에 없음: noncomputable
+  OK   코드에 없음: Classical
+  OK   코드에 없음: admit/native_decide
+  OK   `ℝ` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)
+
+== step4-baseline 공리 의존 + `docs/baseline.md` 기준선 차분
+[step:step4-baseline]
+  OK   기준선을 docs/baseline.md 에서 읽음: ACCOUNTING_INT=[propext, Quot.sound]
+  'baselineProbe' does not depend on any axioms
+  'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+  'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+  1
+  0
+  0
+  'glossaryProbe' does not depend on any axioms
+  'glossaryProbeList' does not depend on any axioms
+  'definitionProbe' does not depend on any axioms
+  'definitionProbeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Glossary.Concept' does not depend on any axioms
+  'CrisisFramework.Glossary.SourceTag' does not depend on any axioms
+  'CrisisFramework.Glossary.ConceptRel' does not depend on any axioms
+  'CrisisFramework.Glossary.registry' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.NodeFamily.empty' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Observation.UndeterminedReason' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedTruth' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedValue' does not depend on any axioms
+  'CrisisFramework.Observation.PaymentMethodShareChange' does not depend on any axioms
+  'CrisisFramework.Observation.RepaymentOutcome' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial' does not depend on any axioms
+  'observationProbe' does not depend on any axioms
+  'observationProbeProd' does not depend on any axioms
+  OK   VerifyBuilt 통과 (DecidableEq 없이 적용됨)
+  OK   실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   creditSupply: 무의존 (기준선 이하)
+  OK   aggregationError: [propext, Quot.sound] (기준선과 동일)
+  OK   two_mul_aggregationError_eq_pairwise: [propext, Quot.sound] (기준선과 동일)
+  OK   aggregationError_eq_zero_of_constant_cap: [propext, Quot.sound] (기준선과 동일)
+  OK   aggregationError_eq_zero_of_constant_equity: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: GLOSSARY=[]
+  OK   용어집 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Glossary.Concept: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.SourceTag: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.ConceptRel: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.registry: [] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: DEFINITION=[propext, Quot.sound]
+  OK   정의층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Definition.Constraint: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Constraint.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeFamily: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.NodeFamily.empty: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: OBSERVATION=[]
+  OK   관측층 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Observation.UndeterminedReason: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedTruth: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedValue: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.PaymentMethodShareChange: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.RepaymentOutcome: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial: [] (기준선과 동일)
+  OK   공리 감사 대상 선언 42 (회계층 5 · 용어집 4 · 정의층 6 · 관측층 27)
+
+== step5-mutation 변이 검사
+[step:step5-mutation]
+  OK   L149 변이 거부됨 (1 error) — 실검사 확인
+  OK   L166 변이 거부됨 (1 error) — 실검사 확인
+  OK   L184 변이 거부됨 (1 error) — 실검사 확인
+  OK   L192 변이 거부됨 (1 error) — 실검사 확인
+  OK   L200 변이 거부됨 (1 error) — 실검사 확인
+
+== step6-ledger `check_wiki.py` 호출
+[step:step6-ledger]
+원장 검증기 — 뿌리 /root/workspace/crisis_framework
+레지스터 entry: decisions 533 · deferred 34 · retirements 26 · rejected 0 · 총계 593
+
+[check:wiki1-id-unique] OK  검사 1 — id 가 CF-<n> 형식이고 전 파일에서 유일한가
+    - id 593건
+[check:wiki2-origin-arc] OK  검사 2 — origin.arc 가 arcs.json 의 아크 이름에 실재하는가
+[check:wiki3-origin-phase] OK  검사 3 — origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가
+    - 패치가 권한을 준 항목 0건
+[check:wiki3a-phase-form] OK  검사 3-a — origin.phase 가 origin.arc + "-" + <n> 형태인가
+[check:wiki4a-patch-from] OK  검사 4-a — op 가 move·split 인 패치의 from 이 그 아크의 phases 에 있는가
+    - move·split 패치 4건
+[check:wiki5-closed-arc] OK  검사 5 — status: closed 인 아크에 새 항목이 드는가
+    - 닫힌 아크를 가리키는 항목 568건
+[check:wiki6-tier-vocab] OK  검사 6 — tier 가 invariant·policy·finding 중 하나인가
+[check:wiki7-invariant-check] OK  검사 7 — tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가
+    - verify.sh 가 선언한 단계 id: ['step1-duplicate', 'step2-build', 'step3-forbidden', 'step4-baseline', 'step5-mutation', 'step6-ledger', 'step7-cqfin']
+[check:wiki8-retire-target] OK  검사 8 — 폐기 레코드의 target 이 실재하고 한 대상에 폐기가 둘 이상이 아닌가
+[check:wiki9-retire-reason] OK  검사 9 — 폐기 레코드에 original 과 reason 이 비어 있지 않은가
+[check:wiki10-ghost-ref] OK  검사 10 — 폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가
+    - 폐기된 id 26건을 유니버스로 훑었다. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki11-reopen-kind] OK  검사 11 — deferred 항목에 reopen_when 이 있고 kind 가 넷 중 하나인가
+[check:wiki12-reopen-ref] OK  검사 12 — reopen_when.ref 가 kind 별 형식을 만족하는가
+[check:wiki13-dd-target] OK  검사 13 — Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가
+    - DD: 표지 42개
+[check:wiki14-dd-layer] OK  검사 14 — DD: 항목의 layer 가 그 파일이 사는 층과 같은가
+    - meta 가 아닌 표지 4개를 봤다
+[check:wiki15-names-unique] OK  검사 15 — names 의 규율 ID 가 원장 전체에서 유일한가
+    - 규율 ID 229건
+[check:wiki23-rule-ghost] OK  검사 23 — statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, 폐기됐으면 그 폐기 레코드를 related 가 드는가
+    - 규율 ID 토큰 145건을 봤다. 계열은 ['PH-R', 'P', 'A', 'C', 'L', 'D', 'T', 'R', 'N', 'V', 'W', 'Q', 'B', 'O', 'G', 'S', 'F', 'J', 'K']
+    - 폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 21건
+[check:wiki24-doc-rule-ghost] OK  검사 24 — 상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가
+    - 규율 ID 토큰 233건. 미실재 0 · 선언 없는 폐기 지목 0 · 선언으로 면제된 폐기 지목 19
+    - 유니버스: 상주 문서 6 · Lean 4. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki25-marker-missing] OK  검사 25 — Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가
+    - 최상위 선언 42 · 표지 42 · 누락 0
+    - example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)
+[check:wiki16-trigger-fired] REPORT  검사 16 — reopen_when 이 충족된 이연 항목
+    - 발화한 트리거 9건
+    - CF-151 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-153 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-159 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-176 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-177 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-181 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-193 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-194 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-209 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+[check:wiki17-reopen-null] REPORT  검사 17 — reopen_when: null 인 항의 계수
+    - reopen_when: null 5건
+    - CF-18 — names ['K-12']
+    - CF-165 — names ['H-12']
+    - CF-169 — names ['H-16']
+    - CF-183 — names ['H-30']
+    - CF-216 — names ['H-63']
+[check:wiki18-blocking-disposition] REPORT  검사 18 — 아크별 blocking 구멍의 처분 내역
+    - blocking 구멍 1건, 아크 1개
+    - claim (status open) — CF-579
+[check:wiki19-id-gap] REPORT  검사 19 — CF-<n> 번호의 결번
+    - CF-1~CF-593, 계수 593, 결번 0건
+[check:wiki20-arc-holes] SKIP  검사 20 — 그 아크에 걸린 구멍마다 해소됐거나 이관됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki21-arc-blocking] SKIP  검사 21 — 그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki26-clarify-target] OK  검사 26 — 꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가
+    - 꼬리 41건
+[check:wiki27-clarify-resolves] OK  검사 27 — 꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 대상 항목의 산문 필드에 실제로 있는가
+    - 꼬리 41건 · 지목 78건
+[check:wiki28-cq-exists] OK  검사 28 — arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가
+    - 고정 절의 CQ 11건 · 아크가 든 cq 2건
+[check:wiki29-arc-cq] SKIP  검사 29 — 그 아크의 cq 마다 그 아크에서 나온 원장 항목이 statement 나 basis 에 그 CQ 를 드는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki30-cq-unclaimed] REPORT  검사 30 — 어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호
+    - 아크에 걸리지 않은 CQ 9건
+    - CQ-fin-3, CQ-fin-4, CQ-fin-5, CQ-fin-6, CQ-fin-7, CQ-fin-8, CQ-fin-9, CQ-fin-10, CQ-fin-11
+
+검사 30개 가운데 27개 수행, 실패 0개
+원장 검증 전량 통과
+  OK   원장 검증 전량 통과
+
+== step7-cqfin CQ 고정 절 대조
+[step:step7-cqfin]
+관측층 선언에서 뽑은 줄 11 · 고정 절의 줄 11
+  OK   CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+  OK   CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+  OK   CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+  OK   CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+  OK   CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+  OK   CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+  OK   CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+  OK   CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+  OK   CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+  OK   CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+  OK   CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+고정 절과 관측층 선언이 순서까지 일치한다
+  OK   CQ 고정 절과 관측층 선언이 일치한다
+
+전량 통과
+OUTPUT_DIGEST=f19316d6b387
+```
+
+#### 구간 2 (`d1a2521`)
+
+```
+
+== step1-duplicate 빌드 타깃 밖 중복 사본 탐지
+[step:step1-duplicate]
+  OK   저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음
+
+== step2-build olean 삭제 후 전량 재빌드
+[step:step2-build]
+✔ [747/979] Built CrisisFramework.Glossary.Core (381ms)
+✔ [976/979] Built CrisisFramework.Observation.CompetencyQuestion (505ms)
+✔ [977/979] Built CrisisFramework.Definition.Constraint (3.7s)
+✔ [978/979] Built CrisisFramework.Accounting.Aggregation (2.0s)
+Build completed successfully (979 jobs).
+  OK   lake build 전량 통과, error/warning 0 (979 job)
+
+== step3-forbidden 금지 구문 정적 검사 (층별 `ℝ` 포함)
+[step:step3-forbidden]
+  OK   코드에 없음: sorry
+  OK   코드에 없음: axiom 선언
+  OK   코드에 없음: noncomputable
+  OK   코드에 없음: Classical
+  OK   코드에 없음: admit/native_decide
+  OK   `ℝ` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)
+
+== step4-baseline 공리 의존 + `docs/baseline.md` 기준선 차분
+[step:step4-baseline]
+  OK   기준선을 docs/baseline.md 에서 읽음: ACCOUNTING_INT=[propext, Quot.sound]
+  'baselineProbe' does not depend on any axioms
+  'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+  'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+  1
+  0
+  0
+  'glossaryProbe' does not depend on any axioms
+  'glossaryProbeList' does not depend on any axioms
+  'definitionProbe' does not depend on any axioms
+  'definitionProbeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Glossary.Concept' does not depend on any axioms
+  'CrisisFramework.Glossary.SourceTag' does not depend on any axioms
+  'CrisisFramework.Glossary.ConceptRel' does not depend on any axioms
+  'CrisisFramework.Glossary.registry' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.NodeFamily.empty' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Observation.UndeterminedReason' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedTruth' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedValue' does not depend on any axioms
+  'CrisisFramework.Observation.PaymentMethodShareChange' does not depend on any axioms
+  'CrisisFramework.Observation.RepaymentOutcome' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial' does not depend on any axioms
+  'observationProbe' does not depend on any axioms
+  'observationProbeProd' does not depend on any axioms
+  OK   VerifyBuilt 통과 (DecidableEq 없이 적용됨)
+  OK   실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   creditSupply: 무의존 (기준선 이하)
+  OK   aggregationError: [propext, Quot.sound] (기준선과 동일)
+  OK   two_mul_aggregationError_eq_pairwise: [propext, Quot.sound] (기준선과 동일)
+  OK   aggregationError_eq_zero_of_constant_cap: [propext, Quot.sound] (기준선과 동일)
+  OK   aggregationError_eq_zero_of_constant_equity: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: GLOSSARY=[]
+  OK   용어집 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Glossary.Concept: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.SourceTag: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.ConceptRel: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.registry: [] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: DEFINITION=[propext, Quot.sound]
+  OK   정의층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Definition.Constraint: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Constraint.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeFamily: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.NodeFamily.empty: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: OBSERVATION=[]
+  OK   관측층 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Observation.UndeterminedReason: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedTruth: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedValue: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.PaymentMethodShareChange: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.RepaymentOutcome: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial: [] (기준선과 동일)
+  OK   공리 감사 대상 선언 42 (회계층 5 · 용어집 4 · 정의층 6 · 관측층 27)
+
+== step5-mutation 변이 검사
+[step:step5-mutation]
+  OK   L149 변이 거부됨 (1 error) — 실검사 확인
+  OK   L166 변이 거부됨 (1 error) — 실검사 확인
+  OK   L184 변이 거부됨 (1 error) — 실검사 확인
+  OK   L192 변이 거부됨 (1 error) — 실검사 확인
+  OK   L200 변이 거부됨 (1 error) — 실검사 확인
+
+== step6-ledger `check_wiki.py` 호출
+[step:step6-ledger]
+원장 검증기 — 뿌리 /root/workspace/crisis_framework
+레지스터 entry: decisions 557 · deferred 34 · retirements 26 · rejected 0 · 총계 617
+
+[check:wiki1-id-unique] OK  검사 1 — id 가 CF-<n> 형식이고 전 파일에서 유일한가
+    - id 617건
+[check:wiki2-origin-arc] OK  검사 2 — origin.arc 가 arcs.json 의 아크 이름에 실재하는가
+[check:wiki3-origin-phase] OK  검사 3 — origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가
+    - 패치가 권한을 준 항목 0건
+[check:wiki3a-phase-form] OK  검사 3-a — origin.phase 가 origin.arc + "-" + <n> 형태인가
+[check:wiki4a-patch-from] OK  검사 4-a — op 가 move·split 인 패치의 from 이 그 아크의 phases 에 있는가
+    - move·split 패치 4건
+[check:wiki5-closed-arc] OK  검사 5 — status: closed 인 아크에 새 항목이 드는가
+    - 닫힌 아크를 가리키는 항목 568건
+[check:wiki6-tier-vocab] OK  검사 6 — tier 가 invariant·policy·finding 중 하나인가
+[check:wiki7-invariant-check] OK  검사 7 — tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가
+    - verify.sh 가 선언한 단계 id: ['step1-duplicate', 'step2-build', 'step3-forbidden', 'step4-baseline', 'step5-mutation', 'step6-ledger', 'step7-cqfin']
+[check:wiki8-retire-target] OK  검사 8 — 폐기 레코드의 target 이 실재하고 한 대상에 폐기가 둘 이상이 아닌가
+[check:wiki9-retire-reason] OK  검사 9 — 폐기 레코드에 original 과 reason 이 비어 있지 않은가
+[check:wiki10-ghost-ref] OK  검사 10 — 폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가
+    - 폐기된 id 26건을 유니버스로 훑었다. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki11-reopen-kind] OK  검사 11 — deferred 항목에 reopen_when 이 있고 kind 가 넷 중 하나인가
+[check:wiki12-reopen-ref] OK  검사 12 — reopen_when.ref 가 kind 별 형식을 만족하는가
+[check:wiki13-dd-target] OK  검사 13 — Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가
+    - DD: 표지 42개
+[check:wiki14-dd-layer] OK  검사 14 — DD: 항목의 layer 가 그 파일이 사는 층과 같은가
+    - meta 가 아닌 표지 4개를 봤다
+[check:wiki15-names-unique] OK  검사 15 — names 의 규율 ID 가 원장 전체에서 유일한가
+    - 규율 ID 229건
+[check:wiki23-rule-ghost] OK  검사 23 — statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, 폐기됐으면 그 폐기 레코드를 related 가 드는가
+    - 규율 ID 토큰 179건을 봤다. 계열은 ['PH-R', 'P', 'A', 'C', 'L', 'D', 'T', 'R', 'N', 'V', 'W', 'Q', 'B', 'O', 'G', 'S', 'F', 'J', 'K']
+    - 폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 21건
+[check:wiki24-doc-rule-ghost] OK  검사 24 — 상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가
+    - 규율 ID 토큰 233건. 미실재 0 · 선언 없는 폐기 지목 0 · 선언으로 면제된 폐기 지목 19
+    - 유니버스: 상주 문서 6 · Lean 4. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki25-marker-missing] OK  검사 25 — Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가
+    - 최상위 선언 42 · 표지 42 · 누락 0
+    - example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)
+[check:wiki16-trigger-fired] REPORT  검사 16 — reopen_when 이 충족된 이연 항목
+    - 발화한 트리거 9건
+    - CF-151 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-153 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-159 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-176 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-177 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-181 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-193 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-194 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-209 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+[check:wiki17-reopen-null] REPORT  검사 17 — reopen_when: null 인 항의 계수
+    - reopen_when: null 5건
+    - CF-18 — names ['K-12']
+    - CF-165 — names ['H-12']
+    - CF-169 — names ['H-16']
+    - CF-183 — names ['H-30']
+    - CF-216 — names ['H-63']
+[check:wiki18-blocking-disposition] REPORT  검사 18 — 아크별 blocking 구멍의 처분 내역
+    - blocking 구멍 1건, 아크 1개
+    - claim (status open) — CF-579
+[check:wiki19-id-gap] REPORT  검사 19 — CF-<n> 번호의 결번
+    - CF-1~CF-617, 계수 617, 결번 0건
+[check:wiki20-arc-holes] SKIP  검사 20 — 그 아크에 걸린 구멍마다 해소됐거나 이관됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki21-arc-blocking] SKIP  검사 21 — 그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki26-clarify-target] OK  검사 26 — 꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가
+    - 꼬리 41건
+[check:wiki27-clarify-resolves] OK  검사 27 — 꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 대상 항목의 산문 필드에 실제로 있는가
+    - 꼬리 41건 · 지목 78건
+[check:wiki28-cq-exists] OK  검사 28 — arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가
+    - 고정 절의 CQ 11건 · 아크가 든 cq 2건
+[check:wiki29-arc-cq] SKIP  검사 29 — 그 아크의 cq 마다 그 아크에서 나온 원장 항목이 statement 나 basis 에 그 CQ 를 드는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki30-cq-unclaimed] REPORT  검사 30 — 어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호
+    - 아크에 걸리지 않은 CQ 9건
+    - CQ-fin-3, CQ-fin-4, CQ-fin-5, CQ-fin-6, CQ-fin-7, CQ-fin-8, CQ-fin-9, CQ-fin-10, CQ-fin-11
+
+검사 30개 가운데 27개 수행, 실패 0개
+원장 검증 전량 통과
+  OK   원장 검증 전량 통과
+
+== step7-cqfin CQ 고정 절 대조
+[step:step7-cqfin]
+관측층 선언에서 뽑은 줄 11 · 고정 절의 줄 11
+  OK   CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+  OK   CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+  OK   CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+  OK   CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+  OK   CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+  OK   CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+  OK   CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+  OK   CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+  OK   CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+  OK   CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+  OK   CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+고정 절과 관측층 선언이 순서까지 일치한다
+  OK   CQ 고정 절과 관측층 선언이 일치한다
+
+전량 통과
+OUTPUT_DIGEST=fd2accd8421e
+```
+
+#### 구간 3 (`332632c`) — `step9-propfree` 가 기대된 실패를 내는 판
+
+```
+
+== step1-duplicate 빌드 타깃 밖 중복 사본 탐지
+[step:step1-duplicate]
+  OK   저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음
+
+== step2-build olean 삭제 후 전량 재빌드
+[step:step2-build]
+✔ [975/979] Built CrisisFramework.Glossary.Core (370ms)
+✔ [976/979] Built CrisisFramework.Observation.CompetencyQuestion (528ms)
+✔ [977/979] Built CrisisFramework.Definition.Constraint (835ms)
+✔ [978/979] Built CrisisFramework.Accounting.Aggregation (956ms)
+Build completed successfully (979 jobs).
+  OK   lake build 전량 통과, error/warning 0 (979 job)
+
+== step3-forbidden 금지 구문 정적 검사 (층별 `ℝ` 포함)
+[step:step3-forbidden]
+  OK   코드에 없음: sorry
+  OK   코드에 없음: axiom 선언
+  OK   코드에 없음: noncomputable
+  OK   코드에 없음: Classical
+  OK   코드에 없음: admit/native_decide
+  OK   `ℝ` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)
+
+== step4-baseline 공리 의존 + `docs/baseline.md` 기준선 차분
+[step:step4-baseline]
+  'baselineProbe' does not depend on any axioms
+  'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+  1
+  0
+  0
+  'glossaryProbe' does not depend on any axioms
+  'glossaryProbeList' does not depend on any axioms
+  'definitionProbe' does not depend on any axioms
+  'definitionProbeFamily' depends on axioms: [propext, Quot.sound]
+  'observationProbe' does not depend on any axioms
+  'observationProbeProd' does not depend on any axioms
+  OK   VerifyBuilt 통과 (DecidableEq 없이 적용됨)
+  'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+  'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.Constraint' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.NodeFamily.empty' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Glossary.Concept' does not depend on any axioms
+  'CrisisFramework.Glossary.SourceTag' does not depend on any axioms
+  'CrisisFramework.Glossary.ConceptRel' does not depend on any axioms
+  'CrisisFramework.Glossary.registry' does not depend on any axioms
+  'CrisisFramework.Observation.UndeterminedReason' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedTruth' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedValue' does not depend on any axioms
+  'CrisisFramework.Observation.PaymentMethodShareChange' does not depend on any axioms
+  'CrisisFramework.Observation.RepaymentOutcome' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial' does not depend on any axioms
+  OK   선언 감사 프로브 통과 (임시 파일, 선언 42)
+  OK   기준선을 docs/baseline.md 에서 읽음: ACCOUNTING_INT=[propext, Quot.sound]
+  OK   회계층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Accounting.creditSupply: [] (기준선 이하)
+  OK   CrisisFramework.Accounting.aggregationError: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: GLOSSARY=[]
+  OK   용어집 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Glossary.Concept: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.SourceTag: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.ConceptRel: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.registry: [] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: DEFINITION=[propext, Quot.sound]
+  OK   정의층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Definition.Constraint: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Constraint.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeFamily: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.NodeFamily.empty: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: OBSERVATION=[]
+  OK   관측층 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Observation.UndeterminedReason: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedTruth: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedValue: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.PaymentMethodShareChange: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.RepaymentOutcome: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial: [] (기준선과 동일)
+  OK   공리 감사 대상 선언 42 (회계층 5 · 용어집 4 · 정의층 6 · 관측층 27)
+
+== step8-layertype 층별 수 타입 정적 검사 (L-10)
+[step:step8-layertype]
+  OK   용어집: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   정의층: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   회계층: 파일 1 · ℚ·Rat 보고 0줄
+  OK   관측층: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   대상 밖 파일 0 (동학층과 층 디렉터리 밖)
+
+== step9-propfree 발동조건 문법의 `Prop` 금지 (C-10)
+[step:step9-propfree]
+  FAIL Prop 를 담은 structure Constraint 의 필드: CrisisFramework/Definition/Constraint.lean:39
+       assetEligible : Asset → Prop
+
+== step5-mutation 변이 검사
+[step:step5-mutation]
+  OK   변이 대상 5 (CrisisFramework/Accounting/Aggregation.lean 5)
+  OK   CrisisFramework/Accounting/Aggregation.lean:149 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:166 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:184 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:192 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:200 변이 거부됨 (1 error) — 실검사 확인
+
+== step6-ledger `check_wiki.py` 호출
+[step:step6-ledger]
+원장 검증기 — 뿌리 /root/workspace/crisis_framework
+레지스터 entry: decisions 557 · deferred 34 · retirements 26 · rejected 0 · 총계 617
+
+[check:wiki1-id-unique] OK  검사 1 — id 가 CF-<n> 형식이고 전 파일에서 유일한가
+    - id 617건
+[check:wiki2-origin-arc] OK  검사 2 — origin.arc 가 arcs.json 의 아크 이름에 실재하는가
+[check:wiki3-origin-phase] OK  검사 3 — origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가
+    - 패치가 권한을 준 항목 0건
+[check:wiki3a-phase-form] OK  검사 3-a — origin.phase 가 origin.arc + "-" + <n> 형태인가
+[check:wiki4a-patch-from] OK  검사 4-a — op 가 move·split 인 패치의 from 이 그 아크의 phases 에 있는가
+    - move·split 패치 4건
+[check:wiki5-closed-arc] OK  검사 5 — status: closed 인 아크에 새 항목이 드는가
+    - 닫힌 아크를 가리키는 항목 568건
+[check:wiki6-tier-vocab] OK  검사 6 — tier 가 invariant·policy·finding 중 하나인가
+[check:wiki7-invariant-check] OK  검사 7 — tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가
+    - verify.sh 가 선언한 단계 id: ['step1-duplicate', 'step2-build', 'step3-forbidden', 'step4-baseline', 'step8-layertype', 'step9-propfree', 'step5-mutation', 'step6-ledger', 'step7-cqfin']
+[check:wiki8-retire-target] OK  검사 8 — 폐기 레코드의 target 이 실재하고 한 대상에 폐기가 둘 이상이 아닌가
+[check:wiki9-retire-reason] OK  검사 9 — 폐기 레코드에 original 과 reason 이 비어 있지 않은가
+[check:wiki10-ghost-ref] OK  검사 10 — 폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가
+    - 폐기된 id 26건을 유니버스로 훑었다. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki11-reopen-kind] OK  검사 11 — deferred 항목에 reopen_when 이 있고 kind 가 넷 중 하나인가
+[check:wiki12-reopen-ref] OK  검사 12 — reopen_when.ref 가 kind 별 형식을 만족하는가
+[check:wiki13-dd-target] OK  검사 13 — Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가
+    - DD: 표지 42개
+[check:wiki14-dd-layer] OK  검사 14 — DD: 항목의 layer 가 그 파일이 사는 층과 같은가
+    - meta 가 아닌 표지 4개를 봤다
+[check:wiki15-names-unique] OK  검사 15 — names 의 규율 ID 가 원장 전체에서 유일한가
+    - 규율 ID 229건
+[check:wiki23-rule-ghost] OK  검사 23 — statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, 폐기됐으면 그 폐기 레코드를 related 가 드는가
+    - 규율 ID 토큰 179건을 봤다. 계열은 ['PH-R', 'P', 'A', 'C', 'L', 'D', 'T', 'R', 'N', 'V', 'W', 'Q', 'B', 'O', 'G', 'S', 'F', 'J', 'K']
+    - 폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 21건
+[check:wiki24-doc-rule-ghost] OK  검사 24 — 상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가
+    - 규율 ID 토큰 233건. 미실재 0 · 선언 없는 폐기 지목 0 · 선언으로 면제된 폐기 지목 19
+    - 유니버스: 상주 문서 6 · Lean 4. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki25-marker-missing] OK  검사 25 — Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가
+    - 최상위 선언 42 · 표지 42 · 누락 0
+    - example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)
+[check:wiki16-trigger-fired] REPORT  검사 16 — reopen_when 이 충족된 이연 항목
+    - 발화한 트리거 9건
+    - CF-151 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-153 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-159 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-176 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-177 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-181 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-193 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-194 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-209 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+[check:wiki17-reopen-null] REPORT  검사 17 — reopen_when: null 인 항의 계수
+    - reopen_when: null 5건
+    - CF-18 — names ['K-12']
+    - CF-165 — names ['H-12']
+    - CF-169 — names ['H-16']
+    - CF-183 — names ['H-30']
+    - CF-216 — names ['H-63']
+[check:wiki18-blocking-disposition] REPORT  검사 18 — 아크별 blocking 구멍의 처분 내역
+    - blocking 구멍 1건, 아크 1개
+    - claim (status open) — CF-579
+[check:wiki19-id-gap] REPORT  검사 19 — CF-<n> 번호의 결번
+    - CF-1~CF-617, 계수 617, 결번 0건
+[check:wiki20-arc-holes] SKIP  검사 20 — 그 아크에 걸린 구멍마다 해소됐거나 이관됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki21-arc-blocking] SKIP  검사 21 — 그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki26-clarify-target] OK  검사 26 — 꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가
+    - 꼬리 41건
+[check:wiki27-clarify-resolves] OK  검사 27 — 꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 대상 항목의 산문 필드에 실제로 있는가
+    - 꼬리 41건 · 지목 78건
+[check:wiki28-cq-exists] OK  검사 28 — arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가
+    - 고정 절의 CQ 11건 · 아크가 든 cq 2건
+[check:wiki29-arc-cq] SKIP  검사 29 — 그 아크의 cq 마다 그 아크에서 나온 원장 항목이 cq_disposition 으로 그 CQ 를 드는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki30-cq-unclaimed] REPORT  검사 30 — 어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호
+    - 아크에 걸리지 않은 CQ 9건
+    - CQ-fin-3, CQ-fin-4, CQ-fin-5, CQ-fin-6, CQ-fin-7, CQ-fin-8, CQ-fin-9, CQ-fin-10, CQ-fin-11
+
+검사 30개 가운데 27개 수행, 실패 0개
+원장 검증 전량 통과
+  OK   원장 검증 전량 통과
+
+== step7-cqfin CQ 고정 절 대조
+[step:step7-cqfin]
+관측층 선언에서 뽑은 줄 11 · 고정 절의 줄 11
+  OK   CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+  OK   CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+  OK   CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+  OK   CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+  OK   CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+  OK   CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+  OK   CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+  OK   CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+  OK   CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+  OK   CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+  OK   CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+고정 절과 관측층 선언이 순서까지 일치한다
+  OK   CQ 고정 절과 관측층 선언이 일치한다
+
+검증 실패 항목 있음
+OUTPUT_DIGEST=d8f162cf46f3
+```
+
+#### 구간 4 (`d9fe0ad`)
+
+```
+
+== step1-duplicate 빌드 타깃 밖 중복 사본 탐지
+[step:step1-duplicate]
+  OK   저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음
+
+== step2-build olean 삭제 후 전량 재빌드
+[step:step2-build]
+✔ [976/980] Built CrisisFramework.Observation.CompetencyQuestion (607ms)
+✔ [977/980] Built CrisisFramework.Definition.Constraint (1.1s)
+✔ [978/980] Built CrisisFramework.Definition.Trigger (1.2s)
+✔ [979/980] Built CrisisFramework.Accounting.Aggregation (1.2s)
+Build completed successfully (980 jobs).
+  OK   lake build 전량 통과, error/warning 0 (980 job)
+
+== step3-forbidden 금지 구문 정적 검사 (층별 `ℝ` 포함)
+[step:step3-forbidden]
+  OK   코드에 없음: sorry
+  OK   코드에 없음: axiom 선언
+  OK   코드에 없음: noncomputable
+  OK   코드에 없음: Classical
+  OK   코드에 없음: admit/native_decide
+  OK   `ℝ` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)
+
+== step4-baseline 공리 의존 + `docs/baseline.md` 기준선 차분
+[step:step4-baseline]
+  'baselineProbe' does not depend on any axioms
+  'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+  1
+  0
+  0
+  'glossaryProbe' does not depend on any axioms
+  'glossaryProbeList' does not depend on any axioms
+  'definitionProbe' does not depend on any axioms
+  'definitionProbeFamily' depends on axioms: [propext, Quot.sound]
+  'observationProbe' does not depend on any axioms
+  'observationProbeProd' does not depend on any axioms
+  OK   VerifyBuilt 통과 (DecidableEq 없이 적용됨)
+  'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+  'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.Constraint' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.NodeFamily.empty' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.ExtCheck' does not depend on any axioms
+  'CrisisFramework.Definition.Term' does not depend on any axioms
+  'CrisisFramework.Definition.Trigger' does not depend on any axioms
+  'CrisisFramework.Definition.Env' does not depend on any axioms
+  'CrisisFramework.Definition.Env.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.evalTerm' does not depend on any axioms
+  'CrisisFramework.Definition.fires' does not depend on any axioms
+  'CrisisFramework.Definition.TriggerFamily' does not depend on any axioms
+  'CrisisFramework.Definition.TriggerFamily.constant' does not depend on any axioms
+  'CrisisFramework.Glossary.Concept' does not depend on any axioms
+  'CrisisFramework.Glossary.SourceTag' does not depend on any axioms
+  'CrisisFramework.Glossary.ConceptRel' does not depend on any axioms
+  'CrisisFramework.Glossary.registry' does not depend on any axioms
+  'CrisisFramework.Observation.UndeterminedReason' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedTruth' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedValue' does not depend on any axioms
+  'CrisisFramework.Observation.PaymentMethodShareChange' does not depend on any axioms
+  'CrisisFramework.Observation.RepaymentOutcome' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial' does not depend on any axioms
+  OK   선언 감사 프로브 통과 (임시 파일, 선언 51)
+  OK   기준선을 docs/baseline.md 에서 읽음: ACCOUNTING_INT=[propext, Quot.sound]
+  OK   회계층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Accounting.creditSupply: [] (기준선 이하)
+  OK   CrisisFramework.Accounting.aggregationError: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: GLOSSARY=[]
+  OK   용어집 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Glossary.Concept: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.SourceTag: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.ConceptRel: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.registry: [] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: DEFINITION=[propext, Quot.sound]
+  OK   정의층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Definition.Constraint: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Constraint.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeFamily: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.NodeFamily.empty: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.ExtCheck: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Term: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Trigger: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Env: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Env.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.evalTerm: [] (기준선 이하)
+  OK   CrisisFramework.Definition.fires: [] (기준선 이하)
+  OK   CrisisFramework.Definition.TriggerFamily: [] (기준선 이하)
+  OK   CrisisFramework.Definition.TriggerFamily.constant: [] (기준선 이하)
+  OK   기준선을 docs/baseline.md 에서 읽음: OBSERVATION=[]
+  OK   관측층 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Observation.UndeterminedReason: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedTruth: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedValue: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.PaymentMethodShareChange: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.RepaymentOutcome: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial: [] (기준선과 동일)
+  OK   공리 감사 대상 선언 51 (회계층 5 · 용어집 4 · 정의층 15 · 관측층 27)
+
+== step8-layertype 층별 수 타입 정적 검사 (L-10)
+[step:step8-layertype]
+  OK   용어집: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   정의층: 파일 2 · 금지 수 타입·수치 리터럴 없음
+  OK   회계층: 파일 1 · ℚ·Rat 보고 0줄
+  OK   관측층: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   대상 밖 파일 0 (동학층과 층 디렉터리 밖)
+
+== step9-propfree 발동조건 문법의 `Prop` 금지 (C-10)
+[step:step9-propfree]
+  OK   정의층 파일 2 · structure 3 · inductive 3 의 필드와 생성자에 Prop 없음
+
+== step5-mutation 변이 검사
+[step:step5-mutation]
+  OK   변이 대상 5 (CrisisFramework/Accounting/Aggregation.lean 5)
+  OK   CrisisFramework/Accounting/Aggregation.lean:149 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:166 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:184 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:192 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:200 변이 거부됨 (1 error) — 실검사 확인
+
+== step6-ledger `check_wiki.py` 호출
+[step:step6-ledger]
+원장 검증기 — 뿌리 /root/workspace/crisis_framework
+레지스터 entry: decisions 557 · deferred 34 · retirements 26 · rejected 0 · 총계 617
+
+[check:wiki1-id-unique] OK  검사 1 — id 가 CF-<n> 형식이고 전 파일에서 유일한가
+    - id 617건
+[check:wiki2-origin-arc] OK  검사 2 — origin.arc 가 arcs.json 의 아크 이름에 실재하는가
+[check:wiki3-origin-phase] OK  검사 3 — origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가
+    - 패치가 권한을 준 항목 0건
+[check:wiki3a-phase-form] OK  검사 3-a — origin.phase 가 origin.arc + "-" + <n> 형태인가
+[check:wiki4a-patch-from] OK  검사 4-a — op 가 move·split 인 패치의 from 이 그 아크의 phases 에 있는가
+    - move·split 패치 4건
+[check:wiki5-closed-arc] OK  검사 5 — status: closed 인 아크에 새 항목이 드는가
+    - 닫힌 아크를 가리키는 항목 568건
+[check:wiki6-tier-vocab] OK  검사 6 — tier 가 invariant·policy·finding 중 하나인가
+[check:wiki7-invariant-check] OK  검사 7 — tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가
+    - verify.sh 가 선언한 단계 id: ['step1-duplicate', 'step2-build', 'step3-forbidden', 'step4-baseline', 'step8-layertype', 'step9-propfree', 'step5-mutation', 'step6-ledger', 'step7-cqfin']
+[check:wiki8-retire-target] OK  검사 8 — 폐기 레코드의 target 이 실재하고 한 대상에 폐기가 둘 이상이 아닌가
+[check:wiki9-retire-reason] OK  검사 9 — 폐기 레코드에 original 과 reason 이 비어 있지 않은가
+[check:wiki10-ghost-ref] OK  검사 10 — 폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가
+    - 폐기된 id 26건을 유니버스로 훑었다. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki11-reopen-kind] OK  검사 11 — deferred 항목에 reopen_when 이 있고 kind 가 넷 중 하나인가
+[check:wiki12-reopen-ref] OK  검사 12 — reopen_when.ref 가 kind 별 형식을 만족하는가
+[check:wiki13-dd-target] OK  검사 13 — Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가
+    - DD: 표지 51개
+[check:wiki14-dd-layer] OK  검사 14 — DD: 항목의 layer 가 그 파일이 사는 층과 같은가
+    - meta 가 아닌 표지 18개를 봤다
+[check:wiki15-names-unique] OK  검사 15 — names 의 규율 ID 가 원장 전체에서 유일한가
+    - 규율 ID 229건
+[check:wiki23-rule-ghost] OK  검사 23 — statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, 폐기됐으면 그 폐기 레코드를 related 가 드는가
+    - 규율 ID 토큰 179건을 봤다. 계열은 ['PH-R', 'P', 'A', 'C', 'L', 'D', 'T', 'R', 'N', 'V', 'W', 'Q', 'B', 'O', 'G', 'S', 'F', 'J', 'K']
+    - 폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 21건
+[check:wiki24-doc-rule-ghost] OK  검사 24 — 상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가
+    - 규율 ID 토큰 259건. 미실재 0 · 선언 없는 폐기 지목 0 · 선언으로 면제된 폐기 지목 19
+    - 유니버스: 상주 문서 6 · Lean 5. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki25-marker-missing] OK  검사 25 — Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가
+    - 최상위 선언 51 · 표지 51 · 누락 0
+    - example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)
+[check:wiki16-trigger-fired] REPORT  검사 16 — reopen_when 이 충족된 이연 항목
+    - 발화한 트리거 9건
+    - CF-151 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-153 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-159 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-176 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-177 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-181 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-193 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-194 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-209 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+[check:wiki17-reopen-null] REPORT  검사 17 — reopen_when: null 인 항의 계수
+    - reopen_when: null 5건
+    - CF-18 — names ['K-12']
+    - CF-165 — names ['H-12']
+    - CF-169 — names ['H-16']
+    - CF-183 — names ['H-30']
+    - CF-216 — names ['H-63']
+[check:wiki18-blocking-disposition] REPORT  검사 18 — 아크별 blocking 구멍의 처분 내역
+    - blocking 구멍 1건, 아크 1개
+    - claim (status open) — CF-579
+[check:wiki19-id-gap] REPORT  검사 19 — CF-<n> 번호의 결번
+    - CF-1~CF-617, 계수 617, 결번 0건
+[check:wiki20-arc-holes] SKIP  검사 20 — 그 아크에 걸린 구멍마다 해소됐거나 이관됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki21-arc-blocking] SKIP  검사 21 — 그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki26-clarify-target] OK  검사 26 — 꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가
+    - 꼬리 41건
+[check:wiki27-clarify-resolves] OK  검사 27 — 꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 대상 항목의 산문 필드에 실제로 있는가
+    - 꼬리 41건 · 지목 78건
+[check:wiki28-cq-exists] OK  검사 28 — arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가
+    - 고정 절의 CQ 11건 · 아크가 든 cq 2건
+[check:wiki29-arc-cq] SKIP  검사 29 — 그 아크의 cq 마다 그 아크에서 나온 원장 항목이 cq_disposition 으로 그 CQ 를 드는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki30-cq-unclaimed] REPORT  검사 30 — 어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호
+    - 아크에 걸리지 않은 CQ 9건
+    - CQ-fin-3, CQ-fin-4, CQ-fin-5, CQ-fin-6, CQ-fin-7, CQ-fin-8, CQ-fin-9, CQ-fin-10, CQ-fin-11
+
+검사 30개 가운데 27개 수행, 실패 0개
+원장 검증 전량 통과
+  OK   원장 검증 전량 통과
+
+== step7-cqfin CQ 고정 절 대조
+[step:step7-cqfin]
+관측층 선언에서 뽑은 줄 11 · 고정 절의 줄 11
+  OK   CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+  OK   CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+  OK   CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+  OK   CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+  OK   CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+  OK   CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+  OK   CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+  OK   CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+  OK   CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+  OK   CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+  OK   CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+고정 절과 관측층 선언이 순서까지 일치한다
+  OK   CQ 고정 절과 관측층 선언이 일치한다
+
+전량 통과
+OUTPUT_DIGEST=561e974c5a3e
+```
+
+#### 구간 5 (이 커밋, 이 절을 적기 전)
+
+```
+
+== step1-duplicate 빌드 타깃 밖 중복 사본 탐지
+[step:step1-duplicate]
+  OK   저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음
+
+== step2-build olean 삭제 후 전량 재빌드
+[step:step2-build]
+✔ [976/980] Built CrisisFramework.Observation.CompetencyQuestion (497ms)
+✔ [977/980] Built CrisisFramework.Definition.Constraint (3.9s)
+✔ [978/980] Built CrisisFramework.Definition.Trigger (4.0s)
+✔ [979/980] Built CrisisFramework.Accounting.Aggregation (1.9s)
+Build completed successfully (980 jobs).
+  OK   lake build 전량 통과, error/warning 0 (980 job)
+
+== step3-forbidden 금지 구문 정적 검사 (층별 `ℝ` 포함)
+[step:step3-forbidden]
+  OK   코드에 없음: sorry
+  OK   코드에 없음: axiom 선언
+  OK   코드에 없음: noncomputable
+  OK   코드에 없음: Classical
+  OK   코드에 없음: admit/native_decide
+  OK   `ℝ` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)
+
+== step4-baseline 공리 의존 + `docs/baseline.md` 기준선 차분
+[step:step4-baseline]
+  'baselineProbe' does not depend on any axioms
+  'baselineProbeSum' depends on axioms: [propext, Quot.sound]
+  1
+  0
+  0
+  'glossaryProbe' does not depend on any axioms
+  'glossaryProbeList' does not depend on any axioms
+  'definitionProbe' does not depend on any axioms
+  'definitionProbeFamily' depends on axioms: [propext, Quot.sound]
+  'observationProbe' does not depend on any axioms
+  'observationProbeProd' does not depend on any axioms
+  OK   VerifyBuilt 통과 (DecidableEq 없이 적용됨)
+  'CrisisFramework.Accounting.creditSupply' does not depend on any axioms
+  'CrisisFramework.Accounting.aggregationError' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.Constraint' does not depend on any axioms
+  'CrisisFramework.Definition.Constraint.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState' does not depend on any axioms
+  'CrisisFramework.Definition.NodeState.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.NodeFamily' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.NodeFamily.empty' depends on axioms: [propext, Quot.sound]
+  'CrisisFramework.Definition.ExtCheck' does not depend on any axioms
+  'CrisisFramework.Definition.Term' does not depend on any axioms
+  'CrisisFramework.Definition.Trigger' does not depend on any axioms
+  'CrisisFramework.Definition.Env' does not depend on any axioms
+  'CrisisFramework.Definition.Env.trivial' does not depend on any axioms
+  'CrisisFramework.Definition.evalTerm' does not depend on any axioms
+  'CrisisFramework.Definition.fires' does not depend on any axioms
+  'CrisisFramework.Definition.TriggerFamily' does not depend on any axioms
+  'CrisisFramework.Definition.TriggerFamily.constant' does not depend on any axioms
+  'CrisisFramework.Glossary.Concept' does not depend on any axioms
+  'CrisisFramework.Glossary.SourceTag' does not depend on any axioms
+  'CrisisFramework.Glossary.ConceptRel' does not depend on any axioms
+  'CrisisFramework.Glossary.registry' does not depend on any axioms
+  'CrisisFramework.Observation.UndeterminedReason' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedTruth' does not depend on any axioms
+  'CrisisFramework.Observation.ObservedValue' does not depend on any axioms
+  'CrisisFramework.Observation.PaymentMethodShareChange' does not depend on any axioms
+  'CrisisFramework.Observation.RepaymentOutcome' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradePaymentComposition.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SanctionTextCut.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.SwapLineReach.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors' does not depend on any axioms
+  'CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial' does not depend on any axioms
+  OK   선언 감사 프로브 통과 (임시 파일, 선언 51)
+  OK   기준선을 docs/baseline.md 에서 읽음: ACCOUNTING_INT=[propext, Quot.sound]
+  OK   회계층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Accounting.creditSupply: [] (기준선 이하)
+  OK   CrisisFramework.Accounting.aggregationError: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.two_mul_aggregationError_eq_pairwise: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_cap: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Accounting.aggregationError_eq_zero_of_constant_equity: [propext, Quot.sound] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: GLOSSARY=[]
+  OK   용어집 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Glossary.Concept: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.SourceTag: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.ConceptRel: [] (기준선과 동일)
+  OK   CrisisFramework.Glossary.registry: [] (기준선과 동일)
+  OK   기준선을 docs/baseline.md 에서 읽음: DEFINITION=[propext, Quot.sound]
+  OK   정의층 실효 기준선 실측 = [propext, Quot.sound] (기대값과 일치)
+  OK   CrisisFramework.Definition.Constraint: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Constraint.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeState.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.NodeFamily: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.NodeFamily.empty: [propext, Quot.sound] (기준선과 동일)
+  OK   CrisisFramework.Definition.ExtCheck: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Term: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Trigger: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Env: [] (기준선 이하)
+  OK   CrisisFramework.Definition.Env.trivial: [] (기준선 이하)
+  OK   CrisisFramework.Definition.evalTerm: [] (기준선 이하)
+  OK   CrisisFramework.Definition.fires: [] (기준선 이하)
+  OK   CrisisFramework.Definition.TriggerFamily: [] (기준선 이하)
+  OK   CrisisFramework.Definition.TriggerFamily.constant: [] (기준선 이하)
+  OK   기준선을 docs/baseline.md 에서 읽음: OBSERVATION=[]
+  OK   관측층 실효 기준선 실측 = [] (기대값과 일치)
+  OK   CrisisFramework.Observation.UndeterminedReason: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedTruth: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.ObservedValue: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.PaymentMethodShareChange: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.RepaymentOutcome: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradePaymentComposition.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.TradeFinanceCurrency.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SanctionTextCut.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.DebtCapacityCollateralDependence.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByHolderConstraintKind.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.SwapLineReach.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsByDecisionUnit.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.MonetaryHierarchyOrder.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.RepaymentAndAdjustment.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.PledgedClaimsAndStock.trivial: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors: [] (기준선과 동일)
+  OK   CrisisFramework.Observation.CQ.ClaimsOnMismatchedDebtors.trivial: [] (기준선과 동일)
+  OK   공리 감사 대상 선언 51 (회계층 5 · 용어집 4 · 정의층 15 · 관측층 27)
+
+== step8-layertype 층별 수 타입 정적 검사 (L-10)
+[step:step8-layertype]
+  OK   용어집: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   정의층: 파일 2 · 금지 수 타입·수치 리터럴 없음
+  OK   회계층: 파일 1 · ℚ·Rat 보고 0줄
+  OK   관측층: 파일 1 · 금지 수 타입·수치 리터럴 없음
+  OK   대상 밖 파일 0 (동학층과 층 디렉터리 밖)
+
+== step9-propfree 발동조건 문법의 `Prop` 금지 (C-10)
+[step:step9-propfree]
+  OK   정의층 파일 2 · structure 3 · inductive 3 의 필드와 생성자에 Prop 없음
+
+== step5-mutation 변이 검사
+[step:step5-mutation]
+  OK   변이 대상 5 (CrisisFramework/Accounting/Aggregation.lean 5)
+  OK   CrisisFramework/Accounting/Aggregation.lean:149 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:166 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:184 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:192 변이 거부됨 (1 error) — 실검사 확인
+  OK   CrisisFramework/Accounting/Aggregation.lean:200 변이 거부됨 (1 error) — 실검사 확인
+
+== step6-ledger `check_wiki.py` 호출
+[step:step6-ledger]
+원장 검증기 — 뿌리 /root/workspace/crisis_framework
+레지스터 entry: decisions 557 · deferred 34 · retirements 26 · rejected 0 · 총계 617
+
+[check:wiki1-id-unique] OK  검사 1 — id 가 CF-<n> 형식이고 전 파일에서 유일한가
+    - id 617건
+[check:wiki2-origin-arc] OK  검사 2 — origin.arc 가 arcs.json 의 아크 이름에 실재하는가
+[check:wiki3-origin-phase] OK  검사 3 — origin.phase 가 그 아크의 phases 에 있거나, 없으면 patches 가 권한을 주는가
+    - 패치가 권한을 준 항목 0건
+[check:wiki3a-phase-form] OK  검사 3-a — origin.phase 가 origin.arc + "-" + <n> 형태인가
+[check:wiki4a-patch-from] OK  검사 4-a — op 가 move·split 인 패치의 from 이 그 아크의 phases 에 있는가
+    - move·split 패치 4건
+[check:wiki5-closed-arc] OK  검사 5 — status: closed 인 아크에 새 항목이 드는가
+    - 닫힌 아크를 가리키는 항목 568건
+[check:wiki6-tier-vocab] OK  검사 6 — tier 가 invariant·policy·finding 중 하나인가
+[check:wiki7-invariant-check] OK  검사 7 — tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가
+    - verify.sh 가 선언한 단계 id: ['step1-duplicate', 'step2-build', 'step3-forbidden', 'step4-baseline', 'step8-layertype', 'step9-propfree', 'step5-mutation', 'step6-ledger', 'step7-cqfin']
+[check:wiki8-retire-target] OK  검사 8 — 폐기 레코드의 target 이 실재하고 한 대상에 폐기가 둘 이상이 아닌가
+[check:wiki9-retire-reason] OK  검사 9 — 폐기 레코드에 original 과 reason 이 비어 있지 않은가
+[check:wiki10-ghost-ref] OK  검사 10 — 폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가
+    - 폐기된 id 26건을 유니버스로 훑었다. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki11-reopen-kind] OK  검사 11 — deferred 항목에 reopen_when 이 있고 kind 가 넷 중 하나인가
+[check:wiki12-reopen-ref] OK  검사 12 — reopen_when.ref 가 kind 별 형식을 만족하는가
+[check:wiki13-dd-target] OK  검사 13 — Lean 줄 주석의 DD: 표지가 실재하고 폐기되지 않은 id 를 가리키는가
+    - DD: 표지 51개
+[check:wiki14-dd-layer] OK  검사 14 — DD: 항목의 layer 가 그 파일이 사는 층과 같은가
+    - meta 가 아닌 표지 18개를 봤다
+[check:wiki15-names-unique] OK  검사 15 — names 의 규율 ID 가 원장 전체에서 유일한가
+    - 규율 ID 229건
+[check:wiki23-rule-ghost] OK  검사 23 — statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, 폐기됐으면 그 폐기 레코드를 related 가 드는가
+    - 규율 ID 토큰 179건을 봤다. 계열은 ['PH-R', 'P', 'A', 'C', 'L', 'D', 'T', 'R', 'N', 'V', 'W', 'Q', 'B', 'O', 'G', 'S', 'F', 'J', 'K']
+    - 폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 21건
+[check:wiki24-doc-rule-ghost] OK  검사 24 — 상주 문서와 Lean 주석의 규율 ID 토큰이 실재하고, 폐기됐으면 그 문서가 선언했는가
+    - 규율 ID 토큰 273건. 미실재 0 · 선언 없는 폐기 지목 0 · 선언으로 면제된 폐기 지목 19
+    - 유니버스: 상주 문서 6 · Lean 5. 유니버스 밖: ['BUILD_LOG.md', 'docs/phases/', 'docs/extractions/', 'docs/arcs.json 의 patches 배열']
+[check:wiki25-marker-missing] OK  검사 25 — Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가
+    - 최상위 선언 51 · 표지 51 · 누락 0
+    - example 은 정의도 정리도 아니므로 대상이 아니다(SPEC §2.1)
+[check:wiki16-trigger-fired] REPORT  검사 16 — reopen_when 이 충족된 이연 항목
+    - 발화한 트리거 9건
+    - CF-151 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-153 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-159 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-176 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-177 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-181 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+    - CF-193 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-194 (artifact) — 경로 `CrisisFramework/Glossary/Core.lean` 가 실재한다
+    - CF-209 (artifact) — 경로 `CrisisFramework/Observation/` 가 실재한다
+[check:wiki17-reopen-null] REPORT  검사 17 — reopen_when: null 인 항의 계수
+    - reopen_when: null 5건
+    - CF-18 — names ['K-12']
+    - CF-165 — names ['H-12']
+    - CF-169 — names ['H-16']
+    - CF-183 — names ['H-30']
+    - CF-216 — names ['H-63']
+[check:wiki18-blocking-disposition] REPORT  검사 18 — 아크별 blocking 구멍의 처분 내역
+    - blocking 구멍 1건, 아크 1개
+    - claim (status open) — CF-579
+[check:wiki19-id-gap] REPORT  검사 19 — CF-<n> 번호의 결번
+    - CF-1~CF-617, 계수 617, 결번 0건
+[check:wiki20-arc-holes] SKIP  검사 20 — 그 아크에 걸린 구멍마다 해소됐거나 이관됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki21-arc-blocking] SKIP  검사 21 — 그 아크에 걸린 blocking 구멍마다 해소됐거나 이월됐는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki26-clarify-target] OK  검사 26 — 꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가
+    - 꼬리 41건
+[check:wiki27-clarify-resolves] OK  검사 27 — 꼬리의 resolves 가 phrase 와 absolute 를 갖고 그 phrase 가 대상 항목의 산문 필드에 실제로 있는가
+    - 꼬리 41건 · 지목 78건
+[check:wiki28-cq-exists] OK  검사 28 — arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가
+    - 고정 절의 CQ 11건 · 아크가 든 cq 2건
+[check:wiki29-arc-cq] SKIP  검사 29 — 그 아크의 cq 마다 그 아크에서 나온 원장 항목이 cq_disposition 으로 그 CQ 를 드는가
+    - 아크 종료 커밋이 아니므로 수행하지 않는다
+[check:wiki30-cq-unclaimed] REPORT  검사 30 — 어느 아크의 cq 에도 들지 않은 CQ 의 계수와 번호
+    - 아크에 걸리지 않은 CQ 9건
+    - CQ-fin-3, CQ-fin-4, CQ-fin-5, CQ-fin-6, CQ-fin-7, CQ-fin-8, CQ-fin-9, CQ-fin-10, CQ-fin-11
+
+검사 30개 가운데 27개 수행, 실패 0개
+원장 검증 전량 통과
+  OK   원장 검증 전량 통과
+
+== step7-cqfin CQ 고정 절 대조
+[step:step7-cqfin]
+관측층 선언에서 뽑은 줄 11 · 고정 절의 줄 11
+  OK   CQFIN=1|TradePaymentComposition|Country → Country → Commodity → Time → Time → PaymentMethodShareChange TradePaymentMethod|60e31a0b1efc
+  OK   CQFIN=2|TradeFinanceCurrency|Country → Country → Commodity → Currency → Time → ObservedValue Amount|d4f8833587eb
+  OK   CQFIN=3|SanctionTextCut|Entity → (t : Time) → NetworkKind t → ObservedTruth|1a127b9fc7e7
+  OK   CQFIN=4|DebtCapacityCollateralDependence|Entity → Commodity → Time → ObservedTruth|1e6be6292736
+  OK   CQFIN=5|ClaimsByHolderConstraintKind|Country → HolderConstraintKind → Currency → Time → ObservedValue Amount|2ee0dc125a36
+  OK   CQFIN=6|SwapLineReach|Entity → CentralBankSwapLine → Time → ObservedTruth|229bc5c1aa41
+  OK   CQFIN=7|ClaimsByDecisionUnit|Country → Node → Currency → Time → ObservedValue Amount|b332bdcb6eb9
+  OK   CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e114f404c3
+  OK   CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
+  OK   CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
+  OK   CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+고정 절과 관측층 선언이 순서까지 일치한다
+  OK   CQ 고정 절과 관측층 선언이 일치한다
+
+전량 통과
+OUTPUT_DIGEST=e5289437b413
+```
+
+### 70-8. 미전사분
+
+리포의 추적 파일에 살지만 원장에는 아직 없는 것이다. 결정 세션이 받는다고 밝혔다.
+
+- 집행이 쓴 스크립트 문면. 구간 3 에서 `verify.sh` 와 `check_wiki.py` 에 쓴 주석과 보고 문구는
+  결정 세션이 승인했고, 구간 5 에서 K20 이 고친 `step8` 주석 한 문단은 아직 승인 전이다
+- `step4-baseline` 이 이름 없는 `instance` 와 네 층 디렉터리 밖의 선언을 실패로 두는 처분
+- 회계층의 차분 방식이 부분집합 대조로 바뀐 것
+- `step4` 와 `step9` 와 검사 25 의 유니버스가 `private` 과 `@[attr]` 과 `class` 선언을 보지
+  못한다는 기록
+
+**원장에 들어갈 자리가 없던 낙착이 하나 있다.** push 허가에는 그 결과를 확인하는 `fetch` 가 딸려
+오고, `fetch` 뒤에 로컬을 움직이는 조작은 따로 허가를 받는다는 판정이다. 카드가 이미 병합된 뒤에
+나왔으므로 다음에 카드를 병합하는 회차가 받으며, `CLAUDE.md` §11 의 문면도 그때 고친다고 결정
+세션이 밝혔다.
+
+### 70-9. 해시
+
+| 시점 | `OUTPUT_DIGEST` |
+|---|---|
+| 구간 5 (이 절을 적기 전) | `e5289437b413` |
+| 구간 5 (이 절을 적은 뒤) | `e5289437b413` |
+
+`verify.sh` 는 이 파일을 읽지 않으므로 이 절을 적기 전과 뒤의 두 값이 같아야 한다.
+
+---
+
+## 71. 해석 (관측값 아님)
+
+- **지시서는 지시이면서 기록이다.** K20 을 세우며 K5 가 딛던 재료를 고치자 이미 집행된 K5 의
+  명세가 소급해 바뀌었고, 커밋과 명세를 맞대는 쪽에서는 그 어긋남이 결함으로 읽혔다. 결정 세션이
+  재료를 갈라 K5 를 집행된 판으로 되돌렸다.
+- **음성 대조는 그 단계가 통과 상태일 때만 뜻이 있다.** 실패하고 있는 단계에 위반을 넣으면 주입이
+  낳은 실패가 기존 실패와 갈리지 않는다. `step9-propfree` 가 그 경우였고 `CF-617` 이 그것을 든다.
+- **검사를 넓히는 일은 음성 대조를 할 대상과 함께 가야 한다.** 유니버스 밖의 선언 종류(`private` ·
+  `@[attr]` · `class`)를 이번에 넣지 않은 까닭이 이것이다.
+- **`Trigger.lean` 의 선언 아홉이 전부 무의존으로 섰다.** 수 체계의 연산과 비교를 필드로 받고
+  타입클래스를 요구하지 않은 것(`CF-605`)이 정의를 세우는 시점에 공리를 끌어오지 않았다. 다만
+  확인된 것은 정의가 섰다는 것이며, 그것을 쓰는 증명은 아직 없다.
+
+---
+
+## 72. 진술을 바꿔야만 통과할 것 같은 지점
+
+**없다.** 이 회차가 세운 Lean 선언은 정의뿐이며 지시서의 전문 그대로 컴파일됐다. 검증기와 CI
+워크플로를 고쳐 통과시킨 자리도 없다. `step9-propfree` 가 통과로 돌아선 것은 K10 이 `assetEligible`
+을 `Bool` 로 고친 결과다.
+
+---
+
+## 73. 사람의 판단이 필요해 보이는 것 (실행하지 않음)
+
+1. **witness 의 docstring 이 D-2 의 세 항목을 채우지 않는 자리가 열넷에서 열여섯이 됐다.**
+   `Env.trivial` 과 `TriggerFamily.constant` 가 앞 witness 들의 관례를 따랐다. `CF-593` 이 미뤄 둔
+   자리다.
+2. **N-1 의 양방향 참조를 재는 검사가 없다.** `Core.lean` 과 `Trigger.lean` 이 `extraction-06` 의
+   §10 을 지목한 구간 4 에는 그 절이 아직 없었고 구간 5 에서야 섰는데, 그 사이의 어긋남을 잡는
+   검사가 없었다.
+3. **L-13 의 「최상위 대상」을 두 가지로 읽는 문제(`CF-611`)에 걸리는 선언이 늘었다.**
+   `Trigger.lean` 에서 족은 `TriggerFamily` 하나이고, `ExtCheck` · `Term` · `Trigger` · `Env` ·
+   `Env.trivial` · `evalTerm` · `fires` 는 족이 아니다. `CLAUDE.md` §2 의 문면대로 읽으면 이 일곱도
+   위반이 된다.
+4. **검사 29 는 `cq_disposition` 의 값을 아크를 닫을 때만 본다.** 형식이 틀린 처분이 원장에
+   들어와도 그 아크가 닫힐 때까지 드러나지 않는다.
+5. **`CLAUDE.md` §5 의 절 순서와 `verify.sh` 의 단계 순서가 대응하지 않는다.** 절은 5-8 과 5-9 가
+   맨 뒤에 오고, 단계는 `step8` 과 `step9` 가 `step5` 앞에서 돈다.

@@ -41,6 +41,8 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | Greenlaw · Hatzius · Kashyap · Shin (2008), *Leveraged Losses* | 2007-08 손실의 대차대조표 배분. 손실 배분처 추적의 사례 |
 | Eichengreen, *Golden Fetters* (뭉치 밖, B-1 기록 대상) | 금본위제 = 중앙은행의 외화 축 제약. J-4·K-3 정본 사례 |
 | Aramonte · Schrimpf · Shin (2023) §2 (E-04, 추출 완료) | 2020년 3월 국채시장. 신용위험 없는 자산에서 발원한 위기 |
+| Pozsar · Adrian · Ashcraft · Boesky (2010), FRBNY SR 458 부록 (E-06, 추출 완료 · §10 덧붙임) | 계약상 크레딧 라인을 통한 유동성 풋. 담보가치 하락에서 ABCP 롤 실패와 헤어컷 상승을 거쳐 풋이 발동한 연쇄. C-10 의 검증 가능 신호 위 발동조건의 정본 사례 |
+| Claessens · Pozsar · Ratnovski · Singh (2012), *Shadow Banking: Economics and Policy* (IMF SDN/12/12, 추출 기록 없음 · S-7 로 사례만 인용) | 암묵적 유동성 풋. 시장 조달이 마르자 은행이 기구를 대차대조표로 받거나 무너뜨리고 풋을 이행하지 않은 사례. 위 행과 짝을 이루어 신호 분할의 V-4 사례가 된다 |
 
 ---
 

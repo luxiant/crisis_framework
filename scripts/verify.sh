@@ -312,9 +312,10 @@ ok "공리 감사 대상 선언 $AUDITED ($detail)"
 
 step step8-layertype '층별 수 타입 정적 검사 (L-10)'
 # CLAUDE.md §2 의 층별 금지 표를 주석을 지운 코드에서 대조한다. 디렉터리가 층을 결정한다.
-# 정의층의 ℕ·Nat 은 L-13 의 명시적 예외라 잡지 않는다. 회계층의 ℝ 는 step3-forbidden 이
-# 보므로 여기서 다시 세지 않는다. 회계층의 ℚ·Rat 은 L-15 의 판정이 docstring 의 사유를
-# 읽어야 서므로 실패가 아니라 보고로 낸다.
+# 정의층의 ℕ·Nat 은 L-13 의 명시적 예외라 잡지 않는다. ℝ 기호는 네 층 전부에서 step3-forbidden
+# 이 보므로 여기서 다시 세지 않는다. L-4 가 invariant 로 그 단계에 걸려 있기 때문이다. 다만 영문명
+# Real 은 step3 가 기호만 보므로 여기서 잡는다. 회계층의 ℚ·Rat 은 L-15 의 판정이 docstring 의
+# 사유를 읽어야 서므로 실패가 아니라 보고로 낸다.
 LT=$(mktemp -d)
 for t in "${TARGETS[@]}"; do
   mkdir -p "$LT/$(dirname "$t")"
@@ -325,10 +326,10 @@ import os, re, sys
 root, files = sys.argv[1], sys.argv[2:]
 # 디렉터리: (층, 금지 기호, 금지 영문명, 수치 리터럴 금지, 처분)
 RULES = {
-    "Glossary":    ("용어집", "ℚℤℝℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
-    "Definition":  ("정의층", "ℚℤℝ",  ("Rat", "Int", "Real"),        False, "FAIL"),
-    "Accounting":  ("회계층", "ℚ",    ("Rat",),                      False, "REPORT"),
-    "Observation": ("관측층", "ℚℤℝℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
+    "Glossary":    ("용어집", "ℚℤℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
+    "Definition":  ("정의층", "ℚℤ",  ("Rat", "Int", "Real"),        False, "FAIL"),
+    "Accounting":  ("회계층", "ℚ",   ("Rat",),                      False, "REPORT"),
+    "Observation": ("관측층", "ℚℤℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
 }
 # 영문명은 토큰 경계를 요구하고 대소문자를 구별한다. `intermediation` 의 Int 나 `Rational` 의
 # Rat 이 걸리지 않게 한다. 수치 리터럴은 식별자의 일부가 아닌 독립 정수·소수이며 첨자는 들지 않는다.
