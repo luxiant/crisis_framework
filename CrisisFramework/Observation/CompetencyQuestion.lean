@@ -80,8 +80,10 @@ inductive ObservedTruth where
 **대응 비형식 개념:** 금액을 묻는 물음의 답. 금액이 서거나 서지 않는다.
 
 **이 정의가 배제하는 사례:**
-2016년 이후 BIS 은행통계가 일부 보고국의 자리를 추정치로 메우는데, 이 열거는 잰 값과
-메운 값을 가르지 않는다. 값이 있다는 것과 그 값이 관측에서 나왔다는 것이 같은 칸에 든다.
+2008년 이후 교차통화 베이시스가 0 에서 벌어진 채 유지된 기간의 FX 스왑 잔액. 총액은 공표
+수치에서 복원되지 않아 이 열거가 판정 불가로 접지만, 같은 기간에 그 포지션에 걸린 제약의
+그림자 가격인 베이시스는 매일 관측됐다. 대리 관측이 있다는 것과 소스가 아예 없다는 것이 같은
+칸에 든다.
 
 **기각한 대체 정의:**
 `Option` 으로 두는 안. 없음의 까닭이 사라지고, 관측층의 주된 산출물이 「소스 없음」이라는
@@ -170,7 +172,7 @@ namespace CQ
 이분법을 전제하는데 두 원인이 동시에 성립하거나 둘 다 아닐 수 있고, 개별 거래의 자금조달은
 계약 당사자만 알아서 밖에서 보는 관측자에게 소스가 구조적으로 없다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure TradePaymentComposition
     (Time Country Commodity TradePaymentMethod : Type) where
   /-- 보내는 나라와 받는 나라와 품목과 두 시점을 받아 결제 방식별 몫의 변화를 낸다. -/
@@ -201,7 +203,7 @@ def TradePaymentComposition.trivial :
 걸치게 하므로 단일 통화로는 답이 서지 않는다. 통화마다 금액을 묻는 형태로 두면 여러 통화에
 걸친 경우가 여러 답으로 나뉘어 표현된다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure TradeFinanceCurrency
     (Time Country Commodity Currency Amount : Type) where
   /-- 보내는 나라와 받는 나라와 품목과 표시 통화와 시점을 받아 금액을 낸다. -/
@@ -232,7 +234,7 @@ def TradeFinanceCurrency.trivial :
 
 **망의 종류가 시점에 딸린다.** `NetworkKind : Time → Type` 이 K-8 을 타입으로 드러낸다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure SanctionTextCut
     (Time Entity : Type) (NetworkKind : Time → Type) where
   /-- 주체와 시점과 그 시점의 망 종류를 받아 잘렸는지를 낸다. -/
@@ -260,7 +262,7 @@ def SanctionTextCut.trivial :
 전달 크기를 답에 넣는 안. 담보 가치는 값이고 값의 결정은 동학층이므로, 크기를 물으면 답이
 동학층으로 떨어져 재유입 산출물로는 답해지지 않는다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure DebtCapacityCollateralDependence
     (Time Entity Commodity : Type) where
   /-- 교역 주체와 상품과 시점을 받아 구조적 의존이 있는지를 낸다. -/
@@ -288,7 +290,7 @@ def DebtCapacityCollateralDependence.trivial :
 제약이 실제로 구속하는지를 함께 묻는 안. 구속 여부는 위험 측정의 변화에 매달리므로
 동학층이고, 재유입 산출물로 답해지지 않는다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure ClaimsByHolderConstraintKind
     (Time Country HolderConstraintKind Currency Amount : Type) where
   /-- 나라와 보유자 제약 유형과 표시 통화와 시점을 받아 금액을 낸다. -/
@@ -316,7 +318,7 @@ def ClaimsByHolderConstraintKind.trivial :
 실제 유동성 흐름이 닿았는지를 묻는 안. 활성화와 인출은 결정이므로 동학층으로 떨어진다.
 구조적 도달 범위로 좁히면 유한 그래프의 도달 가능성이라 판정된다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure SwapLineReach
     (Time Entity CentralBankSwapLine : Type) where
   /-- 주체와 통화 교환과 시점을 받아 도달 범위 안에 있는지를 낸다. -/
@@ -346,7 +348,7 @@ def SwapLineReach.trivial :
 소재지로 세는 안. 소재지는 J-1 이 관측 투영으로 두는 것이고, 허브를 거친 자금조달을 허브
 소재국에 대한 의존으로 읽게 만든다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure ClaimsByDecisionUnit
     (Time Country Node Currency Amount : Type) where
   /-- 나라와 의사결정 단위와 표시 통화와 시점을 받아 금액을 낸다. -/
@@ -374,7 +376,7 @@ J-4 가 위계 최상단을 그 기능으로 정의하는데, 두 주체의 상�
 위계 위치와 실패의 관계를 함께 묻는 안. 초석 명제가 상단의 노드는 조정하고 하단에서 상환
 실패가 난다고 드는데, 그것을 물음에 넣으면 CQ가 자기가 검증할 이론을 전제로 품는다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure MonetaryHierarchyOrder
     (Time Entity : Type) where
   /-- 두 주체와 시점을 받아 앞이 뒤보다 위에 있는지를 낸다. -/
@@ -404,7 +406,7 @@ def MonetaryHierarchyOrder.trivial :
 조정을 담지 않는다. 그리고 그 분해에서 지급능력 조건은 장부에 없는 자산 수익률을 인자로
 가지므로, 성립 여부를 사후에도 재지 못하는 경우가 남는다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure RepaymentAndAdjustment
     (Time Entity : Type) where
   /-- 주체와 두 시점을 받아 상환의 결과를 낸다. -/
@@ -432,7 +434,7 @@ def RepaymentAndAdjustment.trivial :
 비율 하나로 답하는 안. 비율은 `ℚ` 를 부르고 L-15 가 `ℚ` 를 강제되는 경우로 한정하므로,
 두 값을 각각 내면 배수의 판정이 교차곱 정수 부등식으로 선다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure PledgedClaimsAndStock
     (Time Commodity Currency Amount : Type) where
   /-- 상품과 통화와 시점을 받아 담보로 제공된 청구권의 합과 실물의 가치를 함께 낸다. -/
@@ -461,7 +463,7 @@ def PledgedClaimsAndStock.trivial :
 전달이 있었는지를 술어로 묻는 안. 전달 엣지의 타입이 정의되지 않아 술어를 쓸 수 없고,
 금액을 물으면 그 공백이 답을 막는 자리로 드러난다.
 -/
--- DD:CF-571
+-- DD:CF-582
 structure ClaimsOnMismatchedDebtors
     (Time Entity Currency Amount : Type) where
   /-- 금융 주체와 불일치 통화와 표시 통화와 시점을 받아 금액을 낸다. -/

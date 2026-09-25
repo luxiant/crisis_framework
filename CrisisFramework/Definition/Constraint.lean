@@ -29,14 +29,14 @@ namespace CrisisFramework.Definition
 같은 축이다. 단일 상한으로는 이 축이 표현되지 않아 기각했다.
 
 **수치 타입:** `Num` 으로 추상화한다. 정의층은 구체 수 체계를 언급하지 않는다(L-10).
-`Num` 의 실제 인스턴스화는 회계층에서 `ℚ` 로 이루어진다.
+`Num` 의 실제 인스턴스화는 회계층이 하며 그 기본 수 체계는 `ℤ` 다(L-15).
 -/
 -- DD:CF-130
 structure Constraint (Num Currency Asset : Type) where
   /-- 부채 측 한도. 통화 축별로 다른 값을 갖는다(L-12, 중앙은행의 비대칭). -/
   liabilityCap : Currency → Num
-  /-- 자산 측 적격성. 어떤 자산을 보유할 수 있는가. -/
-  assetEligible : Asset → Prop
+  /-- 자산 측 적격성. 어떤 자산을 보유할 수 있는가. 판정은 계산으로 나온다(C-3). -/
+  assetEligible : Asset → Bool
 
 /--
 witness 인스턴스 (A-3).
@@ -46,7 +46,7 @@ witness 인스턴스 (A-3).
 -- DD:CF-31
 def Constraint.trivial : Constraint Unit Unit Unit where
   liabilityCap := fun _ => ()
-  assetEligible := fun _ => True
+  assetEligible := fun _ => true
 
 /--
 노드의 자기자본과 제약을 묶은 상태.

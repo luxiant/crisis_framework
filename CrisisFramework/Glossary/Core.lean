@@ -33,6 +33,14 @@ inductive Concept where
   | constraintAssetEligibility
   /-- 신용공급. 노드가 공여할 수 있는 신용의 양. -/
   | creditSupply
+  /-- 신호. 발동조건이 읽는 것. 아래 둘의 상위 개념이며 형식층 대상을 갖지 않는다. -/
+  | signal
+  /-- 검증 가능 신호. 계약 당사자와 법원이 함께 확인할 수 있는 감사된 회계수치. -/
+  | verifiableSignal
+  /-- 외생 확인 신호. 모형이 계산하지 않고 밖에서 받는 판정. -/
+  | exogenousSignal
+  /-- 발동조건. 조건부 청구권이 요구를 발생시키는 조건. -/
+  | triggerCondition
   deriving DecidableEq, Repr
 
 /--
@@ -82,6 +90,15 @@ inductive ConceptRel where
 정의만으로 따라 나오는 분할은 예외인데 아래 등록분은 거기에 들지 않는다.
 제약이 부채 측과 자산 측 둘로 나뉜다는 것은 현재까지 확인된 두 종류일 뿐,
 셋째가 없다는 증명이 아니다.
+
+**신호 분할의 V-4 사례.** 2007-08년에 같은 기능을 하던 두 종류의 유동성 풋이 갈렸다. 은행이
+도관에 계약상 크레딧 라인으로 제공한 풋은 담보가치 하락과 ABCP 롤 실패와 헤어컷 상승을 거쳐
+실제로 발동했고, SIV 와 도관에 대한 암묵적 풋은 이행되지 않았다. 갈린 자리가 조건이 문서에
+있었는가이며, 그것이 검증 가능 신호와 외생 확인 신호를 가르는 축과 같다.
+`docs/extractions/extraction-06-pozsar-adrian-ashcraft-boesky-2010.md` §10 이 그 대비를 든다.
+
+**`measuredBy` 를 신호에 붙이지 않는다.** 신호에 측정 소스를 대응시키는 일은 관측 명세를
+세우는 페이즈의 몫이고, 그 자리에서 관측자 상대성의 구멍이 발화하기 때문이다.
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -91,6 +108,8 @@ def registry : List ConceptRel :=
   , .measuredBy .equity .regulatoryFiling
   , .measuredBy .balanceSheet .regulatoryFiling
   , .measuredBy .creditSupply .flowOfFunds
+  , .partitions .signal [.verifiableSignal, .exogenousSignal]
+  , .excludes .verifiableSignal .exogenousSignal
   ]
 
 end CrisisFramework.Glossary
