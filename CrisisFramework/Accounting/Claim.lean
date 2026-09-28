@@ -75,4 +75,41 @@ def newlyInternalized {ι Party Node Obs Ext Lvl Currency : Type}
         f (S.assign i).obligor = f (S.assign i).holder
      then evalTerm e (S.assign i).amount else 0)
 
+/--
+집계가 총액에서 빼는 것은 새로 내부화된 청구권의 금액뿐이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가 (T-2):**
+두 당사자를 하나로 묶었을 때 총액의 감소분이 그 사이에 선 청구권의 금액 합과 다른 사례가
+관측되어야 한다. 재담보가 그 후보다. 같은 담보가 여러 청구권을 떠받치면 상계의 단위가 청구권
+단위와 어긋날 수 있고, J-3 이 소유권 장부와 담보 장부의 분리로 그것을 다루기로 정해 두었다.
+이 정리는 담보를 담지 않으므로 그 사례가 반례가 되는지는 담보 덩어리가 판정한다.
+
+**형식층 배정:** 회계층. `ℤ` 와 `Finset` 합을 쓴다(L-8 의 색인, L-15).
+
+**이 정리가 E-19 의 관찰을 형식으로 옮긴다.** 같은 실물 흐름이 한 결정 단위 안에 있으면 재고로
+총액에 한 번 서고 결정 단위 둘로 갈리면 매출채권으로 양쪽 총액에 두 번 선다는 것이며, 경계가
+총액을 만든다는 그 관찰이 여기서 항등식이 된다.
+-/
+-- DD:CF-627
+theorem grossTotal_sub_mapParty_eq_newlyInternalized
+    {ι Party Node Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Node]
+    (e : Env ℤ Obs Ext Lvl) (f : Party → Node)
+    (S : ClaimSet ι Party ℤ Obs Ext Lvl Currency) :
+    grossTotal e S - grossTotal e (S.mapParty f) = newlyInternalized e f S := by
+  have hidx : (S.mapParty f).index = S.index := rfl
+  unfold grossTotal newlyInternalized
+  rw [hidx, ← Finset.sum_sub_distrib]
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  have ho : ((S.mapParty f).assign i).obligor = f (S.assign i).obligor := rfl
+  have hh : ((S.mapParty f).assign i).holder = f (S.assign i).holder := rfl
+  have ha : ((S.mapParty f).assign i).amount = (S.assign i).amount := rfl
+  rw [ho, hh, ha]
+  by_cases h : (S.assign i).obligor = (S.assign i).holder
+  · rw [if_pos h, if_pos (congrArg f h), if_neg (fun hc => hc.1 h), sub_zero]
+  · by_cases hf : f (S.assign i).obligor = f (S.assign i).holder
+    · rw [if_neg h, if_pos hf, if_pos ⟨h, hf⟩, sub_zero]
+    · rw [if_neg h, if_neg hf, if_neg (fun hc => hf hc.2), sub_self]
+
 end CrisisFramework.Accounting

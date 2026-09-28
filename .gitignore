@@ -6,6 +6,10 @@
 IMPLEMENTATION_PLAN_*.md
 ENTRY_CARD_*.json
 
+# 결정 세션이 전달하는 별지 (지시서가 지목하는 재료)
+CLAUDE_ADDENDUM.md
+*-declarations*.md
+
 # 파이썬 바이트코드 (검증기 실행의 산출물)
 __pycache__/
 *.pyc
