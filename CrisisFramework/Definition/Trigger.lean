@@ -105,25 +105,25 @@ inductive Trigger (Num Obs Ext Lvl : Type) where
   | or : Trigger Num Obs Ext Lvl → Trigger Num Obs Ext Lvl → Trigger Num Obs Ext Lvl
 
 /--
-평가 환경.
+수 체계와 명목값 순서의 해석.
 
-**대응 비형식 개념:** 문법을 실제 수치에 앉히는 자리. 수 체계의 연산과 신호의 현재 값을
-함께 받는다.
+**대응 비형식 개념:** 계약 조항을 읽을 때 쓰는 산술과 비교의 뜻. 곱한다는 것이 무엇이고
+이하라는 것이 무엇인가.
 
-**이 정의가 배제하는 사례:**
-회계층이 `ℤ` 를 쓰기로 한 것(L-15)을 정의층이 미리 아는 구성. 이 구조는 곱셈과 비교를
-필드로 받으므로 어떤 수 체계가 들어올지 정의층이 알지 못한다. 그래서 수 체계에서 오는
-성질과 개념에서 오는 성질이 층으로 갈린다.
+**이 정의가 배제하는 사례:** 없다. 오히려 이 정의는 다음을 배제하기 위해 갈라져 나왔다.
+시점이 바뀌면 곱셈도 바뀔 수 있다고 타입이 주장하는 것. `Env` 를 통째로 시점 족으로 두면
+그 주장이 서며, 재지 않은 것을 적지 않는다는 이 프로젝트의 태도와 어긋난다.
 
 **기각한 대체 정의:**
-타입클래스로 연산을 요구하는 안. 인스턴스가 사실상 `ℤ` 하나여서 재사용 이점이 발휘되지
-않고, 인스턴스가 공리를 끌어오는 것은 그것을 쓰는 증명이 설 때이므로 정의를 세우는 시점에는
-잴 수 없다. `Aggregation.lean` 에서 `mul_eq_zero` 가 요구한 `NoZeroDivisors ℤ` 가 기준선을
-오염시킨 것이 그 실측이다. 되돌리는 비용도 갈린다. 나중에 타입클래스를 얹는 것은 되지만
-반대는 이미 쓴 증명을 버려야 한다.
+`Env` 를 쪼개지 않고 `ℕ → Env` 로 두면서 연산의 시점 무관성을 정리의 가정으로 다는 안.
+T-4 를 충족하고 실제로 막히기는 하나, 그 가정을 쓸 때마다 적어야 하고 한 번 잊으면 조용히
+틀린 정리가 선다. A-1 이 `axiom` 을 막고 C-10 이 `Prop` 대신 `Bool` 을 고른 것이 전부 구조가
+막게 하는 수법이므로 여기서만 사람의 주의에 맡기지 않는다.
+
+**연산을 타입클래스가 아니라 필드로 받는 것은 `CF-605` 를 따른다.**
 -/
--- DD:CF-605
-structure Env (Num Obs Ext Lvl : Type) where
+-- DD:CF-618
+structure Ops (Num Lvl : Type) where
   /-- 수 체계의 곱셈. -/
   mul : Num → Num → Num
   /-- 수 체계의 덧셈. -/
@@ -132,26 +132,102 @@ structure Env (Num Obs Ext Lvl : Type) where
   le : Num → Num → Bool
   /-- 미만 비교. -/
   lt : Num → Num → Bool
-  /-- 검증 가능 신호의 현재 값. -/
-  obs : Obs → Num
-  /-- 외생 확인 신호의 현재 명목값. -/
-  extLvl : Ext → Lvl
   /-- 명목값 사이의 순서. -/
   lvlAtLeast : Lvl → Lvl → Bool
   /-- 명목값 사이의 같음. -/
   lvlEq : Lvl → Lvl → Bool
 
-/-- witness (A-3). 모든 자리가 `Unit` 이고 모든 판정이 참인 환경. -/
+/-- witness (A-3). 모든 자리가 `Unit` 이고 모든 판정이 참인 해석. -/
 -- DD:CF-31
-def Env.trivial : Env Unit Unit Unit Unit where
+def Ops.trivial : Ops Unit Unit where
   mul := fun _ _ => ()
   add := fun _ _ => ()
   le := fun _ _ => true
   lt := fun _ _ => true
-  obs := fun _ => ()
-  extLvl := fun _ => ()
   lvlAtLeast := fun _ _ => true
   lvlEq := fun _ _ => true
+
+/--
+한 시점의 신호 판독.
+
+**대응 비형식 개념:** 그 시점에 조항이 읽어 들이는 값. 감사된 회계수치와 외생 확인 신호의
+명목값이다.
+
+**이 정의가 배제하는 사례:**
+2007년 8월 BNP Paribas 가 세 펀드의 환매를 중단하면서 일부 자산의 가치를 신뢰성 있게 평가할
+수 없다고 밝힌 경우. 판독이 전 함수이므로 「값이 없다」가 표현되지 않고, 신호가 정의되지
+않는 것과 어떤 값을 갖는 것이 이 구조에서 구별되지 않는다.
+
+**기각한 대체 정의:**
+판독을 `Obs → Option Num` 으로 두어 값 없음을 담는 안. `evalTerm` 이 항마다 없음을 전파해야
+하고 그 전파 규칙이 계약 문서에 없으므로, 제도가 갖지 않는 표현력을 문법이 갖게 된다(C-10).
+값 없음은 조항의 성질이 아니라 관측의 결손이므로 관측층이 소스 없음으로 등재하는 것이 거처다
+(L-14).
+-/
+-- DD:CF-618
+structure Reading (Num Obs Ext Lvl : Type) where
+  /-- 검증 가능 신호의 그 시점 값. -/
+  obs : Obs → Num
+  /-- 외생 확인 신호의 그 시점 명목값. -/
+  extLvl : Ext → Lvl
+
+/-- witness (A-3). -/
+-- DD:CF-31
+def Reading.trivial : Reading Unit Unit Unit Unit where
+  obs := fun _ => ()
+  extLvl := fun _ => ()
+
+/--
+시점 인덱스를 갖는 판독 족 (L-13).
+
+**대응 비형식 개념:** 시간에 따라 변하는 신호의 값. 조항이 그대로여도 이것이 바뀌면 발동
+여부와 금액이 바뀐다.
+
+**이 정의가 배제하는 사례:**
+변동금리 대출의 금리가 바뀌는 것과 신용장의 조건변경이 수락되는 것이 이 구조에서 같은 종류로
+보이지 않아야 하는데, 이 족만으로는 뒤를 담지 못한다. UCP 600 제10조 (c)는 변경 내용에
+부합하는 제시가 있으면 수락으로 간주하고 그때부터 신용장이 변경된 것으로 보므로, 판독의 값이
+조항의 족을 바꾼다. 이 족과 `TriggerFamily` 가 서로 독립이라 그 의존이 표현되지 않는다.
+
+**기각한 대체 정의:**
+판독과 조항을 한 족으로 묶어 `ℕ → (Reading × Trigger)` 로 두는 안. 묶으면 둘이 같은 이유로
+바뀌는 것처럼 읽히는데, 변동금리는 조항이 그대로이고 판독만 바뀌므로 사태와 어긋난다.
+-/
+-- DD:CF-618
+abbrev ReadingFamily (Num Obs Ext Lvl : Type) := ℕ → Reading Num Obs Ext Lvl
+
+/-- witness (A-3). 모든 시점에 같은 판독을 주는 상수 족. -/
+-- DD:CF-31
+def ReadingFamily.constant {Num Obs Ext Lvl : Type} (r : Reading Num Obs Ext Lvl) :
+    ReadingFamily Num Obs Ext Lvl := fun _ => r
+
+/--
+조항을 평가하는 환경.
+
+**대응 비형식 개념:** 조항을 읽는 데 필요한 것 전부. 산술과 비교의 뜻과, 그 시점의 신호 값이다.
+
+**이 정의가 배제하는 사례:**
+같은 시점에 두 당사자가 서로 다른 값을 읽는 경우. 개설은행과 수익자가 같은 서류를 놓고 일치
+여부를 달리 판단하는 것이 UCP 600 제16조의 분쟁 구조인데, 이 구조는 환경이 하나이므로 판독이
+당사자에 상대적인 것을 담지 못한다. `CF-213` 이 같은 결손을 검증 가능성의 관계 상대성으로
+들고 있다.
+
+**기각한 대체 정의:**
+분할 전의 여덟 필드 구조. 수 체계의 해석과 그 시점의 판독이라는 두 개념에 대응하므로 D-4 가
+분할을 요구하며, 분할하지 않으면 시점을 붙일 자리가 하나로 좁혀지지 않는다.
+-/
+-- DD:CF-618
+structure Env (Num Obs Ext Lvl : Type) where
+  /-- 수 체계와 명목값 순서의 해석. 시점이 붙지 않는다. -/
+  ops : Ops Num Lvl
+  /-- 그 시점의 신호 판독. -/
+  reading : Reading Num Obs Ext Lvl
+
+/-- witness (A-3). -/
+-- DD:CF-31
+def Env.trivial : Env Unit Unit Unit Unit where
+  ops := Ops.trivial
+  reading := Reading.trivial
 
 /--
 항의 평가.
@@ -170,9 +246,9 @@ def Env.trivial : Env Unit Unit Unit Unit where
 -- DD:CF-42
 def evalTerm {Num Obs Ext Lvl : Type} (e : Env Num Obs Ext Lvl) : Term Num Obs → Num
   | .const n => n
-  | .signal o => e.obs o
-  | .mul a b => e.mul (evalTerm e a) (evalTerm e b)
-  | .add a b => e.add (evalTerm e a) (evalTerm e b)
+  | .signal o => e.reading.obs o
+  | .mul a b => e.ops.mul (evalTerm e a) (evalTerm e b)
+  | .add a b => e.ops.add (evalTerm e a) (evalTerm e b)
 
 /--
 발동 여부.
@@ -191,10 +267,10 @@ SIV 와 도관에 대한 암묵적 유동성 풋의 이행 여부. 조건이 문
 -/
 -- DD:CF-42
 def fires {Num Obs Ext Lvl : Type} (e : Env Num Obs Ext Lvl) : Trigger Num Obs Ext Lvl → Bool
-  | .le a b => e.le (evalTerm e a) (evalTerm e b)
-  | .lt a b => e.lt (evalTerm e a) (evalTerm e b)
-  | .check (.atLeast x l) => e.lvlAtLeast (e.extLvl x) l
-  | .check (.eq x l) => e.lvlEq (e.extLvl x) l
+  | .le a b => e.ops.le (evalTerm e a) (evalTerm e b)
+  | .lt a b => e.ops.lt (evalTerm e a) (evalTerm e b)
+  | .check (.atLeast x l) => e.ops.lvlAtLeast (e.reading.extLvl x) l
+  | .check (.eq x l) => e.ops.lvlEq (e.reading.extLvl x) l
   | .and p q => fires e p && fires e q
   | .or p q => fires e p || fires e q
 
