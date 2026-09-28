@@ -145,6 +145,11 @@ CrisisFramework/
   Observation/   값 없음. 측정 사상의 명세만. 수 없음
 ```
 
+**같은 이름의 파일이 두 층에 설 수 있다.** `Definition/Claim.lean` 이 청구권 타입을 세우고
+`Accounting/Claim.lean` 이 그 위의 집계 항등식을 든다. 타입은 수 체계를 매개변수로 받아 정의층에
+서고, 항등식은 `Finset` 합에 구체 `ℤ` 가 필요해 회계층에 선다. 파일 이름이 같다고 같은 층이
+아니며, 층을 정하는 것은 디렉터리다.
+
 **import 방향은 단방향이다.**
 
 ```
@@ -182,6 +187,19 @@ Observation → Dynamics → Accounting → Definition → Glossary
 관측층의 선언은 시점과 금액과 영역 타입을 전부 매개변수로 받고 수 타입을 언급하지 않는다.
 금액의 수 체계는 회계층이 정한다.
 `← L-4, L-9, L-10, L-11, L-12, L-13, L-14, L-15`
+
+
+### 2-1. 시점 족의 선언 형
+
+투영이 쓰이는 족은 `abbrev` 로 두고 투영이 쓰이지 않는 족은 `def` 로 남긴다. `def` 로 둔 함수
+타입에 구조체 투영을 바로 쓰면 정의가 접혀 있어 필드를 찾지 못하기 때문이다.
+
+| 족 | 형 | 까닭 |
+|---|---|---|
+| `ClaimFamily` · `ReadingFamily` | `abbrev` | `(F t).index` 같은 접근이 쓰인다 |
+| `NodeFamily` · `TriggerFamily` | `def` | 투영을 쓰는 자리가 없다 |
+
+**기존 둘을 고치지 않는다.** 걸리지 않는 자리를 이 페이즈가 이유 없이 건드리지 않는다.
 
 ---
 
@@ -458,9 +476,9 @@ lake env lean Scratch/Foo.lean
 
 | 레지스터 | entry |
 |---|---|
-| decisions | 557 |
-| deferred | 34 |
-| rejected | 0 |
+| decisions | 571 |
+| deferred | 41 |
+| rejected | 4 |
 | retirements | 26 |
 
 `← R-6, §5.6`
@@ -520,7 +538,7 @@ entry 를 가리키므로 그 둘이 먼저 서야 한다.
 | 1 | `docs/decisions/decisions.json` | `new.decisions` |
 | 2 | `docs/decisions/deferred.json` | `new.deferred` |
 | 3 | `docs/decisions/retirements.json` | `new.retirements` |
-| 4 | `docs/decisions/rejected.json` | (빈 레지스터) |
+| 4 | `docs/decisions/rejected.json` | `new.rejected` |
 
 **병합 뒤에 등가 검증을 한다.** 네 파일에서 읽은 entry 가 카드 파일의 entry 와 **바이트로 같은지**
 본다. 차분으로 갈음하지 않는다.
