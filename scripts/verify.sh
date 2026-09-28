@@ -78,7 +78,16 @@ for t in "${TARGETS[@]}"; do
   base=$(basename "$t")
   abs="$ROOT/$t"
   while IFS= read -r other; do
-    [ "$(readlink -f "$other")" = "$(readlink -f "$abs")" ] && continue
+    other_abs=$(readlink -f "$other")
+    [ "$other_abs" = "$(readlink -f "$abs")" ] && continue
+    # 다른 빌드 타깃은 사본이 아니다. `lakefile.toml` 의 glob 이 둘을 함께 세우고
+    # `lake` 가 경로로 구별하므로 검증에서 빠지는 파일이 아니다. 이 검사가 잡으려는
+    # 것은 빌드 타깃 **밖**의 낡은 초안이며 CF-83 의 사고가 그 형이었다.
+    is_target=0
+    for u in "${TARGETS[@]}"; do
+      [ "$other_abs" = "$(readlink -f "$ROOT/$u")" ] && { is_target=1; break; }
+    done
+    [ "$is_target" -eq 1 ] && continue
     dup=1
     rel=${other#"$SCAN"/}
     if diff -q "$other" "$abs" >/dev/null 2>&1; then
