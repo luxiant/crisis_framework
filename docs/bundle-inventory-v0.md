@@ -46,7 +46,7 @@
 | | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | 형식 모형. Holmström-Tirole 계열 |
 | | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | 위와 동일 모형의 다른 판본으로 추정 |
 
-## O-3 통화 확장 — 달러·국경 간 청구권·CIP (16편)
+## O-3 통화 확장 — 달러·국경 간 청구권·CIP (18편)
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
@@ -66,6 +66,8 @@
 | | International portfolio frictions | Du·Fontana·Jakubik·Koijen·Shin 2023 | 보험사·은행 포트폴리오 |
 | | Second Phase of Global Liquidity (편집본 내 Shin 챕터) | Shin 2013 | 408쪽 편집본. 은행 → 채권 조달 전환 |
 | | Central bank balance sheets and financial stability (편집본 내 Shin 챕터) | Shin | 302쪽 편집본. J-4 관련 |
+| | Breaking free of the triple coincidence in international finance | Avdjiev·McCauley·Shin 2016 (BIS WP 524) | 국제금융 통계의 삼중 일치 해체. J-1 의 근거 원전. `claim-4` 가 S-7 로 지목해 읽었다 (E-18). 원래 뭉치에 없었고 이번 회차에 들어왔다 |
+| | Exchange rates and the working capital channel of trade fluctuations | Bruno·Kim·Shin 2018 (BIS WP 694) | 교역의 운전자본 경로와 표시 통화·자금조달 통화의 분리. `claim-4` 가 S-7 로 지목해 읽었다 (E-19). 원래 뭉치에 없었고 이번 회차에 들어왔다 |
 
 ---
 
@@ -113,12 +115,15 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 |---|---|
 | O-1 | 20 |
 | O-2 | 11 |
-| O-3 | 16 |
+| O-3 | 18 |
 | Tier B | 24 |
 | PH-5 보관 | 2 |
 | Tier C 제외 | 11 |
 | 중복 | 2 |
 | 뭉치 밖 | 3 |
-| **합계** | **89** (+ 중복 2 + 뭉치밖 포함 시 93) |
+| **합계** | **91** (+ 중복 2 + 뭉치밖 포함 시 93) |
 
 필독(★) 13편. O-1 5 / O-2 4 / O-3 4.
+
+**O-3 의 둘은 `macro_models.zip` 에서 오지 않았다.** `claim-4` 가 BIS WP 524 와 694 를 지목 참조로
+읽으면서 들어왔으므로 zip 의 93 편은 그대로이고 배정 합계만 둘이 는다.

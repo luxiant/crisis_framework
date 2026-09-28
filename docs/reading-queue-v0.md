@@ -43,6 +43,13 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | Aramonte · Schrimpf · Shin (2023) §2 (E-04, 추출 완료) | 2020년 3월 국채시장. 신용위험 없는 자산에서 발원한 위기 |
 | Pozsar · Adrian · Ashcraft · Boesky (2010), FRBNY SR 458 부록 (E-06, 추출 완료 · §10 덧붙임) | 계약상 크레딧 라인을 통한 유동성 풋. 담보가치 하락에서 ABCP 롤 실패와 헤어컷 상승을 거쳐 풋이 발동한 연쇄. C-10 의 검증 가능 신호 위 발동조건의 정본 사례 |
 | Claessens · Pozsar · Ratnovski · Singh (2012), *Shadow Banking: Economics and Policy* (IMF SDN/12/12, 추출 기록 없음 · S-7 로 사례만 인용) | 암묵적 유동성 풋. 시장 조달이 마르자 은행이 기구를 대차대조표로 받거나 무너뜨리고 풋을 이행하지 않은 사례. 위 행과 짝을 이루어 신호 분할의 V-4 사례가 된다 |
+| ICC, *UCP 600* (뭉치 밖, 추출 기록 E-21) | 화환신용장의 조문. 제7조 (b)의 개설 시점과 제6조 (d)의 유효기일 명시와 제30조의 허용 편차가 청구권 타입의 시점 축과 금액 항의 정본 사례다. 제36조의 불가항력이 `Claim.wellFormed` 의 배제 사례다 |
+| Flood · Goodenough, *Contract as Automaton* (뭉치 밖, 추출 기록 E-22) | 계약을 결정적 유한 오토마톤으로 옮기는 설계. 청구권 타입이 기각한 대체 정의의 원전이며 D-3 의 역사 사례가 아니라 D-2 3항의 공급원이다 |
+| Peyton Jones · Eber · Seward, *Composing Contracts* (뭉치 밖, 추출 기록 E-23) | 지급을 축으로 삼고 조건을 부속으로 두는 조합자 설계. 위와 같이 D-2 3항의 공급원이고 `Obs` 를 계약과 다른 타입으로 두는 선택의 선례다 |
+
+**마지막 셋은 추출 기록을 가진다.** 이 절의 머리가 「추출 기록을 만들지 않고 사례 단위로 인용한다」고
+적는데 그 셋은 `claim-4` 가 S-7 로 지목해 읽으면서 E-21 과 E-22 와 E-23 을 세웠다. 사례를 여기서
+조달하는 자리라는 지위는 같으므로 이 절에 둔다.
 
 ---
 
@@ -75,7 +82,7 @@ O-2·O-3 종료 후 미해결 구멍이 남아 있으면 이 순서로 재개한
 | PH-3 (동학층) | Morris·Shin 전략적 보완성 8편 — 신념·조정 primitive. 대차대조표 primitive와 다른 계통이므로 층 진입 시 별도 판정 필요 |
 | PH-4 (전파) | di Iasio·Pozsar 2편(형식 모형), Cifuentes·Ferrucci·Shin *Liquidity Risk and Contagion* |
 | PH-5 (예측) | Adrian·Boyarchenko·Giannone *Vulnerable Growth*, Adrian 외 *Term Structure of Growth-at-Risk* |
-| 노드 유형 확장 | Kim·Shin *Theory of Supply Chains*, Banerjee·Shin·Vidal Pastor *Elasticity of Money in Production Networks* — 비금융기업 대차대조표 |
+| 노드 유형 확장 | Banerjee·Shin·Vidal Pastor *Elasticity of Money in Production Networks*. 비금융기업 대차대조표를 든다. **Kim·Shin *Theory of Supply Chains* 는 이 배정에서 빠졌다.** `claim-4` 가 E-19 와 짝으로 당겨 읽었고 그 추출 기록이 E-20 이다 |
 | J-3 관측 과제 | BIS 2025 Triennial 계열 3편 (뭉치 밖, B-1 기록 대상) — FX 스왑 총액 복원 데이터 |
 | 제약의 규제적 원천 | 규제·정책 9편. B-5에 따라 처방은 비추출, 제약의 근거만 확인 |
 

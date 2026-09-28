@@ -188,7 +188,6 @@ Observation → Dynamics → Accounting → Definition → Glossary
 금액의 수 체계는 회계층이 정한다.
 `← L-4, L-9, L-10, L-11, L-12, L-13, L-14, L-15`
 
-
 ### 2-1. 시점 족의 선언 형
 
 투영이 쓰이는 족은 `abbrev` 로 두고 투영이 쓰이지 않는 족은 `def` 로 남긴다. `def` 로 둔 함수
