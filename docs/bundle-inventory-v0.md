@@ -83,28 +83,28 @@
 
 ## 교역 금융과 결제 방식 (11편 · zip 밖 2편)
 
-`claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였다. 추출 기록의 번호는 기록이 선 뒤에 적는다.
+`claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였다. 실무 안내서 하나를 빼고 모두 추출 기록을 가진다.
 
 | 파일 | 저자·연도 | 비고 |
 |---|---|---|
-| Trade finance: developments and issues | CGFS Papers No 50 (2014) | 은행 개입 결제와 기업 간 신용의 분류(부록 2), 교역금융 자료의 원천(§3, 부록 3·4), 리먼 이후 신용장의 감소 |
-| Poultry in Motion: A Study of International Trade Finance Practices | Antràs·Foley 2015 (JPE) | 결제 조건 넷과 섞인 조건의 분류 규칙, 2008-09 위기의 방식별 몫과 그 아래의 상쇄 |
-| International Trade, Risk and the Role of Banks | Niepmann·Schmidt-Eisenlohr 2014 (워킹페이퍼 판) | 결제 계약 넷의 정의, SWIFT MT700 · MT400 과 FFIEC 009 의 관측 범위 |
-| No Guarantees, No Trade: How Banks Affect Export Patterns | Niepmann·Schmidt-Eisenlohr 2017 (JIE, 게재 확정 원고) | 신용장 공급 충격이 수출을 줄이며 위기에 커진다 |
-| Towards a Theory of Trade Finance | Schmidt-Eisenlohr 2012 (워킹페이퍼 판) | 수출자 금융 · 수입자 금융 · 은행 금융의 셋으로 나누는 분류 |
-| Payment Choice in International Trade | Hoefele·Schmidt-Eisenlohr·Yu 2013 (워킹페이퍼 판) | 세계은행 기업조사의 지급 시점 셋(인도 전 · 인도 시 · 인도 후) |
-| Trade Credit and Markups | Garcia-Marin·Justel·Schmidt-Eisenlohr 2019 (CESifo WP 7600) | 칠레 세관 자료의 거래별 결제 방식 |
-| Exports and Financial Shocks | Amiti·Weinstein 2011 (QJE) | 신용장 거래를 청구권의 사슬로 서술한다. 결제 위에 금융이 얹히는 구조 |
-| The Financial Channel of the Exchange Rate and Global Trade | Ma·Schmidt-Eisenlohr 2023 | 결제 정보를 가진 세관 자료의 나라(터키 · 칠레 · 콜롬비아). 달러의 금융 경로는 `claim-6` 쪽 재료다 |
-| UCP600: An Exercise in International Private Sector Self Regulation | Byrne 2007 (International Commerce & Law Review 36) | OCR 층을 얹은 판이다. 개설의뢰인의 정의, 서류 아닌 조건과 보증채무, 사기 예외 |
-| Exporter Guide to Documentary Credits under UCP 600 | Collyer Consulting 2009 | 실무 안내이며 새 구조가 없다 |
+| Trade finance: developments and issues | CGFS Papers No 50 (2014) | E-24. 은행 개입 결제와 기업 간 신용의 분류(부록 2), 교역금융 자료의 원천(§3, 부록 3·4), 리먼 이후 신용장의 감소 |
+| Poultry in Motion: A Study of International Trade Finance Practices | Antràs·Foley 2015 (JPE) | E-25. 결제 조건 넷과 섞인 조건의 분류 규칙, 2008-09 위기의 방식별 몫과 그 아래의 상쇄 |
+| International Trade, Risk and the Role of Banks | Niepmann·Schmidt-Eisenlohr 2014 (워킹페이퍼 판) | E-26. 결제 계약 넷의 정의, SWIFT MT700 · MT400 과 FFIEC 009 의 관측 범위 |
+| No Guarantees, No Trade: How Banks Affect Export Patterns | Niepmann·Schmidt-Eisenlohr 2017 (JIE, 게재 확정 원고) | E-27. 신용장 공급 충격이 수출을 줄이며 위기에 커진다 |
+| Towards a Theory of Trade Finance | Schmidt-Eisenlohr 2012 (워킹페이퍼 판) | E-28. 수출자 금융 · 수입자 금융 · 은행 금융의 셋으로 나누는 분류 |
+| Payment Choice in International Trade | Hoefele·Schmidt-Eisenlohr·Yu 2013 (워킹페이퍼 판) | E-29. 세계은행 기업조사의 지급 시점 셋(인도 전 · 인도 시 · 인도 후) |
+| Trade Credit and Markups | Garcia-Marin·Justel·Schmidt-Eisenlohr 2019 (CESifo WP 7600) | E-30. 칠레 세관 자료의 거래별 결제 방식 |
+| Exports and Financial Shocks | Amiti·Weinstein 2011 (QJE) | E-32. 신용장 거래를 청구권의 사슬로 서술한다. 결제 위에 금융이 얹히는 구조 |
+| The Financial Channel of the Exchange Rate and Global Trade | Ma·Schmidt-Eisenlohr 2023 | E-31(부분 추출). 결제 정보를 가진 세관 자료의 나라(터키 · 칠레 · 콜롬비아). 달러의 금융 경로는 `claim-6` 쪽 재료다 |
+| UCP600: An Exercise in International Private Sector Self Regulation | Byrne 2007 (International Commerce & Law Review 36) | E-34. OCR 층을 얹은 판이다. 개설의뢰인의 정의, 서류 아닌 조건과 보증채무, 사기 예외 |
+| Exporter Guide to Documentary Credits under UCP 600 | Collyer Consulting 2009 | 실무 안내이며 새 구조가 없어 추출 기록을 세우지 않았다 |
 
 **zip 밖 구성원.**
 
 | 문헌 | 발행 | 열람처 | 비고 |
 |---|---|---|---|
-| UCP 600 신용장통일규칙 | ICC 간행물 제600호 (2007 시행) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0038`) | E-21 은 이 문서를 뭉치 밖으로 기록했다. 기록은 고치지 않는다 |
-| URC 522 추심에 관한 통일규칙 | ICC 간행물 제522호 (1995 개정) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0017`) | 인수인도와 지급인도(제7조), 은행이 지급을 책임지지 않는다는 조항들(제11조~제13조) |
+| UCP 600 신용장통일규칙 | ICC 간행물 제600호 (2007 시행) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0038`) | E-21. 그 기록은 이 문서를 뭉치 밖으로 적었고, `claim-5` 가 기록 말미에 덧붙였다 |
+| URC 522 추심에 관한 통일규칙 | ICC 간행물 제522호 (1995 개정) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0017`) | E-33. 인수인도와 지급인도(제7조), 은행의 면책(제9조~제15조) |
 
 ---
 
@@ -118,14 +118,14 @@
 |---|---|---|
 | Composing Contracts: An Adventure in Financial Engineering | Peyton Jones·Eber·Seward 2000 (ICFP) | E-23. 지급을 축으로 삼는 조합자 |
 | Contract as Automaton | Flood·Goodenough 2022 (Artificial Intelligence and Law) | E-22. 계약을 결정적 유한 오토마톤으로 옮긴다. zip 의 판은 학술지 판이고, 원장의 기각 항목은 2015년 OFR 워킹페이퍼 판을 든다 |
-| Smart Derivatives Contracts: the ISDA Master Agreement and the Automation of Payments and Deliveries | Clack·McGonagle 2019 (arXiv 1904.01461) | 사건이 일어나는 층위 넷과 관측의 어려움, 선행조건 제2조 (a)(iii) |
+| Smart Derivatives Contracts: the ISDA Master Agreement and the Automation of Payments and Deliveries | Clack·McGonagle 2019 (arXiv 1904.01461) | E-35. 사건이 일어나는 층위 넷과 관측의 어려움, 선행조건 제2조 (a)(iii) |
 | Design Discussion on the ISDA Common Domain Model | Clack 2017 (2018 개정, arXiv 1711.10964) | 사건 · 상태 · 전이. 사건이 쌍방 이전만 지정한다 |
 | Smart Contract Templates: Foundations, Design Landscape and Research Directions | Clack·Bakshi·Braine 2016 | 운영적 측면과 비운영적 측면의 구분, 매개변수로 법률 문면과 코드를 잇는다 |
 | Smart Contract Templates: Essential Requirements and Design Options | Clack·Bakshi·Braine 2016 (arXiv 1612.04496) | 계약 템플릿의 형식 요건 |
 | Smart Contract Templates: Legal Semantics and Code Validation | Clack 2017 무렵 | 법률 문면의 의미와 코드의 검증 |
 | Smart Confirmation Contracts: An Architecture for ISDA Smart Contracts | Fierro 2023 (UCL 석사 논문. Clack · McGonagle 지도) | ISDA 확인서의 모듈 설계 |
 | Simulating an Object-Oriented Financial System in a Functional Language | Braine·Haviland·Smith-Jaynes·Vautier·Clack (연도 미상) | 함수형 언어로 금융 시스템을 흉내 낸 사례 |
-| Smart Financial Contracts Revisited (파일명 `Smart Contracts, Distributed Ledgers, and the Need for an Algorithmic Financial Contract Standard.pdf`) | Brammertz 2018 무렵 (토론 원고) | Szabo 의 관측 가능성 · 검증 가능성 · 비밀성 · 집행 가능성 |
+| Smart Financial Contracts Revisited (파일명 `Smart Contracts, Distributed Ledgers, and the Need for an Algorithmic Financial Contract Standard.pdf`) | Brammertz 2018 무렵 (토론 원고) | E-36. Szabo 의 관측 가능성 · 검증 가능성 · 비밀성 · 집행 가능성 |
 | From Digital Currencies to Digital Finance: the Case for a Smart Financial Contract Standard | Brammertz·Mendelowitz 2018 (Journal of Risk Finance) | 금융계약을 현금 흐름의 유형으로 표준화한다 |
 | Improving Systemic Risk Monitoring and Financial Market Transparency | Mendelowitz·Brammertz·Khashanah 2013 | ACTUS. 금융계약 대부분이 서른 개 안팎의 현금 흐름 유형으로 표현된다 |
 | Limits and Opportunities of Big Data for Macro-Prudential Modeling of Financial Systemic Risk | Brammertz·Mendelowitz 2014 무렵 | 구조화된 계약 자료의 필요 |

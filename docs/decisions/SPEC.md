@@ -518,7 +518,7 @@ D-2 3항이 docstring에 드는 것과 같은 대상이다. **docstring이 요�
       "status": "open",
       "opened": "2026-09-19",
       "closed": null,
-      "holes": ["CF-120", "CF-121"],
+      "holes": ["CF-<n>", "CF-<m>"],
       "cq": ["CQ-fin-1"]
     }
   ],

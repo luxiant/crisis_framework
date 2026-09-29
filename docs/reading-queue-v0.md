@@ -28,8 +28,9 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | Danielsson · Shin · Zigrand (2012), *Procyclical Leverage and Endogenous Risk* | **H-02** (실제 위험에 측정 대응 없음) | 측정 위험 ↔ 실제 위험의 되먹임을 정면으로 다루는 유일한 편. H-03(부도확률 불변 ≠ VaR/E 불변)도 여기 걸림 |
 | Morris · Shin (2016), *Illiquidity Component of Credit Risk* | **H-22** (해소됨) · 기록 소실 복구 · **소진** | 지급불능 / 유동성 분해. **소진됐다.** 다시 읽어 S-7 에 따라 세운 추출 기록이 `docs/extractions/extraction-17-morris-shin-2016.md` (E-17) 이다 |
 | Danielsson · Shin · Zigrand (2004), *The Impact of Risk Regulation on Price Dynamics* | H-09 (되먹임이 가정에 의존) | 규제 제약 → 가격 동학. 동학층 진입 시 |
-| Clack · McGonagle (2019), *Smart Derivatives Contracts* | **H-66** (관측자 상대성) | 사건이 일어나는 층위 넷과 그 관측의 어려움. `claim-5` 가 해당 절을 읽었고, 관측 명세를 세울 때 전문을 읽는다 |
-| Brammertz (2018 무렵), *Smart Financial Contracts Revisited* | **H-66** · **H-60** | Szabo 의 관측 가능성 · 검증 가능성 · 비밀성의 구분. `claim-5` 가 해당 절을 읽었다 |
+| Clack · McGonagle (2019), *Smart Derivatives Contracts* | **H-66** (관측자 상대성) · **소진** | 사건이 일어나는 층위 넷과 그 관측의 어려움. `claim-5` 가 읽고 E-35 를 세웠다 |
+| Brammertz (2018 무렵), *Smart Financial Contracts Revisited* | **H-66** · **소진** | Szabo 의 관측 가능성 · 검증 가능성 · 비밀성의 구분. `claim-5` 가 읽고 E-36 을 세웠다 |
+| Byrne (2007), *UCP600: An Exercise in International Private Sector Self Regulation* | **H-60** (검증 가능성의 상대성) · **소진** | 사기 예외와 선의의 판정이 지역법에 있다. `claim-5` 가 읽고 E-34 를 세웠다 |
 
 ---
 
@@ -49,6 +50,10 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | ICC, *UCP 600* (뭉치 · zip 밖 구성원, 추출 기록 E-21) | 화환신용장의 조문. 제7조 (b)의 개설 시점과 제6조 (d)의 유효기일 명시와 제30조의 허용 편차가 청구권 타입의 시점 축과 금액 항의 정본 사례다. 제36조의 불가항력이 `Claim.wellFormed` 의 배제 사례다 |
 | Flood · Goodenough, *Contract as Automaton* (뭉치 · 계약 표현, 추출 기록 E-22) | 계약을 결정적 유한 오토마톤으로 옮기는 설계. 청구권 타입이 기각한 대체 정의의 원전이며 D-3 의 역사 사례가 아니라 D-2 3항의 공급원이다 |
 | Peyton Jones · Eber · Seward, *Composing Contracts* (뭉치 · 계약 표현, 추출 기록 E-23) | 지급을 축으로 삼고 조건을 부속으로 두는 조합자 설계. 위와 같이 D-2 3항의 공급원이고 `Obs` 를 계약과 다른 타입으로 두는 선택의 선례다 |
+| CGFS, *Trade Finance: Developments and Issues* (뭉치 · 교역 금융, 추출 기록 E-24) | 업계가 새로 도입한 은행지급확약(BPO). 은행이 서류 없이 자료 대조로 지급을 확약하므로, 결제 방식 열거가 확약의 조건을 가르지 못하는 배제 사례다. 결제 방식이 시점에 따라 새로 생긴 K-8 의 실례이기도 하다 |
+| Antràs · Foley (2015), *Poultry in Motion* (뭉치 · 교역 금융, 추출 기록 E-25) | 2008-09년 위기에 매출이 크게 줄었는데 방식별 몫은 거의 그대로였고, 그 아래에서 이탈과 진입이 상쇄됐다. 몫 판정의 배제 사례다. 선지급 절반과 신용장 절반이 섞인 조건이 선지급으로 분류되는 것은 분류 규칙의 배제 사례다 |
+| Niepmann · Schmidt-Eisenlohr (2014), *International Trade, Risk and the Role of Banks* (뭉치 · 교역 금융, 추출 기록 E-26) | 은행 설문이 추정한 은행 개입 교역의 비중이 SWIFT 로 잰 비중보다 훨씬 컸다. 경로 명세가 칸만 선언하고 값의 편향을 걸러 내지 못하는 배제 사례다 |
+| Byrne (2007), *UCP600: An Exercise in International Private Sector Self Regulation* (뭉치 · 교역 금융, 추출 기록 E-34) | 서류 아닌 조건을 개설은행이 심사하게 바꾼 약정이 보증채무로 취급된 미국 항소법원의 판결. 신용장 칸의 경계가 C-10 의 선과 겹친다는 사례다 |
 
 ---
 
