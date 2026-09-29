@@ -8,7 +8,7 @@
 #                    감사 대상 선언은 매 실행마다 훑어 잡아 임시 프로브 파일로 찍는다
 #   step8-layertype  층별 수 타입 정적 검사 (CLAUDE.md §2 의 층별 금지 표)
 #   step9-propfree   정의층 structure 필드와 inductive 생성자의 Prop 금지
-#   step5-mutation   변이 검사 — 결론이 `= 0`·`≠ 0` 인 진술을 하나씩 뒤집어 반드시 실패함을 확인
+#   step5-mutation   변이 검사 — 최상위 theorem 과 example 의 결론 전체를 ¬ ( ) 로 감싸 반드시 실패함을 확인
 #                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
 #   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 서른)
 #                    아크 종료 검사 셋은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
@@ -101,7 +101,10 @@ done
 
 step step2-build "olean 삭제 후 전량 재빌드"
 rm -rf .lake/build/lib/lean/CrisisFramework .lake/build/lib/lean/CrisisFramework.[oit]*
-if lake build 2>&1 | tee /tmp/verify_build.log | tail -5; then
+# 성공 경로에서는 완료 요약 한 줄만 낸다. 뒤 다섯 줄은 병렬 작업의 완료 순서를 따라 바뀌어
+# OUTPUT_DIGEST 가 리포 상태의 함수가 아니게 된다(CF-674).
+if lake build 2>&1 | tee /tmp/verify_build.log >/dev/null; then
+  grep -m1 'Build completed successfully' /tmp/verify_build.log || true
   if grep -qE 'error|warning' /tmp/verify_build.log; then
     bad "빌드 로그에 error/warning 존재:"; grep -nE 'error|warning' /tmp/verify_build.log
   else
@@ -109,6 +112,7 @@ if lake build 2>&1 | tee /tmp/verify_build.log | tail -5; then
     ok "lake build 전량 통과, error/warning 0 (${jobs:-?} job)"
   fi
 else
+  tail -5 /tmp/verify_build.log
   bad "lake build 실패"
 fi
 
@@ -441,38 +445,143 @@ while IFS=$'\t' read -r kind a b c; do
 done <<< "$pf_out"
 
 step step5-mutation "변이 검사"
-# 대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡으며 계수를 박지 않는다. 목록을 박아 두면
-# 새 진술이 그물 밖에 남는다 (CF-595). 뽑는 패턴은 결론이 `= 0`·`≠ 0` 인 진술이다.
-# 변이 사본은 파일별로 임시 디렉터리에 만들어 원본을 건드리지 않고 돌린 뒤 지운다.
-mut_targets=()
-for t in "${TARGETS[@]}"; do
-  while IFS= read -r ln; do
-    [ -n "$ln" ] && mut_targets+=("$t:$ln")
-  done < <(grep -nE '(≠|=) 0 := by' "$t" | cut -d: -f1)
-done
-if [ "${#mut_targets[@]}" -eq 0 ]; then
-  ok "변이 대상 0 — 결론이 \`= 0\`·\`≠ 0\` 인 진술이 CrisisFramework 아래에 없다"
+# 대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는 최상위 theorem 과 example 이며 계수를 박지 않는다.
+# 목록을 박아 두면 새 진술이 그물 밖에 남는다 (CF-595). 결론의 모양을 가리지 않고 결론 전체를 ¬ ( ) 로
+# 감싼 사본을 만든다 (CF-675). 변이 사본은 파일별로 임시 디렉터리에 만들어 원본을 건드리지 않고 돌린 뒤 지운다.
+mut_dir=$(mktemp -d)
+mut_list="$mut_dir/targets.tsv"
+python3 - "$mut_dir" "${TARGETS[@]}" > "$mut_list" <<'MUTEOF'
+import pathlib, re, sys
+
+tmp, files = pathlib.Path(sys.argv[1]), sys.argv[2:]
+
+OPEN = {'(': ')', '[': ']', '{': '}', '⟨': '⟩', '⦃': '⦄'}
+CLOSE = {v: k for k, v in OPEN.items()}
+DECL = re.compile(r'^(theorem|example)(?=[\s:])', re.M)
+
+
+def mask(src: str) -> str:
+    """주석을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다."""
+    out, i, n, depth = list(src), 0, len(src), 0
+    while i < n:
+        if depth == 0 and src.startswith('--', i):
+            j = src.find('\n', i)
+            j = n if j < 0 else j
+            for k in range(i, j):
+                out[k] = ' '
+            i = j
+            continue
+        if src.startswith('/-', i):
+            depth += 1
+            out[i] = out[i + 1] = ' '
+            i += 2
+            continue
+        if depth > 0 and src.startswith('-/', i):
+            depth -= 1
+            out[i] = out[i + 1] = ' '
+            i += 2
+            continue
+        if depth > 0 and src[i] != '\n':
+            out[i] = ' '
+        i += 1
+    return ''.join(out)
+
+
+def skip_group(m: str, i: int):
+    """여는 괄호 자리에서 짝의 다음 자리를 낸다. 짝이 없으면 None 이다."""
+    stack, n = [OPEN[m[i]]], len(m)
+    i += 1
+    while i < n and stack:
+        c = m[i]
+        if c in OPEN:
+            stack.append(OPEN[c])
+        elif c == stack[-1]:
+            stack.pop()
+        i += 1
+    return None if stack else i
+
+
+def conclusion(m: str, kw: str, i: int):
+    """선언 머리 뒤에서 결론의 (시작, 끝) offset 을 낸다. 못 잡으면 None 이다."""
+    n = len(m)
+    if kw == 'theorem':
+        while i < n and m[i].isspace():
+            i += 1
+        while i < n and not m[i].isspace() and m[i] not in OPEN and m[i] != ':':
+            i += 1
+    # 괄호 묶음을 차례로 건너뛰고 깊이 0 의 ':' 를 결론의 시작으로 잡는다. 결론 안의
+    # `∃ m : T,` 같은 콜론을 시작으로 잡지 않기 위해서다.
+    while i < n:
+        c = m[i]
+        if c.isspace():
+            i += 1
+            continue
+        if c in OPEN:
+            j = skip_group(m, i)
+            if j is None:
+                return None
+            i = j
+            continue
+        if c == ':':
+            if m[i:i + 2] == ':=':
+                return None
+            i += 1
+            break
+        i += 1
+    else:
+        return None
+    start, depth = i, 0
+    while i < n:
+        c = m[i]
+        if c in OPEN:
+            depth += 1
+        elif c in CLOSE:
+            depth -= 1
+        elif depth == 0 and m[i:i + 2] == ':=':
+            return (start, i)
+        i += 1
+    return None
+
+
+rows, serial = [], 0
+for f in files:
+    src = pathlib.Path(f).read_text(encoding='utf-8')
+    m = mask(src)
+    for d in DECL.finditer(m):
+        span = conclusion(m, d.group(1), d.end())
+        if span is None:
+            continue
+        a, b = span
+        serial += 1
+        box = tmp / ('m%03d' % serial)
+        box.mkdir()
+        copy = box / 'Mutant.lean'
+        copy.write_text(src[:a] + '¬ (' + src[a:b] + ')' + src[b:], encoding='utf-8')
+        line = src[:d.start()].count('\n') + 1
+        brief = ' '.join(src[a:b].split())
+        rows.append('%s\t%d\t%s\t%s' % (f, line, copy, brief))
+
+sys.stdout.write(''.join(r + '\n' for r in rows))
+MUTEOF
+mapfile -t mut_rows < "$mut_list"
+if [ "${#mut_rows[@]}" -eq 0 ]; then
+  ok "변이 대상 0 — CrisisFramework 아래에 최상위 theorem 과 example 이 없다"
 else
-  per_file=$(printf '%s\n' "${mut_targets[@]}" | cut -d: -f1 | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
-  ok "변이 대상 ${#mut_targets[@]} ($per_file)"
-  tmp=$(mktemp -d)
-  for tl in "${mut_targets[@]}"; do
-    t=${tl%:*}; ln=${tl##*:}
-    src=$(sed -n "${ln}p" "$t")
-    if printf '%s' "$src" | grep -q '≠ 0 := by'; then
-      mut=$(printf '%s' "$src" | sed 's/≠ 0 := by/= 0 := by/')
+  per_file=$(cut -f1 "$mut_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
+  ok "변이 대상 ${#mut_rows[@]} ($per_file)"
+  for row in "${mut_rows[@]}"; do
+    IFS=$'\t' read -r m_file m_line m_copy m_concl <<< "$row"
+    if lake env lean "$m_copy" >"$mut_dir/out" 2>&1; then
+      bad "$m_file:$m_line 변이가 통과함 — 해당 진술은 공허한 검사다: $m_concl"
+    elif grep -q 'error: unexpected' "$mut_dir/out"; then
+      # 결론을 잘못 잡아 사본이 깨진 것을 거부로 세면 이 검사가 공허해진다.
+      bad "$m_file:$m_line 변이가 구문 오류로 깨졌다 — 결론을 잘못 잡았다: $m_concl"
     else
-      mut=$(printf '%s' "$src" | sed 's/= 0 := by/≠ 0 := by/')
-    fi
-    awk -v n="$ln" -v r="$mut" 'NR==n{print r; next}{print}' "$t" > "$tmp/Mutant.lean"
-    if lake env lean "$tmp/Mutant.lean" >"$tmp/out" 2>&1; then
-      bad "$t:$ln 변이가 통과함 — 해당 진술은 공허한 검사다: ${src## }"
-    else
-      ok "$t:$ln 변이 거부됨 ($(grep -cE 'error' "$tmp/out") error) — 실검사 확인"
+      ok "$m_file:$m_line 변이 거부됨 ($(grep -cE 'error' "$mut_dir/out") error) — 실검사 확인"
     fi
   done
-  rm -rf "$tmp"
 fi
+rm -rf "$mut_dir"
 
 step step6-ledger '`check_wiki.py` 호출'
 if python3 scripts/check_wiki.py; then
