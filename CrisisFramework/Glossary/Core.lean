@@ -41,6 +41,18 @@ inductive Concept where
   | exogenousSignal
   /-- 발동조건. 조건부 청구권이 요구를 발생시키는 조건. -/
   | triggerCondition
+  /-- 결제 방식. 교역 한 건의 대금이 물품에 대해 언제, 누구를 통해 치러지는가. 아래 다섯의 상위 개념이다. -/
+  | tradePaymentMethod
+  /-- 선지급. 수입자가 선적 전에 대금을 치른다. -/
+  | cashInAdvance
+  /-- 신용장. 은행이 일치하는 제시에 대해 결제를 확약한다. -/
+  | letterOfCredit
+  /-- 추심. 은행이 서류를 다루되 지급을 확약하지 않는다. -/
+  | documentaryCollection
+  /-- 후지급. 물품이 먼저 인도되고 대금은 기일에 치러진다. -/
+  | openAccount
+  /-- 그 밖의 결제 조건. 위 넷 가운데 어느 것도 들지 않는다. -/
+  | otherPaymentTerms
   deriving DecidableEq, Repr
 
 /--
@@ -59,6 +71,16 @@ inductive SourceTag where
   | bisLocational
   /-- 자금순환표. -/
   | flowOfFunds
+  /-- 세관 신고. 나라에 따라 거래마다 결제 방식을 든다. -/
+  | customsDeclaration
+  /-- SWIFT 메시지. 신용장 개설(MT700)과 추심 대금 통지(MT400)다. -/
+  | swiftMessage
+  /-- 은행 감독 보고. 미국 FFIEC 009 의 교역금융 청구권이다. -/
+  | bankSupervisoryReport
+  /-- 외환 결제 통계. 수출입 대금을 결제 방식별로 가른다. -/
+  | fxSettlementStatistics
+  /-- 기업조사. 매출의 지급 시점을 묻는다. -/
+  | enterpriseSurvey
   deriving DecidableEq, Repr
 
 /--
@@ -87,7 +109,7 @@ inductive ConceptRel where
 등록된 관계.
 
 **주의:** `partitions` 의 완전성은 V-7에 따라 가정이며 기여 목록에 계상하지 않는다.
-정의만으로 따라 나오는 분할은 예외인데 아래 등록분은 거기에 들지 않는다.
+정의만으로 따라 나오는 분할은 예외이며, 아래 등록분 가운데 결제 방식의 분할 하나만 거기에 든다.
 제약이 부채 측과 자산 측 둘로 나뉜다는 것은 현재까지 확인된 두 종류일 뿐,
 셋째가 없다는 증명이 아니다.
 
@@ -99,6 +121,17 @@ inductive ConceptRel where
 
 **`measuredBy` 를 신호에 붙이지 않는다.** 신호에 측정 소스를 대응시키는 일은 관측 명세를
 세우는 페이즈의 몫이고, 그 자리에서 관측자 상대성의 구멍이 발화하기 때문이다.
+
+**결제 방식 분할은 정의만으로 완전하다.** 그 밖의 결제 조건이 넷 가운데 어느 것도 들지 않는
+조건을 모두 받으므로 여집합의 귀결이다(V-7).
+
+**결제 방식 분할의 V-4 사례.** 2008-09년 위기에 한 미국 수출기업에서 선지급 고객의 매입 감소와
+이탈이 후지급 고객보다 컸고, 신규 고객은 선지급으로 더 많이 들어왔다(Antràs · Foley 2015). 같은
+교역 감소가 결제 방식마다 다르게 나타났다.
+
+**결제 방식에는 `measuredBy` 를 붙인다.** 관측 명세가 공시 경로로 색인되어 관측자 상대성의 걸림이
+풀렸기 때문이다. 방식마다 측정 대응의 집합이 서로 달라 V-5 를 통과한다. 신호에 붙이지 않는다는 앞
+문단은 그대로다.
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -110,6 +143,19 @@ def registry : List ConceptRel :=
   , .measuredBy .creditSupply .flowOfFunds
   , .partitions .signal [.verifiableSignal, .exogenousSignal]
   , .excludes .verifiableSignal .exogenousSignal
+  , .partitions .tradePaymentMethod
+      [.cashInAdvance, .letterOfCredit, .documentaryCollection, .openAccount, .otherPaymentTerms]
+  , .measuredBy .cashInAdvance .customsDeclaration
+  , .measuredBy .cashInAdvance .enterpriseSurvey
+  , .measuredBy .letterOfCredit .customsDeclaration
+  , .measuredBy .letterOfCredit .swiftMessage
+  , .measuredBy .letterOfCredit .bankSupervisoryReport
+  , .measuredBy .letterOfCredit .fxSettlementStatistics
+  , .measuredBy .documentaryCollection .swiftMessage
+  , .measuredBy .documentaryCollection .fxSettlementStatistics
+  , .measuredBy .openAccount .customsDeclaration
+  , .measuredBy .otherPaymentTerms .customsDeclaration
+  , .measuredBy .otherPaymentTerms .fxSettlementStatistics
   ]
 
 end CrisisFramework.Glossary
