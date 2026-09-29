@@ -5,6 +5,7 @@
 # 결정 세션이 전달하는 지시서와 엔트리 카드 (리포 루트에 두되 추적하지 않는다)
 IMPLEMENTATION_PLAN_*.md
 ENTRY_CARD_*.json
+VERIFY_PATCH_*.md
 
 # 결정 세션이 전달하는 별지 (지시서가 지목하는 재료)
 CLAUDE_ADDENDUM.md
