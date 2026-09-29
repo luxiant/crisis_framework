@@ -68,7 +68,9 @@ STEP_CALL = re.compile(r"^\s*step\s+['\"]?([^\s'\"]+)")
 EXTRACTION_NO = re.compile(r"^E-(\d+)$")
 ARTIFACT_PATH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
 # 검사 25 의 유니버스. 최상위 선언만 보며 생성자와 필드는 자기를 담은 선언의 표지를 딛는다.
-TOP_DECL = re.compile(r"^(def|theorem|inductive|structure)\s+([^\s({\[:]+)")
+# abbrev 도 최상위 선언이다. 투영이 쓰이는 족을 abbrev 로 두므로(CF-641) 빼면 표지 누락이 그물 밖에
+# 남는다(CF-669).
+TOP_DECL = re.compile(r"^(def|theorem|inductive|structure|abbrev)\s+([^\s({\[:]+)")
 
 
 class Report:
@@ -412,21 +414,50 @@ def check_09(led: Ledger) -> Report:
 def check_10(led: Ledger) -> Report:
     r = Report("10", "wiki10-ghost-ref", "폐기된 id 를 살아 있는 것처럼 참조하는 자리가 있는가", "fail")
     dead = led.dead
+    early: list[str] = []
+    early_owners: list[str] = []
+
+    def id_no(cf) -> int:
+        """`CF-<n>` 의 번호. 형식이 아니면 -1 이라 가름에 쓰이지 않는다."""
+        m = ID_FORM.match(str(cf or ""))
+        return int(m.group(1)) if m else -1
+
+    def judge(e: dict, ref: str, msg: str) -> None:
+        """원장 안의 지목 하나를 가른다. 폐기 전이면 보고하고, 폐기 뒤면 승인하거나 실패시킨다."""
+        retirer = led.retired_by.get(ref)
+        if retirer is not None and id_no(e.get("id")) < id_no(retirer):
+            early.append(msg)
+            if e.get("id") not in early_owners:
+                early_owners.append(e.get("id"))
+            return
+        if retirer is not None and retirer in (e.get("related") or []):
+            return
+        r.bad(msg)
+
+    # 폐기 전에 쓰인 지목은 그 시점에 산 대상을 가리킨 역사이므로 실패가 아니라 보고다. ID 가 단조
+    # 증가하므로 지목한 항목이 폐기 레코드보다 앞서는지로 가른다. 폐기 뒤에 쓰인 지목만 그 폐기
+    # 레코드를 related 에 들 때 승인한다(SPEC §2.1, CF-661).
     # 원장 안. 폐기 레코드 자신의 target 과 original 은 제외한다(SPEC §2.1).
     for name, e in led.entries:
+        # 그 자신이 폐기된 항목은 보지 않는다. 폐기된 항목의 지목을 고치는 길이 없고, 그 문면도
+        # 폐기 시점의 앎을 담은 역사이기 때문이다.
+        if e.get("id") in dead:
+            continue
         for ref in e.get("related", []) or []:
             if ref in dead:
-                r.bad(f"{e.get('id')}: related 가 폐기된 {ref} 를 든다")
+                judge(e, ref, f"{e.get('id')}: related 가 폐기된 {ref} 를 든다")
         rw = e.get("reopen_when")
         if isinstance(rw, dict) and rw.get("ref") in dead:
-            r.bad(f"{e.get('id')}: reopen_when.ref 가 폐기된 {rw.get('ref')} 를 든다")
+            judge(e, rw.get("ref"),
+                  f"{e.get('id')}: reopen_when.ref 가 폐기된 {rw.get('ref')} 를 든다")
         if name == "retirements":
             continue
         for f in ("statement", "basis", "reason", "candidate", "for"):
             for m in CF_TOKEN.finditer(str(e.get(f) or "")):
                 if m.group(0) in dead:
-                    r.bad(f"{e.get('id')}: {f} 가 폐기된 {m.group(0)} 를 든다")
-    # Lean 의 DD: 표지
+                    judge(e, m.group(0),
+                          f"{e.get('id')}: {f} 가 폐기된 {m.group(0)} 를 든다")
+    # Lean 의 DD: 표지. 이 자리는 고칠 수 있으므로 폐기와 함께 고치며 가름을 받지 않는다.
     for f, ln, ref in led.dd_markers():
         if ref in dead:
             r.bad(f"{f.relative_to(led.root)}:{ln}: DD: 표지가 폐기된 {ref} 를 가리킨다")
@@ -441,6 +472,9 @@ def check_10(led: Ledger) -> Report:
                 if m.group(0) in dead:
                     r.bad(f"{f.relative_to(led.root)}:{i}: 산문이 폐기된 {m.group(0)} 를 든다")
     r.note(f"폐기된 id {len(dead)}건을 유니버스로 훑었다. 유니버스 밖: {list(HISTORY_PATHS)}")
+    r.note(f"폐기 전에 쓰인 지목 {len(early)}건 · 그것을 든 항목 {len(early_owners)}개")
+    for msg in early:
+        r.note(msg)
     return r
 
 
@@ -618,7 +652,7 @@ def check_24(led: Ledger) -> Report:
 
 def check_25(led: Ledger) -> Report:
     r = Report("25", "wiki25-marker-missing",
-               "Lean 의 최상위 def·theorem·inductive·structure 선언마다 DD: 표지가 붙었는가",
+               "Lean 의 최상위 def·theorem·inductive·structure·abbrev 선언마다 DD: 표지가 붙었는가",
                "fail")
     marks = led.dd_markers()
     n_decl = n_mark = missing = 0
