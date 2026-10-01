@@ -81,9 +81,10 @@
 
 ---
 
-## 교역 금융과 결제 방식 (11편 · zip 밖 2편)
+## 교역 금융과 결제 방식 (19편 · 그중 zip 밖 8편)
 
-`claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였다. 실무 안내서 하나를 빼고 모두 추출 기록을 가진다.
+`claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였고, `claim-6` 이 CQ-fin-2 의 교역 금융 통화를
+세우려고 여섯을 더 들였다. 실무 안내서 하나를 빼고 모두 추출 기록을 가진다.
 
 | 파일 | 저자·연도 | 비고 |
 |---|---|---|
@@ -105,6 +106,12 @@
 |---|---|---|---|
 | UCP 600 신용장통일규칙 | ICC 간행물 제600호 (2007 시행) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0038`) | E-21. 그 기록은 이 문서를 뭉치 밖으로 적었고, `claim-5` 가 기록 말미에 덧붙였다 |
 | URC 522 추심에 관한 통일규칙 | ICC 간행물 제522호 (1995 개정) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0017`) | E-33. 인수인도와 지급인도(제7조), 은행의 면책(제9조~제15조) |
+| Understanding Trade Finance: Theory and Evidence from Transaction-level Data | Ahn 2014 (IMF 워킹 원고. 표지에 PRELIMINARY DRAFT) | 사용자가 건넨 PDF | E-37. 결제 방식 셋의 열거, 원자료의 칸과 재분류의 갈림, 매출채권 담보의 자기청산성과 소구권, 외환 규제가 분포를 정한다는 것 |
+| Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy: Evidence from Letter-of-Credit Import Transactions in Colombia | Ahn·Sarmiento 2019 (*Review of International Economics* 27(5)) | 사용자가 건넨 PDF | E-38. **신용장의 비대체성과 대응이 거래 단위로 서는 조건.** 당사자 넷과 청구권의 사슬, 신용등록부의 통화·보증 종류 칸 |
+| Don't throw in the towel, throw in trade credit! | Demir·Javorcik 2018 (*Journal of International Economics* 111) | 사용자가 건넨 PDF | E-39. 터키 세관의 결제 방식 넷, 자료 입도가 거래 단위가 아니라는 것, 고정 수수료가 신용장을 큰 선적으로 쏠리게 한다는 것 |
+| The Dominant Currency Financing Channel of External Adjustment | Casas·Meleshchuk·Timmer 2022 (Federal Reserve IFDP 1343) | 사용자가 건넨 PDF | E-40. **대응이 기업 × 분기에서 멈춘다는 것.** 신용등록부의 외화·자국통화 가름, 헤지 셋, 만기 위치가 충격 종류를 가른다는 것 |
+| Cross-Border Currency Exposures. New evidence based on an enhanced and updated dataset | Bénétrix·Gautam·Juvenal·Schmitz 2019 (IMF WP 19/299) | 사용자가 건넨 PDF | E-41. E-31 이 쓴 대리 변수의 원전. 나라 × 연도 입도, 부문 분해 없음, 실측과 합성이 섞인다는 것. **덩어리 배정은 내용이 아니라 쓰임을 따랐다.** 내용으로는 통화 구성 자료다 |
+| Category 7 — Documentary Credits and Guarantees, Message Reference Guide | SWIFT, Standards MT November 2019 (전 331쪽) | 사용자가 건넨 PDF | E-42. **MT 700 의 32B 가 필수이고 ISO 4217 통화 코드를 강제한다.** 품목(45A)은 선택이고 자유 서술이다. 상업 간행물이므로 문언을 옮기지 않고 필드 번호로 지목한다 |
 
 ---
 
@@ -200,25 +207,25 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 
 ## 집계
 
-**구성원.**
+**구성원.** 무리별로 세며, **zip 밖 구성원도 그 무리의 편수에 든다.**
 
-| 무리 | 편수 |
-|---|---|
-| O-1 | 20 |
-| O-2 | 11 |
-| O-2 보조 | 1 |
-| O-3 | 18 |
-| 교역 금융과 결제 방식 | 11 |
-| 계약 표현 | 14 |
-| 다른 CQ 덩어리의 재료 | 7 |
-| Tier B | 26 |
-| PH-4 보관 | 1 |
-| PH-5 보관 | 2 |
-| Tier C 제외 권고 | 11 |
-| 배제 사례와 관측 과제의 보조 | 3 |
-| zip 안 구성원 소계 | 125 |
-| zip 밖 구성원 | 2 |
-| **구성원 합계** | **127** |
+| 무리 | 편수 | 그중 zip 밖 |
+|---|---|---|
+| O-1 | 20 | — |
+| O-2 | 11 | — |
+| O-2 보조 | 1 | — |
+| O-3 | 18 | — |
+| 교역 금융과 결제 방식 | 19 | 8 |
+| 계약 표현 | 14 | — |
+| 다른 CQ 덩어리의 재료 | 7 | — |
+| Tier B | 26 | — |
+| PH-4 보관 | 1 | — |
+| PH-5 보관 | 2 | — |
+| Tier C 제외 권고 | 11 | — |
+| 배제 사례와 관측 과제의 보조 | 3 | — |
+| **구성원 합계** | **133** | **8** |
+
+zip 안 구성원은 125편이다.
 
 **zip 대조.** `macro_models.zip` 의 파일 128개는 zip 안 구성원 125편과 중복 사본 3개다.
 
@@ -228,3 +235,8 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 파일이 셋 있었으며(Corsetti 외, Cifuentes 외, SR 382 유지본), 규제·정책을 9편으로 적었으나 목록은 10편이었다.
 이 판의 계수는 zip 의 파일 전량을 한 번씩 무리에 배정한 대장에서 뽑았다. 대장은 결정 세션이
 Python 으로 만들었고, 빠진 파일과 두 번 든 파일이 없음을 단언으로 확인했다.
+
+**`claim-6` 이 집계의 축을 갈랐다.** 앞 판은 무리와 소재를 한 표에 섞어 세어서, 덩어리의 편수가
+그 덩어리에 속한 zip 밖 구성원을 빼고 적혔다. 교역 금융 덩어리가 표에서 11편인데 실제로는 13편인
+상태였고, 이번에 여섯이 더 들어오면 그 어긋남이 여덟이 된다. 이 판은 무리별 편수가 소재와 무관하게
+그 무리의 전량을 세게 하고, 소재는 따로 칸을 두어 센다. zip 안 125편과 zip 대조는 바뀌지 않는다.
