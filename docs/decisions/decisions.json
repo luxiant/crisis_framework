@@ -10026,6 +10026,290 @@
    "related": [
     "CF-596"
    ]
+  },
+  {
+   "id": "CF-680",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "변이 검사가 문자열 리터럴을 마스킹하지 않아 리터럴 안의 주석 기호나 괄호가 결론 추출을 어긋나게 할 수 있다.",
+   "basis": "`claim-5` 구간 4 에서 집행이 새 `step5-mutation` 을 구현하며 짚었다. 그 시점의 코드 영역에 문자열 리터럴이 없어 결론을 옳게 잡았으므로 실패로 드러나지 않았다. `BUILD_LOG.md` §78-10 의 1 번이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-681",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "변이 사본의 구문 오류를 `error: unexpected` 한 가지 머리로만 가르므로 다른 머리로 나는 구문 오류가 거부로 세어진다.",
+   "basis": "`claim-5` 구간 4 에서 집행이 짚었다. 거부로 세어지면 그 진술에 대해 변이 검사가 공허해지는데 통과로 보고되므로 밖에서 구별되지 않는다. `BUILD_LOG.md` §78-10 의 2 번이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-680"
+   ]
+  },
+  {
+   "id": "CF-682",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "변이 검사가 결론을 잡지 못한 선언을 알림 없이 건너뛰므로 그 진술이 그물 밖에 남는다.",
+   "basis": "`claim-5` 의 최종 검증에서 결정 세션이 `step5-mutation` 의 코드를 읽다 짚었다. 그 회차에는 여덟이 모두 잡혀 드러나지 않았다. 리포 안에 거처가 없어 아크 blueprint 의 메모가 전사까지의 유일한 기록이었다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-680",
+    "CF-681"
+   ]
+  },
+  {
+   "id": "CF-683",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "검사 10 의 보고 줄과 실패 줄이 같은 모양이라 줄 머리의 `-` 와 `·` 로만 갈린다.",
+   "basis": "`claim-5` 구간 4 에서 집행이 짚었다. 보고를 받는 쪽이 그 둘을 눈으로 가르게 되어 있다. `BUILD_LOG.md` §78-10 의 3 번이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-684",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "검사 16 과 18 이 폐기된 이연 항목도 목록에 싣는다.",
+   "basis": "`claim-5` 의 병합 전 모의 검증에서 드러났고 지시서 0 절이 현행 구현의 동작으로 적었으나 카드에 싣지 못했다. `claim-6` 의 사전 검사에서 검사 18 이 `claim` 아크의 blocking 구멍을 둘로 보고했는데 그 가운데 하나는 앞 페이즈가 이미 폐기한 항목이고, 살아 있는 것은 하나뿐이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-685",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "`by_contra` 가 거치는 `Classical.byContradiction` 과 Mathlib 의 일반 `add_lt_add` 가 끌어오는 `Classical.choice` 는 C-8 의 둘째 종류다.",
+   "basis": "`claim-5` 구간 5 에서 `exists_shareFell_eq_false` 의 첫 증명이 회계층 기준선을 넘었다. 진술을 건드리지 않고 `Bool` 갈래 분해와 `Int.add_lt_add` 로 바꾸자 같은 진술이 `[propext]` 만 남겼다. 둘째 종류가 전면 `simp` 밖에도 있다는 실측이다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-40"
+   ]
+  },
+  {
+   "id": "CF-686",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "증명 안의 주석이 규율 ID 를 들어도 된다.",
+   "basis": "`claim-5` 의 최종 보고 Ⅳ-2 에서 사용자가 승인했다. 근거를 따라가게 하고, 검사 24 가 그 토큰의 실재와 폐기를 이미 보므로 폐기된 ID 가 주석에 남는 경우는 잡힌다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-687",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "기대표는 집행의 몫이 움직일 수 있는 계수를 별지분과 집행 증분으로 가르고 대조는 별지분에만 건다.",
+   "basis": "`claim-5` 의 최종 보고 Ⅳ-1 에서 검사 24 가 기대한 366 대신 367 을 냈고, 차이를 만든 것은 집행이 쓴 증명 주석의 규율 ID 하나였다. 증명과 그 주석이 집행의 몫이므로 그 자리를 함께 세는 계수는 별지만으로 정해지지 않는다. 사용자가 승인했다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-686"
+   ]
+  },
+  {
+   "id": "CF-688",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "보고의 출력 원문은 리포 밖의 증거 파일로 첨부하고 보고는 파일마다 경로와 줄 수와 sha256 을 싣는다.",
+   "basis": "`claim-5` 의 S2 처분에서 정했다. S1 과 S2 보고의 출력 원문이 결정 세션에 닿는 도중 결손을 입었고 커밋 SHA 도 27 자로 잘렸다. 갈음 뒤의 대조를 `OUTPUT_DIGEST` 가 이미 받치고 있어 판정은 서 있었다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-689",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "`claim-5` 에서 집행이 쓴 문면을 승인한다.",
+   "basis": "`import` 줄 셋과 정리의 증명과 그 안의 주석 여섯 줄, `check_wiki.py` 의 검사 10 안에 더한 주석 둘과 보조 함수 둘의 docstring, `verify.sh` 의 `step5-mutation` 안에 더한 Python 블록과 그 주석, 그리고 `BUILD_LOG.md` §78 부터 §81 까지다. 집행이 증명 안의 주석을 넉 줄로 적었으나 파일의 실물은 여섯 줄이며, 이 승인은 실물을 대상으로 한다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-686"
+   ]
+  },
+  {
+   "id": "CF-690",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "CQ-fin-1 이 정의 공백을 벗어났다.",
+   "basis": "`claim-5` 가 결제 방식의 열거와 몫의 판정과 공시 경로의 명세를 세워 ⓐⓑⓒ 를 채웠고, 집행을 확인한 뒤로 미뤄 두었던 처분이다. `04cb714` 의 CI 통과로 확인됐다.",
+   "tier": "finding",
+   "layer": "observation",
+   "cq_disposition": [
+    {
+     "cq": "CQ-fin-1",
+     "kind": "cleared"
+    }
+   ],
+   "related": []
+  },
+  {
+   "id": "CF-691",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "청구권과 교역을 잇는 대응을 청구권 타입 밖의 별도 대상으로 둔다.",
+   "basis": "`claim-6` 의 읽기에서 대응이 다대다임이 실물로 섰다. 한 교역이 청구권 넷을 낳고(개설은행의 확약 · 확인은행의 보증 · 수출자의 운전자금 대출 · 수입자의 약속어음) 한 청구권이 교역 여럿을 금융한다(회전 신용장 · 운전자금 한도). 필드는 함수라 다대일까지만 담기므로 어느 쪽의 필드로도 서지 않는다. UCP 600 제4조의 독립성은 은행의 지급의무가 매매계약의 이행에 걸리지 않는다는 것이지 대상이 독립이라는 뜻이 아니므로 근거가 되지 않는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-619",
+    "CF-620"
+   ]
+  },
+  {
+   "id": "CF-692",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "교역 한 건의 결제 방식과 상업송장의 통화를 한 대상에 묶는다.",
+   "basis": "`claim-6` 이 UCP 600 제18조 (a) 를 재료로 받았다. 상업송장은 신용장과 같은 통화로 발행해야 하므로 신용장 칸에서 둘이 제도로 묶이고, 다른 칸에서는 갈리며 갈리는 것이 그 칸의 정상이다. 송장은 한 번 발행되고 시점에 따라 변하는 것은 그 조건으로 치러진 교역의 가치이므로 시점 인덱스를 두지 않는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-691"
+   ]
+  },
+  {
+   "id": "CF-693",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "신용장으로 치러진 교역에서는 송장의 통화와 그것을 금융한 청구권의 통화가 같다는 것을 전제로 받고 그 귀결을 정리로 세운다.",
+   "basis": "`claim-6` 이 UCP 600 제18조 (a) 와 청구권 하나가 단일 통화라는 결정을 이으면 한 청구권이 신용장 교역 둘을 함께 금융할 때 두 교역의 송장 통화가 같아야 한다는 것이 따라 나온다. 통화 일치는 제도가 보증하는 것이지 형식층이 증명할 수 있는 것이 아니므로 T-4 에 따라 진술문에 가정으로 명시한다. 진술이 교역의 송장 통화와 대응 사상이라는 두 정의를 강제했고 둘 다 서 있지 않았다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-24",
+    "CF-60",
+    "CF-620",
+    "CF-691",
+    "CF-692"
+   ]
+  },
+  {
+   "id": "CF-694",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "교역 금융의 관측 명세를 소스가 아니라 소스와 축의 짝으로 색인하고, 대응의 입도와 축의 해상도를 독립된 칸으로 둔다.",
+   "basis": "`claim-6` 이 SWIFT 카테고리 7 명세를 읽어 한 소스 안에서 축마다 관측 가능성이 갈리는 것을 실측했다. MT 700 의 32B 는 필수이고 ISO 4217 통화 코드를 강제하는데 품목을 담는 45A 는 선택이고 자유 서술이다. 입도와 해상도가 독립이라는 것은 같은 자리가 보인다. 신용장은 대응이 거래 단위인데도 품목을 가르지 못한다. 알려진 경로 셋의 입도가 거래와 차입자와 나라 총계로 갈렸다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-51",
+    "CF-662",
+    "CF-691"
+   ]
+  },
+  {
+   "id": "CF-695",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "교역 금융의 답을 공시 경로 하나의 판독으로 조립하고 여러 경로를 합치는 일은 미룬다.",
+   "basis": "`claim-5` 가 결제 방식의 조립에서 같은 이유로 미뤘다. 경로마다 칸이 달라 합치는 규칙이 판정을 요구한다. `claim-6` 이 읽은 콜롬비아의 병합은 세관 자료와 신용등록부를 은행명과 수입자 번호로 이은 것이고 거래 쪽과 대출 쪽의 입도가 둘이라 경로 하나로 서지 않는다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-662",
+    "CF-694"
+   ]
+  },
+  {
+   "id": "CF-696",
+   "origin": {
+    "arc": "claim",
+    "phase": "claim-6",
+    "kind": "decision_session",
+    "date": "2026-10-01"
+   },
+   "statement": "CQ-fin-2 가 정의 공백을 벗어났다.",
+   "basis": "`claim-6` 이 대응 사상과 교역의 결제 조건을 정의하고 그것을 딛는 정리를 세워 ⓐ 를, 경로가 그 자리에서 답을 낼 수 있는지의 판정을 `Bool` 로 두어 ⓑ 를, 교역 금융의 공시 경로를 관측층에 세워 ⓒ 를 채웠다. 알려진 경로 가운데 네 축을 모두 가르는 것이 없어 답이 전부 소스 없음으로 접히나, 무엇을 재야 하는지는 섰으므로 남은 것은 정의 공백이 아니라 데이터 공백이다. 접히는 자리가 어느 칸인지는 경로 선언이 든다.",
+   "tier": "finding",
+   "layer": "observation",
+   "cq_disposition": [
+    {
+     "cq": "CQ-fin-2",
+     "kind": "cleared"
+    }
+   ],
+   "related": [
+    "CF-691",
+    "CF-693",
+    "CF-694",
+    "CF-695"
+   ]
   }
  ]
 }
