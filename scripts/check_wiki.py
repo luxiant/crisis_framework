@@ -473,8 +473,10 @@ def check_10(led: Ledger) -> Report:
                     r.bad(f"{f.relative_to(led.root)}:{i}: 산문이 폐기된 {m.group(0)} 를 든다")
     r.note(f"폐기된 id {len(dead)}건을 유니버스로 훑었다. 유니버스 밖: {list(HISTORY_PATHS)}")
     r.note(f"폐기 전에 쓰인 지목 {len(early)}건 · 그것을 든 항목 {len(early_owners)}개")
+    # 보고 줄과 실패 줄을 줄 머리(`-` 와 `·`)로만 가르면 받는 쪽이 눈으로 가르게 된다. 각 줄이
+    # 스스로 「폐기 전에 쓰인 지목」임을 들어 문면으로도 갈리게 한다(CF-683).
     for msg in early:
-        r.note(msg)
+        r.note(f"폐기 전에 쓰인 지목 — {msg}")
     return r
 
 
@@ -682,7 +684,8 @@ def check_25(led: Ledger) -> Report:
 
 def check_16(led: Ledger) -> Report:
     r = Report("16", "wiki16-trigger-fired", "reopen_when 이 충족된 이연 항목", "report")
-    fired = []
+    fired: list[str] = []
+    dropped: list[str] = []
     for e in led.reg["deferred"]:
         rw = e.get("reopen_when")
         if not isinstance(rw, dict):
@@ -711,8 +714,15 @@ def check_16(led: Ledger) -> Report:
         # 아크가 그냥 열려 있는 것이 갈리지 않아 늘 발화로 뜨고, 그러면 이 보고를 읽는 쪽이
         # 곧 넘기게 되어 검사 16 을 두는 사유가 무너진다. 그 몫은 검사 18 이 든다(SPEC §2.2).
         if hit:
+            # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 함께 실으면 살아 있는 구멍의 수를
+            # 밖에서 셀 수 없다(CF-684). 뺀 건수는 출력에 남긴다.
+            if e.get("id") in led.dead:
+                dropped.append(str(e.get("id")))
+                continue
             fired.append(f"{e.get('id')} ({kind}) — {why}")
-    r.note(f"발화한 트리거 {len(fired)}건")
+    r.note(f"발화한 트리거 {len(fired)}건"
+           + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
+              if dropped else " · 뺀 폐기분 0건"))
     for line in fired:
         r.note(line)
     return r
@@ -730,11 +740,18 @@ def check_17(led: Ledger) -> Report:
 def check_18(led: Ledger) -> Report:
     r = Report("18", "wiki18-blocking-disposition", "아크별 blocking 구멍의 처분 내역", "report")
     rows: dict = {}
+    dropped: list[str] = []
     for e in led.reg["deferred"]:
         rw = e.get("reopen_when")
         if isinstance(rw, dict) and rw.get("kind") == "blocking":
+            # 폐기된 구멍은 처분이 끝난 것이므로 목록에서 뺀다. 뺀 건수는 출력에 남긴다(CF-684).
+            if e.get("id") in led.dead:
+                dropped.append(str(e.get("id")))
+                continue
             rows.setdefault(str(rw.get("ref")), []).append(e.get("id"))
-    r.note(f"blocking 구멍 {sum(len(v) for v in rows.values())}건, 아크 {len(rows)}개")
+    r.note(f"blocking 구멍 {sum(len(v) for v in rows.values())}건, 아크 {len(rows)}개"
+           + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
+              if dropped else " · 뺀 폐기분 0건"))
     for arc, ids in sorted(rows.items()):
         a = led.arcs.get(arc) or {}
         r.note(f"{arc} (status {a.get('status')}) — {', '.join(ids)}")

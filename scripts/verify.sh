@@ -458,12 +458,29 @@ tmp, files = pathlib.Path(sys.argv[1]), sys.argv[2:]
 OPEN = {'(': ')', '[': ']', '{': '}', '⟨': '⟩', '⦃': '⦄'}
 CLOSE = {v: k for k, v in OPEN.items()}
 DECL = re.compile(r'^(theorem|example)(?=[\s:])', re.M)
+NAME = re.compile(r'[^\s(){}\[\]⟨⟩⦃⦄:]+')
 
 
 def mask(src: str) -> str:
-    """주석을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다."""
+    """주석과 문자열 리터럴을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다.
+
+    리터럴을 함께 덮는 까닭은 그 안의 `--` 와 `/-` 가 주석 제거를 어긋나게 하고 그 안의 괄호가
+    괄호 묶음 건너뛰기를 어긋나게 하기 때문이다 (CF-680). 여는 따옴표와 닫는 따옴표는 남기고
+    안쪽만 덮으며, 따옴표는 괄호가 아니므로 깊이 셈에 들지 않는다.
+    """
     out, i, n, depth = list(src), 0, len(src), 0
     while i < n:
+        if depth == 0 and src[i] == '"':
+            j = i + 1
+            while j < n and src[j] != '"':
+                if src[j] == '\\' and j + 1 < n:
+                    out[j] = ' '
+                    j += 1                 # 이스케이프된 글자는 리터럴을 닫지 않는다
+                if src[j] != '\n':
+                    out[j] = ' '
+                j += 1
+            i = j + 1 if j < n else n
+            continue
         if depth == 0 and src.startswith('--', i):
             j = src.find('\n', i)
             j = n if j < 0 else j
@@ -543,13 +560,25 @@ def conclusion(m: str, kw: str, i: int):
     return None
 
 
+def decl_name(m: str, kw: str, i: int) -> str:
+    """선언 머리의 이름. `example` 은 이름을 갖지 않으므로 그 낱말을 그대로 낸다."""
+    if kw == 'example':
+        return 'example'
+    g = NAME.search(m, i)
+    return g.group(0) if g else '<이름을 읽지 못했다>'
+
+
 rows, serial = [], 0
 for f in files:
     src = pathlib.Path(f).read_text(encoding='utf-8')
     m = mask(src)
     for d in DECL.finditer(m):
+        line = src[:d.start()].count('\n') + 1
         span = conclusion(m, d.group(1), d.end())
         if span is None:
+            # 결론을 잡지 못한 선언을 조용히 건너뛰면 그 진술이 알림 없이 그물 밖에 남고 통과
+            # 계수에도 들지 않아 밖에서 보이지 않는다 (CF-682). 이름과 파일을 알리고 실패로 센다.
+            rows.append('NOCONCL\t%s\t%d\t-\t%s' % (f, line, decl_name(m, d.group(1), d.end())))
             continue
         a, b = span
         serial += 1
@@ -557,25 +586,34 @@ for f in files:
         box.mkdir()
         copy = box / 'Mutant.lean'
         copy.write_text(src[:a] + '¬ (' + src[a:b] + ')' + src[b:], encoding='utf-8')
-        line = src[:d.start()].count('\n') + 1
         brief = ' '.join(src[a:b].split())
-        rows.append('%s\t%d\t%s\t%s' % (f, line, copy, brief))
+        rows.append('MUT\t%s\t%d\t%s\t%s' % (f, line, copy, brief))
 
 sys.stdout.write(''.join(r + '\n' for r in rows))
 MUTEOF
 mapfile -t mut_rows < "$mut_list"
+# 구문 오류의 머리 목록. 사본을 일부러 깨뜨려 Lean 이 내는 머리를 모은 것이다 (CF-681).
+# 한 가지 머리로만 가르면 그 밖의 머리로 깨진 사본이 거부로 세어지고, 그 진술의 검사가
+# 수행되지 않았는데도 통과로 보고된다. 거부가 아니라 실패로 세는 까닭이 그것이다.
+mut_syntax_re='error: (unexpected|unterminated comment|unterminated string literal|expected token|Invalid `end`)'
 if [ "${#mut_rows[@]}" -eq 0 ]; then
   ok "변이 대상 0 — CrisisFramework 아래에 최상위 theorem 과 example 이 없다"
 else
-  per_file=$(cut -f1 "$mut_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
+  per_file=$(cut -f2 "$mut_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
   ok "변이 대상 ${#mut_rows[@]} ($per_file)"
+  rep "구문 오류로 세는 머리: unexpected · unterminated comment · unterminated string literal · expected token · Invalid \`end\`"
   for row in "${mut_rows[@]}"; do
-    IFS=$'\t' read -r m_file m_line m_copy m_concl <<< "$row"
+    IFS=$'\t' read -r m_kind m_file m_line m_copy m_concl <<< "$row"
+    if [ "$m_kind" = NOCONCL ]; then
+      bad "$m_file:$m_line $m_concl 의 결론을 잡지 못해 그 진술의 변이 검사가 수행되지 않았다"
+      continue
+    fi
     if lake env lean "$m_copy" >"$mut_dir/out" 2>&1; then
       bad "$m_file:$m_line 변이가 통과함 — 해당 진술은 공허한 검사다: $m_concl"
-    elif grep -q 'error: unexpected' "$mut_dir/out"; then
-      # 결론을 잘못 잡아 사본이 깨진 것을 거부로 세면 이 검사가 공허해진다.
-      bad "$m_file:$m_line 변이가 구문 오류로 깨졌다 — 결론을 잘못 잡았다: $m_concl"
+    elif grep -qE "$mut_syntax_re" "$mut_dir/out"; then
+      # 사본이 깨진 것을 거부로 세면 그 진술의 검사가 공허해지는데도 통과로 보고된다.
+      m_head=$(grep -oE "$mut_syntax_re" "$mut_dir/out" | head -1)
+      bad "$m_file:$m_line 변이 사본이 구문 오류로 깨져 그 진술의 검사가 수행되지 않았다 ($m_head): $m_concl"
     else
       ok "$m_file:$m_line 변이 거부됨 ($(grep -cE 'error' "$mut_dir/out") error) — 실검사 확인"
     fi
