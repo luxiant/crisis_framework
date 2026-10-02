@@ -74,6 +74,32 @@
       ]
     },
     {
+      "name": "collateral",
+      "discriminator": "담보는 무엇을 얼마나 몇 번 떠받치는가",
+      "ph": "PH-2",
+      "phases": [
+        "collateral-1",
+        "collateral-2",
+        "collateral-3",
+        "collateral-4",
+        "collateral-5",
+        "collateral-6",
+        "collateral-7"
+      ],
+      "status": "open",
+      "opened": "2026-10-02",
+      "closed": null,
+      "holes": [
+        "CF-159",
+        "CF-173",
+        "CF-209"
+      ],
+      "cq": [
+        "CQ-fin-4",
+        "CQ-fin-10"
+      ]
+    },
+    {
       "name": "propagation",
       "discriminator": "되먹임 루프를 어떤 점화식으로 쓰는가",
       "ph": "PH-3",
