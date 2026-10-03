@@ -84,7 +84,8 @@
         "collateral-4",
         "collateral-5",
         "collateral-6",
-        "collateral-7"
+        "collateral-7",
+        "collateral-8"
       ],
       "status": "open",
       "opened": "2026-10-02",
@@ -92,7 +93,11 @@
       "holes": [
         "CF-159",
         "CF-173",
-        "CF-209"
+        "CF-209",
+        "CF-730",
+        "CF-738",
+        "CF-741",
+        "CF-743"
       ],
       "cq": [
         "CQ-fin-4",
@@ -309,6 +314,34 @@
         "phase": "charter-20",
         "kind": "decision_session",
         "date": "2026-09-20"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-8",
+      "what": "앞 페이즈의 미전사분을 받아 원장에 넣고 병합만 하며 아크를 닫는 페이즈",
+      "why": "`collateral-2` 가 E-04 의 가름 셋을 둘로 접은 자리에서 자본청구권의 결손을 열었고, 그 부채를 이 아크가 갚기로 했다. §2.2 가 마지막 페이즈에 새 낙착을 금지하므로 병합 전용 역할이 뒤로 한 칸 물러난다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-2",
+        "kind": "decision_session",
+        "date": "2026-10-03"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "move",
+      "from": "collateral-7",
+      "phase": "collateral-8",
+      "what": "병합만 하고 아크를 닫는 일",
+      "why": "`collateral-7` 이 자본청구권을 담을 자리를 세우거나 세울 수 없는 까닭을 구멍으로 남기는 일을 받는다. §6.7 (8) 을 따라 중간에 끼우지 않고 말미에 덧붙이므로 앞 여섯의 번호가 밀리지 않는다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-2",
+        "kind": "decision_session",
+        "date": "2026-10-03"
       }
     }
   ]
