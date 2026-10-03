@@ -10524,6 +10524,445 @@
    "related": [
     "CF-589"
    ]
+  },
+  {
+   "id": "CF-719",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "배제 사례의 출처를 논문 뭉치로 한정하지 않고 비학술 외부 문면도 쓰며, 표기를 학술 여부로 가른다.",
+   "basis": "`collateral-2` 가 담보물의 배제 사례로 2014년 칭다오항 금속 금융을 쓰려다 그것이 뭉치의 어느 편에도 없다는 것을 확인한 자리에서 섰다. 실측하면 관례가 이미 그러했다. `Observation/CompetencyQuestion.lean` 의 배제 사례 넷이 전부 뭉치 밖 사건인데 출처 지목이 한 건도 없었고, 출처가 붙은 것은 뭉치 문헌과 UCP 조문뿐이었다. 그러므로 이 결정은 허용을 넓히는 것이 아니라 출처 표기를 요구로 세우는 것이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-720",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "names": [
+    "R-11"
+   ],
+   "statement": "원장의 산문 필드는 규율을 조항 ID로 지목하고 그 조항에 붙은 특정 주석을 지목하지 않는다.",
+   "basis": "`collateral-1` 이 `CF-715` 의 `basis` 에 「C-10 의 v7 판정 주석」을 적었고, J-10 으로 리포에 규율 전문이 없어 집행이 그 문면을 열 수 없다는 것이 그 회차에서 드러났다. 검사 23 은 이름으로 든 규율의 폐기를 보므로 조항이 살아 있고 주석만 폐기되는 경우를 잡지 못하는데, §0.3 (6) 이 판정 주석의 폐기·재발행을 정식 절차로 세운 뒤로 그 경우가 실제로 일어난다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-721",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "names": [
+    "D-8"
+   ],
+   "statement": "A-3 이 요구하는 witness 인스턴스는 D-2 3항목의 대상이 아니며, 증거 대상과 한 줄 서술만 든다.",
+   "basis": "`claim` 이 세운 witness 셋을 열어 보니 둘이 `/-- witness (A-3). -/` 뿐이었고 셋 다 3항목을 채우지 않았다. 관례가 조항보다 앞서 있었고 그대로 두면 D-2 의 「모든 정의」가 거짓인 채로 돈다. `claim` 이 이 판단을 넘긴 것을 `collateral-2` 가 받았다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-722",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "대조표 형 A 에 「두 경로가 재는 대상」 열을 더하고, 그 칸이 두 경로에서 다르면 그 행을 실측 명령 표로 보낸다.",
+   "basis": "`collateral-1` 에서 형 A 가 「아니오」를 내고도 지시서가 마감됐고, 그 불일치의 실체가 두 경로의 어긋남이 아니라 서로 다른 것을 재는 두 값을 한 행에 맞댄 것이었다. 관문을 「일치」에만 걸면 애초에 맞댈 상대가 아니었던 경우를 놓친다. 형 B 의 「그 자리의 실물」 열이 지목의 존재와 재료의 존재를 가른 것과 같은 수법이다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-723",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "검사 21 의 유니버스는 아크의 `holes` 와 `blocking` 트리거의 `ref` 가 그 아크를 가리키는 항목의 합집합이다.",
+   "basis": "`collateral-2` 가 `check_wiki.py` 를 열어 확인했다. `CF-718` 의 `basis` 가 그 검사를 `holes` 만 보는 것으로 좁게 적었으나 결론은 선다. 검사 16 이 `blocking` 을 발화 대상에서 빼므로 그 항목이 말하는 발화에 `blocking` 이 들어오지 않는다. 폐기가 아니므로 원 항목은 살아 있다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-718"
+   ],
+   "clarifies": "CF-718",
+   "resolves": [
+    {
+     "phrase": "검사 20 과 21 은 아크의 `holes` 에 든 것만 보므로",
+     "absolute": "검사 21 의 유니버스는 아크의 `holes` 와 `blocking` 트리거의 `ref` 가 그 아크를 가리키는 항목의 합집합이다. 그럼에도 이 항목의 결론은 선다"
+    }
+   ]
+  },
+  {
+   "id": "CF-724",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "CF-153 의 `statement` 말미 「폐기 (v4):.」는 소급 적재 때 섞인 조각이며 그 항목의 내용은 그 앞까지다.",
+   "basis": "`collateral-1` 의 최종 검토에서 드러났고 `collateral-2` 가 처분했다. 그 조각이 없어도 판정이 달라지지 않으므로 폐기가 아니라 꼬리로 둔다. 폐기하면 ID 가 하나 더 쓰이고 그 항목을 지목하는 자리 둘이 낡는데, 군더더기 하나에 치를 값이 아니다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-153"
+   ],
+   "clarifies": "CF-153",
+   "resolves": [
+    {
+     "phrase": "폐기 (v4):",
+     "absolute": "소급 적재 때 섞인 조각이며 이 항목의 내용이 아니다. 내용은 그 앞까지다"
+    }
+   ]
+  },
+  {
+   "id": "CF-725",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "청구권 개념이 용어집에 등재되지 않은 채 `Definition/Claim.lean` 의 `Claim` 이 섰다.",
+   "basis": "`collateral-2` 가 담보 개념의 등재 범위를 짜려고 `Glossary/Core.lean` 을 열어 확인했다. `Concept` 의 생성자 열일곱에 청구권이 없고, `Claim` 은 필드를 여덟 든 성질 있는 정의다. `verify.sh` 의 아홉 단계에 D-7 검사가 없어 아무도 보지 않은 결과로 보인다. 같은 아크에서 신호 셋과 결제 방식 다섯은 등재됐다.",
+   "tier": "finding",
+   "layer": "glossary",
+   "related": []
+  },
+  {
+   "id": "CF-726",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "이 페이즈가 용어집에 더하는 것은 청구권과 담보 개념들이며 헤어컷은 더하지 않는다.",
+   "basis": "`Concept` 의 docstring 이 「확장은 사용처가 생길 때 한다」를 들고 있으므로 쓰는 것만 넣는다. 헤어컷은 `collateral-3` 의 마진 작업에 속하고, 그 자리의 D-4 판정을 요구하는 구멍은 트리거가 `Glossary/Core.lean` 이라 이미 발화해 있어 아크가 닫히기 전까지 처분되면 된다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": [
+    "CF-725"
+   ]
+  },
+  {
+   "id": "CF-727",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "E-04 가 가른 셋 가운데 내부 부채청구권만 정의층에 담기고 내부 자본청구권은 담길 자리가 없다.",
+   "basis": "`collateral-2` 가 `CF-713` 의 접음을 확인하려고 E-04 의 추출 기록을 열었다. 투자자의 자산이 내부 부채청구권과 내부 자본청구권과 외부 자산 셋으로 갈리고 앞 둘이 엣지이며 셋째가 말단이다. 접는 축이 엣지냐 말단이냐이므로 자본청구권은 청구권 쪽이어야 하는데, `Claim` 의 대응 비형식 개념이 특정 통화로 특정 금액을 요구할 권리라 잔여성과 의결권이 들어갈 자리가 없다. 프라임브로커의 마진론 담보가 주식이므로 이 아크의 중심 사례가 걸린다.",
+   "tier": "finding",
+   "layer": "definition",
+   "related": []
+  },
+  {
+   "id": "CF-728",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보물을 자산 하나에 청구권 색인을 옵션으로 붙인 것으로 두고, 색인이 없는 것을 그 여집합으로 정의한다.",
+   "basis": "`collateral-1` 의 리뷰가 `CF-713` 의 가름을 여집합의 귀결로 보고 판정을 이 페이즈로 넘겼다. 생성자 둘로 두면 완전성이 「생성자가 둘뿐」에서 나와 외부 자산을 청구권의 여집합으로 정의한 것이 아니라 둘로 이름 붙인 것이 되고, V-7 의 셋째 귀결을 docstring 에 적을 근거가 구조에 없어 N-2 가 걸린다. 옵션 색인으로 두면 여집합이 구조로 선다. 자산을 매개변수로 받으므로 자산 전체 타입을 세우지 않아 보유 아크와 겹치지 않는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-727"
+   ]
+  },
+  {
+   "id": "CF-729",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "청구권 색인이 없는 칸을 「외부 자산」으로 부르지 않는다. E-04 의 외부 자산은 그 칸의 진부분집합이다.",
+   "basis": "자본청구권이 색인을 받지 못해 그 칸으로 가는데, E-04 의 외부 자산은 누구의 부채도 아닌 말단이라 둘이 다른 대상이다. 같은 낱말이 두 대상을 가리키면 D-5 가 막는 형이 된다. 2014년 칭다오항 금속 금융에서 여러 번 돌아간 것이 창고증권이고 은행이 잡았다고 믿은 것이 금속이었으므로, 둘을 구조에서 가르는 것이 이 이름 결정의 값이다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-728",
+    "CF-727"
+   ]
+  },
+  {
+   "id": "CF-731",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 제공은 떠받치는 청구권과 반환 청구권을 둘 다 색인으로 지목하며 반환 청구권을 구조가 명시한다.",
+   "basis": "유도만 하면 담보를 보증한 자와 청구 의무를 지는 자와 청구권을 가진 자가 갈리는 구조가 담기지 않는다는 것을 사용자가 모기지 ABS 로 들었다. 명시하면 자리가 넷으로 갈리고 물상보증과 담보 대리인이 둘 다 선다. 반환 의무를 청구권 집합에 넣으므로 집계에 잡히고, 그 결과 구조가 재담보의 부외성을 거부한다. E-08 이 재담보된 담보 전량을 부외로 적고 리먼의 8,000억 대 7,000억을 든 자리가 그것이다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": []
+  },
+  {
+   "id": "CF-732",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "`Claim` 의 `currency` 자리를 통화만이 아니라 종류물까지 받는 것으로 읽는다. 「하나」는 유지한다.",
+   "basis": "담보 반환은 금전 지급이 아니라 같은 종류의 증권 인도이고 재담보에서 돌아오는 것이 등가물이다. 그 자리의 주석이 「표시 통화. 하나다. 합성 자금조달은 청구권 여럿으로 쪼갠다」이므로 통화가 여럿인 경우를 못 본 것이 아니라 쪼개기로 보낸 설계이며, 「하나」가 설계이므로 값의 범위를 넓히는 것이 그 설계를 깨지 않는다. L-12 가 통화 간 환산을 막듯 종류물 간 환산도 막아 커버리지 비교가 같은 종류물 안에서만 선다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-731"
+   ]
+  },
+  {
+   "id": "CF-733",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "창고증권과 선하증권 같은 권리증권이 종류물 해석으로 `Claim` 에 담긴다.",
+   "basis": "`claim` 아크는 서류를 결제 방식의 가름 기준으로만 썼고 권리증권을 대상으로 세운 자리가 없다. 종류물을 받으면 창고증권이 「이 종류물 n단위를 인도받을 권리」가 되어 별도 구조가 필요 없다. `collateral-2` 가 칭다오 사례를 다루다가 확인했고, 다음 회차가 「권리증권이 없다」를 다시 열지 않도록 싣는다.",
+   "tier": "finding",
+   "layer": "definition",
+   "related": [
+    "CF-732"
+   ]
+  },
+  {
+   "id": "CF-735",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 제공을 담보물과 떠받치는 청구권과 반환 청구권의 조로 두고 조를 여럿 둔다.",
+   "basis": "프라임브로커리지의 풀 담보와 ABS 의 대출채권 풀이 다대다를 정면으로 세우므로 쌍을 하나로 묶을 수 없다. 조의 집합으로 두면 `ClaimSet` 의 색인 관례와 형이 같아지고, 같은 담보물이 여러 조에 나타나는 것이 곧 중복 계상이라 판별선의 「몇 번」이 구조에서 읽힌다. 빠지는 것은 ISDA 마스터 계약의 netting set 이며, 담보가 순 익스포저에 걸린다는 것이 각 거래를 떠받친다로 바뀐다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-731"
+   ]
+  },
+  {
+   "id": "CF-736",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 제공자와 담보 수취자와 채무자와 채권자 넷 사이에 정합 술어를 걸지 않는다.",
+   "basis": "넷을 묶으면 물상보증과 다단계 구조가 전부 배제된다. 첫째와 셋째가 갈리는 것이 물상보증이고, 둘째와 넷째가 갈리는 것이 신디케이트 대출의 담보 대리인과 ABS 의 수탁자다. 넷을 묶지 않고 그대로 두는 것이 답이며, 안 거는 것이 누락이 아니라 결정임을 남기려고 싣는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-735"
+   ]
+  },
+  {
+   "id": "CF-737",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보를 내놓는 쪽의 대리인은 J-1 의 귀결로 갈리며 구조에 자리를 더하지 않는다.",
+   "basis": "E-08 §2-1 이 실물머니 계정의 증권대여를 「계정이 본인, 수탁기관이 대리인」으로 적는데 당사자 넷에 대리인이 앉을 자리가 없다. J-1 이 노드를 의사결정 단위로 정의하므로 순수 대리는 노드가 아니어서 본인이 당사자로 서고, 보증을 선 대리는 대차대조표가 걸려 노드이므로 본인에 대한 보증 청구권 하나로 담긴다. `collateral-2` 가 (나-3) 에서 이것을 배제 사례로 돌리려다 정정했다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-736"
+   ]
+  },
+  {
+   "id": "CF-739",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "반환 청구권의 생애를 떠받치는 청구권의 생애에 묶지 않는다.",
+   "basis": "변동증거금이 피담보채무가 살아 있는 동안에도 오가며 담보 반환 의무를 쌓았다 줄였다 한다. 두 생애를 묶으면 그것이 배제되어 `collateral-3` 이 마진을 세울 때 받을 대상이 없어진다. 담보가 피담보채무보다 오래 남는 상태가 구조상 허용되는 것은 그 대가다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-731"
+   ]
+  },
+  {
+   "id": "CF-740",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 사슬을 유도하고, 이어짐은 반환 청구권의 종류물이 같은 것으로 재며, 순환은 금지하지 않고 판정 술어로 둔다.",
+   "basis": "E-08 §2-2 의 연쇄 예시 네 단계 가운데 회전 2 가 거래 결제 인도여서 떠받치는 청구권이 없다. 담보물 색인이 같은 것으로 재면 그 자리에서 사슬이 끊기고, 종류물이 같은 것으로 재면 끊기지 않는다. 재담보에서 돌아오는 것이 등가물이므로 뒤가 실물에 맞다. 순환을 금지하면 당일 재담보가 배제되는데 시점 인덱스가 `ℕ` 이라 같은 시점 안의 순서를 구조가 줄 수 없고, 허용해도 유한 색인 위의 도달 가능성이라 C-3 에 걸리지 않는다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-735",
+    "CF-732"
+   ]
+  },
+  {
+   "id": "CF-742",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "재담보 권리를 담보 제공의 불린 속성으로 둔다.",
+   "basis": "E-08 의 형식화 판정이 불린 속성이었다. 한도나 C-10 발동조건 문법으로 두면 조의 매개변수가 둘에서 여섯으로 늘고, 한도가 실제로 구속하는 자리는 커버리지 합이라 회계층이다. 미국 프라임브로커리지의 재담보가 고객 차변잔액의 140% 까지로 묶여 있는 것이 이 선택이 배제하는 자리다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-735"
+   ]
+  },
+  {
+   "id": "CF-744",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "점유를 정의층 대상으로 담지 않는다.",
+   "basis": "점유를 담보물의 시점 족 속성으로 두면 점유자가 매 시점 하나로 서서 2014년 칭다오항 금속 금융 같은 중복 제공이 구조상 불가능해지는데, 그것은 일어난 일이다. 담지 않으면 청구권 담보의 재담보와 외부 자산 담보의 중복 제공이 둘 다 조의 중복으로 올라오고, 적법한 것과 사고인 것의 구별은 재담보 권리 속성이 든다.",
+   "tier": "policy",
+   "layer": "definition",
+   "related": [
+    "CF-728"
+   ]
+  },
+  {
+   "id": "CF-745",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "원천 담보와 재담보된 담보와 재담보 가능 담보는 분할이 아니므로 정제와 배타로 둔다.",
+   "basis": "첫째는 출처의 축이고 나머지 둘은 상태의 축이라 셋이 겹친다. 같은 분할의 세 조각이면 E-08 의 「재담보된 담보 총량 = 원천 담보 × 속도」에서 분모와 분자가 서로의 여집합이 되어 식이 성립하지 않는다. `docs/baseline.md` §3 이 그 어간의 분기를 셋으로 적은 것은 같은 낱말이 세 대상을 가리킨다는 뜻이다. 측정 소스가 증권대여·레포·마진론 잔액과 재무제표 부외 공시로 갈리므로 G-1 과 V-5 를 통과한다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": [
+    "CF-742"
+   ]
+  },
+  {
+   "id": "CF-746",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "Lean 모듈 이름은 D-5 의 오염 어간 금지 대상이 아니다.",
+   "basis": "`CF-173` 의 재개 트리거가 `CrisisFramework/Definition/Margin.lean` 인데 `margin` 이 오염 어간 열하나에 든다. 원장이 수정 불가이므로 그 경로를 고칠 수 없고, 따라서 모듈 이름을 대상으로 읽으면 살아 있는 트리거 하나가 조항 위반이 된다. 그 판정이 어디에도 서 있지 않아 `collateral-2` 가 세운다.",
+   "tier": "policy",
+   "layer": "meta",
+   "related": [
+    "CF-173"
+   ]
+  },
+  {
+   "id": "CF-747",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 중복 계상의 정본 사례가 금융자산에만 있다는 전제가 약해진다. 상품 담보에도 수치가 붙은 사례가 있다.",
+   "basis": "2014년 칭다오항 금속 금융에서 실물 가치 약 3억 8천만 달러의 금속으로 42억 달러가 조달됐다. 커버리지가 실물의 열한 배이고 `CQ-fin-10` 이 묻는 두 총계가 그대로 실측된 자리다. 그러므로 두 CQ 가 상품을 받는 것이 어긋난 선택이 아니었다. `CF-716` 이 정한 `collateral-4` 의 대조는 그대로 둔다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-716"
+   ]
+  },
+  {
+   "id": "CF-748",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "S-7 의 둘째 절과 `reading-queue-v0` 의 기재가 어긋나 있다.",
+   "basis": "그 문서가 Claessens·Pozsar·Ratnovski·Singh(2012) 를 「추출 기록 없음 · S-7 로 사례만 인용」으로 적는데 S-7 은 지목 참조한 편도 추출 기록을 남기라고 한다. `extraction-06` 본문이 그 편을 유동성 풋 신호 분할의 반대편 사례로 인용하고 있으므로 예정이 아니라 이미 난 어긋남이다. 갈리는 축이 학술 여부가 아니라 구조를 뽑았는가 사례만 빌렸는가로 보인다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": []
+  },
+  {
+   "id": "CF-750",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "`CF-712` 의 `basis` 가 `collateral-7` 을 병합 전용으로 적었으나 패치로 그 역할이 `collateral-8` 로 옮겨간다.",
+   "basis": "`collateral-2` 가 자본청구권의 부채를 이 아크 안에서 갚기로 하면서 페이즈를 하나 더하게 됐다. §2.2 가 마지막 페이즈에 새 낙착을 금지하므로 자본청구권은 병합 전용 페이즈가 받을 수 없고, §6.7 (8) 의 원칙을 따라 중간에 끼우지 않고 말미에 덧붙인다. §2.4 가 패치의 대상으로 페이즈의 이동을 명시해 둔 자리다.",
+   "tier": "finding",
+   "layer": "meta",
+   "related": [
+    "CF-712"
+   ]
+  },
+  {
+   "id": "CF-762",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-2",
+    "kind": "decision_session",
+    "date": "2026-10-03"
+   },
+   "statement": "담보 축 셋에 `measuredBy` 를 붙이지 않고 정제와 배타만 등재한다.",
+   "basis": "`collateral-2` 가 용어집 문면을 짜다가 `SourceTag` 의 입도를 확인했다. 현행 태그 여덟이 공시 체계 수준이라 원천 담보와 재담보된 담보와 재담보 가능 담보가 전부 규제 공시 하나로 모이고, 재무제표 안의 다른 줄이라는 것은 그 입도 아래다. 그 상태로 붙이면 G-2 가 같은 데이터로 측정되는 개념을 가르지 말라고 한 자리에 걸린다. 용어집이 신호에 `measuredBy` 를 붙이지 않은 선례와 같은 형이며, 그 사유도 관측 명세를 세우는 페이즈의 몫이라는 것으로 같다. 태그 입도를 지금 내리면 관측 명세 없이 그 결정이 서고, `CF-743` 이 이미 그 자리에 걸려 있어 함께 올라온다.",
+   "tier": "policy",
+   "layer": "glossary",
+   "related": [
+    "CF-745",
+    "CF-743"
+   ]
   }
  ]
 }
