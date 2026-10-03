@@ -53,6 +53,28 @@ inductive Concept where
   | openAccount
   /-- 그 밖의 결제 조건. 위 넷 가운데 어느 것도 들지 않는다. -/
   | otherPaymentTerms
+  /-- 청구권. 한 당사자가 다른 당사자에게 통화나 종류물의 일정량을 특정 조건 아래 요구할 수 있는 권리. -/
+  | claim
+  /-- 반환 청구권. 담보를 받은 쪽이 같은 종류의 것을 돌려줄 의무에 대응하는 권리. -/
+  | returnClaim
+  /-- 담보물. 담보로 제공될 수 있는 것. 아래 둘의 상위 개념이다. -/
+  | pledgeableAsset
+  /-- 청구권인 담보물. 청구권 집합의 색인으로 함께 지목된다. -/
+  | claimPledgeable
+  /-- 청구권이 아닌 담보물. 색인을 갖지 않는 것 전부이며 외부 자산보다 넓다. -/
+  | nonClaimPledgeable
+  /-- 외부 자산. 다른 노드의 대차대조표에 대응물이 없는 말단 자산. -/
+  | externalAsset
+  /-- 담보 제공. 담보물 하나가 청구권 하나를 떠받치고 반환 의무 하나를 낳는 관계. -/
+  | pledge
+  /-- 재담보. 받은 담보를 처분하고 같은 종류의 것을 돌려줄 의무만 지는 것. -/
+  | rehypothecation
+  /-- 원천 담보. 재담보 권리가 딸린 제공. -/
+  | sourceCollateral
+  /-- 재담보된 담보. 권리가 있고 실제로 다시 제공된 것. -/
+  | rehypothecatedCollateral
+  /-- 재담보 가능 담보. 권리가 있으나 아직 다시 제공되지 않은 것. -/
+  | rehypothecatableCollateral
   deriving DecidableEq, Repr
 
 /--
@@ -132,6 +154,22 @@ inductive ConceptRel where
 **결제 방식에는 `measuredBy` 를 붙인다.** 관측 명세가 공시 경로로 색인되어 관측자 상대성의 걸림이
 풀렸기 때문이다. 방식마다 측정 대응의 집합이 서로 달라 V-5 를 통과한다. 신호에 붙이지 않는다는 앞
 문단은 그대로다.
+
+**담보물 분할은 정의만으로 완전하다.** 청구권이 아닌 담보물이 색인을 갖지 않는 것 전부를 받으므로
+여집합의 귀결이다(V-7). 외부 자산은 그 칸의 진부분집합이며 다른 노드의 대차대조표에 대응물이 없는
+말단만 든다. 자본청구권이 색인을 받지 못해 그 칸에 들어오는 것이 그 차이이고, 그것을 담을 정의가
+없다는 것은 구멍으로 등재되어 있다.
+
+**담보물 분할의 V-4 사례.** 2014년 산둥성 칭다오항과 펑라이항에 보관된 금속 약 40만 톤에 대해
+창고증권이 여러 장 발행되어 서로 다른 은행의 대출 담보로 쓰였다(Reuters 2014년 6월 보도). 실물
+가치 약 3억 8천만 달러에 조달액이 42억 달러였다. 여러 번 돌아간 것은 창고증권이고 은행이 잡았다고
+믿은 것은 금속이므로, 둘이 다른 칸에 서는 것이 이 분할의 실물이다.
+
+**담보 축 셋에는 `measuredBy` 를 붙이지 않는다.** 원천 담보와 재담보된 담보와 재담보 가능 담보가
+현행 `SourceTag` 의 입도에서는 전부 규제 공시 하나로 모이고, 재무제표 안의 다른 줄이라는 것은 그
+입도 아래다. 그 상태로 붙이면 G-2 에 걸린다. 측정 소스를 대응시키는 일은 관측 명세를 세우는
+페이즈의 몫이며, 신호에 붙이지 않는다는 앞 문단과 같은 형이다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -156,6 +194,15 @@ def registry : List ConceptRel :=
   , .measuredBy .openAccount .customsDeclaration
   , .measuredBy .otherPaymentTerms .customsDeclaration
   , .measuredBy .otherPaymentTerms .fxSettlementStatistics
+  , .refines .returnClaim .claim
+  , .partitions .pledgeableAsset [.claimPledgeable, .nonClaimPledgeable]
+  , .excludes .claimPledgeable .nonClaimPledgeable
+  , .refines .externalAsset .nonClaimPledgeable
+  , .refines .rehypothecation .pledge
+  , .refines .sourceCollateral .pledge
+  , .refines .rehypothecatedCollateral .pledge
+  , .refines .rehypothecatableCollateral .pledge
+  , .excludes .rehypothecatedCollateral .rehypothecatableCollateral
   ]
 
 end CrisisFramework.Glossary
