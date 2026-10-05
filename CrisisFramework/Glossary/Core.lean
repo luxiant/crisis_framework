@@ -75,6 +75,12 @@ inductive Concept where
   | rehypothecatedCollateral
   /-- 재담보 가능 담보. 권리가 있으나 아직 다시 제공되지 않은 것. -/
   | rehypothecatableCollateral
+  /-- 담보 제공에 붙는 비율. 아래 둘의 상위 개념이다. -/
+  | pledgeRate
+  /-- 떠받쳐야 할 것에 요구되는 자기자본의 몫. 개시증거금과 변동증거금이 든다. -/
+  | exposureMargin
+  /-- 떠받치는 것을 얼마로 쳐 주는가. 차감률이 아니라 곱하는 비율이다. -/
+  | valuationRate
   deriving DecidableEq, Repr
 
 /--
@@ -170,6 +176,17 @@ inductive ConceptRel where
 입도 아래다. 그 상태로 붙이면 G-2 에 걸린다. 측정 소스를 대응시키는 일은 관측 명세를 세우는
 페이즈의 몫이며, 신호에 붙이지 않는다는 앞 문단과 같은 형이다.
 
+**비율 둘을 분할로 두지 않고 정제와 배타로 둔다.** 비율이 둘뿐이라는 근거가 없으므로 완전성을
+주장하지 않으며, V-7 이 분할의 완전성을 가정으로 두는 자리를 애초에 만들지 않는다. 그래서 V-4 가
+요구하는 분할의 사례도 걸리지 않는다. 둘이 겹치지 않는 것은 색인이 다르기 때문이다. 앞은 떠받쳐야
+할 것에 붙고 뒤는 떠받치는 것에 붙으며, 표준 개시증거금 일람이 익스포저 명목금액의 백분율로 서고
+표준 헤어컷 일람이 담보 자산 시장가치의 백분율로 서는 것이 그 실물이다(BCBS · IOSCO 2020년 4월
+부속서 A 와 부속서 B).
+
+**비율 둘에도 `measuredBy` 를 붙이지 않는다.** 현행 `SourceTag` 의 입도에서 둘이 전부 규제 공시
+하나로 모이므로 그 상태로 붙이면 G-2 에 걸린다. 담보 축 셋에 붙이지 않은 것과 같은 사유이며,
+측정 소스를 대응시키는 일은 관측 명세를 세우는 페이즈의 몫이다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -203,6 +220,9 @@ def registry : List ConceptRel :=
   , .refines .rehypothecatedCollateral .pledge
   , .refines .rehypothecatableCollateral .pledge
   , .excludes .rehypothecatedCollateral .rehypothecatableCollateral
+  , .refines .exposureMargin .pledgeRate
+  , .refines .valuationRate .pledgeRate
+  , .excludes .exposureMargin .valuationRate
   ]
 
 end CrisisFramework.Glossary
