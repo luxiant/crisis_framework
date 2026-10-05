@@ -551,6 +551,41 @@
    "related": [
     "CF-705"
    ]
+  },
+  {
+   "id": "CF-779",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-3",
+    "kind": "decision_session",
+    "date": "2026-10-05"
+   },
+   "target": "CF-173",
+   "original": "담보 축은 확정됐으나 마진 세 용법인 레포 헤어컷과 개시증거금과 변동증거금의 분할이 미판정이다. 측정 소스가 달라 G-1 으로는 갈리는데 저자는 통합해 쓴다. 트리거는 `artifact` 로 `CrisisFramework/Definition/Margin.lean` 을 가리켰다.",
+   "reason": "물음이 잘못 서 있었다. 저자가 셋을 통합해 쓴다는 전제가 원문에서 서지 않고, 측정 소스 셋이 추출 시점에 붙은 것이라 G-1 으로 갈린다는 전제도 서지 않는다. 그리고 셋이 한 축의 세 칸이 아니다. 레포 헤어컷은 그 규범의 적용에서 명시로 빠지므로 다른 규제 체제의 대상이고, 남은 둘은 권리로 갈려 이미 선 담보 축에 투영된다.",
+   "replaced_by": "CF-770",
+   "statement": "`CF-173` 을 폐기한다.",
+   "basis": "`collateral-3` 이 원문과 규범을 함께 열어 전제를 깼다.",
+   "related": [
+    "CF-764",
+    "CF-765"
+   ]
+  },
+  {
+   "id": "CF-780",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-3",
+    "kind": "decision_session",
+    "date": "2026-10-05"
+   },
+   "target": "CF-159",
+   "original": "헤어컷이 자기자본비율이면서 헤어컷이다. 하나의 식별자가 두 비형식 개념에 대응하므로 D-4 판정이 필요하다. 트리거는 `artifact` 로 `CrisisFramework/Glossary/Core.lean` 을 가리켰고 이미 발화해 있었다.",
+   "reason": "두 대응이 한 모형의 축약이었다. 개시증거금 일람이 익스포저에 붙고 헤어컷 일람이 담보 자산에 붙어 색인이 다르므로 둘은 한 개념의 두 용법이 아니며, E-01 에서 겹친 것은 그 모형에 노드가 하나이고 자산도 하나여서다. 그러므로 D-4 가 요구하는 분할이 아니라 정제 관계로 서고, 헤어컷이 담보부 차입에 서는 특수 사례다.",
+   "replaced_by": "CF-763",
+   "statement": "`CF-159` 를 폐기한다.",
+   "basis": "`collateral-3` 이 규범의 부속서 둘에서 색인의 가름을 얻었다.",
+   "related": []
   }
  ]
 }
