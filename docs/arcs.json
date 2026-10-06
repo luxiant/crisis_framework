@@ -402,6 +402,62 @@
         "kind": "decision_session",
         "date": "2026-10-06"
       }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "`Finset` 합의 부등식·비음수 보조정리 셋이 회계층 기준선을 넘긴다",
+      "why": "`Finset.sum_le_sum` 과 `Finset.sum_nonneg` 과 `Finset.sum_le_sum_of_subset_of_nonneg` 가 핀된 Mathlib 판에서 `Classical.choice` 를 끌어온다. 집행이 구간 4 의 첫 판에서 초과를 받고 전술마다 따로 찍어 갈랐으며, `by_cases` 도 `split_ifs` 도 끌어오지 않는다는 것을 함께 쟀다. 목록의 정본은 `docs/baseline.md` §2-2 이고 `CLAUDE.md` §5-10 이 그것을 지목한다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "그 초과는 C-8 의 둘째 종류다",
+      "why": "수학적 내용이 요구하지 않는다는 것이 실측으로 섰다. 같은 부분합 부등식을 `Finset.cons_induction` 으로 세우니 쓰는 부품 다섯이 전부 기준선 이하였다. 수 체계에서 오는 것이 아니므로 첫째가 아니고, 회피가 가능하므로 셋째가 아니다. 둘째 종류의 이름이 「전술·인스턴스 해결의 의존」이라 보조정리를 담지 않는 것처럼 읽히나, 그 종류의 판별 시험은 「도구 구현에 있는가」이고 라이브러리 보조정리가 도구에 든다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "기준선을 넘기는 보조정리의 목록을 `step3-forbidden` 의 금지 토큰으로 세우지 않는다",
+      "why": "그 단계에 이름 목록을 더하면 둘째 탐지기가 서는데 불완전하고 핀과 함께 낡는다. §3.10-1 이 검사마다 음성 대조를 요구하므로 낡은 목록은 주입된 위반을 잡지 못한 채 통과하여 검사가 도는 것처럼 보이게 된다. 완전한 탐지는 `step4-baseline` 의 차분이고 이미 서 있으며 늦을 뿐이므로, 늦음을 사람이 조작 전에 읽는 목록으로 메운다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "`lake build` 의 job 수는 기대표가 뜻을 두고 담지 않는 값이다",
+      "why": "파일이 늘면 반드시 움직이나 Lake 의 구현과 Mathlib 핀에 따라서도 움직이므로 이 프로젝트가 바꾼 것만을 재지 못한다. 페이즈가 바꾼 것은 파일 수와 선언 수가 이미 든다. 담지 않는 값이 움직인 것은 실패가 아니라 관측이며 집행이 보고에 적는다. 구간 4 에서 989 에서 995 로 늘어난 것이 그 형이고, 집행이 칸이 없다는 것을 사안으로 올려 이 판정이 섰다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
     }
   ]
 }

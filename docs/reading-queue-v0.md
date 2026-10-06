@@ -32,6 +32,8 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | Brammertz (2018 무렵), *Smart Financial Contracts Revisited* | **H-66** · **소진** | Szabo 의 관측 가능성 · 검증 가능성 · 비밀성의 구분. `claim-5` 가 읽고 E-36 을 세웠다 |
 | Byrne (2007), *UCP600: An Exercise in International Private Sector Self Regulation* | **H-60** (검증 가능성의 상대성) · **소진** | 사기 예외와 선의의 판정이 지역법에 있다. `claim-5` 가 읽고 E-34 를 세웠다 |
 | **세관 신고 서식의 칸 열거** (콜롬비아 · 칠레 · 터키 가운데 어느 하나. 당국의 서식이거나 그 자료의 칸을 열거한 편) | `CF-699` (세관 경로가 송장 통화를 담는지 미확인) | 송장의 통화가 신고의 칸으로 서는가. 서면 UCP 600 제18조 (a) 가 신용장 칸에서 송장 통화와 청구권 통화를 묶으므로 세관 경로 하나로 CQ-fin-2 의 네 축이 다 선다. E-38 이 콜롬비아 자료의 칸을 열거하는데 통화가 없다 |
+| Singh (2011), *Velocity of Pledged Collateral: Analysis and Implications* (IMF WP 11/256) | **소진됐다.** `collateral-4` 가 담보 속도의 분자와 분모가 같은 대상을 세는지를 가리려고 열었고 추출 기록 E-44 가 섰다 |
+| Singh · Aitken (2010), *The (sizable) Role of Rehypothecation in the Shadow Banking System* (IMF WP 10/172) | **소진됐다.** 같은 자리에서 함께 열었고 같은 기록이 받는다 |
 
 ---
 
