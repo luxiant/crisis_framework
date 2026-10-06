@@ -81,7 +81,7 @@
 
 ---
 
-## 교역 금융과 결제 방식 (19편 · 그중 zip 밖 8편)
+## 교역 금융과 결제 방식 (19편 · 그중 zip 밖 2편)
 
 `claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였고, `claim-6` 이 CQ-fin-2 의 교역 금융 통화를
 세우려고 여섯을 더 들였다. 실무 안내서 하나를 빼고 모두 추출 기록을 가진다.
@@ -106,12 +106,12 @@
 |---|---|---|---|
 | UCP 600 신용장통일규칙 | ICC 간행물 제600호 (2007 시행) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0038`) | E-21. 그 기록은 이 문서를 뭉치 밖으로 적었고, `claim-5` 가 기록 말미에 덧붙였다 |
 | URC 522 추심에 관한 통일규칙 | ICC 간행물 제522호 (1995 개정) | 우리은행 외환센터 영한 대역본 (`https://spot.wooribank.com/pot/Dream?withyou=FXFXG0017`) | E-33. 인수인도와 지급인도(제7조), 은행의 면책(제9조~제15조) |
-| Understanding Trade Finance: Theory and Evidence from Transaction-level Data | Ahn 2014 (IMF 워킹 원고. 표지에 PRELIMINARY DRAFT) | 사용자가 건넨 PDF | E-37. 결제 방식 셋의 열거, 원자료의 칸과 재분류의 갈림, 매출채권 담보의 자기청산성과 소구권, 외환 규제가 분포를 정한다는 것 |
-| Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy: Evidence from Letter-of-Credit Import Transactions in Colombia | Ahn·Sarmiento 2019 (*Review of International Economics* 27(5)) | 사용자가 건넨 PDF | E-38. **신용장의 비대체성과 대응이 거래 단위로 서는 조건.** 당사자 넷과 청구권의 사슬, 신용등록부의 통화·보증 종류 칸 |
-| Don't throw in the towel, throw in trade credit! | Demir·Javorcik 2018 (*Journal of International Economics* 111) | 사용자가 건넨 PDF | E-39. 터키 세관의 결제 방식 넷, 자료 입도가 거래 단위가 아니라는 것, 고정 수수료가 신용장을 큰 선적으로 쏠리게 한다는 것 |
-| The Dominant Currency Financing Channel of External Adjustment | Casas·Meleshchuk·Timmer 2022 (Federal Reserve IFDP 1343) | 사용자가 건넨 PDF | E-40. **대응이 기업 × 분기에서 멈춘다는 것.** 신용등록부의 외화·자국통화 가름, 헤지 셋, 만기 위치가 충격 종류를 가른다는 것 |
-| Cross-Border Currency Exposures. New evidence based on an enhanced and updated dataset | Bénétrix·Gautam·Juvenal·Schmitz 2019 (IMF WP 19/299) | 사용자가 건넨 PDF | E-41. E-31 이 쓴 대리 변수의 원전. 나라 × 연도 입도, 부문 분해 없음, 실측과 합성이 섞인다는 것. **덩어리 배정은 내용이 아니라 쓰임을 따랐다.** 내용으로는 통화 구성 자료다 |
-| Category 7 — Documentary Credits and Guarantees, Message Reference Guide | SWIFT, Standards MT November 2019 (전 331쪽) | 사용자가 건넨 PDF | E-42. **MT 700 의 32B 가 필수이고 ISO 4217 통화 코드를 강제한다.** 품목(45A)은 선택이고 자유 서술이다. 상업 간행물이므로 문언을 옮기지 않고 필드 번호로 지목한다 |
+| Understanding Trade Finance: Theory and Evidence from Transaction-level Data | Ahn 2014 (IMF 워킹 원고. 표지에 PRELIMINARY DRAFT) | 묶음 안 `기타/Understanding Trade Finance Theory and Evidence from Transaction-Level Data.pdf` | E-37. 결제 방식 셋의 열거, 원자료의 칸과 재분류의 갈림, 매출채권 담보의 자기청산성과 소구권, 외환 규제가 분포를 정한다는 것 |
+| Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy: Evidence from Letter-of-Credit Import Transactions in Colombia | Ahn·Sarmiento 2019 (*Review of International Economics* 27(5)) | 묶음 안 `기타/Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy Evidence from Letter-of-Credit Import Transactions in Colombia.pdf` | E-38. **신용장의 비대체성과 대응이 거래 단위로 서는 조건.** 당사자 넷과 청구권의 사슬, 신용등록부의 통화·보증 종류 칸 |
+| Don't throw in the towel, throw in trade credit! | Demir·Javorcik 2018 (*Journal of International Economics* 111) | 묶음 안 `기타/Don't Throw in the Towel, Throw in Trade Credit!.pdf` | E-39. 터키 세관의 결제 방식 넷, 자료 입도가 거래 단위가 아니라는 것, 고정 수수료가 신용장을 큰 선적으로 쏠리게 한다는 것 |
+| The Dominant Currency Financing Channel of External Adjustment | Casas·Meleshchuk·Timmer 2022 (Federal Reserve IFDP 1343) | 묶음 안 `기타/The Dominant Currency Financing Channel of External Adjustment.pdf` | E-40. **대응이 기업 × 분기에서 멈춘다는 것.** 신용등록부의 외화·자국통화 가름, 헤지 셋, 만기 위치가 충격 종류를 가른다는 것 |
+| Cross-Border Currency Exposures. New evidence based on an enhanced and updated dataset | Bénétrix·Gautam·Juvenal·Schmitz 2019 (IMF WP 19/299) | 묶음 안 `기타/Cross-Border Currency Exposures.pdf` | E-41. E-31 이 쓴 대리 변수의 원전. 나라 × 연도 입도, 부문 분해 없음, 실측과 합성이 섞인다는 것. **덩어리 배정은 내용이 아니라 쓰임을 따랐다.** 내용으로는 통화 구성 자료다 |
+| Category 7 — Documentary Credits and Guarantees, Message Reference Guide | SWIFT, Standards MT November 2019 (전 331쪽) | 묶음 안 `기타/SWIFT.pdf` | E-42. **MT 700 의 32B 가 필수이고 ISO 4217 통화 코드를 강제한다.** 품목(45A)은 선택이고 자유 서술이다. 상업 간행물이므로 문언을 옮기지 않고 필드 번호로 지목한다 |
 
 ---
 
@@ -140,7 +140,7 @@
 
 ---
 
-## 증거금과 담보의 규범 (3편 · 전부 zip 밖)
+## 증거금과 담보의 규범 (3편)
 
 `collateral-3` 이 변동증거금이 반환 의무를 낳는지를 결판내려고 들였다. 뭉치의 어느 편도 증거금
 용법의 법적 성질을 적지 않아서 규범 하나와 계약 양식 둘을 함께 열었다. 셋이 추출 기록 하나(E-43)를
@@ -148,16 +148,17 @@
 
 | 문헌 | 발행 | 열람처 | 비고 |
 |---|---|---|---|
-| Margin requirements for non-centrally cleared derivatives | BCBS·IOSCO 2020년 4월 | 사용자가 건넨 PDF 두 벌 | E-43. **BIS 발간본과 IOSCO 발간본(FR03/2020)이 같은 보고서다.** 조항 본문이 같고 목차 조판과 ISBN 만 달라 구성원 하나로 센다. 두 증거금의 재담보 비대칭, 레포와 증권대여의 적용 제외, 부속서 둘의 색인 차이 |
-| Credit Support Annex (영국법 이전형) | ISDA 1995년 저작권 | 사용자가 건넨 PDF. 2025년 7월 체결본 | E-43. 소유권이 넘어가고 담보권을 세우지 않으며 반환 대상이 등가 신용보전이다. **표준 양식의 단락만 쓰고 당사자별 선택은 쓰지 않는다.** 열람본이 비밀유지 표시를 단다 |
-| Credit Support Annex (뉴욕법 담보권형) | ISDA 1994년 저작권 | 사용자가 건넨 PDF. 2008년 4월 체결본 | E-43. 질권을 설정하고 재담보를 명시로 허용하며 반환 대상이 제공된 신용보전 그 자체다. 재담보권이 당사자별 선택으로 꺼질 수 있다. 표준 양식의 단락만 쓴다 |
+| Margin requirements for non-centrally cleared derivatives | BCBS·IOSCO 2020년 4월 | 묶음 안 `증거금과 담보의 규범/BCBS.pdf` 와 `증거금과 담보의 규범/IOSCO.pdf` | E-43. **BIS 발간본과 IOSCO 발간본(FR03/2020)이 같은 보고서다.** 조항 본문이 같고 목차 조판과 ISBN 만 달라 구성원 하나로 센다. 두 증거금의 재담보 비대칭, 레포와 증권대여의 적용 제외, 부속서 둘의 색인 차이 |
+| Credit Support Annex (영국법 이전형) | ISDA 1995년 저작권 | 묶음 안 `증거금과 담보의 규범/ISDA_barclays.pdf`. 2025년 7월 체결본 | E-43. 소유권이 넘어가고 담보권을 세우지 않으며 반환 대상이 등가 신용보전이다. **표준 양식의 단락만 쓰고 당사자별 선택은 쓰지 않는다.** 열람본이 비밀유지 표시를 단다 |
+| Credit Support Annex (뉴욕법 담보권형) | ISDA 1994년 저작권 | 묶음 안 `증거금과 담보의 규범/ISDA_new_york.pdf`. 2008년 4월 체결본 | E-43. 질권을 설정하고 재담보를 명시로 허용하며 반환 대상이 제공된 신용보전 그 자체다. 재담보권이 당사자별 선택으로 꺼질 수 있다. 표준 양식의 단락만 쓴다 |
 
-**발간본 둘을 「중복」 절이 받지 않는다.** 그 절은 zip 안에서 해시가 같은 사본을 세는데, 이 둘은
-zip 밖이고 바이트로 같지도 않다. 위 구성원 행 하나가 그 사실을 든다.
+**발간본 둘을 「중복」 절이 받지 않는다.** 그 절은 해시가 같은 사본을 세는데 이 둘은 바이트로 같지
+않다. 둘이 묶음 밖이라는 앞 판의 사유는 이제 거짓이고, 바이트가 다르다는 사유만 남는다. 위 구성원
+행 하나가 그 사실을 든다.
 
 ---
 
-## 담보 속도와 재담보의 계량 (2편 · 전부 zip 밖)
+## 담보 속도와 재담보의 계량 (2편)
 
 `collateral-4` 가 담보 속도의 분모를 결판내려고 들였다. E-08 이 속도를 쓰면서 그 정의의 정본을
 다른 편으로 미루고 있었고, 그 편과 원천 담보의 개념을 처음 적은 편이 둘 다 뭉치 밖이었다. 둘이
@@ -165,8 +166,8 @@ zip 밖이고 바이트로 같지도 않다. 위 구성원 행 하나가 그 사
 
 | 문헌 | 발행 | 열람처 | 비고 |
 |---|---|---|---|
-| Velocity of Pledged Collateral: Analysis and Implications | Singh 2011 (IMF WP 11/256) | 사용자가 건넨 PDF | E-44. **속도의 정의 정본.** 분자가 받은 담보이고 분모가 1 차 원천이며 둘 다 잔량이다. 부록 1 이 Shin 의 미발표 기술 노트를 써서 속도를 레버리지 승수와 잇고 행합이 1 보다 작은 것을 수렴 조건으로 둔다. 상자 1 이 재담보와 재사용을 가른다 |
-| The (sizable) Role of Rehypothecation in the Shadow Banking System | Singh·Aitken 2010 (IMF WP 10/172) | 사용자가 건넨 PDF | E-44. **원천 담보 개념의 원전.** 미국의 140% 한도와 영국의 무한도를 가르고 그 한도를 누적 담보 창출의 유한성으로 적는다. §V 의 회전 계수가 위 편과 분모를 다르게 잡는다 |
+| Velocity of Pledged Collateral: Analysis and Implications | Singh 2011 (IMF WP 11/256) | 묶음 안 `기타/Velocity of Pledged Collateral Analysis and Implications.pdf` | E-44. **속도의 정의 정본.** 분자가 받은 담보이고 분모가 1 차 원천이며 둘 다 잔량이다. 부록 1 이 Shin 의 미발표 기술 노트를 써서 속도를 레버리지 승수와 잇고 행합이 1 보다 작은 것을 수렴 조건으로 둔다. 상자 1 이 재담보와 재사용을 가른다 |
+| The (sizable) Role of Rehypothecation in the Shadow Banking System | Singh·Aitken 2010 (IMF WP 10/172) | 묶음 안 `기타/The (sizable) Role of Rehypothecation in the Shadow Banking System.pdf` | E-44. **원천 담보 개념의 원전.** 미국의 140% 한도와 영국의 무한도를 가르고 그 한도를 누적 담보 창출의 유한성으로 적는다. §V 의 회전 계수가 위 편과 분모를 다르게 잡는다 |
 
 **E-08 의 참고문헌이 앞 편의 제목을 부제 없이 적는다.** 실제 제목은 위 표의 것이다.
 
@@ -246,21 +247,23 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | O-2 | 11 | — |
 | O-2 보조 | 1 | — |
 | O-3 | 18 | — |
-| 교역 금융과 결제 방식 | 19 | 8 |
+| 교역 금융과 결제 방식 | 19 | 2 |
 | 계약 표현 | 14 | — |
-| 증거금과 담보의 규범 | 3 | 3 |
+| 증거금과 담보의 규범 | 3 | — |
 | 다른 CQ 덩어리의 재료 | 7 | — |
 | Tier B | 26 | — |
 | PH-4 보관 | 1 | — |
 | PH-5 보관 | 2 | — |
 | Tier C 제외 권고 | 11 | — |
 | 배제 사례와 관측 과제의 보조 | 3 | — |
-| 담보 속도와 재담보의 계량 | 2 | 2 |
-| **구성원 합계** | **138** | **13** |
+| 담보 속도와 재담보의 계량 | 2 | — |
+| **구성원 합계** | **138** | **2** |
 
-zip 안 구성원은 125편이다.
+zip 안 구성원은 136편이다.
 
-**zip 대조.** `macro_models.zip` 의 파일 128개는 zip 안 구성원 125편과 중복 사본 3개다.
+**zip 대조.** `macro_models.zip` 의 파일 140개는 zip 안 구성원 136편과 해시가 같은 중복 사본 3개와
+같은 문헌의 다른 발간본 1개다. 셋째 항이 BCBS 발간본과 IOSCO 발간본이며, 구성원으로는 하나이고
+파일로는 둘이다.
 
 **집계의 이력.** `collateral-3` 이 「증거금과 담보의 규범」 셋을 들여 구성원 합계가 133 에서 136 으로,
 zip 밖이 8 에서 11 로 늘었다. zip 안 구성원과 중복 사본과 필독 편수는 움직이지 않았다.
@@ -279,3 +282,15 @@ Python 으로 만들었고, 빠진 파일과 두 번 든 파일이 없음을 단
 
 **`collateral-4` 가 「담보 속도와 재담보의 계량」 둘을 들였다.** 구성원 합계가 136 에서 138 로,
 zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 필독 편수는 움직이지 않았다.
+
+**`collateral-5` 에서 소재가 바뀌었다.** 사용자가 묶음을 다시 건네면서 묶음 밖 구성원 열셋 가운데
+열하나가 들어왔고 파일로는 열둘이다. 묶음의 파일이 128 에서 140 으로, 묶음 안 구성원이 125 에서 136
+으로 늘고 묶음 밖이 13 에서 2 로 줄었다. **구성원 합계와 중복 사본과 필독 편수는 움직이지 않았다.**
+남은 둘은 웹 대역본으로 열람한 규범 둘이고 묶음에 들어올 수 없다. 그리고 같은 보고서의 두 발간본이
+묶음 안으로 들어와 묶음 대조 등식에 셋째 항이 섰다.
+
+**이 이력을 표로 접지 않는다.** 이 절의 문단 가운데 둘은 계수의 증감이고 둘은 계산 방법이 바뀐
+경위인데, 뒤의 둘은 표의 칸에 들어가지 않으므로 통째로 접으면 압축이 된다. 증감 문단만 접는 것은
+정돈에 들지만 지금 셋뿐이라 얻는 것이 없고, 증감 문단은 현행 값을 전사하지 않고 차이만 들어 낡지
+않는다. 접을 때는 증감만 표로 모으고 경위 문단을 산문으로 남기며, 그 작업은 이 문서를 재편하는
+일로 따로 선다.
