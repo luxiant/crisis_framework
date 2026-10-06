@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """원장 검증기의 음성 대조.
 
-`docs/decisions/SPEC.md` §2 의 주입 시험 칸대로 검사 스물일곱 각각에 위반을 주입하고, 그 검사가
-주입을 잡는지 본다. **주입은 사본에서 하고 원장을 건드리지 않는다.** 사본은 임시 디렉터리에
+`docs/decisions/SPEC.md` §2 의 주입 시험 칸이 든 검사마다 위반을 주입하고, 그 검사가 주입을
+잡는지 본다. **주입은 사본에서 하고 원장을 건드리지 않는다.** 사본은 임시 디렉터리에
 만들며 검사가 끝나면 지운다.
 
     python3 scripts/wiki_negative_control.py [--keep]
 
-판정 기준이 셋으로 갈린다. 실패시키는 검사(열여덟과 아크 종료 둘)는 **주입한 사본에서 FAIL 이
-나고 기준선에 없던 위반 줄이 새로 나야** 통과다. 기준선에서 이미 실패하는 검사가 있으므로
-FAIL 여부만 보면 공허해지기 때문이다. 보고만 하는 검사 넷은 실패시키지 않으므로 **보고 줄이
-기준선과 달라지고 주입한 항목이 그 안에 잡혀야** 통과다.
+판정 기준이 셋으로 갈린다. 실패시키는 검사와 아크 종료 검사는 **주입한 사본에서 FAIL 이 나고
+기준선에 없던 위반 줄이 새로 나야** 통과다. 기준선에서 이미 실패하는 검사가 있으므로 FAIL
+여부만 보면 공허해지기 때문이다. 보고만 하는 검사는 실패시키지 않으므로 **보고 줄이 기준선과
+달라지고 주입한 항목이 그 안에 잡혀야** 통과다.
+
+**머리 문면이 계수를 들지 않는다.** 몇을 드는지의 정본은 `CASES` 이고 그 계수는 이 스크립트의
+출력이 낸다. 머리 문면이 계수를 들면 검사가 늘 때마다 낡는데 그 낡음을 어느 검사도 보지 않으며,
+`collateral-5` 가 받은 판에서 실제로 한 수가 어긋나 있었다.
 
 셋째는 **잡히지 않아야 하는 항**이며 `CASES` 의 일곱째 자리에 `"nocatch"` 를 둔 항이 그것이다.
 새 위반 줄이 나지 않아야 통과다. 검사 5 가 날짜로 가르므로 닫힌 날 이전 날짜의 항목은 잡히지
@@ -87,6 +91,15 @@ def save_arcs(root: Path, doc: dict) -> None:
         json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def id_no(cf) -> int:
+    """`CF-<n>` 의 번호. 형식이 아니면 -1 이다.
+
+    검사 10 이 지목한 항목과 폐기 레코드의 번호로 가르므로, 그 검사를 겨누는 주입이 같은 가름을
+    쓰려면 여기서도 번호를 읽어야 한다."""
+    m = re.match(r"CF-(\d+)$", str(cf or ""))
+    return int(m.group(1)) if m else -1
+
+
 def pick(root: Path, reg: str, pred) -> dict:
     for e in load(root, reg)[reg]:
         if pred(e):
@@ -147,11 +160,26 @@ def inj_03p(root):
 
     검사 4 를 폐기하고 검사 3 하나로 두었으므로(SPEC §2.1) 이 검사가 잡아야 할 것이 둘이다.
     앞은 선언되지 않은 페이즈를 적는 것이고 뒤가 이것이다. 먼저 미선언 페이즈에 권한을 주는
-    패치를 세워 정당한 상태를 만들고, 그 패치만 걷어 낸다."""
-    edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", "charter-11"))
+    패치를 세워 정당한 상태를 만들고, 그 패치만 걷어 낸다.
+
+    **미선언 페이즈의 이름을 박지 않고 유도한다.** 이 주입은 그 이름을 `charter-11` 로 박아
+    두었는데, 그 뒤 `charter` 아크가 `charter-11` 을 선언하면서 조건이 서지 않게 되었다.
+    `collateral-5` 가 받은 판에서 이미 죽어 있었고, 그래서 검사 3 의 이 갈래가 음성 대조를 받지
+    않는 상태로 여러 회차를 지났다. 그 죽음은 「새 위반 줄 없음」으로만 보여 유도의 결함과 검사의
+    결함이 그 문면에서 갈리지 않는다.
+
+    **단언이 그 유도를 지킨다.** 선언된 페이즈의 뒤 번호 가운데 가장 큰 것에 1 을 더해 이름을
+    짓고, 그 이름이 그 아크의 `phases` 에 없음을 주입 전에 단언한다. 아크가 페이즈를 더 선언해도
+    이름이 함께 뒤로 가므로 유도가 스스로 유지된다."""
+    a = arcs(root)
+    charter = next(x for x in a["arcs"] if x["name"] == "charter")
+    phase = f"charter-{max(int(p.rsplit('-', 1)[1]) for p in charter['phases']) + 1}"
+    if phase in charter["phases"]:
+        raise SystemExit(f"유도한 페이즈 `{phase}` 가 이미 선언돼 있어 주입이 조건을 만들지 못한다")
+    edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", phase))
     doc = arcs(root)
     doc["patches"].append({
-        "arc": "charter", "op": "add", "from": None, "phase": "charter-11",
+        "arc": "charter", "op": "add", "from": None, "phase": phase,
         "what": "", "why": "음성 대조가 세운 항이다.",
         "origin": {"arc": "charter", "phase": "charter-8",
                    "kind": "decision_session", "date": "2026-09-20"},
@@ -159,8 +187,9 @@ def inj_03p(root):
     save_arcs(root, doc)
     # 여기까지가 정당한 상태다. 아래가 주입이며 권한을 준 패치를 지운다.
     doc = arcs(root)
-    doc["patches"] = [q for q in doc["patches"] if q.get("phase") != "charter-11"]
+    doc["patches"] = [q for q in doc["patches"] if q.get("phase") != phase]
     save_arcs(root, doc)
+    return phase
 
 
 def inj_04a(root):
@@ -240,8 +269,32 @@ def inj_09(root):
 
 
 def inj_10(root):
-    dead = load(root, "retirements")["retirements"][0]["target"]
-    edit(root, "decisions", "CF-24", lambda e: e.__setitem__("related", [dead]))
+    """폐기된 id 를 폐기 뒤에 선 항목의 `related` 에 넣는다.
+
+    **지목하는 항목을 박지 않고 유도한다.** 이 주입은 그 항목을 `CF-24` 로 박아 두었는데, 검사
+    10 이 폐기 레코드보다 번호가 앞선 항목의 지목을 실패가 아니라 보고로 돌리므로 그 지목은
+    구조적으로 실패가 될 수 없다. `collateral-5` 가 받은 판에서 이미 죽어 있었고, 그래서 검사
+    10 이 음성 대조를 받지 않는 상태로 여러 회차를 지났다.
+
+    그래서 번호가 가장 작은 폐기 레코드를 고르고, 그 번호보다 큰 살아 있는 결정 항목 가운데
+    번호가 가장 큰 것이 그 폐기 대상을 들게 한다. 원장이 자라면 고르는 항목이 함께 뒤로 가므로
+    유도가 스스로 유지된다. `related` 는 덮지 않고 덧붙인다. 덮으면 그 항목이 원래 들고 있던
+    지목이 사라져 같은 사본에서 다른 검사가 함께 흔들린다."""
+    rets = load(root, "retirements")["retirements"]
+    first = min(rets, key=lambda q: id_no(q.get("id")))
+    dead = first["target"]
+    retired = {q["target"] for q in rets if q.get("target")}
+    live = [e for e in load(root, "decisions")["decisions"]
+            if id_no(e.get("id")) > id_no(first.get("id")) and e.get("id") not in retired]
+    if not live:
+        raise SystemExit("폐기 레코드보다 뒤에 선 살아 있는 결정 항목이 없어 주입 대상이 없다")
+    tgt = max(live, key=lambda e: id_no(e.get("id")))
+    related = list(tgt.get("related") or [])
+    if dead in related or first.get("id") in related:
+        raise SystemExit(f"{tgt['id']} 가 이미 {dead} 나 {first['id']} 를 들어 주입이 조건을 만들지 못한다")
+    edit(root, "decisions", tgt["id"],
+         lambda e: e.__setitem__("related", list(e.get("related") or []) + [dead]))
+    return tgt["id"]
 
 
 def inj_11(root):
