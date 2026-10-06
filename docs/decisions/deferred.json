@@ -1099,6 +1099,62 @@
     "CF-811",
     "CF-818"
    ]
+  },
+  {
+   "id": "CF-833",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-5",
+    "kind": "decision_session",
+    "date": "2026-10-06"
+   },
+   "statement": "FX 스왑의 총액을 공표 수치에서 복원하는 자리가 남는다.",
+   "basis": "`CF-209` 가 총액 복원을 묻고 그 가운데 담보 쪽은 `collateral` 아크가 처분했다. J-3 이 같은 물음을 FX 스왑에도 걸어 두었고 그 몫은 이 아크의 판별선 밖이므로 남는다. 총액 기재로 회계 폐쇄성은 유지되나 공표 수치에서 그 총액을 되찾는 자리가 서지 않았다.",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "network",
+    "what": "FX 스왑의 총액을 공표 수치에서 복원하려는 진술이 막히는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-834",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-5",
+    "kind": "decision_session",
+    "date": "2026-10-06"
+   },
+   "statement": "원천 담보의 측정 소스가 추정과 업계 집계라 본인별로 쪼개지지 않는다.",
+   "basis": "`CF-738` 이 측정 단위의 어긋남을 물었고 S-7 읽기가 그 성문 근거를 주었다. 분모가 헤지펀드 운용자산에 레버리지 추정을 곱한 값과 업계 협회의 집계로 서며, 그 집계가 수탁기관 단위다. 투영이 되돌릴 수 없다는 것이 소스 없음의 내용이므로 그 자리는 조달로 풀리고 이 아크가 풀지 않는다.",
+   "layer": "observation",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "propagation",
+    "what": "원천 담보의 총계를 본인별로 쪼개어 쓰려는 진술이 막히는 자리"
+   },
+   "related": [
+    "CF-826"
+   ]
+  },
+  {
+   "id": "CF-835",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-5",
+    "kind": "decision_session",
+    "date": "2026-10-06"
+   },
+   "statement": "구조가 매도 인도를 담지 않아 담보 사슬이 저자의 사슬보다 짧다.",
+   "basis": "`CF-823` 이 재사용과 재담보의 넓이 차이를 물었다. 사슬의 이어짐을 반환 청구권의 종류물이 같은 것으로 유도하기로 한 결정이 그 자리를 비켜 가게 했을 뿐 담은 것이 아니며, 매도로 소유권이 넘어가는 고리를 담으려면 담보 제공이 아닌 이전을 구조가 받아야 한다. 그것은 담보의 판별선 밖이다.",
+   "layer": "definition",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "network",
+    "what": "매도 인도를 담보 사슬의 고리로 세려는 진술이 막히는 자리"
+   },
+   "related": []
   }
  ]
 }
