@@ -40,6 +40,11 @@ namespace CrisisFramework.Observation
 **기각한 대체 정의:**
 까닭을 묻지 않고 판정 불가를 한 칸으로 두는 안. 소스가 없어서 못 재는 것과 잴 대상이
 실현되지 않아서 못 재는 것은 해소 경로가 다르다. 앞은 조달로 풀리고 뒤는 풀리지 않는다.
+
+**칸이 다섯이 된 까닭도 해소 경로다.** 구조를 더하면 풀리는 것과 이 프로젝트의 경계 밖이어서 끝까지
+남는 것을 한 칸에 두면, 조달로 풀리는 것과 풀리지 않는 것을 가른 위 문단의 근거가 그 자리에서
+무너진다. 담보 실물의 가치가 둘을 함께 요구하는 것이 그 실측이며, 수량은 점유를 담지 않기로 한
+결정 때문에 구조에 없고 가격은 값의 결정이라 동학층에 있다.
 -/
 -- DD:CF-571
 inductive UndeterminedReason where
@@ -49,6 +54,11 @@ inductive UndeterminedReason where
   | legalTextAmbiguous
   /-- 반사실을 평가하지 못한다. 답이 실현되지 않은 세계의 값을 요구한다. -/
   | counterfactualUnevaluated
+  /-- 구조가 그 대상을 담지 않는다. 재야 할 것은 정해졌으나 그것을 담는 대상이 형식층에 없다. -/
+  | structureLacksTarget
+  /-- 그 값의 결정이 재유입 범위 밖의 층에 있다. 값은 관측되나 결정이 동학층이어서 산출물이
+      답하지 못한다. -/
+  | determinationOutOfScope
   deriving DecidableEq, Repr
 
 /--
@@ -474,6 +484,43 @@ structure ClaimsOnMismatchedDebtors
 def ClaimsOnMismatchedDebtors.trivial :
     ClaimsOnMismatchedDebtors Unit Unit Unit Unit where
   answer := fun _ _ _ _ => .undetermined .noMeasurementSource
+
+/--
+`CQ-fin-12` 청구권 담보의 배수.
+
+**대응 비형식 개념:** 한 시점에 청구권 j 를 담보로 한 청구권의 합과 그 청구권 j 자신의 금액은
+통화 c 로 각각 얼마인가. 금융자산 담보가 자기 금액의 몇 배에 해당하는 청구권을 떠받치는지 보고,
+같은 청구권이 여러 번 떠받쳐진 자리를 감시 대상으로 올릴지 정하는 데 복무한다.
+
+**이 정의가 배제하는 사례:**
+미국 프라임브로커리지의 재담보가 고객 차변잔액의 140% 까지로 묶여 있는 것(Singh·Aitken 2010).
+그 한도는 당사자별 잔액에 걸리고 이 물음은 청구권별 배수를 묻으므로, 한도를 지키면서도 한 청구권이
+여러 번 떠받칠 수 있다. 이 물음은 그 한도의 준수 여부를 담지 않는다.
+
+**기각한 대체 정의:**
+배수를 비 하나로 답하는 안. 비는 `ℚ` 를 부르고 L-15 가 `ℚ` 를 강제되는 경우로 한정하므로, 두
+값을 각각 내면 배수의 판정이 교차곱 정수 부등식으로 선다. `CQ-fin-10` 이 같은 자리에서 같은
+선택을 했다. 한도 초과 여부를 묻는 안도 기각했다. 한도가 법역마다 다르고 구조에 없으므로 그
+물음이 구조 밖의 값을 요구한다.
+
+**`CQ-fin-10` 과 담보물의 종류로 갈린다.** 그 물음이 상품을 받고 이 물음이 청구권을 받는다. 담보
+장부는 담보물의 종류를 가르지 않으므로 같은 구조물이 둘을 함께 받치는데, 두 물음이 접히는 자리가
+서로 다르다.
+-/
+-- DD:CF-845
+structure ClaimPledgeMultiple
+    (Time Claim Currency Amount : Type) where
+  /-- 담보로 잡힌 청구권과 통화와 시점을 받아 그 청구권이 떠받치는 청구권의 합과 그 청구권
+      자신의 금액을 함께 낸다. -/
+  answer : Claim → Currency → Time → ObservedValue Amount × ObservedValue Amount
+
+/-- witness (A-3). `ClaimPledgeMultiple` 이 비어 있지 않음을 보인다. 모든 자리에서 두 값을 소스
+없음으로 내는 사상. -/
+-- DD:CF-31
+def ClaimPledgeMultiple.trivial :
+    ClaimPledgeMultiple Unit Unit Unit Unit where
+  answer := fun _ _ _ =>
+    (.undetermined .noMeasurementSource, .undetermined .noMeasurementSource)
 
 end CQ
 

@@ -189,13 +189,14 @@ CQFIN=8|MonetaryHierarchyOrder|Entity → Entity → Time → ObservedTruth|e3e1
 CQFIN=9|RepaymentAndAdjustment|Entity → Time → Time → RepaymentOutcome|fb94926a3bbc
 CQFIN=10|PledgedClaimsAndStock|Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount|ccf0c693f75e
 CQFIN=11|ClaimsOnMismatchedDebtors|Entity → Currency → Currency → Time → ObservedValue Amount|5a4185e7b233
+CQFIN=12|ClaimPledgeMultiple|Claim → Currency → Time → ObservedValue Amount × ObservedValue Amount|39a1bec9d4e8
 <!-- CQFIN:END -->
 
 ---
 
 ## 6. CQ 고정 절 (CF-571)
 
-이 절이 잠그는 것은 `CQ-fin` 열하나의 **서명과 docstring** 이며, 그 선언의 거처는
+이 절이 잠그는 것은 `CQ-fin` 열둘의 **서명과 docstring** 이며, 그 선언의 거처는
 `CrisisFramework/Observation/CompetencyQuestion.lean` 이다. 고정 절의 값은 §5 의 `CQFIN` 블록이
 든다.
 
