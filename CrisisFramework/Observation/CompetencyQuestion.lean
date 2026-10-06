@@ -437,7 +437,7 @@ def RepaymentAndAdjustment.trivial :
 -- DD:CF-582
 structure PledgedClaimsAndStock
     (Time Commodity Currency Amount : Type) where
-  /-- 상품과 통화와 시점을 받아 담보로 제공된 청구권의 합과 실물의 가치를 함께 낸다. -/
+  /-- 상품과 통화와 시점을 받아 그 상품이 떠받치는 청구권의 합과 실물의 가치를 함께 낸다. -/
   answer : Commodity → Currency → Time → ObservedValue Amount × ObservedValue Amount
 
 /-- witness (A-3). -/

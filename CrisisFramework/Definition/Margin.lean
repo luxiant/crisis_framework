@@ -85,14 +85,14 @@ structure PledgeRates (PIdx Num Obs : Type) where
   /-- 떠받쳐야 할 것에 요구되는 자기자본의 몫. 개시증거금과 변동증거금이 든다. -/
   exposureMargin : Ratio Num Obs
   /-- 떠받치는 것을 얼마로 쳐 주는가. 차감률이 아니라 곱하는 비율이다. -/
-  valuation : Ratio Num Obs
+  valuationRate : Ratio Num Obs
 
 /-- witness (A-3). `PledgeRates` 가 비어 있지 않음을 보인다. 제공 색인과 두 비율이 모두 자명한 조. -/
 -- DD:CF-31
 def PledgeRates.trivial : PledgeRates Unit Unit Unit where
   pledge := ()
   exposureMargin := Ratio.trivial
-  valuation := Ratio.trivial
+  valuationRate := Ratio.trivial
 
 /--
 마진 요구가 충족되는가.
@@ -145,8 +145,8 @@ def PledgeRates.marginHolds {PIdx Num Obs Ext Lvl : Type}
 def PledgeRates.coverageHolds {PIdx Num Obs Ext Lvl : Type}
     (r : PledgeRates PIdx Num Obs) (collateralValue required : Term Num Obs) :
     Trigger Num Obs Ext Lvl :=
-  Trigger.le (Term.mul required r.valuation.denom)
-             (Term.mul r.valuation.numer collateralValue)
+  Trigger.le (Term.mul required r.valuationRate.denom)
+             (Term.mul r.valuationRate.numer collateralValue)
 
 /--
 한 시점의 비율 집합.

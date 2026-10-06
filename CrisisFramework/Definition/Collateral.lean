@@ -122,7 +122,7 @@ def Pledge.trivial : Pledge Unit Unit where
   rehypothecable := false
 
 /--
-그 제공이 원천 담보인가.
+그 제공이 재담보 권리를 지니는가.
 
 **대응 비형식 개념:** 재담보 권리가 딸려 있어 사슬의 출발점이 될 수 있는 담보.
 
@@ -136,9 +136,14 @@ def Pledge.trivial : Pledge Unit Unit where
 구속하는 자리는 커버리지 합이라 회계층이다. C-10 의 발동조건 문법으로 두는 안도 기각했다. 140%
 규칙이 차변잔액 위의 교차곱 정수 부등식이라 문법에 들어맞지만, 권리 하나 때문에 매개변수 넷이
 딸려 온다.
+
+**이름이 「원천 담보」가 아닌 까닭.** 저자가 쓰는 원천 담보는 사슬의 머리이고 담보 속도의
+분모다. 이 술어는 권리가 붙어 받은 제공 전량을 가르므로 그 분자의 거름망이며, 저자의 이름을
+붙이면 읽는 사람이 분자와 분모를 거꾸로 받는다. 권리를 지닌 것과 그 권리를 이미 쓴 것과 아직
+쓰지 않은 것 셋이 나란히 읽히도록 이름을 골랐다.
 -/
 -- DD:CF-742
-def Pledge.isSourceCollateral {Idx Asset : Type} (p : Pledge Idx Asset) : Bool :=
+def Pledge.carriesRehypothecationRight {Idx Asset : Type} (p : Pledge Idx Asset) : Bool :=
   p.rehypothecable
 
 /--
@@ -318,5 +323,34 @@ abbrev PledgeFamily (PIdx Idx Asset : Type) := ℕ → PledgeSet PIdx Idx Asset
 -- DD:CF-31
 def PledgeFamily.constant {PIdx Idx Asset : Type}
     (P : PledgeSet PIdx Idx Asset) : PledgeFamily PIdx Idx Asset := fun _ => P
+
+/--
+그 제공이 사슬의 머리인가.
+
+**대응 비형식 개념:** 어느 제공에서도 이어 들어오지 않은 담보 제공. 그 제공자가 그 종류물로
+담보를 받은 적이 없으므로 그 담보가 사슬 밖에서 들어온 것이다. 담보 속도의 분모가 세는 대상이
+이것이다.
+
+**이 정의가 배제하는 사례:**
+받기도 하고 내놓기도 하는 딜러가 자기 대차대조표로 대는 담보. 그 딜러는 받는 쪽이기도 하므로
+이 술어가 거짓을 내고 그 담보가 분모에서 빠진다. Singh 2011 이 그 자리를 회전 계수가 무한인
+것으로 보고 금액이 작아 결과에 영향이 없다고 적는데, 구조는 그 크기를 재는 수단을 갖지 않으므로
+같은 근거로 넘길 수 없다.
+
+**기각한 대체 정의:**
+당사자의 종류로 가르는 안. 저자는 궁극 원천인 자산운용자에게서 채굴된 것을 분모로 두나, 노드를
+의사결정 단위로 두고 기관유형을 관측 투영으로 보낸 결정이 서 있어 당사자의 종류가 정의층에 없다.
+그 종류가 하는 일은 2차 보유분을 빼어 머리를 가리는 것이므로 측정 대리이지 정의가 아니며, 그
+대리는 관측 명세가 받는다. 받은 것보다 더 내보낸 몫으로 재는 안도 기각했다. 저자의 분모는 급수의
+0 차 항이고 그 몫은 당사자별 순유출이라 다른 대상이다.
+
+**단계 수를 받지 않는다.** 머리인지는 한 걸음 안쪽만 보면 서므로 도달 판정이 필요하지 않다.
+-/
+-- DD:CF-804
+def PledgeSet.isChainHead {PIdx Idx Asset Party Num Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Currency]
+    (S : ClaimSet Idx Party Num Obs Ext Lvl Currency)
+    (P : PledgeSet PIdx Idx Asset) (i : PIdx) : Bool :=
+  !decide (∃ k ∈ P.index, ((P.assign k).linksTo S (P.assign i)) = true)
 
 end CrisisFramework.Definition
