@@ -109,6 +109,9 @@ inductive SourceTag where
   | fxSettlementStatistics
   /-- 기업조사. 매출의 지급 시점을 묻는다. -/
   | enterpriseSurvey
+  /-- 재무제표의 담보 주석. 받아서 인도하거나 재담보하도록 허용된 금융상품의 공정가치와 그중
+      실제로 인도하거나 재담보한 금액을 든다. -/
+  | pledgeNote
   deriving DecidableEq, Repr
 
 /--
@@ -187,6 +190,20 @@ inductive ConceptRel where
 하나로 모이므로 그 상태로 붙이면 G-2 에 걸린다. 담보 축 셋에 붙이지 않은 것과 같은 사유이며,
 측정 소스를 대응시키는 일은 관측 명세를 세우는 페이즈의 몫이다.
 
+**담보물 분할의 V-5 판정이 섰다.** 청구권인 담보물은 재무제표의 담보 주석에서 측정되고 청구권이
+아닌 담보물은 그 주석에 들지 않는다. **그 주석이 드는 것이 「담보로 받은 금융상품의 공정가치」이기
+때문이며**(Singh·Aitken 2010 상자 1 이 인용한 재무제표 문면), 상품 재고를 담보로 받은 것은 그
+문면의 한정에서 빠진다. 측정 대응이 한쪽에만 있으므로 둘이 다르고, V-5 가 요구하는 판정의 재료가
+이 자리에서 선다.
+
+**상품 재고가 그 칸에 서지 않는다는 것은 저자의 주장이 아니라 그 문면의 한정에서 따라 나오는
+판정이다.** 저자는 그 주석을 재담보 가능 담보의 측정 소스로 쓰면서 담보물의 종류를 가르지 않는다.
+그러므로 이 판정의 근거는 인용된 문면이고 저자의 서술이 아니다.
+
+**한쪽의 측정 대응이 없다는 것을 용어집이 적지 않는다.** V-2 의 네 관계에 「측정 대응 없음」이
+없고, L-14 가 소스 없음의 등재를 관측층의 몫으로 둔다. 그래서 이 등재는 한쪽에만 서고 없는 쪽은
+관측층의 공시 경로가 칸으로 든다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -214,6 +231,7 @@ def registry : List ConceptRel :=
   , .refines .returnClaim .claim
   , .partitions .pledgeableAsset [.claimPledgeable, .nonClaimPledgeable]
   , .excludes .claimPledgeable .nonClaimPledgeable
+  , .measuredBy .claimPledgeable .pledgeNote
   , .refines .externalAsset .nonClaimPledgeable
   , .refines .rehypothecation .pledge
   , .refines .sourceCollateral .pledge
