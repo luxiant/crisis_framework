@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기의 음성 대조.
 
-`docs/decisions/SPEC.md` §2 의 주입 시험 칸대로 검사 스물다섯 각각에 위반을 주입하고, 그 검사가
+`docs/decisions/SPEC.md` §2 의 주입 시험 칸대로 검사 스물일곱 각각에 위반을 주입하고, 그 검사가
 주입을 잡는지 본다. **주입은 사본에서 하고 원장을 건드리지 않는다.** 사본은 임시 디렉터리에
 만들며 검사가 끝나면 지운다.
 
@@ -389,6 +389,42 @@ def inj_20(root):
     save_arcs(root, doc)
 
 
+def inj_31(root):
+    """열린 아크의 페이즈로 발화하는 이연 항을 쓰고 어느 아크의 `holes` 에도 넣지 않는다.
+
+    기존 뼈대는 `origin.phase` 를 `charter-6` 으로 두는데 검사 31 이 첫 적재를 면제하므로
+    그대로 쓰면 주입이 조건을 만들지 못한다. 그 자리만 열린 아크의 선언된 페이즈로 바꾸고
+    나머지는 같게 둔다."""
+    doc = load(root, "deferred")
+    e = deferred_stub("CF-9031", {"kind": "artifact", "ref": "docs/arcs.json"})
+    e["origin"]["arc"] = "collateral"
+    e["origin"]["phase"] = "collateral-5"
+    doc["deferred"].append(e)
+    save(root, "deferred", doc)
+    return "CF-9031"
+
+
+def inj_32(root):
+    """블록의 값을 그 페이즈의 패치 계수와 다르게 적는다.
+
+    패치가 하나 이상인 페이즈의 종료 문서를 골라 말미에 블록을 더하고 값을 0 으로 둔다.
+    패치가 0 인 페이즈를 고르면 0 이 참값이라 주입이 조건을 만들지 못한다."""
+    counts: dict = {}
+    for p in arcs(root)["patches"]:
+        ph = (p.get("origin") or {}).get("phase")
+        if ph:
+            counts[ph] = counts.get(ph, 0) + 1
+    d = root / "docs" / "phases"
+    for f in sorted(d.glob("*-closure.md")) if d.is_dir() else []:
+        phase = f.name[:-len("-closure.md")]
+        if counts.get(phase, 0) > 0:
+            f.write_text(f.read_text(encoding="utf-8")
+                         + "\n<!-- UNTRANSCRIBED:BEGIN -->\nUNTRANSCRIBED=0\n"
+                           "<!-- UNTRANSCRIBED:END -->\n", encoding="utf-8")
+            return phase
+    raise SystemExit("패치가 하나 이상인 페이즈의 종료 문서가 없어 검사 32 의 주입 대상이 없다")
+
+
 def inj_21(root):
     """발화도 해소도 이월도 되지 않은 blocking 구멍을 든 채 아크를 닫는다."""
     doc = load(root, "deferred")
@@ -431,6 +467,8 @@ CASES = [
     ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19,  "CF-100",  None),
     ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
     ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21,  None, "charter"),
+    ("31",  "wiki31-hole-unassigned",      "열린 아크의 페이즈로 발화하는 이연 항을 쓴다",  inj_31,  None, None),
+    ("32",  "wiki32-closure-untranscribed", "블록의 값을 그 페이즈의 패치 계수와 다르게 적는다", inj_32, None, None),
 ]
 
 

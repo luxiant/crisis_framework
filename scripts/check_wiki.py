@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 서른을 돈다. 실패시키는 것 스물둘과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 서른둘을 돈다. 실패시키는 것 스물넷과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -682,37 +682,47 @@ def check_25(led: Ledger) -> Report:
     return r
 
 
+def trigger_fired(led: Ledger, e: dict) -> tuple[bool, str, str]:
+    """이연 항목의 `reopen_when` 이 충족됐는가와 그 종류와 사유를 낸다.
+
+    검사 16 과 31 이 같은 판정을 쓴다. 판정을 두 자리에 전사하면 한쪽을 고칠 때 다른 쪽이
+    조용히 낡고, 둘이 다른 수를 내는 것을 어느 검사도 잡지 못한다(SPEC §2.1).
+    """
+    rw = e.get("reopen_when")
+    if not isinstance(rw, dict):
+        return False, "", ""
+    kind, ref = rw.get("kind"), str(rw.get("ref") or "")
+    hit = False
+    why = ""
+    if kind == "artifact":
+        p = led.root / ref
+        hit = p.exists()
+        why = f"경로 `{ref}` 가 실재한다"
+    elif kind == "extraction":
+        # 그 논문의 추출 기록이 섰는가를 파일명으로 본다. 본문으로 보면 다른 추출 기록이
+        # 그 논문을 인용한 자리가 발화로 잡힌다.
+        flat = re.sub(r"[^a-z0-9]", "", ref.lower())
+        d = led.root / "docs" / "extractions"
+        for f in (sorted(d.glob("*.md")) if d.is_dir() else []):
+            if flat and flat in re.sub(r"[^a-z0-9]", "", f.stem.lower()):
+                hit, why = True, f"추출 기록 `{f.name}` 이 섰다"
+                break
+    elif kind == "arc_phase":
+        a = led.arcs.get(ref)
+        hit = bool(a) and a.get("status") == "open"
+        why = f"아크 `{ref}` 가 열려 있다"
+    # `blocking` 은 여기서 보지 않는다. 아크가 열려 있다는 것으로는 누가 실제로 부딪힌 것과
+    # 아크가 그냥 열려 있는 것이 갈리지 않아 늘 발화로 뜨고, 그러면 이 보고를 읽는 쪽이
+    # 곧 넘기게 되어 검사 16 을 두는 사유가 무너진다. 그 몫은 검사 18 이 든다(SPEC §2.2).
+    return hit, str(kind or ""), why
+
+
 def check_16(led: Ledger) -> Report:
     r = Report("16", "wiki16-trigger-fired", "reopen_when 이 충족된 이연 항목", "report")
     fired: list[str] = []
     dropped: list[str] = []
     for e in led.reg["deferred"]:
-        rw = e.get("reopen_when")
-        if not isinstance(rw, dict):
-            continue
-        kind, ref = rw.get("kind"), str(rw.get("ref") or "")
-        hit = False
-        why = ""
-        if kind == "artifact":
-            p = led.root / ref
-            hit = p.exists()
-            why = f"경로 `{ref}` 가 실재한다"
-        elif kind == "extraction":
-            # 그 논문의 추출 기록이 섰는가를 파일명으로 본다. 본문으로 보면 다른 추출 기록이
-            # 그 논문을 인용한 자리가 발화로 잡힌다.
-            flat = re.sub(r"[^a-z0-9]", "", ref.lower())
-            d = led.root / "docs" / "extractions"
-            for f in (sorted(d.glob("*.md")) if d.is_dir() else []):
-                if flat and flat in re.sub(r"[^a-z0-9]", "", f.stem.lower()):
-                    hit, why = True, f"추출 기록 `{f.name}` 이 섰다"
-                    break
-        elif kind == "arc_phase":
-            a = led.arcs.get(ref)
-            hit = bool(a) and a.get("status") == "open"
-            why = f"아크 `{ref}` 가 열려 있다"
-        # `blocking` 은 여기서 보지 않는다. 아크가 열려 있다는 것으로는 누가 실제로 부딪힌 것과
-        # 아크가 그냥 열려 있는 것이 갈리지 않아 늘 발화로 뜨고, 그러면 이 보고를 읽는 쪽이
-        # 곧 넘기게 되어 검사 16 을 두는 사유가 무너진다. 그 몫은 검사 18 이 든다(SPEC §2.2).
+        hit, kind, why = trigger_fired(led, e)
         if hit:
             # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 함께 실으면 살아 있는 구멍의 수를
             # 밖에서 셀 수 없다(CF-684). 뺀 건수는 출력에 남긴다.
@@ -830,7 +840,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "29", "30"]
+         "28", "31", "32", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -989,6 +999,74 @@ def check_30(led: Ledger) -> Report:
     return r
 
 
+def check_31(led: Ledger) -> Report:
+    r = Report("31", "wiki31-hole-unassigned",
+               "발화한 이연 항목이 어느 아크의 holes 에도 들지 않는가", "fail")
+    assigned = {h for a in led.arcs.values() for h in (a.get("holes") or [])}
+    n_fired = n_assigned = exempt = 0
+    for e in led.reg["deferred"]:
+        # 폐기된 항목은 살아 있는 구멍이 아니므로 유니버스 밖이다. 검사 16 과 같은 형이다.
+        if e.get("id") in led.dead:
+            continue
+        hit, kind, _ = trigger_fired(led, e)
+        if not hit:
+            continue
+        n_fired += 1
+        if e.get("id") in assigned:
+            n_assigned += 1
+            continue
+        # 첫 적재는 아크 개념 이전에 섰고 `arcs.json` 에 배정될 자리가 없었다. 예외를
+        # charter-6 으로 못 박으므로 그 뒤의 항목은 요건을 그대로 받는다(SPEC §2.1).
+        if (e.get("origin") or {}).get("phase") == "charter-6":
+            exempt += 1
+            continue
+        r.bad(f"{e.get('id')}: 발화한({kind}) 이연 항목이 어느 아크의 holes 에도 없다")
+    r.note(f"발화 {n_fired}건 · 그 가운데 배정된 것 {n_assigned}건 "
+           f"· 첫 적재(charter-6) 면제 {exempt}건")
+    return r
+
+
+# 검사 32 가 읽는 미전사분 블록. 형은 CQ 고정 절과 같고 자리는 종료 문서 안이면 어디든 된다.
+UNTRANSCRIBED_BLOCK = re.compile(
+    r"<!-- UNTRANSCRIBED:BEGIN -->\n(.*?)<!-- UNTRANSCRIBED:END -->", re.S)
+UNTRANSCRIBED_LINE = re.compile(r"^UNTRANSCRIBED=(-?\d+)$")
+
+
+def check_32(led: Ledger) -> Report:
+    r = Report("32", "wiki32-closure-untranscribed",
+               "페이즈 종료 문서의 미전사분 블록이 그 페이즈의 패치 계수와 같은가", "fail")
+    declared = {p for a in led.arcs.values() for p in (a.get("phases") or [])}
+    d = led.root / "docs" / "phases"
+    docs = sorted(d.glob("*-closure.md")) if d.is_dir() else []
+    n_block = exempt = 0
+    for f in docs:
+        phase = f.name[:-len("-closure.md")]
+        rel = f.relative_to(led.root)
+        if phase not in declared:
+            r.bad(f"{rel}: 페이즈 `{phase}` 가 어느 아크의 phases 에도 없다")
+        text = f.read_text(encoding="utf-8")
+        blocks = UNTRANSCRIBED_BLOCK.findall(text)
+        if not blocks:
+            # 종료 문서는 운영자가 그 회차의 커밋보다 뒤에 쓰므로 없을 때 실패시키지 않는다.
+            # 계수로 보고하고, 결정 세션의 사전 검사가 그 출력을 읽는다(SPEC §2.1).
+            exempt += 1
+            continue
+        n_block += 1
+        if len(blocks) > 1:
+            r.bad(f"{rel}: UNTRANSCRIBED 블록이 {len(blocks)}개다")
+            continue
+        vals = [m.group(1) for m in map(UNTRANSCRIBED_LINE.match, blocks[0].splitlines()) if m]
+        if len(vals) != 1:
+            r.bad(f"{rel}: 블록 안의 UNTRANSCRIBED=<정수> 줄이 {len(vals)}개다")
+            continue
+        want = sum(1 for p in led.patches
+                   if (p.get("origin") or {}).get("phase") == phase)
+        if int(vals[0]) != want:
+            r.bad(f"{rel}: 블록이 {vals[0]} 을 들었으나 그 페이즈의 패치 레코드는 {want}건이다")
+    r.note(f"종료 문서 {len(docs)}건 · 블록을 든 것 {n_block}건 · 블록이 없어 면제된 것 {exempt}건")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -999,7 +1077,8 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_16(led), check_17(led), check_18(led), check_19(led),
         check_20(led, arc_close), check_21(led, arc_close),
         check_26(led), check_27(led),
-        check_28(led), check_29(led, arc_close), check_30(led),
+        check_28(led), check_31(led), check_32(led),
+        check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
     reports.sort(key=lambda r: order[r.number])
@@ -1025,7 +1104,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른둘)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
