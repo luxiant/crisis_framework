@@ -346,6 +346,62 @@
         "kind": "decision_session",
         "date": "2026-10-03"
       }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "구간의 커밋은 `verify.sh` 가 잰 작업 트리 전량을 담는다",
+      "why": "결정 세션이 구간 3 의 호출에서 경로를 명시해 `docs/arcs.json` 을 커밋에서 빼라고 지시했는데 그 지시가 틀렸다. `verify.sh` 가 작업 트리 전체를 재므로 커밋에서 한 경로를 빼면 커밋된 트리가 측정된 트리와 달라지고, W-3 이 유일한 증거 경로로 세운 「출력 원문과 커밋 SHA」의 짝이 그 자리에서 끊긴다. 집행이 그 사유를 들어 함께 담았고 판정이 옳았다. 소진 문서를 커밋에서 떼는 수단은 `.gitignore` 이며 경로 지정이 아니다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "지시서의 착수 전 확인에 작업 트리의 미커밋 변경이 조작 자리와 겹치는지를 둔다",
+      "why": "`collateral-3` 은 운영자가 산문층 별지를 미커밋으로 건넸고 `collateral-4` 는 운영자의 직권 편집이 별지 A3 의 조작 자리와 겹쳤다. 지시서와 별지는 커밋된 판을 딛는데 작업 트리에 그 뒤의 편집이 얹혀 있다는 구조가 같고, 그 구조를 적은 조항이 없었다. 회차를 건너 살아남은 것이 값이 아니라 형이나, §2.3 의 예외가 드는 근거가 「그 문서를 만드는 절차의 결함」이므로 형에도 걸린다. 그래서 §6.7 이 받는다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "`docs/baseline.md` 의 측정 시점 칸은 그 층의 선언이 마지막으로 감사된 회차를 든다",
+      "why": "기준선 값이 바뀐 회차가 아니다. 공리 감사가 매 실행마다 선언 전량을 훑으므로 그 층에 선언이 늘면 감사의 대상이 달라지고 값이 그대로라는 것도 새로 잰 결과다. `collateral-2` 가 프로브를 그대로 둔 채 정의층의 같은 칸을 자기 회차로 고친 것이 그 관례를 세웠으나 어디에도 적혀 있지 않아, `collateral-4` 의 별지가 「값이 바뀌는가」를 물어 정의층 행을 건드리지 않기로 적었다. 집행이 그것을 판단 사안으로 올려 잡혔다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-4",
+      "what": "별지가 조작의 조건으로 이름을 드는 문자열은 대장이 앵커로 등재한다",
+      "why": "그대로 두라고 적은 줄과 블록을 가르는 경계 줄이 그 부류다. 등재하지 않으면 생성기의 단언을 받지 않으므로 그 줄이 사라져도 사전 검사가 잡지 못한다. 구간 3 에서 집행이 센 앵커가 열넷이고 대장이 든 것이 열둘이었으며, 더한 둘이 `| rejected | 26 |` 과 `end CrisisFramework.Definition` 이다. 집행이 넓게 재어 결손이 드러나지 않았을 뿐이다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-4",
+        "kind": "decision_session",
+        "date": "2026-10-06"
+      }
     }
   ]
 }
