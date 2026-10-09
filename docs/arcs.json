@@ -585,6 +585,188 @@
         "kind": "decision_session",
         "date": "2026-10-06"
       }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "`W-3` 의 v8 판정 주석이 드는 해시 불변은 산문 구간에만 걸리고 원장 병합 구간에는 걸리지 않는다. `verify.sh` 의 `OUTPUT_DIGEST` 가 그 출력 전량을 입력으로 받고 정규화가 지우는 것이 색 코드와 절대 경로와 빌드 진행 표시와 소요 시간 넷뿐이므로, `step6-ledger` 가 내보내는 레지스터 계수와 검사 19·23 의 값이 그 입력에 남는다.",
+      "why": "결정 세션이 그 주석에서 「해시가 움직이는 조건은 검사 24 의 토큰 계수뿐」을 끌어내 구간 1 의 기대에 해시 불변을 적었고, 집행이 해시 계산을 복제해 기재값을 재현한 뒤 `check_wiki` 절만 받은 판으로 되돌려 다른 값을 얻어 그 추론을 반증했다. 앞 회차의 병합 구간도 해시가 옮겨 간 것을 회차 절이 든다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "지시서의 기대표는 `OUTPUT_DIGEST` 의 불변을 적지 않고 구간마다 실측해 기록하게 두며, 착지 증거는 커밋 SHA 와 바뀐 파일의 경로를 함께 든다.",
+      "why": "해시가 움직이든 움직이지 않든 처분이 같으므로 기대를 적는 것이 이익 없이 어긋남만 낳고, 어느 구간이 산문 구간인지의 판정이 출력 전량을 읽어야 서므로 결정 세션이 그것을 미리 가를 수 없다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "엔트리 카드의 직렬화 들여쓰기를 원장 실물에서 뽑아 원장의 형에 맞추고 생성기에 박지 않는다.",
+      "why": "`collateral-6` 의 카드가 `indent=2` 였고 원장이 `indent=1` 이어서 앞 회차가 쓴 「들여쓰기 한 칸을 걷어 내는」 병합 수단이 서지 않았다. 깊이마다 걷어 낼 칸이 달라지기 때문이며, 집행이 원장의 직렬화 형으로 다시 써 넣고 그 형이 원장의 형임을 먼저 세웠다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "별지의 선언이 쓰는 이름이 대상 파일의 `import` 닫힘에서 보이는지를 사전 검사가 잰다. Lean 빌드를 요구하지 않으므로 결정 세션이 조작 전에 잴 수 있다.",
+      "why": "`collateral-6` 구간 2 의 K3 이 그 자리에서 막혔다. 별지 B 가 `RatesSet` 과 `RatesSet.hasRates` 를 쓰는데 그 둘이 `Definition/Margin.lean` 에 살고 그 파일이 거꾸로 대상 지점을 `import` 해 순환이 됐다. 사전 검사가 별지 B 를 그 자리에 심고도 통과시킨 것은 원장 검증과 층별 수 타입 검사가 이름의 해결을 보지 않기 때문이다. 음성 대조로 그 검사가 이 결손을 잡는 것을 확인했다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "한 이름 공간의 선언이 그 타입을 세운 파일 밖에 설 수 있고, 그 자리를 정하는 것은 이름 공간이 아니라 그 선언이 딛는 것과 파일의 주제다. 이름이 대상을 가리키는 것이 자리의 관례보다 앞선다.",
+      "why": "`PledgeSet.*` 여섯이 전부 `Collateral.lean` 에 있는 것은 그 여섯이 그 파일이 딛는 것만 썼기 때문이고 관례가 아니라 귀결이다. `RatesSet.isOrphan` 이 `PledgeSet` 을 첫 명시 인자로 받으면서 `Margin.lean` 에 사는 것이 이미 그 자리를 가른 선례다. 부채수용력의 담보 의존이 담보 관계와 마진을 함께 딛어 두 파일 어느 쪽의 주제도 아니므로 새 파일이 섰다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "L-13 이 요구하는 시점 인덱스는 정의층의 타입에 걸리고 그 타입 위의 술어에는 걸리지 않는다. 술어가 시점에 따라 변하는 것은 그 집합을 주는 쪽이 들기 때문이다.",
+      "why": "`collateral-6` 의 새 파일이 술어 셋과 존재 진술 둘을 담으면서 그 조항을 규율 목록에서 빼고 설계 문단에서 다루었고, 기존 `Collateral.lean` 의 `reachesWithin` 과 `inCycle` 과 `isChainHead` 가 이미 같은 형으로 서 있어 관례가 그렇게 돌고 있었다. `CLAUDE.md` §2 의 문면이 「인덱스 없는 정의가 정의층에 서면 위반이다」로 넓게 적고 §3.10 의 L-13 행이 「CI 예정」이므로, 그 검사를 쓸 때 이 구별이 없으면 정당한 술어가 위반으로 걸린다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "Lean 파일 머리의 규율 목록은 그 파일의 실물에 적용 대상이 있는 조항만 든다. 적용 대상 없는 조항을 넣으면 그 목록이 그 파일이 지키는 것이 아니라 규율 전량을 드는 자리가 된다.",
+      "why": "`collateral-6` 의 정의층 새 파일이 `structure` 를 세우지 않아 A-3 과 D-8 을 목록에서 빼고 `theorem` 둘을 세워 T-2 와 T-4 를 더했으며, 관측층 새 파일이 `inductive` 로 분할을 세워 V-7 을 더했다. 그 목록과 실물을 다섯 파일에 걸쳐 전수로 맞댄 결과 어긋남이 없었고, 그 규칙이 그때까지 문면으로 서지 않았다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "지시서를 다시 놓아야 하는 회차에는 호출 프롬프트가 지시서와 별지의 줄 수와 sha256 을 함께 들고, 지시서 §0 이 디스크의 값을 그 값과 맞댄다. 그리고 호출이 무엇이 바뀌었는지를 열거해 집행이 그 자리를 하나씩 열어 확인한다. 검증값 대조는 전달을 받치고 열거는 문서 안의 조작 문면이 실제로 바뀌었는지를 받친다.",
+      "why": "`collateral-6` 구간 3 에서 새 판의 지시서가 디스크에 닿지 않았고 집행이 앞 판을 읽었다. 구간 4 에서는 검증값이 맞았으나 호출이 든 변경 셋 가운데 하나가 그 판에 서지 않았고, 호출이 셋을 열거했기에 집행이 하나씩 열어 빠진 것을 찾았다. 두 결함이 다른 자리에 있으므로 받치는 수단도 둘이다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "별지가 구조체 갱신을 쓸 때 기반 항에 타입을 지정한 꼴로 쓴다. 바깥 타입 지정만으로는 암묵 인자가 정해지지 않는다.",
+      "why": "핀된 판의 Lean 에서 `{ e with … }` 가 `e` 를 `let` 으로 묶고 그 `let` 의 타입을 바깥 타입 지정보다 먼저 추론하므로, 암묵 인자가 기반 항에서 정해지지 않으면 elaboration 이 끊긴다. 별지의 원형이 그 꼴이어서 집행이 §1-1 의 예외를 썼고, 대안인 필드 전량 복제는 정리가 경로 값을 이름으로 부르지 않게 되어 해소 신호 기능을 없애므로 쓸 수 없었다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "Lean 파일 머리의 규율 목록에 R-6 을 넣지 않고 말미의 원장 문단이 그 요구를 든다. 모든 파일의 모든 선언에 걸리는 조항은 목록이 아니라 그 요구를 직접 드는 문단이 받는다.",
+      "why": "목록이 「이 파일에 특히 걸리는 것」을 드는 자리인데 전량에 걸리는 조항을 넣으면 그 성격이 흐려진다. 기존 네 파일이 말미 문단으로 두고 있고 `collateral-6` 의 정의층 새 파일 하나만 목록에 들어 같은 회차의 두 파일이 갈렸다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "`collateral-6` 이 구간 2-a 를 신설하고 정의층의 의존 술어와 독립 진술을 그 구간에서 세웠다. 구간이 다섯에서 여섯으로 늘었다.",
+      "why": "구간 2 의 K3 이 대상 지점에서 설 수 없어 자리의 결정이 필요했고, 그 결정을 받아 새 파일에 세우는 조작이 한 구간 분량이었다. 구간 3 에 붙이면 그 구간이 정의층과 관측층을 함께 담아 맥락의 분량을 넘고, 구간 3 의 기대표가 구간 2 의 증분을 전제하므로 그 전제가 깨진다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "지시서의 조작 절은 조작마다 지시문과 집행이 지어내는 것과 그 재료를 든 자리를 함께 든다. 대장의 지시문이 대조표에만 서면 집행이 조작 근거로 읽는 자리에 닿지 않는다.",
+      "why": "`collateral-6` 구간 4 에서 결정 세션이 `K7-O2` 의 지시문을 고쳤는데 그 변경이 지시서에 서지 않았다. 생성기가 조작 표를 「무엇을」과 「집행이 지어내는 것」 둘로만 뽑고 지시문 열이 없었으므로, 고친 것이 지시서에 닿을 경로가 애초에 없었다. 집행이 호출의 열거와 디스크의 판을 맞대어 그것을 찾았다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-6",
+      "what": "추출 기록은 검사 24 의 유니버스 밖이므로 그 문면이 드는 규율 ID 의 실재와 폐기 여부를 결정 세션이 작성 시점에 확인한다.",
+      "why": "`collateral-6` 의 추출 기록 둘이 규율 ID 열넷을 들고 그 가운데 셋이 그 회차의 Lean 과 상주 문서에 나타나지 않는다. 그 디렉터리가 유니버스 밖인 것은 역사 기록의 낡은 지목이 정당하기 때문이나, 작성 시점에 이미 폐기된 조항을 지목하는 것은 낡음이 아니라 거짓이며 검사가 그것을 잡지 않는다. 이 회차의 열넷은 전부 살아 있는 것을 결정 세션이 원장에 맞대어 확인했다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-6",
+        "kind": "decision_session",
+        "date": "2026-10-09"
+      }
     }
   ]
 }
