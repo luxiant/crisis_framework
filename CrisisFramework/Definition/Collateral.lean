@@ -60,7 +60,7 @@ structure Pledgeable (Idx Asset : Type) where
 담보물의 종류를 열거형으로 두고 그것으로 판정하는 안. 종류를 미리 열거하면 새 수단이 들어올
 때마다 정의층을 손대야 하고, 관측층에 사상을 더해 넓히는 길이 막힌다.
 -/
--- DD:CF-729
+-- DD:CF-959
 def Pledgeable.isClaimBacked {Idx Asset : Type} (c : Pledgeable Idx Asset) : Bool :=
   c.asClaim.isSome
 

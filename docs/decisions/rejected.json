@@ -791,6 +791,623 @@
    "related": [
     "CF-916"
    ]
+  },
+  {
+   "id": "CF-1011",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "`Claim` 에 지분율 필드를 더하고 금액을 선택으로 두는 안.",
+   "reason": "청구권의 서명이 자본과 부채를 함께 받아 쓰이지 않는 필드가 모든 청구권에 붙고, `claim` 아크가 닫은 설계를 뒤집는다.",
+   "for": "자본청구권의 금액 형.",
+   "statement": "`Claim` 에 지분율 필드를 더하는 안을 기각했다.",
+   "basis": "`Claim` 의 서명이 이미 여섯 타입을 받고 모든 청구권이 그 필드를 지니게 되므로, 부채 청구권에서 쓰이지 않는 자리가 선다.",
+   "for_decl": "CrisisFramework.Definition.equityClaimAmount",
+   "related": [
+    "CF-957"
+   ]
+  },
+  {
+   "id": "CF-1012",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "자본청구권을 별도 구조로 세우는 안.",
+   "reason": "담보물이 청구권 집합의 색인으로 지목되는 자리가 하나이므로 구조를 둘로 두면 그 색인이 둘로 갈리고, 담보 장부의 세 총계가 어느 색인을 세는지가 흐려진다.",
+   "for": "자본청구권의 금액 형.",
+   "statement": "자본청구권을 별도 구조로 세우는 안을 기각했다.",
+   "basis": "담보물의 청구권 색인이 한 자리이고 회계층의 세 총계가 그 색인을 거쳐 금액을 읽는다.",
+   "for_decl": "CrisisFramework.Definition.equityClaimAmount",
+   "related": [
+    "CF-957"
+   ]
+  },
+  {
+   "id": "CF-1013",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "신호의 종류를 보고 판정하는 안.",
+   "reason": "신호가 발행자의 자기자본을 읽는지는 관측 사상의 성질이고 그 사상은 관측층에 있으므로, 정의층이 그것을 보면 L-9 의 방향이 뒤집힌다.",
+   "for": "자본청구권 금액 형의 판정.",
+   "statement": "신호의 종류를 보고 자본청구권을 판정하는 안을 기각했다.",
+   "basis": "L-9 가 관측층에서 정의층으로 가는 단방향을 요구하고 측정 사상의 명세가 관측층에 산다(L-14).",
+   "for_decl": "CrisisFramework.Definition.Term.isEquityClaimForm",
+   "related": [
+    "CF-957"
+   ]
+  },
+  {
+   "id": "CF-1014",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "청구권에 종류 필드를 두어 자본인지 부채인지를 적는 안.",
+   "reason": "같은 사실이 금액의 모양과 필드 둘에 살아 어긋날 자리가 생기고, 어긋났을 때 어느 쪽이 참인지를 구조가 말하지 않는다.",
+   "for": "자본청구권 금액 형의 판정.",
+   "statement": "청구권에 종류 필드를 두는 안을 기각했다.",
+   "basis": "마진의 조가 제공을 복제하지 않고 색인으로 지목한 것과 같은 사유다. 같은 사실을 두 자리에 두면 어긋남의 판정이 구조 밖으로 나간다.",
+   "for_decl": "CrisisFramework.Definition.Term.isEquityClaimForm",
+   "related": [
+    "CF-957"
+   ]
+  },
+  {
+   "id": "CF-1015",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "담보로 내놓았는지를 참거짓 하나로 두는 안.",
+   "reason": "묶인 제공을 함께 들어야 어느 차입이 그 몫을 쓰는지가 서는데, 참거짓만으로는 그 지목을 담을 자리가 없다.",
+   "for": "몫의 종류.",
+   "statement": "몫의 종류를 참거짓 하나로 두는 안을 기각했다.",
+   "basis": "제공의 색인을 함께 들어야 그 몫이 어느 차입에 묶였는지가 선다.",
+   "for_decl": "CrisisFramework.Definition.ShareKind",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1016",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "종류를 세 칸 이상으로 두어 소유권이 넘어간 경우를 더하는 안.",
+   "reason": "그 경우는 몫이 아예 그 당사자의 것이 아니게 되므로 다른 당사자의 몫으로 서야 하고, 종류의 칸이 아니라 보유자가 바뀌는 자리다.",
+   "for": "몫의 종류.",
+   "statement": "종류에 소유권이 넘어간 칸을 더하는 안을 기각했다.",
+   "basis": "레포로 금융하면 재고가 장부에서 제거되고 보유자가 바뀌므로, 같은 당사자의 몫에 칸을 더하는 것으로 담기지 않는다.",
+   "for_decl": "CrisisFramework.Definition.ShareKind",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1017",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫을 수량으로 두는 안.",
+   "reason": "수량은 단위가 물건마다 달라 톤과 배럴이 한 타입에 들어오는데 정의층이 무차원이라 단위를 담을 자리가 없고, 공시가 수량을 보유자별로 들지 않는다.",
+   "for": "외부 자산의 몫.",
+   "statement": "외부 자산의 몫을 수량으로 두는 안을 기각했다.",
+   "basis": "L-10 이 정의층에 시점 인덱스 밖의 구체 수 타입을 금지하고 단위를 담는 자리가 없다. 거래소가 총량을 일별로 공표하되 보유자별로 가르지 않는 것도 같은 자리에 걸린다.",
+   "for_decl": "CrisisFramework.Definition.AssetShare",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1018",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫을 시장가치로 두는 안.",
+   "reason": "가치의 결정이 동학층에 있으므로 정의층이 그것을 담으면 값과 값의 결정이 한 층에 서게 된다.",
+   "for": "외부 자산의 몫.",
+   "statement": "외부 자산의 몫을 시장가치로 두는 안을 기각했다.",
+   "basis": "L-4 가 값과 값의 결정을 다른 층에 두게 하고 E-04 가 외부 자산을 시장가치로 적어 그 결정이 동학층에 있음을 보인다.",
+   "for_decl": "CrisisFramework.Definition.AssetShare",
+   "related": [
+    "CF-958",
+    "CF-983"
+   ]
+  },
+  {
+   "id": "CF-1019",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "보유와 제공을 집합 둘로 가르는 안.",
+   "reason": "두 집합의 색인이 갈려 같은 자산을 두고 선 몫들을 한 식에서 맞대려면 색인 사이의 대응이 하나 더 필요해진다.",
+   "for": "외부 자산의 몫.",
+   "statement": "보유와 제공을 집합 둘로 가르는 안을 기각했다.",
+   "basis": "중복의 판정이 두 합을 한 부등식에서 맞대므로 색인이 같아야 한다. 종류로 가르면 한 집합에 살아 그 조건이 선다.",
+   "for_decl": "CrisisFramework.Definition.AssetShare",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1020",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "지목이 가리키는 제공의 실재까지 함께 묻는 안.",
+   "reason": "제공 집합을 인자로 더 받아야 하므로 이 술어가 두 집합의 정합을 묻는 것이 되고, 종류와 지목의 정합이라는 좁은 물음이 흐려진다.",
+   "for": "종류와 제공 지목의 정합.",
+   "statement": "지목이 가리키는 제공의 실재까지 묻는 안을 기각했다.",
+   "basis": "비율의 조가 사라진 제공을 가리키는 것을 따로 판정하는 선례가 있고, 두 물음이 다른 대상이다.",
+   "for_decl": "CrisisFramework.Definition.AssetShare.wellFormed",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1021",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "정합이 깨진 몫을 구조로 금지하는 안.",
+   "reason": "종류마다 다른 생성자를 둔 합 타입이 되어 두 종류의 몫을 한 합으로 모으는 일이 멀어진다.",
+   "for": "종류와 제공 지목의 정합.",
+   "statement": "정합이 깨진 몫을 구조로 금지하는 안을 기각했다.",
+   "basis": "회계층의 두 합이 같은 집합을 훑어 종류로 거르므로, 합 타입이 되면 그 거름이 패턴 매칭으로 바뀌어 한 식에 두 종류를 모으는 자리가 길어진다.",
+   "for_decl": "CrisisFramework.Definition.AssetShare.wellFormed",
+   "related": [
+    "CF-958"
+   ]
+  },
+  {
+   "id": "CF-1022",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "`Finset (AssetShare ...)` 로 두는 안.",
+   "reason": "청구권 집합과 제공 집합이 색인 방식을 쓰므로 리포 안에서 관례가 갈린다.",
+   "for": "한 시점의 몫 집합.",
+   "statement": "몫 집합을 `Finset` 으로 두는 안을 기각했다.",
+   "basis": "`ClaimSet` 과 `PledgeSet` 과 `RatesSet` 이 전부 색인과 배정으로 서 있다.",
+   "for_decl": "CrisisFramework.Definition.ShareSet",
+   "related": [
+    "CF-973"
+   ]
+  },
+  {
+   "id": "CF-1023",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "당사자와 자산의 쌍에서 몫으로 가는 함수로 두는 안.",
+   "reason": "같은 쌍에 보유와 제공된 몫이 함께 서야 하므로 함수의 값이 하나일 수 없고, 몫이 서지 않은 쌍에 0 이 놓이면 몫이 0 인 보유와 기록되지 않은 것이 같아진다.",
+   "for": "한 시점의 몫 집합.",
+   "statement": "쌍에서 몫으로 가는 함수로 두는 안을 기각했다.",
+   "basis": "종류를 가른 뒤에는 한 쌍에 몫이 둘 이상 서는 것이 정상이고, 0 인 몫이 기록된 것과 기록되지 않은 것이 다른 사실이다.",
+   "for_decl": "CrisisFramework.Definition.ShareSet",
+   "related": [
+    "CF-973"
+   ]
+  },
+  {
+   "id": "CF-1024",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫이 0 보다 큰지를 함께 묻는 안.",
+   "reason": "공매도가 음의 몫으로 나타나므로 부호로 거르면 공매도 포지션이 「몫이 없다」로 접힌다.",
+   "for": "그 쌍에 그 종류의 몫이 서 있는가.",
+   "statement": "몫이 0 보다 큰지를 함께 묻는 안을 기각했다.",
+   "basis": "E-04 가 그 비율이 음수를 가질 수 있고 그것이 공매도를 뜻한다고 적는다.",
+   "for_decl": "CrisisFramework.Definition.ShareSet.hasShareOfKind",
+   "related": [
+    "CF-973",
+    "CF-984"
+   ]
+  },
+  {
+   "id": "CF-1025",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "종류를 받지 않고 몫의 존재만 묻는 안.",
+   "reason": "보유가 있는지와 내놓은 것이 있는지가 다른 물음이고, `CQ-fin-4` 의 거짓 쪽이 서려면 앞의 것이 따로 서야 한다.",
+   "for": "그 쌍에 그 종류의 몫이 서 있는가.",
+   "statement": "종류를 받지 않는 안을 기각했다.",
+   "basis": "`CF-818` 이 그 물음의 답이 참 쪽으로만 서는 까닭을 내놓지 않은 여력이 구조에 없다는 것으로 적었고, 그 여력이 보유 쪽 술어로 선다.",
+   "for_decl": "CrisisFramework.Definition.ShareSet.hasShareOfKind",
+   "related": [
+    "CF-973"
+   ]
+  },
+  {
+   "id": "CF-1026",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫에 생애 구간을 필드로 두어 족을 쓰지 않는 안.",
+   "reason": "보유가 하루 안에 여러 번 옮겨 가는 것이 구간 하나로 담기지 않으며, 담보 제공의 족이 같은 자리에서 같은 것을 배제한다.",
+   "for": "시점 인덱스를 갖는 몫 집합의 족.",
+   "statement": "몫에 생애 구간을 두어 족을 쓰지 않는 안을 기각했다.",
+   "basis": "L-13 이 정의층의 타입에 시점 인덱스를 요구하고, 비율의 족이 같은 사유로 구간 필드를 기각한 선례가 있다.",
+   "for_decl": "CrisisFramework.Definition.ShareFamily",
+   "related": [
+    "CF-973"
+   ]
+  },
+  {
+   "id": "CF-1027",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "그 자산을 가리키는 제공의 수를 세어 둘 이상인지 보는 안.",
+   "reason": "개수가 자연수이고 정의층은 시점 인덱스 밖의 자연수를 쓰지 못하므로 그 셈은 회계층의 몫이다.",
+   "for": "같은 외부 자산에 제공이 둘 이상 서 있는가.",
+   "statement": "정의층에서 제공의 수를 세는 안을 기각했다.",
+   "basis": "L-10 이 그 금지를 두고 `step8-layertype` 이 그것을 집행한다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.hasMultiplePledgesOn",
+   "related": [
+    "CF-974"
+   ]
+  },
+  {
+   "id": "CF-1028",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "청구권인 담보물까지 함께 보는 안.",
+   "reason": "담보물이 청구권이면 청구권 집합의 색인을 들어 같은 청구권을 가리키는 제공들을 묶을 수 있으므로 이 막힘에 걸리지 않는다.",
+   "for": "같은 외부 자산에 제공이 둘 이상 서 있는가.",
+   "statement": "청구권인 담보물까지 함께 보는 안을 기각했다.",
+   "basis": "담보 장부의 세 총계가 청구권 색인을 거쳐 이미 그 자리를 덮으며, 그 구별이 이 술어가 외부 자산에만 걸리는 까닭이다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.hasMultiplePledgesOn",
+   "related": [
+    "CF-974"
+   ]
+  },
+  {
+   "id": "CF-1029",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫의 두 종류를 `partitions` 로 등록하는 안.",
+   "reason": "그 생성자가 완전성을 가정으로 두는데 실제 반례가 있다. 소유권을 넘기는 구조로 금융한 재고가 장부에서 제거되어 두 칸 어디에도 들지 않는다.",
+   "for": "용어집의 관계 등록.",
+   "statement": "몫의 두 종류를 `partitions` 로 등록하는 안을 기각했다.",
+   "basis": "2014년 칭다오항 금융의 상당 부분이 레포 구조였고 그 재고가 장부에서 제거되었다(Minko 2016 §2.4). `refines` 둘과 `excludes` 하나로 두면 둘이 상위 개념의 특수 사례이고 서로 겹치지 않는다는 것만 서며 둘이 전부라는 것은 서지 않는다. 비율의 두 용법이 같은 형으로 등재된 선례가 있다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-981"
+   ]
+  },
+  {
+   "id": "CF-1030",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "몫에 평가율을 곱한 값을 더하는 안.",
+   "reason": "합이 자산마다 다른 비율을 품어 공통분모가 필요해지며, 담보 장부가 총계를 평가 전 값으로 둔 것과 같은 사유다.",
+   "for": "그 자산에 선 보유 몫의 합.",
+   "statement": "몫에 평가율을 곱해 더하는 안을 기각했다.",
+   "basis": "담보 장부가 세 총계를 평가 전 값으로 두고 평가율은 제공별 판정이 든다. 같은 사유가 몫의 합에도 걸린다.",
+   "for_decl": "CrisisFramework.Accounting.heldShareTotalOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1031",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "자산을 가르지 않고 전량을 더하는 안.",
+   "reason": "서로 다른 자산의 몫을 더하면 단위가 섞여 완전 배분과 맞댈 상대가 사라진다.",
+   "for": "그 자산에 선 보유 몫의 합.",
+   "statement": "자산을 가르지 않고 전량을 더하는 안을 기각했다.",
+   "basis": "몫이 그 자산에 대한 비율이므로 자산마다 단위가 따로 서고, 중복의 판정이 한 자산 안에서 두 합을 맞댄다.",
+   "for_decl": "CrisisFramework.Accounting.heldShareTotalOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1032",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "묶인 제공의 색인마다 따로 모으는 안.",
+   "reason": "제공별 총계는 그 제공이 요구하는 몫 하나이므로 합이 될 것이 없고, 자산 단위로 모아야 보유 몫과 맞댈 상대가 선다.",
+   "for": "그 자산에 선 제공된 몫의 합.",
+   "statement": "제공의 색인마다 따로 모으는 안을 기각했다.",
+   "basis": "한 몫이 한 제공에 묶이므로 제공별로 모으면 항이 하나이고, 중복은 자산 단위에서 두 합을 맞대어 선다.",
+   "for_decl": "CrisisFramework.Accounting.pledgedShareTotalOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1033",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "제공의 실재를 확인하고 모으는 안.",
+   "reason": "제공 집합을 인자로 더 받아야 하며, 낡은 지목을 거르는 일은 그 정합을 따로 판정하는 자리의 몫이다.",
+   "for": "그 자산에 선 제공된 몫의 합.",
+   "statement": "제공의 실재를 확인하고 모으는 안을 기각했다.",
+   "basis": "비율 집합이 사라진 제공을 가리키는 것을 따로 판정하는 선례가 있고, 그 판정과 합의 계산이 다른 물음이다.",
+   "for_decl": "CrisisFramework.Accounting.pledgedShareTotalOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1034",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "청구권인 담보물까지 함께 세는 안.",
+   "reason": "담보물이 청구권이면 청구권 집합의 색인으로 제공들을 묶을 수 있어 담보 장부의 세 총계가 이미 그 자리를 덮는다.",
+   "for": "그 자산을 가리키는 외부 자산 제공의 수.",
+   "statement": "청구권인 담보물까지 함께 세는 안을 기각했다.",
+   "basis": "커버리지 합과 제공 합과 머리 합이 청구권 색인을 거쳐 그 자리를 세며, 외부 자산만 그 묶음에서 빠진다.",
+   "for_decl": "CrisisFramework.Accounting.pledgeCountOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1035",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "제공의 색인을 세지 않고 떠받치는 청구권의 색인을 세는 안.",
+   "reason": "한 제공이 청구권 하나를 떠받치므로 같은 수가 나오나, 떠받치는 청구권이 같은 제공 둘이 설 수 있어 그때 두 수가 갈린다.",
+   "for": "그 자산을 가리키는 외부 자산 제공의 수.",
+   "statement": "떠받치는 청구권의 색인을 세는 안을 기각했다.",
+   "basis": "담보 제공이 떠받치는 청구권을 하나씩 지목하되 그 지목의 유일성을 구조가 요구하지 않으므로, 같은 청구권을 떠받치는 제공 둘이 선다.",
+   "for_decl": "CrisisFramework.Accounting.pledgeCountOn",
+   "related": [
+    "CF-975"
+   ]
+  },
+  {
+   "id": "CF-1036",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "주기와 지연을 칸으로 두는 안.",
+   "reason": "어느 판정도 그 칸을 읽지 않으므로 읽지 않는 필드를 두지 않는다는 원칙에 걸린다.",
+   "for": "외부 자산의 몫을 보는 공시 경로.",
+   "statement": "공시의 주기와 지연을 칸으로 두는 안을 기각했다.",
+   "basis": "`arcs.json` 의 한 필드가 어느 검사도 읽지 않은 채 서 있던 실측이 그 원칙의 근거이며, 그 자리가 `cq` 필드로 정식화됐다.",
+   "for_decl": "CrisisFramework.Observation.ShareChannel",
+   "related": [
+    "CF-977"
+   ]
+  },
+  {
+   "id": "CF-1037",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "경로마다 규범의 조문 번호를 칸으로 두는 안.",
+   "reason": "문면의 지목은 docstring 이 들고 구조가 들면 조문이 개정될 때 그 값이 조용히 낡는다.",
+   "for": "외부 자산의 몫을 보는 공시 경로.",
+   "statement": "규범의 조문 번호를 칸으로 두는 안을 기각했다.",
+   "basis": "D-3 이 출처의 표기를 docstring 에 두게 하고 URL 을 적지 않게 한 것과 같은 축이다. 조문은 개정되고 구조는 그 개정을 모른다.",
+   "for_decl": "CrisisFramework.Observation.ShareChannel",
+   "related": [
+    "CF-977"
+   ]
+  },
+  {
+   "id": "CF-1038",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "두 몫을 판정 둘로 가르는 안.",
+   "reason": "중복의 판정이 두 합을 함께 요구하므로 한쪽만 서는 경로는 그 물음에 답하지 못하며, 가르면 어느 쪽이 답을 세우는지가 호출하는 쪽의 몫이 된다.",
+   "for": "그 경로가 중복의 판정에 드는 두 몫을 내는가.",
+   "statement": "두 몫을 판정 둘로 가르는 안을 기각했다.",
+   "basis": "회계층의 두 합이 한 부등식에 들어가므로 둘 가운데 하나만 관측되어도 그 비교가 서지 않는다.",
+   "for_decl": "CrisisFramework.Observation.ShareChannel.answersShare",
+   "related": [
+    "CF-977"
+   ]
+  },
+  {
+   "id": "CF-1039",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "총량을 드는 것만으로 참을 내는 안.",
+   "reason": "총량에서 보유자별 몫이 유도되지 않으므로 그 판정이 참을 내면 낼 수 없는 값을 내게 된다.",
+   "for": "그 경로가 중복의 판정에 드는 두 몫을 내는가.",
+   "statement": "총량만으로 참을 내는 안을 기각했다.",
+   "basis": "거래소가 총량을 일별로 공표하되 보유자를 식별하지 않으므로, 총량이 서는 자리에서 몫이 서지 않는 것이 실측이다.",
+   "for_decl": "CrisisFramework.Observation.ShareChannel.answersShare",
+   "related": [
+    "CF-977",
+    "CF-988"
+   ]
+  },
+  {
+   "id": "CF-1040",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "보세창고를 묻지 않는 안.",
+   "reason": "2014년 칭다오항의 금속이 보세창고에 있었으므로 중복 계상의 정본 사례가 바로 그 칸에서 빠진다.",
+   "for": "그 경로가 중복의 판정에 드는 두 몫을 내는가.",
+   "statement": "보세창고를 묻지 않는 안을 기각했다.",
+   "basis": "거래소 공표의 범위가 등록 창고 안이고 그 사건의 금속이 보세창고에 있었다(Minko 2016 §2.5).",
+   "for_decl": "CrisisFramework.Observation.ShareChannel.answersShare",
+   "related": [
+    "CF-977"
+   ]
+  },
+  {
+   "id": "CF-1041",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "등록분과 등록되지 않은 보관분을 경로 둘로 가르는 안.",
+   "reason": "같은 체계가 같은 규범으로 둘을 공표하고 보유자를 식별하지 않는 성질이 둘에 같이 걸리므로, 가르면 측정 대응이 다르지 않은 둘이 선다.",
+   "for": "거래소 창고 공표의 경로 값.",
+   "statement": "등록분과 등록되지 않은 보관분을 경로 둘로 가르는 안을 기각했다.",
+   "basis": "V-5 가 측정 대응이 다르지 않은 둘의 분할을 막고, 두 공표가 한 체계의 같은 규범에서 나온다.",
+   "for_decl": "CrisisFramework.Observation.exchangeWarehouseChannel",
+   "related": [
+    "CF-978"
+   ]
+  },
+  {
+   "id": "CF-1042",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "공표의 지연을 칸으로 받는 안.",
+   "reason": "어느 판정도 그 칸을 읽지 않는다.",
+   "for": "거래소 창고 공표의 경로 값.",
+   "statement": "공표의 지연을 칸으로 받는 안을 기각했다.",
+   "basis": "경로 구조의 칸이 답의 판정에 쓰이는 것만 든다는 결정이 그 자리를 이미 정했다.",
+   "for_decl": "CrisisFramework.Observation.exchangeWarehouseChannel",
+   "related": [
+    "CF-978",
+    "CF-977"
+   ]
+  },
+  {
+   "id": "CF-1043",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "금액을 드는 것을 보유자별 몫을 드는 것으로 읽는 안.",
+   "reason": "금액은 그 기업의 보유에 가격을 곱한 값이고 그 자산의 총량에 대한 비율이 아니므로, 참으로 두면 유도되지 않는 값이 서게 된다.",
+   "for": "재무제표 공시의 경로 값.",
+   "statement": "재무제표의 금액을 보유자별 몫으로 읽는 안을 기각했다.",
+   "basis": "몫은 그 자산 전체에 대한 비율이고 재무제표는 그 기업의 보유만 금액으로 든다. 총량을 모르면 비율이 유도되지 않는다.",
+   "for_decl": "CrisisFramework.Observation.financialStatementShareChannel",
+   "related": [
+    "CF-978"
+   ]
+  },
+  {
+   "id": "CF-1044",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-7",
+    "kind": "decision_session",
+    "date": "2026-10-11"
+   },
+   "candidate": "자산의 특정을 참으로 두는 안.",
+   "reason": "그 기준이 담보 제공분에 종류별 분해를 요구하지 않으므로 상품을 가르는 축이 그 공시에 없다.",
+   "for": "재무제표 공시의 경로 값.",
+   "statement": "재무제표 경로의 자산 특정을 참으로 두는 안을 기각했다.",
+   "basis": "E-45 §2-2 가 분류별 분해가 담보 제공분에 걸리지 않는다는 것을 조문에서 뽑았고, `collateral-6` 이 그 결손을 상품 축의 접힘으로 이미 적었다.",
+   "for_decl": "CrisisFramework.Observation.financialStatementShareChannel",
+   "related": [
+    "CF-978",
+    "CF-989"
+   ]
   }
  ]
 }
