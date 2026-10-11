@@ -41,8 +41,12 @@ REOPEN_KINDS = ("artifact", "extraction", "arc_phase", "blocking")
 # `PH-R` 이 한 계열이고 맨 앞에 두어야 `PH-R2` 가 `R-2` 로 잘리지 않는다.
 RULE_SERIES = ("PH-R", "P", "A", "C", "L", "D", "T", "R", "N", "V", "W", "Q", "B", "O",
                "G", "S", "F", "J", "K")
+# `PH-R` 만 번호를 하이픈 없이 붙인다(`PH-R2`). 그 계열을 하이픈을 요구하는 꼴로 읽으면
+# 토큰이 한 건도 잡히지 않으면서 검사가 통과하므로, 두 꼴을 갈라 받고 그 계열을 먼저 본다.
 RULE_TOKEN = re.compile(
-    r"(?<![0-9A-Za-z-])(" + "|".join(RULE_SERIES) + r")-(\d+)(?![0-9A-Za-z-])")
+    r"(?<![0-9A-Za-z-])(?:PH-R(\d+)|("
+    + "|".join(x for x in RULE_SERIES if x != "PH-R")
+    + r")-(\d+))(?![0-9A-Za-z-])")
 
 # 검사 24 의 유니버스. SPEC §2.1 이 상주 문서 다섯과 Lean 주석을 든다.
 RESIDENT_DOCS = (
@@ -1003,13 +1007,16 @@ def check_31(led: Ledger) -> Report:
     r = Report("31", "wiki31-hole-unassigned",
                "발화한 이연 항목이 어느 아크의 holes 에도 들지 않는가", "fail")
     assigned = {h for a in led.arcs.values() for h in (a.get("holes") or [])}
+    dropped: list[str] = []
     n_fired = n_assigned = exempt = 0
     for e in led.reg["deferred"]:
-        # 폐기된 항목은 살아 있는 구멍이 아니므로 유니버스 밖이다. 검사 16 과 같은 형이다.
-        if e.get("id") in led.dead:
-            continue
         hit, kind, _ = trigger_fired(led, e)
         if not hit:
+            continue
+        # 폐기된 항목은 살아 있는 구멍이 아니므로 유니버스 밖이다. 검사 16 과 같은 형이며,
+        # 발화를 먼저 보고 거르므로 뺀 건수와 그 id 가 출력에 남는다(CF-684).
+        if e.get("id") in led.dead:
+            dropped.append(str(e.get("id")))
             continue
         n_fired += 1
         if e.get("id") in assigned:
@@ -1022,7 +1029,9 @@ def check_31(led: Ledger) -> Report:
             continue
         r.bad(f"{e.get('id')}: 발화한({kind}) 이연 항목이 어느 아크의 holes 에도 없다")
     r.note(f"발화 {n_fired}건 · 그 가운데 배정된 것 {n_assigned}건 "
-           f"· 첫 적재(charter-6) 면제 {exempt}건")
+           f"· 첫 적재(charter-6) 면제 {exempt}건"
+           + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
+              if dropped else " · 뺀 폐기분 0건"))
     return r
 
 
