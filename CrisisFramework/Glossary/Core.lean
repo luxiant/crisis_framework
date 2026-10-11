@@ -61,7 +61,8 @@ inductive Concept where
   | pledgeableAsset
   /-- 청구권인 담보물. 청구권 집합의 색인으로 함께 지목된다. -/
   | claimPledgeable
-  /-- 청구권이 아닌 담보물. 색인을 갖지 않는 것 전부이며 외부 자산보다 넓다. -/
+  /-- 청구권이 아닌 담보물. 색인을 갖지 않는 것 전부이며, 외부 자산과 외연이 같아질 수 있으나
+      판정이 다르다. 이쪽은 색인의 유무로 서고 외부 자산은 대차대조표의 대응물로 선다. -/
   | nonClaimPledgeable
   /-- 외부 자산. 다른 노드의 대차대조표에 대응물이 없는 말단 자산. -/
   | externalAsset
@@ -81,6 +82,15 @@ inductive Concept where
   | exposureMargin
   /-- 떠받치는 것을 얼마로 쳐 주는가. 차감률이 아니라 곱하는 비율이다. -/
   | valuationRate
+  /-- 자본청구권. 발행자의 자기자본에 대한 잔여 청구권이며, 요구할 금액이 상수가 아니라 그
+      자기자본에 걸린다. -/
+  | equityClaim
+  /-- 외부 자산의 몫. 한 당사자가 외부 자산 하나에서 갖는 지분이며 아래 둘의 상위 개념이다. -/
+  | externalAssetShare
+  /-- 보유 몫. 담보로 내놓지 않고 들고 있는 지분. -/
+  | heldAssetShare
+  /-- 제공된 몫. 담보로 내놓아 어느 제공에 묶인 지분. -/
+  | pledgedAssetShare
   deriving DecidableEq, Repr
 
 /--
@@ -118,6 +128,9 @@ inductive SourceTag where
   /-- 감독 규범의 자산 부담 공시. 제공된 자산과 제공되지 않은 자산을 범주별로 가르되 적용
       대상이 신용기관이고, 값이 분기 자료의 이동 중위값이다. -/
   | assetEncumbranceDisclosure
+  /-- 금속 거래소 창고의 재고 공표. 등록분과 등록되지 않은 보관분을 일별로 들되 보유자를
+      식별하지 않으며, 거래소에 등록된 창고의 밖은 범위에 들지 않는다. -/
+  | exchangeWarehouseReport
   deriving DecidableEq, Repr
 
 /--
@@ -210,6 +223,12 @@ inductive ConceptRel where
 없고, L-14 가 소스 없음의 등재를 관측층의 몫으로 둔다. 그래서 이 등재는 한쪽에만 서고 없는 쪽은
 관측층의 공시 경로가 칸으로 든다.
 
+**`partitions` 를 쓰지 않는다.** 몫의 두 종류를 그 생성자로 등록하는 안을 기각했다. 그 생성자가
+완전성을 가정으로 두는데 실제 반례가 있기 때문이며, 소유권을 넘기는 구조로 금융한 재고가 장부에서
+제거되어 보유와 제공 어느 칸에도 들지 않는다(Minko 2016 §2.4). `refines` 둘과 `excludes` 하나로
+두면 둘이 상위 개념의 특수 사례이고 서로 겹치지 않는다는 것만 서며, 둘이 전부라는 것은 서지 않는다.
+비율의 두 용법이 같은 형으로 등재된 선례가 위에 있다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -247,6 +266,13 @@ def registry : List ConceptRel :=
   , .refines .exposureMargin .pledgeRate
   , .refines .valuationRate .pledgeRate
   , .excludes .exposureMargin .valuationRate
+  , .refines .equityClaim .claim
+  , .measuredBy .equityClaim .regulatoryFiling
+  , .refines .heldAssetShare .externalAssetShare
+  , .refines .pledgedAssetShare .externalAssetShare
+  , .excludes .heldAssetShare .pledgedAssetShare
+  , .measuredBy .heldAssetShare .exchangeWarehouseReport
+  , .measuredBy .pledgedAssetShare .encumberedAssetNote
   ]
 
 end CrisisFramework.Glossary
