@@ -36,6 +36,8 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 | Singh · Aitken (2010), *The (sizable) Role of Rehypothecation in the Shadow Banking System* (IMF WP 10/172) | **소진됐다.** 같은 자리에서 함께 열었고 같은 기록이 받는다 |
 | Tang · Zhu (2016), *Commodities as Collateral* (*RFS* 29권 8호) | **소진됐다.** `collateral-6` 이 `CQ-fin-4` 가 묻는 의존의 메커니즘을 확보하려고 열었고 추출 기록 E-46 이 섰다 |
 | Minko (2016), *Implications of the Qingdao Metals Scandal for Commodity Repurchase Agreements* (HES-GE 학사 논문) | **소진됐다.** 같은 자리에서 함께 열었고 같은 기록이 받는다 |
+| **창고증권과 담보권의 규범** (UCC 제1-201조 (b)(18) · 제7-205조 · 제7-207조 · 제7-402조 · 제9-312조 (c)) | **소진됐다.** `collateral-7` 이 외부 자산의 소유를 담는 자리가 없다는 구멍을 처분하려고 열었고 추출 기록 E-47 이 섰다. 같은 회차가 그 구멍을 해소했고 `CF-1009` 가 그것을 폐기했다. 뭉치 밖 참조다 |
+| Borio · McCauley · McGuire, *FX swaps and forwards: missing global debt?* (BIS 분기보고서 2017년 9월) | **대기.** FX 스왑 총액 복원의 구멍 | 딜러 은행의 명목 금액 통계와 국제은행통계로 부외 달러 부채를 사정하는 방법, 파생상품 처리가 원금을 대차대조표에서 빼는 회계적 이유, 그리고 **쪼개지지 않는 것들**(투기와 헤지의 구별, 통화와 만기의 불일치, 비거주자 보유 비중). `collateral-7` 이 외부 자산의 범위를 가리면서 그 편이 이 구멍에 직결됨을 확인했고, FX 스왑이 내부 청구권이라 이 아크의 판별선 밖이므로 `network` 아크가 받는다 |
 
 ---
 

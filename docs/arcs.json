@@ -129,6 +129,19 @@
       "closed": null,
       "holes": [],
       "cq": []
+    },
+    {
+      "name": "currency",
+      "discriminator": "통화 불일치가 누구의 장부에 서고 무엇을 통해 제약으로 전달되는가",
+      "ph": "PH-2",
+      "phases": [],
+      "status": "reserved",
+      "opened": null,
+      "closed": null,
+      "holes": [],
+      "cq": [
+        "CQ-fin-11"
+      ]
     }
   ],
   "patches": [
