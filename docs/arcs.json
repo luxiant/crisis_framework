@@ -85,7 +85,8 @@
         "collateral-5",
         "collateral-6",
         "collateral-7",
-        "collateral-8"
+        "collateral-8",
+        "collateral-9"
       ],
       "status": "open",
       "opened": "2026-10-02",
@@ -779,6 +780,34 @@
         "phase": "collateral-6",
         "kind": "decision_session",
         "date": "2026-10-09"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "add",
+      "from": null,
+      "phase": "collateral-9",
+      "what": "앞 페이즈의 미전사분을 받아 원장에 넣고 병합만 하며 아크를 닫는 페이즈",
+      "why": "`collateral-7` 의 종료 문서가 넘긴 넷 가운데 기각 레지스터의 `for_decl` 을 읽는 검사가 없다는 항이 남았고, `SPEC.md` 가 「어느 검사도 읽지 않는 필드는 두지 않는다」를 들고 있어 그 자리를 비워 두면 명세가 자기 원칙을 어긴 채 남는다. W-6 이 「CI 예정」 행을 리뷰로 끌어오지 말라고 못 박았으므로 검사를 쓰지 않으면 R-8 의 행이 영영 미래형으로 남는다. §2.2 가 마지막 페이즈에 새 낙착을 금지하므로 병합 전용 역할이 뒤로 한 칸 물러난다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-8",
+        "kind": "decision_session",
+        "date": "2026-10-12"
+      }
+    },
+    {
+      "arc": "collateral",
+      "op": "move",
+      "from": "collateral-8",
+      "phase": "collateral-9",
+      "what": "병합만 하고 아크를 닫는 일",
+      "why": "`collateral-8` 이 R-8 의 탐지와 docstring 머리말 규약의 검사를 세우는 일을 받는다. §6.7 (8) 을 따라 중간에 끼우지 않고 말미에 덧붙이므로 앞 일곱의 번호가 밀리지 않는다.",
+      "origin": {
+        "arc": "collateral",
+        "phase": "collateral-8",
+        "kind": "decision_session",
+        "date": "2026-10-12"
       }
     }
   ]
