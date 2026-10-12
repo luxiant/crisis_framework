@@ -2,16 +2,23 @@
 .lake/
 **/.lake/
 
-# 결정 세션이 전달하는 지시서와 엔트리 카드 (리포 루트에 두되 추적하지 않는다)
-IMPLEMENTATION_PLAN_*.md
-ENTRY_CARD_*.json
-VERIFY_PATCH_*.md
-별지-*.md
-대조표-*.md
-
-# 결정 세션이 전달하는 별지 (지시서가 지목하는 재료)
-CLAUDE_ADDENDUM.md
-*-declarations*.md
+# 리포 루트의 추적 대상은 아래 일곱 파일과 다섯 디렉터리뿐이다. 소진 문서는 루트에
+# 놓되 추적하지 않으므로(J-27), 루트를 통째로 무시한 뒤 그 열둘만 되살린다. 양식을
+# 새로 지어내도 자동으로 무시되며, 루트에 무언가를 새로 추적하려면 이 목록을 고치는
+# 결정이 먼저 서야 한다.
+/*
+!/.github/
+!/.gitignore
+!/BUILD_LOG.md
+!/CLAUDE.md
+!/CrisisFramework/
+!/LICENSE
+!/Scratch/
+!/docs/
+!/lake-manifest.json
+!/lakefile.toml
+!/lean-toolchain
+!/scripts/
 
 # 파이썬 바이트코드 (검증기 실행의 산출물)
 __pycache__/

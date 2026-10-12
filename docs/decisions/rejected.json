@@ -1408,6 +1408,25 @@
     "CF-978",
     "CF-989"
    ]
+  },
+  {
+   "id": "CF-1065",
+   "origin": {
+    "arc": "collateral",
+    "phase": "collateral-8",
+    "kind": "decision_session",
+    "date": "2026-10-12"
+   },
+   "candidate": "담보물의 종류를 열거형으로 두고 그것으로 청구권 여부를 판정하는 안.",
+   "reason": "종류를 미리 열거하면 새 수단이 들어올 때마다 정의층을 손대야 하고, 관측층에 사상을 더해 넓히는 길이 막힌다.",
+   "for": "담보물의 청구권 여부 판정.",
+   "statement": "담보물의 종류를 열거형으로 두는 안을 기각했다.",
+   "basis": "`CrisisFramework.Definition.Pledgeable.isClaimBacked` 의 docstring 이 그 기각을 이미 들고 있었으나 기각 레지스터에 대응 항목이 없었다. `CF-729` 가 `CF-1010` 으로 폐기되고 `CF-959` 로 대체되면서 그 선언의 표지가 다시 가리켜졌고, 그래서 경계 안으로 들어왔다.",
+   "for_decl": "CrisisFramework.Definition.Pledgeable.isClaimBacked",
+   "related": [
+    "CF-1055",
+    "CF-1010"
+   ]
   }
  ]
 }
