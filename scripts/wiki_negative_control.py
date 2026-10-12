@@ -34,6 +34,8 @@ from datetime import date as _date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import check_wiki          # noqa: E402  주입 대상을 검증기의 수집기로 고른다
 CHECKER = ROOT / "scripts" / "check_wiki.py"
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -458,24 +460,16 @@ def inj_31(root):
 
 
 def inj_32(root):
-    """블록의 값을 그 페이즈의 패치 계수와 다르게 적는다.
+    """어느 아크의 `phases` 에도 없는 페이즈 이름으로 종료 문서를 하나 둔다.
 
-    패치가 하나 이상인 페이즈의 종료 문서를 골라 말미에 블록을 더하고 값을 0 으로 둔다.
-    패치가 0 인 페이즈를 고르면 0 이 참값이라 주입이 조건을 만들지 못한다."""
-    counts: dict = {}
-    for p in arcs(root)["patches"]:
-        ph = (p.get("origin") or {}).get("phase")
-        if ph:
-            counts[ph] = counts.get(ph, 0) + 1
-    d = root / "docs" / "phases"
-    for f in sorted(d.glob("*-closure.md")) if d.is_dir() else []:
-        phase = f.name[:-len("-closure.md")]
-        if counts.get(phase, 0) > 0:
-            f.write_text(f.read_text(encoding="utf-8")
-                         + "\n<!-- UNTRANSCRIBED:BEGIN -->\nUNTRANSCRIBED=0\n"
-                           "<!-- UNTRANSCRIBED:END -->\n", encoding="utf-8")
-            return phase
-    raise SystemExit("패치가 하나 이상인 페이즈의 종료 문서가 없어 검사 32 의 주입 대상이 없다")
+    좁힌 검사 32 는 블록을 읽지 않으므로 앞 판의 주입(블록의 값을 패치 계수와 다르게 적는
+    것)은 더 이상 조건을 만들지 못한다. 선언된 아크의 이름을 쓰면 검사 35 의 형에는 맞으므로
+    이 주입이 검사 32 만 겨눈다."""
+    phase = "collateral-9999"
+    f = root / "docs" / "phases" / f"{phase}-closure.md"
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text("음성 대조가 주입한 종료 문서다.\n", encoding="utf-8")
+    return phase
 
 
 def inj_21(root):
@@ -490,6 +484,134 @@ def inj_21(root):
             x["holes"] = ["CF-9021"]
     save_arcs(root, a)
 
+
+def _boundary_decls(root: Path):
+    """경계 안 선언. **검증기의 수집기를 그대로 불러 쓰고 전사하지 않는다.**
+
+    경계와 머리말 표를 여기서 다시 읽으면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 주입이
+    경계 밖을 겨누게 되어도 그것을 어느 검사도 잡지 않는다."""
+    led = check_wiki.Ledger(root)
+    since, forms = check_wiki.heading_rules(led)
+    inside = [] if since is None else [d for d in led.doc_decls() if d.no >= since]
+    return inside, forms
+
+
+def inj_33_left(root):
+    """경계 안 선언의 `for_decl` 항목을 지운다. 좌에서 우로가 실패한다.
+
+    한 선언을 여러 항목이 드는 자리가 있으므로 그 값을 든 항목 전량에서 지운다. 하나만
+    지우면 남은 항목이 그 선언을 여전히 들어 주입이 조건을 만들지 못한다."""
+    inside = {d.full for d in _boundary_decls(root)[0]}
+    doc = load(root, "rejected")
+    target = next((str(e["for_decl"]) for e in doc["rejected"]
+                   if str(e.get("for_decl") or "") in inside), None)
+    if not target:
+        raise SystemExit("경계 안 선언을 for_decl 로 드는 기각 항목이 없다")
+    for e in doc["rejected"]:
+        if str(e.get("for_decl") or "") == target:
+            e.pop("for_decl", None)
+    save(root, "rejected", doc)
+    return target
+
+
+def inj_33_right(root):
+    """`for_decl` 값을 없는 선언 이름으로 바꾼다. 우에서 좌로가 실패한다."""
+    doc = load(root, "rejected")
+    e = next((x for x in doc["rejected"] if x.get("for_decl")), None)
+    if e is None:
+        raise SystemExit("for_decl 을 든 기각 항목이 없어 주입 대상이 없다")
+    e["for_decl"] = "CrisisFramework.Definition.NoSuchDeclaration"
+    save(root, "rejected", doc)
+    return e["for_decl"]
+
+
+def inj_34_period(root):
+    """경계 안 머리말의 마침표를 지운다. 그 머리말이 형과 달라져 실패한다.
+
+    예약 낱말을 들고 마침표로 닫는 머리말만 고른다. 자유 머리말은 형에 걸리지 않으므로
+    마침표를 지워도 통과하고, 그러면 주입이 조건을 만들지 못한다."""
+    inside, forms = _boundary_decls(root)
+    for d in inside:
+        f = root / d.rel
+        text = f.read_text(encoding="utf-8")
+        for p in d.paras:
+            head = check_wiki.para_heading(p)
+            if not head or not head.endswith(".") or not any(w in head for w in forms):
+                continue
+            old = f"**{head}**"
+            if old not in text:
+                continue          # 두 줄에 걸친 머리말은 원문에 그 꼴로 서지 않는다
+            f.write_text(text.replace(old, f"**{head[:-1]}**", 1), encoding="utf-8")
+            return head
+    raise SystemExit("마침표로 닫는 예약 머리말이 경계 안에 없다")
+
+
+def inj_34_empty(root):
+    """`HEADING` 블록을 비운다. 비어 있으면 통과가 아니라 실패다."""
+    f = root / "docs" / "baseline.md"
+    text = f.read_text(encoding="utf-8")
+    new = re.sub(r"<!-- HEADING:BEGIN -->\n.*?<!-- HEADING:END -->",
+                 "<!-- HEADING:BEGIN -->\n<!-- HEADING:END -->",
+                 text, count=1, flags=re.S)
+    if new == text:
+        raise SystemExit("HEADING 블록을 찾지 못했다")
+    f.write_text(new, encoding="utf-8")
+
+
+def _plant(root: Path, rel: str) -> str:
+    """`docs/` 아래에 파일을 하나 심고 그 경로를 낸다. 검사 35 의 주입이 전부 이것을 쓴다."""
+    p = root / "docs" / rel
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text("음성 대조가 주입한 문서다.\n", encoding="utf-8")
+    return f"docs/{rel}"
+
+
+def inj_35_plan(root):
+    """청사진을 `docs/` 에 둔다."""
+    return _plant(root, "IMPLEMENTATION_PLAN_collateral_9.md")
+
+
+def inj_35_patch(root):
+    """패치 조각을 `docs/` 에 둔다."""
+    return _plant(root, "patches-collateral-9.json")
+
+
+def inj_35_annex(root):
+    """별지를 `docs/` 에 둔다."""
+    return _plant(root, "별지-collateral-9-명세.md")
+
+
+def inj_35_phases_other(root):
+    """종료 문서가 아닌 것을 `phases/` 에 둔다."""
+    return _plant(root, "phases/collateral-9-notes.md")
+
+
+def inj_35_phases_arc(root):
+    """선언되지 않은 아크 이름으로 종료 문서를 둔다.
+
+    `<ARC>` 가 `arcs.json` 의 아크 이름 전량의 택일로 바뀌므로, 선언된 아크의 이름을 쓰면
+    번호가 무엇이든 통과한다. 그 값을 레지스터가 닫는다는 것이 이 주입이 재는 것이다."""
+    return _plant(root, "phases/nosucharc-1-closure.md")
+
+
+def inj_35_extraction(root):
+    """추출 기록의 접두사를 어긴다."""
+    return _plant(root, "extractions/extract-48-foo.md")
+
+
+def inj_35_case(root):
+    """파일 이름에 대문자와 밑줄을 쓴다."""
+    return _plant(root, "extractions/extraction-48-Foo_Bar.md")
+
+
+def inj_35_dir(root):
+    """허용되지 않은 디렉터리를 만든다."""
+    return _plant(root, "notes/collateral-9.md")
+
+
+def inj_35_ledger(root):
+    """원장 디렉터리에 새 파일을 둔다."""
+    return _plant(root, "decisions/holes.json")
 
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
@@ -521,7 +643,20 @@ CASES = [
     ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
     ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21,  None, "charter"),
     ("31",  "wiki31-hole-unassigned",      "열린 아크의 페이즈로 발화하는 이연 항을 쓴다",  inj_31,  None, None),
-    ("32",  "wiki32-closure-untranscribed", "블록의 값을 그 페이즈의 패치 계수와 다르게 적는다", inj_32, None, None),
+    ("32",  "wiki32-closure-phase",         "선언되지 않은 페이즈 이름으로 종료 문서를 둔다",  inj_32, None, None),
+    ("33",  "wiki33-rejection-registered",  "경계 안 선언의 for_decl 항목을 지운다",         inj_33_left,  None, None),
+    ("33",  "wiki33-rejection-registered",  "for_decl 값을 없는 선언 이름으로 바꾼다",       inj_33_right, None, None),
+    ("34",  "wiki34-heading-form",          "경계 안 머리말의 마침표를 지운다",              inj_34_period, None, None),
+    ("34",  "wiki34-heading-form",          "HEADING 블록을 비운다",                        inj_34_empty,  None, None),
+    ("35",  "wiki35-doc-form",              "청사진을 docs/ 에 둔다",                       inj_35_plan,         None, None),
+    ("35",  "wiki35-doc-form",              "패치 조각을 docs/ 에 둔다",                    inj_35_patch,        None, None),
+    ("35",  "wiki35-doc-form",              "별지를 docs/ 에 둔다",                         inj_35_annex,        None, None),
+    ("35",  "wiki35-doc-form",              "종료 문서가 아닌 것을 phases/ 에 둔다",         inj_35_phases_other, None, None),
+    ("35",  "wiki35-doc-form",              "선언되지 않은 아크 이름으로 종료 문서를 둔다",   inj_35_phases_arc,   None, None),
+    ("35",  "wiki35-doc-form",              "추출 기록의 접두사를 어긴다",                   inj_35_extraction,   None, None),
+    ("35",  "wiki35-doc-form",              "파일 이름에 대문자와 밑줄을 쓴다",              inj_35_case,         None, None),
+    ("35",  "wiki35-doc-form",              "허용되지 않은 디렉터리를 만든다",               inj_35_dir,          None, None),
+    ("35",  "wiki35-doc-form",              "원장 디렉터리에 새 파일을 둔다",                inj_35_ledger,       None, None),
 ]
 
 

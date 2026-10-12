@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 서른둘을 돈다. 실패시키는 것 스물넷과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 서른다섯을 돈다. 실패시키는 것 스물일곱과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -22,6 +22,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 REGISTERS = ("decisions", "deferred", "retirements", "rejected")
 
@@ -75,6 +76,23 @@ ARTIFACT_PATH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]*$")
 # abbrev 도 최상위 선언이다. 투영이 쓰이는 족을 abbrev 로 두므로(CF-641) 빼면 표지 누락이 그물 밖에
 # 남는다(CF-669).
 TOP_DECL = re.compile(r"^(def|theorem|inductive|structure|abbrev)\s+([^\s({\[:]+)")
+# 검사 33·34 가 선언의 완전 이름을 세울 때 쓰는 이름공간. `end` 는 여는 쪽과 같은 점 이름을 든다.
+NAMESPACE = re.compile(r"^namespace\s+(\S+)")
+NAMESPACE_END = re.compile(r"^end\s+(\S+)")
+# docstring 블록과 그 문단과 문단 머리말. 머리말은 문단 선두의 `**` 와 `**` 사이다(SPEC §2.1).
+DOC_BLOCK = re.compile(r"/--(.*?)-/", re.S)
+PARA_SPLIT = re.compile(r"\n\s*\n")
+PARA_HEAD = re.compile(r"^\*\*(.+?)\*\*", re.S)
+
+
+class DocDecl(NamedTuple):
+    """최상위 선언 하나와 그 docstring 의 문단. 검사 33 과 34 가 이 하나를 함께 쓴다."""
+
+    full: str              # 이름공간을 붙인 완전 이름
+    rel: str               # 리포 뿌리를 기준으로 한 경로
+    line: int              # 그 선언이 선 줄
+    no: int                # `DD:` 표지가 가리키는 번호. `CF-<n>` 형식이 아니면 -1
+    paras: list[str]       # docstring 을 빈 줄로 가른 문단
 
 
 class Report:
@@ -171,6 +189,7 @@ class Ledger:
                 self.name_owner.setdefault(n, e["id"])
 
         self.verify_steps = self._read_verify_steps()
+        self._doc_decls: list[DocDecl] | None = None
         self.lean_files = sorted((root / "CrisisFramework").rglob("*.lean")) \
             if (root / "CrisisFramework").is_dir() else []
         self.doc_files = sorted((root / "docs").rglob("*.md")) \
@@ -207,6 +226,52 @@ class Ledger:
             out.append((ARCS_DOC, json.dumps(doc, ensure_ascii=False, indent=1)))
         for f in self.lean_files:
             out.append((str(f.relative_to(self.root)), _lean_comments(f.read_text(encoding="utf-8"))))
+        return out
+
+    def doc_decls(self) -> list[DocDecl]:
+        """최상위 선언마다 그 `DD:` 표지의 번호와 docstring 의 문단을 낸다.
+
+        **검사 33 과 34 가 이 하나를 부른다.** 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡고,
+        둘이 다른 수를 내는 것을 어느 검사도 잡지 않는다. 검사 31 이 검사 16 과 발화 판정을
+        나누어 쓴 것과 같은 형이다(SPEC §2.1).
+
+        표지를 집는 규칙은 검사 25 와 같다. 앞 선언과 이 선언 사이에 선 표지가 이 선언의
+        것이며, 그 구간의 마지막 `/-- -/` 블록이 이 선언의 docstring 이다. 블록이 둘 이상인
+        것은 생성자와 필드가 자기 docstring 을 갖기 때문이고, 그것들은 선언 줄보다 뒤에 서므로
+        구간에 들지 않는다.
+        """
+        if self._doc_decls is not None:
+            return self._doc_decls
+        marks = self.dd_markers()
+        out: list[DocDecl] = []
+        for f in self.lean_files:
+            lines = f.read_text(encoding="utf-8").splitlines()
+            mk = sorted((ln, tgt) for g, ln, tgt in marks if g == f)
+            rel = str(f.relative_to(self.root))
+            stack: list[str] = []
+            prev = 0
+            for i, line in enumerate(lines, 1):
+                m = NAMESPACE.match(line)
+                if m:
+                    stack.append(m.group(1))
+                    continue
+                m = NAMESPACE_END.match(line)
+                if m:
+                    if stack and stack[-1] == m.group(1):
+                        stack.pop()
+                    continue
+                d = TOP_DECL.match(line)
+                if not d:
+                    continue
+                cand = [t for ln, t in mk if prev < ln < i]
+                m = ID_FORM.match(cand[-1]) if cand else None
+                blocks = DOC_BLOCK.findall("\n".join(lines[prev:i - 1]))
+                paras = [p.strip() for p in PARA_SPLIT.split(blocks[-1].strip())
+                         if p.strip()] if blocks else []
+                out.append(DocDecl(".".join(stack + [d.group(2)]), rel, i,
+                                   int(m.group(1)) if m else -1, paras))
+                prev = i
+        self._doc_decls = out
         return out
 
     def dd_markers(self) -> list[tuple[Path, int, str]]:
@@ -844,7 +909,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "31", "32", "29", "30"]
+         "28", "31", "32", "33", "34", "35", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -1035,46 +1100,251 @@ def check_31(led: Ledger) -> Report:
     return r
 
 
-# 검사 32 가 읽는 미전사분 블록. 형은 CQ 고정 절과 같고 자리는 종료 문서 안이면 어디든 된다.
-UNTRANSCRIBED_BLOCK = re.compile(
-    r"<!-- UNTRANSCRIBED:BEGIN -->\n(.*?)<!-- UNTRANSCRIBED:END -->", re.S)
-UNTRANSCRIBED_LINE = re.compile(r"^UNTRANSCRIBED=(-?\d+)$")
-
-
 def check_32(led: Ledger) -> Report:
-    r = Report("32", "wiki32-closure-untranscribed",
-               "페이즈 종료 문서의 미전사분 블록이 그 페이즈의 패치 계수와 같은가", "fail")
+    r = Report("32", "wiki32-closure-phase",
+               "페이즈 종료 문서의 페이즈가 어느 아크의 phases 에 선언되어 있는가", "fail")
     declared = {p for a in led.arcs.values() for p in (a.get("phases") or [])}
     d = led.root / "docs" / "phases"
     docs = sorted(d.glob("*-closure.md")) if d.is_dir() else []
-    n_block = exempt = 0
     for f in docs:
         phase = f.name[:-len("-closure.md")]
-        rel = f.relative_to(led.root)
         if phase not in declared:
-            r.bad(f"{rel}: 페이즈 `{phase}` 가 어느 아크의 phases 에도 없다")
-        text = f.read_text(encoding="utf-8")
-        blocks = UNTRANSCRIBED_BLOCK.findall(text)
-        if not blocks:
-            # 종료 문서는 운영자가 그 회차의 커밋보다 뒤에 쓰므로 없을 때 실패시키지 않는다.
-            # 계수로 보고하고, 결정 세션의 사전 검사가 그 출력을 읽는다(SPEC §2.1).
-            exempt += 1
-            continue
-        n_block += 1
-        if len(blocks) > 1:
-            r.bad(f"{rel}: UNTRANSCRIBED 블록이 {len(blocks)}개다")
-            continue
-        vals = [m.group(1) for m in map(UNTRANSCRIBED_LINE.match, blocks[0].splitlines()) if m]
-        if len(vals) != 1:
-            r.bad(f"{rel}: 블록 안의 UNTRANSCRIBED=<정수> 줄이 {len(vals)}개다")
-            continue
-        want = sum(1 for p in led.patches
-                   if (p.get("origin") or {}).get("phase") == phase)
-        if int(vals[0]) != want:
-            r.bad(f"{rel}: 블록이 {vals[0]} 을 들었으나 그 페이즈의 패치 레코드는 {want}건이다")
-    r.note(f"종료 문서 {len(docs)}건 · 블록을 든 것 {n_block}건 · 블록이 없어 면제된 것 {exempt}건")
+            r.bad(f"{f.relative_to(led.root)}: 페이즈 `{phase}` 가 어느 아크의 "
+                  f"phases 에도 없다")
+    # 미전사분 블록의 대조를 걷었다. 그 문면이 청사진에만 살고 `patches` 가 계획 변경만 들게
+    # 되어 맞댈 상대를 잃었기 때문이다. 블록을 든 앞 판의 종료 문서는 역사 기록이라 그대로
+    # 두며, 이 검사가 블록을 읽지 않으므로 그것들이 걸리지 않는다(SPEC §2).
+    r.note(f"종료 문서 {len(docs)}건")
     return r
 
+
+# 검사 33·34 가 읽는 머리말 규약. `docs/baseline.md` §5 의 `HEADING` 블록이며 정본은 같은
+# 파일의 §7 이다. 경계를 코드에 박지 않고 그 블록의 `HEADING_SINCE` 가 들게 한다.
+HEADING_BLOCK = re.compile(r"<!-- HEADING:BEGIN -->\n(.*?)<!-- HEADING:END -->", re.S)
+HEADING_SINCE_LINE = re.compile(r"^HEADING_SINCE=(\d+)$")
+HEADING_LINE = re.compile(r"^HEADING=([^|]*)\|([^|]*)\|(.*)$")
+# 검사 35 가 읽는 문서 양식. 한 줄은 `DOCFORM=<디렉터리>|<종류>|<값>` 이고 디렉터리는
+# `docs/` 를 기준으로 한 상대 경로이며 루트는 `.` 으로 적는다.
+DOCFORM_BLOCK = re.compile(r"<!-- DOCFORM:BEGIN -->\n(.*?)<!-- DOCFORM:END -->", re.S)
+DOCFORM_LINE = re.compile(r"^DOCFORM=([^|]*)\|([^|]*)\|(.*)$")
+# 검사 35 의 실패 문면. 적발한 뒤의 질의가 이 검사에 요구된 것이므로 이름을 맞추지 말라고
+# 적되, 어떤 이름이면 통과하는지는 적지 않는다. 적으면 합의되지 않은 양식이 합의된 이름을
+# 입고 들어온다(SPEC §2.1).
+DOCFORM_HEAD = "합의되지 않은 형태의 문서 유입 시도"
+DOCFORM_ASK = "그 이름을 맞추지 말고 결정 세션에 묻는다"
+# 기각 문단을 가리는 낱말. 검사 33 의 좌변이 이것으로 선다.
+REJECTION_WORD = "기각"
+
+
+def _baseline_block(led: Ledger, pattern: re.Pattern) -> str:
+    """`docs/baseline.md` 에서 그 블록의 본문. 파일이나 블록이 없으면 빈 문자열이다."""
+    p = led.root / "docs" / "baseline.md"
+    m = pattern.search(p.read_text(encoding="utf-8")) if p.is_file() else None
+    return m.group(1) if m else ""
+
+
+def heading_rules(led: Ledger) -> tuple[int | None, dict[str, list[str]]]:
+    """`HEADING` 블록이 든 경계와 예약 낱말별 형의 목록."""
+    since: int | None = None
+    forms: dict[str, list[str]] = {}
+    for line in _baseline_block(led, HEADING_BLOCK).splitlines():
+        m = HEADING_SINCE_LINE.match(line)
+        if m:
+            since = int(m.group(1))
+            continue
+        m = HEADING_LINE.match(line)
+        if m:
+            forms.setdefault(m.group(1), []).append(m.group(3))
+    return since, forms
+
+
+def heading_matches(form: str, head: str) -> bool:
+    """형과 머리말이 같은가.
+
+    `*` 가 없으면 완전일치다. 있으면 그 앞뒤를 접두와 접미로 보고 가변 구간이 한 글자
+    이상인지 본다(SPEC §2.1).
+    """
+    if "*" not in form:
+        return form == head
+    pre, suf = form.split("*", 1)
+    return (head.startswith(pre) and head.endswith(suf)
+            and len(head) > len(pre) + len(suf))
+
+
+def para_heading(para: str) -> str | None:
+    """문단의 머리말. 선두에 `**` 가 없으면 머리말이 없으며 판정의 대상이 아니다.
+
+    머리말 안의 줄바꿈은 공백 하나로 접는다. 접지 않으면 두 줄에 걸친 머리말이 형과 결코
+    같아지지 않아 그 자리가 전부 위반으로 잡힌다.
+    """
+    m = PARA_HEAD.match(para)
+    return re.sub(r"\s+", " ", m.group(1)).strip() if m else None
+
+
+def check_33(led: Ledger) -> Report:
+    r = Report("33", "wiki33-rejection-registered",
+               "경계 안 선언의 docstring 기각 문단마다 기각 레지스터에 for_decl 로 그 선언을 "
+               "드는 항목이 있고 그 역도 서는가", "fail")
+    since, _ = heading_rules(led)
+    if since is None:
+        r.bad("docs/baseline.md 의 HEADING 블록에 HEADING_SINCE 가 없다")
+        return r
+    decls = led.doc_decls()
+    inside = [d for d in decls if d.no >= since]
+
+    def has_rejection(d: DocDecl) -> bool:
+        return any(REJECTION_WORD in p for p in d.paras)
+
+    # 좌변. 기각 문단을 하나라도 든 경계 안 선언의 완전 이름.
+    left = {d.full: d for d in inside if has_rejection(d)}
+    # 우변. `for_decl` 을 든 기각 항목이 가리키는 완전 이름과 그것을 든 항목의 id.
+    right: dict[str, list[str]] = {}
+    for e in led.reg["rejected"]:
+        if e.get("for_decl"):
+            right.setdefault(str(e["for_decl"]), []).append(str(e.get("id")))
+
+    missed = ghost = 0
+    for full, d in sorted(left.items()):
+        if full not in right:
+            missed += 1
+            r.bad(f"{d.rel}:{d.line}: `{full}` 의 docstring 이 기각 문단을 드는데 기각 "
+                  f"레지스터에 그것을 for_decl 로 드는 항목이 없다")
+    by_full = {d.full: d for d in decls}
+    for full in sorted(right):
+        d = by_full.get(full)
+        ids = ", ".join(right[full])
+        if d is None:
+            ghost += 1
+            r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 에 해당하는 선언이 리포 소스에 없다")
+        elif not has_rejection(d):
+            ghost += 1
+            r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 의 docstring 이 기각 문단을 "
+                  f"들지 않는다")
+    # 계수를 맞대지 않는다. 한 선언에 원장 항목이 둘 이상인 것과 기각 문단이 둘 이상인 것이
+    # 있어 양쪽 계수가 갈리므로 존재 검사로 둔다(SPEC §2.1).
+    outside = sum(1 for d in decls if d.no < since and has_rejection(d))
+    r.note(f"유니버스 선언 {len(inside)} · 좌변 {len(left)} · 우변 {len(right)} "
+           f"· 좌→우 미포착 {missed} · 우→좌 유령 {ghost} · 경계 HEADING_SINCE={since}")
+    r.note(f"경계 밖에서 기각 문단을 든 선언 {outside} "
+           f"(소급하지 않기로 한 미등재분의 크기이며 실패가 아니라 보고다)")
+    return r
+
+
+def check_34(led: Ledger) -> Report:
+    r = Report("34", "wiki34-heading-form",
+               "경계 안 선언의 docstring 문단 머리말이 예약 낱말을 들면 HEADING 블록이 그 "
+               "낱말에 둔 형과 같은가", "fail")
+    since, forms = heading_rules(led)
+    # 블록이 비어 있으면 통과가 아니라 실패다. 가리킬 대상이 없는데 통과시키면 이 검사가
+    # 공허해지고, 머리말이 검사 33 의 좌변 앵커이므로 그 탐지도 함께 조용히 빈다.
+    if not forms:
+        r.bad("docs/baseline.md 의 HEADING 블록이 없거나 비어 있다")
+        return r
+    if since is None:
+        r.bad("docs/baseline.md 의 HEADING 블록에 HEADING_SINCE 가 없다")
+        return r
+    for word in sorted(forms):
+        for form in forms[word]:
+            if form.count("*") > 1:
+                r.bad(f"HEADING 블록의 형 `{form}` 에 `*` 가 둘 이상이다")
+    if r.violations:
+        return r
+
+    n_para = n_res = n_free = outside = 0
+    for d in led.doc_decls():
+        inside = d.no >= since
+        for p in d.paras:
+            head = para_heading(p)
+            if head is None:
+                continue
+            hit = sorted(w for w in forms if w in head)
+            if inside:
+                n_para += 1
+                if hit:
+                    n_res += 1
+                else:
+                    n_free += 1
+            if not hit:
+                continue
+            # 한 머리말이 예약 낱말 둘을 들면 그 둘의 형을 합집합으로 받는다.
+            if any(heading_matches(f, head) for w in hit for f in forms[w]):
+                continue
+            if inside:
+                r.bad(f"{d.rel}:{d.line}: `{d.full}` 의 머리말 `{head}` 가 예약 낱말 "
+                      f"{' · '.join(hit)} 에 걸린 형과 다르다")
+            else:
+                outside += 1
+    r.note(f"유니버스 문단 {n_para} · 예약 낱말을 드는 머리말 {n_res} · 자유 {n_free} "
+           f"· 예약 낱말 {len(forms)} · 형 {sum(len(v) for v in forms.values())} "
+           f"· 경계 HEADING_SINCE={since}")
+    r.note(f"경계 밖에서 형을 어기는 머리말 {outside} "
+           f"(소급하지 않기로 한 미정리분의 크기이며 실패가 아니라 보고다)")
+    return r
+
+
+def check_35(led: Ledger) -> Report:
+    r = Report("35", "wiki35-doc-form",
+               "docs/ 아래의 파일과 디렉터리가 DOCFORM 블록이 든 형에 드는가", "fail")
+    rows: dict[str, list[tuple[str, str]]] = {}
+    for line in _baseline_block(led, DOCFORM_BLOCK).splitlines():
+        m = DOCFORM_LINE.match(line)
+        if m:
+            rows.setdefault(m.group(1), []).append((m.group(2), m.group(3)))
+    # 블록이 비어 있으면 통과가 아니라 실패다. 검사 28 과 34 가 같은 요구를 둔다.
+    if not rows:
+        r.bad("docs/baseline.md 의 DOCFORM 블록이 없거나 비어 있다")
+        return r
+
+    # `<ARC>` 를 아크 이름 전량의 택일로 바꾼다. 아크 이름을 블록에 적지 않는 것은 그 값을
+    # 레지스터가 닫기 때문이다(SPEC §2.1).
+    arc_alt = "|".join(re.escape(a) for a in sorted(led.arcs)) or r"(?!)"
+    forms: dict[str, list[tuple[str, str, re.Pattern | None]]] = {}
+    for d in sorted(rows):
+        for kind, val in rows[d]:
+            if kind == "name":
+                forms.setdefault(d, []).append((kind, val, None))
+            elif kind == "pattern":
+                try:
+                    rx = re.compile(val.replace("<ARC>", f"(?:{arc_alt})"))
+                except re.error as exc:
+                    r.bad(f"DOCFORM 블록의 패턴 `{val}` 이 정규식으로 컴파일되지 않는다: {exc}")
+                    continue
+                forms.setdefault(d, []).append((kind, val, rx))
+            else:
+                r.bad(f"DOCFORM 블록의 종류 `{kind}` 가 name 도 pattern 도 아니다")
+    if r.violations:
+        return r
+
+    base = led.root / "docs"
+    if not base.is_dir():
+        r.bad("docs/ 디렉터리가 없다")
+        return r
+    # 파일시스템을 훑고 `git ls-files` 를 쓰지 않는다. 추적되지 않은 채 그 자리에 놓인
+    # 문서도 유입이고, 추적 여부로 가르면 `.gitignore` 가 가린 것이 함께 가려진다.
+    dirs = sorted(p for p in base.rglob("*") if p.is_dir())
+    files = sorted(p for p in base.rglob("*") if p.is_file())
+    for p in dirs:
+        rel = p.relative_to(base).as_posix()
+        if rel not in rows:
+            r.bad(f"{DOCFORM_HEAD} — docs/{rel}/ 가 허용된 디렉터리가 아니다. {DOCFORM_ASK}")
+    per: dict[str, int] = {}
+    for p in files:
+        rel = p.relative_to(base)
+        d = rel.parent.as_posix()
+        per[d] = per.get(d, 0) + 1
+        items = forms.get(d)
+        if items is None:
+            continue          # 그 디렉터리가 허용 밖인 것은 위에서 이미 들었다
+        # 한 디렉터리에 행이 여럿이면 하나라도 맞으면 통과한다.
+        if any(val == rel.name if rx is None else rx.fullmatch(rel.name)
+               for _kind, val, rx in items):
+            continue
+        r.bad(f"{DOCFORM_HEAD} — docs/{rel.as_posix()} 가 그 디렉터리에 허용된 어느 형에도 "
+              f"맞지 않는다. {DOCFORM_ASK}")
+    r.note(f"docs/ 의 파일 {len(files)} · 디렉터리 {len(dirs)} · 허용 디렉터리 {len(rows)}")
+    r.note("디렉터리별 파일: "
+           + " · ".join(f"{k} {per[k]}" for k in sorted(per)))
+    return r
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
@@ -1087,6 +1357,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_20(led, arc_close), check_21(led, arc_close),
         check_26(led), check_27(led),
         check_28(led), check_31(led), check_32(led),
+        check_33(led), check_34(led), check_35(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -1113,7 +1384,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른둘)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른다섯)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
