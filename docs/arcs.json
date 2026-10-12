@@ -88,9 +88,9 @@
         "collateral-8",
         "collateral-9"
       ],
-      "status": "open",
+      "status": "closed",
       "opened": "2026-10-02",
-      "closed": null,
+      "closed": "2026-10-12",
       "holes": [
         "CF-159",
         "CF-173",
