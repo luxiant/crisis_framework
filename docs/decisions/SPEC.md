@@ -584,7 +584,6 @@ D-2 3항이 docstring에 드는 것과 같은 대상이다. **docstring이 요�
     {
       "name": "claim",
       "discriminator": "청구권 발동조건을 어떤 문법으로 쓰는가",
-      "ph": "PH-2",
       "phases": ["claim-1", "claim-2", "claim-3"],
       "status": "open",
       "opened": "2026-09-19",
