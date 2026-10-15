@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 서른다섯을 돈다. 실패시키는 것 스물일곱과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 서른일곱을 돈다. 실패시키는 것 스물아홉과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -181,6 +181,12 @@ class Ledger:
         for e in self.reg["retirements"]:
             if e.get("target"):
                 self.retired_by.setdefault(e["target"], e.get("id"))
+        # 폐기된 항목 → 그것을 폐기한 레코드가 선 날. 검사 23 의 날짜 면제가 이 값을 요구한다.
+        self.retired_on: dict = {}
+        for e in self.reg["retirements"]:
+            if e.get("target"):
+                self.retired_on.setdefault(
+                    e["target"], (e.get("origin") or {}).get("date"))
 
         # 규율 ID → 그것을 드는 항목의 원장 id
         self.name_owner: dict = {}
@@ -648,10 +654,12 @@ def check_15(led: Ledger) -> Report:
 def check_23(led: Ledger) -> Report:
     r = Report("23", "wiki23-rule-ghost",
                "statement·basis 의 규율 ID 토큰이 어느 항목의 names 에 실재하고, "
-               "폐기됐으면 그 폐기 레코드를 related 가 드는가",
+               "폐기됐으면 그 폐기 레코드를 related 가 들거나 그 항목이 폐기보다 앞서 쓰였는가",
                "fail")
     total = 0
     exempt = 0
+    by_date = 0
+    overlap = 0
     for name, e in led.entries:
         # 폐기 레코드는 통째로 유니버스 밖이다. statement 가 「D-6 을 폐기한다」 꼴이라
         # 형태상 반드시 폐기되는 규율의 ID 를 들기 때문이다(SPEC §2.1).
@@ -673,14 +681,28 @@ def check_23(led: Ledger) -> Report:
                     # 폐기한 레코드의 id 를 related 에서 찾는다. 앞을 요구하면 검사 10 이
                     # 그 id 를 산 참조로 잡아 두 검사가 정면으로 부딪힌다(SPEC §2.1).
                     retirer = led.retired_by.get(owner)
+                    # 날짜 면제가 첫 적재 면제보다 앞에 선다. 앞은 애초에 이 검사의 대상이
+                    # 아니라는 범위의 문제이고 뒤는 그때 related 를 채울 길이 없었다는 구조적
+                    # 사정이므로, 범위가 먼저 서야 뒤의 계수가 소급 불가능분의 크기를 바르게
+                    # 센다. 부등호는 엄격하다. 같은 날을 면제하면 같은 카드에서 폐기되는 규율을
+                    # 새 항목이 이름으로 들지 못하게 한 금지가 조용히 풀린다(SPEC §2.1).
+                    wrote = (e.get("origin") or {}).get("date")
+                    killed = led.retired_on.get(owner)
+                    early = bool(wrote) and bool(killed) and str(wrote) < str(killed)
                     if retirer in related:
                         pass
+                    elif early:
+                        by_date += 1
+                        if first_load:
+                            overlap += 1
                     elif first_load:
                         exempt += 1
                     else:
                         r.bad(f"{e.get('id')}: {f} 가 폐기된 규율 `{tok}`({owner}) 를 "
                               f"그것을 폐기한 레코드 {retirer} 를 related 에 적지 않고 든다")
     r.note(f"규율 ID 토큰 {total}건을 봤다. 계열은 {list(RULE_SERIES)}")
+    r.note(f"폐기보다 앞서 쓰인 항목의 날짜 면제 {by_date}건 "
+           f"(그 가운데 첫 적재와 겹치는 것 {overlap}건)")
     r.note(f"폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 {exempt}건")
     return r
 
@@ -1384,7 +1406,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른다섯)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른일곱)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

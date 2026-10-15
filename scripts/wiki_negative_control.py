@@ -335,25 +335,33 @@ def inj_15(root):
     save(root, "decisions", doc)
 
 
-def inj_23(root):
-    """폐기된 규율 ID 를 근거로 적는다. related 에 적지 않으므로 유령이다.
+def _retired_rule(root) -> tuple[str, str]:
+    """폐기된 규율 ID 하나와 그것을 폐기한 레코드가 선 날을 낸다.
+
+    검사 23 이 날짜로 좁혀졌으므로 주입의 날짜를 그 레코드의 날짜에서 유도해야 한다. 날짜를
+    박아 두면 폐기 레코드가 늘 때 주입이 조건을 만들지 못하면서 음성 대조가 통과한다."""
+    for rec in load(root, "retirements")["retirements"]:
+        target, when = rec.get("target"), (rec.get("origin") or {}).get("date")
+        if not target or not when:
+            continue
+        for reg in ("decisions", "deferred"):
+            for e in load(root, reg)[reg]:
+                if e["id"] == target and e.get("names"):
+                    return e["names"][0], when
+    raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 검사 23 의 주입 대상이 없다")
+
+
+def _inj_23_dated(root, delta: int) -> str:
+    """폐기한 날에서 `delta` 만큼 옮긴 날짜로 폐기된 규율 ID 를 근거로 드는 항을 세운다.
 
     첫 적재(`charter-6`)는 `related` 요건을 면하므로 주입은 그 뒤의 페이즈로 선 항목이어야
     한다. 그래서 `charter-7` 로 선 항목을 새로 세워 거기에 지목을 넣는다."""
-    dead_id = load(root, "retirements")["retirements"][0]["target"]
-    dead_names = None
-    for reg in ("decisions", "deferred"):
-        for e in load(root, reg)[reg]:
-            if e["id"] == dead_id:
-                dead_names = e.get("names")
-    if not dead_names:
-        raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 검사 23 의 주입 대상이 없다")
-    tok = dead_names[0]
+    tok, when = _retired_rule(root)
     doc = load(root, "decisions")
     doc["decisions"].append({
         "id": "CF-9023",
         "origin": {"arc": "charter", "phase": "charter-7",
-                   "kind": "decision_session", "date": "2026-09-19"},
+                   "kind": "decision_session", "date": _shift(when, delta)},
         "names": ["Z-9023"],
         "statement": "음성 대조가 주입한 항이다.",
         "basis": f"음성 대조가 주입한 항이며 {tok} 을 근거로 든다.",
@@ -363,6 +371,30 @@ def inj_23(root):
     })
     save(root, "decisions", doc)
     return tok
+
+
+def inj_23_after(root):
+    """폐기한 날보다 **뒤**의 날짜로 폐기된 규율 ID 를 근거로 적는다. 잡혀야 한다.
+
+    그 검사가 처음부터 잡으려던 행위이며, 작성 시점에 이미 폐기된 것을 근거로 드는 것이다."""
+    return _inj_23_dated(root, 1)
+
+
+def inj_23_before(root):
+    """폐기한 날보다 **앞**의 날짜로 적는다. 잡히지 않아야 한다.
+
+    좁힘이 실제로 받는 쪽이다. 이 방향을 재지 않으면 「날짜를 보지 않고 여전히 전량을
+    잡는다」와 갈리지 않는다."""
+    return _inj_23_dated(root, -1)
+
+
+def inj_23_same(root):
+    """폐기한 날과 **같은** 날짜로 적는다. 잡혀야 한다.
+
+    엄격 부등호가 실제로 엄격한지를 이 주입만 잰다. 없으면 느슨하게 써도 음성 대조가
+    통과하고, 같은 카드에서 폐기되는 규율을 새 항목이 이름으로 들지 못하게 한 금지가
+    조용히 풀린다."""
+    return _inj_23_dated(root, 0)
 
 
 def inj_24_missing(root):
@@ -632,7 +664,9 @@ CASES = [
     ("13",  "wiki13-dd-target",            "없는 id 를 줄 주석에 적는다",                  inj_13,  None, None),
     ("14",  "wiki14-dd-layer",             "회계층 파일에서 정의층 항목을 지목한다",       inj_14,  None, None),
     ("15",  "wiki15-names-unique",         "같은 규율 ID 를 두 항목에 적는다",             inj_15,  None, None),
-    ("23",  "wiki23-rule-ghost",           "폐기된 규율 ID 를 근거로 적는다",              inj_23,  None, None),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날 뒤의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_after,  None, None),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날 앞의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_before, None, None, "nocatch"),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날과 같은 날짜로 폐기된 규율 ID 를 적는다", inj_23_same,   None, None),
     ("24",  "wiki24-doc-rule-ghost",       "상주 문서에 없는 규율 ID 를 적는다",           inj_24_missing,  None, None),
     ("24",  "wiki24-doc-rule-ghost",       "선언되지 않은 폐기 규율을 적는다",             inj_24_retired,  None, None),
     ("25",  "wiki25-marker-missing",       "최상위 선언 하나의 표지를 지운다",             inj_25,          None, None),
