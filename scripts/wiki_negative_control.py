@@ -312,6 +312,37 @@ def inj_12(root):
          lambda e: e["reopen_when"].__setitem__("ref", "아크가 아닌 문자열"))
 
 
+def _out_of_scope_arc(root) -> str:
+    """범위 밖인 아크 하나의 이름. **아크 레코드에서 고르고 박아 두지 않는다.**
+
+    이름을 박으면 그 아크의 처분이 바뀔 때 주입이 조건을 만들지 못하면서 음성 대조가
+    통과한다."""
+    for x in arcs(root)["arcs"]:
+        if x.get("status") == check_wiki.ARC_OUT_OF_SCOPE:
+            return x["name"]
+    raise SystemExit("음성 대조: 범위 밖인 아크가 없어 검사 12·28 의 조건을 만들 수 없다")
+
+
+def inj_28_out_of_scope(root):
+    """범위 밖인 아크의 `cq` 에 고정 절의 번호를 적는다.
+
+    현행 주입은 고정 절에 **없는** 번호를 적는 것이고 이것은 고정 절에 **있는** 번호를 범위
+    밖 아크에 적는 것이다. 번호를 박지 않고 다른 아크가 이미 든 것을 고르므로, 고정 절이
+    바뀌어도 주입이 조건을 만든다."""
+    name = _out_of_scope_arc(root)
+    doc = arcs(root)
+    ref = next((c for x in doc["arcs"]
+                if x.get("status") != check_wiki.ARC_OUT_OF_SCOPE
+                for c in (x.get("cq") or [])), None)
+    if ref is None:
+        raise SystemExit("음성 대조: 고정 절의 번호를 든 아크가 없어 주입 대상이 없다")
+    for x in doc["arcs"]:
+        if x["name"] == name:
+            x["cq"] = [ref]
+    save_arcs(root, doc)
+    return f"{name}/{ref}"
+
+
 def inj_13(root):
     """없는 id 를 **줄 주석**에 적는다.
 
@@ -528,22 +559,54 @@ def _boundary_decls(root: Path):
     return inside, forms
 
 
-def inj_33_left(root):
-    """경계 안 선언의 `for_decl` 항목을 지운다. 좌에서 우로가 실패한다.
+def _append_para(root: Path, d, para: str) -> None:
+    """그 선언의 docstring 말미에 문단 하나를 더한다.
 
-    한 선언을 여러 항목이 드는 자리가 있으므로 그 값을 든 항목 전량에서 지운다. 하나만
-    지우면 남은 항목이 그 선언을 여전히 들어 주입이 조건을 만들지 못한다."""
-    inside = {d.full for d in _boundary_decls(root)[0]}
-    doc = load(root, "rejected")
-    target = next((str(e["for_decl"]) for e in doc["rejected"]
-                   if str(e.get("for_decl") or "") in inside), None)
-    if not target:
-        raise SystemExit("경계 안 선언을 for_decl 로 드는 기각 항목이 없다")
-    for e in doc["rejected"]:
-        if str(e.get("for_decl") or "") == target:
-            e.pop("for_decl", None)
-    save(root, "rejected", doc)
-    return target
+    선언 줄보다 앞에 선 마지막 `/-- -/` 블록이 그 선언의 docstring 이라는 것은 검증기의
+    수집기가 쓰는 규칙과 같다. 그 규칙을 전사하지 않으려고 같은 정규식을 불러 쓴다."""
+    f = root / d.rel
+    text = f.read_text(encoding="utf-8")
+    cut = sum(len(x) for x in text.splitlines(keepends=True)[:d.line - 1])
+    blocks = [m for m in check_wiki.DOC_BLOCK.finditer(text) if m.end() <= cut]
+    if not blocks:
+        raise SystemExit(f"{d.full} 의 docstring 블록을 찾지 못했다")
+    end = blocks[-1].end() - 2            # 닫는 `-/` 앞
+    f.write_text(text[:end] + f"\n{para}\n" + text[end:], encoding="utf-8")
+
+
+def _inj_33_para(root, para: str) -> str:
+    """경계 안 선언 가운데 그 낱말을 들지 않는 것 하나의 docstring 에 문단을 더한다.
+
+    기각 레지스터가 그 선언을 `for_decl` 로 들지 않는 것이 주입의 조건이다. 이미 드는 선언을
+    고르면 좌변에 들어도 미포착이 서지 않아 주입이 조건을 만들지 못한다."""
+    inside, _forms = _boundary_decls(root)
+    claimed = {str(e.get("for_decl")) for e in load(root, "rejected")["rejected"]
+               if e.get("for_decl")}
+    word = check_wiki.REJECTION_WORD
+    for d in inside:
+        if d.full in claimed or any(word in p for p in d.paras):
+            continue
+        _append_para(root, d, para)
+        return d.full
+    raise SystemExit("경계 안에 주입할 선언이 없다")
+
+
+def inj_33_heading(root):
+    """경계 안 선언의 문단에 **머리말로** 그 예약 낱말을 두고 기각 레지스터에 대응 항목을
+    두지 않는다. 좌에서 우로가 실패해야 한다.
+
+    머리말을 `HEADING` 블록의 형 그대로 두어 검사 34 가 함께 걸리지 않게 한다. 걸리면 어느
+    검사가 주입을 잡았는지가 갈리지 않는다."""
+    return _inj_33_para(root, f"**{check_wiki.REJECTION_WORD}:** 음성 대조가 주입한 문단이다.")
+
+
+def inj_33_body(root):
+    """경계 안 선언의 문단에 **본문으로만** 그 낱말을 둔다. 잡히지 않아야 한다.
+
+    그 방향을 재지 않으면 「머리말로 좁혔다」와 「여전히 본문을 본다」가 갈리지 않는다."""
+    return _inj_33_para(
+        root,
+        f"**음성 대조가 주입한 문단이다.** 본문에서만 {check_wiki.REJECTION_WORD} 를 든다.")
 
 
 def inj_33_right(root):
@@ -645,6 +708,54 @@ def inj_35_ledger(root):
     """원장 디렉터리에 새 파일을 둔다."""
     return _plant(root, "decisions/holes.json")
 
+def inj_36_open(root):
+    """사본의 무시 파일에서 `/*` 한 줄을 지운다. 닫힌 형이 깨진다."""
+    f = root / check_wiki.IGNORE_FILE
+    lines = f.read_text(encoding="utf-8").splitlines(keepends=True)
+    for i, ln in enumerate(lines):
+        if ln.strip() == check_wiki.IGNORE_ALL:
+            del lines[i]
+            break
+    else:
+        raise SystemExit(f"무시 파일에 `{check_wiki.IGNORE_ALL}` 줄이 없다")
+    f.write_text("".join(lines), encoding="utf-8")
+
+
+def inj_36_ghost(root):
+    """사본의 무시 파일에 루트에 없는 이름으로 되살림 줄을 더한다. 목록이 유령을 든다.
+
+    산문의 계수를 어기는 주입을 따로 두지 않는다. 이 주입이 목록을 늘리면 계수도 함께
+    어긋나므로 한 주입이 두 축을 함께 잡고, 같은 것을 두 번 세면 검사의 계수가 부풀고 음성
+    대조가 그 자리에서 공허해진다."""
+    f = root / check_wiki.IGNORE_FILE
+    lines = f.read_text(encoding="utf-8").splitlines()
+    ghost = "!/NO_SUCH_ROOT_ENTRY.md"
+    at = [i for i, ln in enumerate(lines) if check_wiki.IGNORE_REVIVE.match(ln.strip())]
+    if not at:
+        raise SystemExit("무시 파일에 되살림 줄이 없다")
+    lines.insert(at[-1] + 1, ghost)
+    f.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return ghost
+
+
+def inj_37_count(root):
+    """사본의 원장 계수 표에서 한 행의 수를 하나 틀리게 적는다."""
+    f = root / check_wiki.LEDGER_COUNT_DOC
+    lines = f.read_text(encoding="utf-8").splitlines()
+    head = [i for i, ln in enumerate(lines)
+            if ln.strip() == check_wiki.LEDGER_COUNT_HEAD]
+    if len(head) != 1:
+        raise SystemExit("원장 계수 표의 머리를 찾지 못했다")
+    for i in range(head[0] + 2, len(lines)):
+        m = check_wiki.LEDGER_COUNT_ROW.match(lines[i].strip())
+        if not m:
+            break
+        lines[i] = f"| {m.group(1)} | {int(m.group(2)) + 1} |"
+        f.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return f"{m.group(1)} {m.group(2)}→{int(m.group(2)) + 1}"
+    raise SystemExit("원장 계수 표의 행을 찾지 못했다")
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -676,9 +787,11 @@ CASES = [
     ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19,  "CF-100",  None),
     ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
     ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21,  None, "charter"),
+    ("28",  "wiki28-cq-exists",            "범위 밖인 아크의 cq 에 고정 절의 번호를 적는다", inj_28_out_of_scope, None, None),
     ("31",  "wiki31-hole-unassigned",      "열린 아크의 페이즈로 발화하는 이연 항을 쓴다",  inj_31,  None, None),
     ("32",  "wiki32-closure-phase",         "선언되지 않은 페이즈 이름으로 종료 문서를 둔다",  inj_32, None, None),
-    ("33",  "wiki33-rejection-registered",  "경계 안 선언의 for_decl 항목을 지운다",         inj_33_left,  None, None),
+    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 머리말에 그 예약 낱말을 둔다",    inj_33_heading, None, None),
+    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 본문에만 그 낱말을 둔다",         inj_33_body,  None, None, "nocatch"),
     ("33",  "wiki33-rejection-registered",  "for_decl 값을 없는 선언 이름으로 바꾼다",       inj_33_right, None, None),
     ("34",  "wiki34-heading-form",          "경계 안 머리말의 마침표를 지운다",              inj_34_period, None, None),
     ("34",  "wiki34-heading-form",          "HEADING 블록을 비운다",                        inj_34_empty,  None, None),
@@ -691,6 +804,9 @@ CASES = [
     ("35",  "wiki35-doc-form",              "파일 이름에 대문자와 밑줄을 쓴다",              inj_35_case,         None, None),
     ("35",  "wiki35-doc-form",              "허용되지 않은 디렉터리를 만든다",               inj_35_dir,          None, None),
     ("35",  "wiki35-doc-form",              "원장 디렉터리에 새 파일을 둔다",                inj_35_ledger,       None, None),
+    ("36",  "wiki36-root-surface",          "무시 파일에서 /* 줄을 지운다",                  inj_36_open,         None, None),
+    ("36",  "wiki36-root-surface",          "없는 이름으로 되살림 줄을 더한다",              inj_36_ghost,        None, None),
+    ("37",  "wiki37-claude-ledger-count",   "원장 계수 표의 한 행의 수를 하나 틀리게 적는다",  inj_37_count,        None, None),
 ]
 
 

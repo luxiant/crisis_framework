@@ -575,6 +575,22 @@ def check_11(led: Ledger) -> Report:
     return r
 
 
+# 범위 밖인 아크의 상태 값. 아크가 영영 열리지 않는다는 처분이며 검사 12 와 28 이 그 값을
+# 읽는다. 어휘의 정본은 SPEC §3.2 의 아크 레코드 필드 표다.
+ARC_OUT_OF_SCOPE = "out_of_scope"
+
+
+def arc_out_of_scope(led: Ledger, name: str) -> bool:
+    """그 아크가 범위 밖인가.
+
+    **검사 28 이 이 판정을 부른다.** 재개 트리거 쪽에 같은 판정을 거는 것은 이 판에 서지
+    않으며, 범위 밖이 된 시점을 드는 필드가 아크 레코드에 없어서 이미 등재된 트리거를 가를
+    자리가 없기 때문이다. 그 자리가 서면 이 함수를 두 검사가 함께 부른다.
+    """
+    a = led.arcs.get(name)
+    return bool(a) and a.get("status") == ARC_OUT_OF_SCOPE
+
+
 def check_12(led: Ledger) -> Report:
     r = Report("12", "wiki12-reopen-ref", "reopen_when.ref 가 kind 별 형식을 만족하는가", "fail")
     queue = led.root / "docs" / "reading-queue-v0.md"
@@ -931,7 +947,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "31", "32", "33", "34", "35", "29", "30"]
+         "28", "31", "32", "33", "34", "35", "36", "37", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -1004,21 +1020,29 @@ def cq_fixed(led: Ledger) -> list[int]:
 
 def check_28(led: Ledger) -> Report:
     r = Report("28", "wiki28-cq-exists",
-               "arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키는가", "fail")
+               "arcs.json 의 cq 값이 CQ 고정 절에 실재하는 번호를 가리키고, 범위 밖인 "
+               "아크가 cq 를 들지 않는가", "fail")
     fixed = set(cq_fixed(led))
     # 블록이 비어 있으면 통과가 아니라 실패다. 가리킬 대상이 없는데 통과시키면 이 검사가 공허해진다.
     if not fixed:
         r.bad("docs/baseline.md 의 CQFIN 블록이 없거나 비어 있다")
-    n = 0
+    n = out = 0
     for name, a in led.arcs.items():
-        for ref in a.get("cq") or []:
+        cq = a.get("cq") or []
+        # 범위 밖인 아크가 CQ 를 받으면 그 종료 조건이 그 항 위에서 영영 재어지지 않는다.
+        # 받는 아크가 없는 것을 피하려고 만든 배정이 같은 결함의 다른 모양이 된다(SPEC §2.1).
+        if cq and arc_out_of_scope(led, name):
+            out += 1
+            r.bad(f"아크 `{name}` 이 범위 밖인데 cq 를 든다 — {', '.join(map(str, cq))}")
+        for ref in cq:
             n += 1
             m = CQ_REF.match(str(ref))
             if not m:
                 r.bad(f"아크 `{name}` 의 cq `{ref}` 가 CQ-fin-<n> 형식이 아니다")
             elif int(m.group(1)) not in fixed:
                 r.bad(f"아크 `{name}` 의 cq `{ref}` 가 고정 절에 없다")
-    r.note(f"고정 절의 CQ {len(fixed)}건 · 아크가 든 cq {n}건")
+    r.note(f"고정 절의 CQ {len(fixed)}건 · 아크가 든 cq {n}건 · "
+           f"범위 밖인데 cq 를 든 아크 {out}건")
     return r
 
 
@@ -1154,8 +1178,14 @@ DOCFORM_LINE = re.compile(r"^DOCFORM=([^|]*)\|([^|]*)\|(.*)$")
 # 입고 들어온다(SPEC §2.1).
 DOCFORM_HEAD = "합의되지 않은 형태의 문서 유입 시도"
 DOCFORM_ASK = "그 이름을 맞추지 말고 결정 세션에 묻는다"
-# 기각 문단을 가리는 낱말. 검사 33 의 좌변이 이것으로 선다.
-REJECTION_WORD = "기각"
+# 기각 문단을 가리키는 **예약 낱말**. 검사 33 의 좌변이 이것으로 선다.
+#
+# 본문의 부분 문자열을 재던 상수를 예약 낱말로 갈음했다. 그 낱말은 기각을 가리키는 머리말에만
+# 서는 것이 아니라 산문 안에서도 서므로, 본문을 재면 기각 문단이 아닌 자리에 기각 레지스터의
+# 등재가 요구된다. 상수를 지우지 않고 남기는 것은 `HEADING` 블록에서 이 낱말을 골라낼 다른
+# 열이 없기 때문이며, 그 항의 규율 ID 를 드는 항이 셋이라 ID 로는 골라지지 않는다. 그래서
+# 상수가 남되 **단언이 지키는 부류로 옮겨 간다**(SPEC §2.1).
+REJECTION_WORD = "기각한 대체 정의"
 
 
 def _baseline_block(led: Ledger, pattern: re.Pattern) -> str:
@@ -1207,15 +1237,26 @@ def check_33(led: Ledger) -> Report:
     r = Report("33", "wiki33-rejection-registered",
                "경계 안 선언의 docstring 기각 문단마다 기각 레지스터에 for_decl 로 그 선언을 "
                "드는 항목이 있고 그 역도 서는가", "fail")
-    since, _ = heading_rules(led)
+    since, forms = heading_rules(led)
     if since is None:
         r.bad("docs/baseline.md 의 HEADING 블록에 HEADING_SINCE 가 없다")
+        return r
+    # 상수가 그 블록에 실재하는지 단언한다. 블록에서 빠지면 좌변이 조용히 비므로, 박아 둔
+    # 값이 아니라 단언이 지키는 값이 된다.
+    if REJECTION_WORD not in forms:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에 예약 낱말 `{REJECTION_WORD}` 이 없다")
         return r
     decls = led.doc_decls()
     inside = [d for d in decls if d.no >= since]
 
     def has_rejection(d: DocDecl) -> bool:
-        return any(REJECTION_WORD in p for p in d.paras)
+        """머리말이 그 예약 낱말을 드는 문단을 하나라도 갖는가.
+
+        본문이 아니라 머리말을 본다. 머리말의 뜻과 낱말을 드는지의 판정은 검사 34 가 쓰는
+        것과 같은 것을 쓴다(SPEC §2.1).
+        """
+        return any(h is not None and REJECTION_WORD in h
+                   for h in (para_heading(p) for p in d.paras))
 
     # 좌변. 기각 문단을 하나라도 든 경계 안 선언의 완전 이름.
     left = {d.full: d for d in inside if has_rejection(d)}
@@ -1236,12 +1277,18 @@ def check_33(led: Ledger) -> Report:
         d = by_full.get(full)
         ids = ", ".join(right[full])
         if d is None:
+            # 깨진 참조는 경계와 무관하다. 기각 레지스터가 없는 선언을 가리키는 것은 경계
+            # 안이든 밖이든 결함이다.
             ghost += 1
             r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 에 해당하는 선언이 리포 소스에 없다")
-        elif not has_rejection(d):
+        elif d.no >= since and not has_rejection(d):
             ghost += 1
             r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 의 docstring 이 기각 문단을 "
                   f"들지 않는다")
+            # 이 판정에 좌변과 같은 경계를 건다. 검사의 제목이 「경계 안 선언의 … 그 역도
+            # 서는가」이므로 그 역도 그 범위의 역인데, 구현의 좌변만 경계로 좁혀져 있고
+            # 우변은 선언 전량을 훑고 있었다. 좌변을 머리말로 좁히기 전에는 본문까지 보았으므로
+            # 경계 밖 선언이 우연히 통과했고, 좁히는 순간 그 비대칭이 드러났다(SPEC §2.1).
     # 계수를 맞대지 않는다. 한 선언에 원장 항목이 둘 이상인 것과 기각 문단이 둘 이상인 것이
     # 있어 양쪽 계수가 갈리므로 존재 검사로 둔다(SPEC §2.1).
     outside = sum(1 for d in decls if d.no < since and has_rejection(d))
@@ -1368,6 +1415,126 @@ def check_35(led: Ledger) -> Report:
            + " · ".join(f"{k} {per[k]}" for k in sorted(per)))
     return r
 
+# 검사 36 이 읽는 무시 파일. 루트의 추적 대상 목록이 그 파일에 이미 실물로 서 있으므로 값
+# 정본에 블록을 두지 않고 이 검사가 그 파일을 직접 읽는다. 블록을 두면 같은 목록이 두 자리에
+# 살고 한쪽을 고칠 때 나머지가 조용히 낡는다(SPEC §0.2).
+IGNORE_FILE = ".gitignore"
+IGNORE_ALL = "/*"
+IGNORE_REVIVE = re.compile(r"^!/(\S+)$")
+# 산문이 든 계수를 읽는 꼴과 한글 수사의 표. 그 대조가 숫자 비교가 아니므로 수사를 값으로
+# 읽어야 한다. 표 밖의 수사는 실패로 내며 표를 늘릴지는 사람이 정한다.
+IGNORE_PROSE = re.compile(r"([가-힣]+) 파일과 ([가-힣]+) 디렉터리")
+KO_NUMERAL = {"하나": 1, "둘": 2, "셋": 3, "넷": 4, "다섯": 5, "여섯": 6, "일곱": 7,
+              "여덟": 8, "아홉": 9, "열": 10, "열하나": 11, "열둘": 12, "열셋": 13,
+              "열넷": 14, "열다섯": 15, "열여섯": 16, "열일곱": 17, "열여덟": 18,
+              "열아홉": 19, "스물": 20}
+
+
+def check_36(led: Ledger) -> Report:
+    r = Report("36", "wiki36-root-surface",
+               "무시 파일의 루트 되살림 목록이 /* 뒤에 서고, 그 항마다 루트에 실물이 있으며 "
+               "산문이 든 계수와 목록의 계수가 같은가", "fail")
+    path = led.root / IGNORE_FILE
+    if not path.is_file():
+        r.bad(f"{IGNORE_FILE} 이 없다")
+        return r
+    lines = path.read_text(encoding="utf-8").splitlines()
+    revive = [(i, m.group(1)) for i, ln in enumerate(lines, 1)
+              for m in [IGNORE_REVIVE.match(ln.strip())] if m]
+    # ㉠ 닫힌 형. 그 줄이 사라지면 되살림 줄이 전부 무의미해지고 루트가 조용히 열린다.
+    # **이 판정이 이 검사가 사는 자리다.** 양식을 새로 지어내도 자동으로 무시된다는 것이 그
+    # 형에 걸려 있으므로, 형이 깨지면 그 보호가 함께 사라진다.
+    at = next((i for i, ln in enumerate(lines, 1) if ln.strip() == IGNORE_ALL), None)
+    if at is None:
+        r.bad(f"{IGNORE_FILE} 에 `{IGNORE_ALL}` 줄이 없다. 루트가 통째로 열려 있다")
+    elif revive and at > revive[0][0]:
+        r.bad(f"{IGNORE_FILE}:{at}: `{IGNORE_ALL}` 줄이 되살림 목록보다 뒤에 선다")
+    if not revive:
+        r.bad(f"{IGNORE_FILE} 에 루트 되살림 줄이 없다")
+        return r
+    # ㉡ 목록의 위생. 파일을 지우거나 이름을 바꾸면 목록이 유령을 든다.
+    n_file = n_dir = 0
+    for i, item in revive:
+        want_dir = item.endswith("/")
+        target = led.root / item.rstrip("/")
+        if not target.exists():
+            r.bad(f"{IGNORE_FILE}:{i}: 되살림 항 `{item}` 의 실물이 루트에 없다")
+            continue
+        if want_dir and not target.is_dir():
+            r.bad(f"{IGNORE_FILE}:{i}: 되살림 항 `{item}` 이 디렉터리 꼴인데 실물이 파일이다")
+        elif not want_dir and not target.is_file():
+            r.bad(f"{IGNORE_FILE}:{i}: 되살림 항 `{item}` 이 파일 꼴인데 실물이 디렉터리다")
+        if want_dir:
+            n_dir += 1
+        else:
+            n_file += 1
+    # ㉢ 산문의 계수. 항을 더하면서 산문을 고치지 않는 것을 잡는다.
+    comment = " ".join(ln.lstrip("#").strip() for ln in lines
+                       if ln.lstrip().startswith("#"))
+    m = IGNORE_PROSE.search(comment)
+    if m is None:
+        r.bad(f"{IGNORE_FILE} 의 주석이 되살림 목록의 계수를 "
+              f"「<수사> 파일과 <수사> 디렉터리」 꼴로 들지 않는다")
+    else:
+        for word, counted, what in ((m.group(1), n_file, "파일"),
+                                    (m.group(2), n_dir, "디렉터리")):
+            said = KO_NUMERAL.get(word)
+            if said is None:
+                r.bad(f"{IGNORE_FILE} 의 주석이 든 수사 `{word}` 를 값으로 읽을 수 없다")
+            elif said != counted:
+                r.bad(f"{IGNORE_FILE} 의 주석이 {what}을 `{word}`({said}) 로 드는데 "
+                      f"목록이 든 것은 {counted} 이다")
+    r.note(f"되살림 항 {len(revive)} (파일 {n_file} · 디렉터리 {n_dir}) · "
+           f"`{IGNORE_ALL}` 줄 {at if at else '없다'}")
+    r.note("우변에서 좌변으로 훑지 않는다. 루트에 추적되지 않는 것이 있는 것은 정상이며 "
+           "지시서와 엔트리 카드가 그 부류다(SPEC §2.1)")
+    return r
+
+
+# 검사 37 이 읽는 집행 문면의 원장 계수 표. 좌변이 그 표의 행이고 우변이 레지스터 배열의
+# 길이다. 그 문면이 「계수는 손으로 세지 않고 검증기의 출력에서 읽는다」를 관례로만 들고
+# 있어서, 병합하는 회차가 그 표를 고치지 않아도 아무것도 걸리지 않았다(SPEC §2.1).
+LEDGER_COUNT_DOC = "CLAUDE.md"
+LEDGER_COUNT_HEAD = "| 레지스터 | entry |"
+LEDGER_COUNT_ROW = re.compile(r"^\|\s*(\w+)\s*\|\s*(\d+)\s*\|$")
+
+
+def check_37(led: Ledger) -> Report:
+    r = Report("37", "wiki37-claude-ledger-count",
+               "집행 문면의 원장 계수 표가 레지스터 넷을 전부 들고 행마다 적힌 수가 그 "
+               "레지스터의 배열 길이와 같은가", "fail")
+    path = led.root / LEDGER_COUNT_DOC
+    if not path.is_file():
+        r.bad(f"{LEDGER_COUNT_DOC} 이 없다")
+        return r
+    lines = path.read_text(encoding="utf-8").splitlines()
+    head = [i for i, ln in enumerate(lines) if ln.strip() == LEDGER_COUNT_HEAD]
+    # 표가 없으면 통과가 아니라 실패다. 검사 28 과 34 와 35 가 같은 요구를 둔다.
+    if len(head) != 1:
+        r.bad(f"{LEDGER_COUNT_DOC} 에 원장 계수 표의 머리 `{LEDGER_COUNT_HEAD}` 가 "
+              f"{len(head)}개다")
+        return r
+    said: dict[str, int] = {}
+    for ln in lines[head[0] + 2:]:
+        m = LEDGER_COUNT_ROW.match(ln.strip())
+        if not m:
+            break
+        said[m.group(1)] = int(m.group(2))
+    # 우변을 새로 세지 않고 검증기의 수집기를 부른다. 출력의 머리가 싣는 계수와 같은 자리다.
+    real = {name: len(led.reg[name]) for name in REGISTERS}
+    for name in sorted(set(said) | set(real)):
+        if name not in said:
+            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 레지스터 `{name}` 의 행을 들지 않는다")
+        elif name not in real:
+            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 레지스터가 아닌 `{name}` 의 행을 든다")
+        elif said[name] != real[name]:
+            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 `{name}` 을 {said[name]} 로 드는데 "
+                  f"그 배열의 길이가 {real[name]} 이다")
+    r.note("표의 행 " + (" · ".join(f"{k} {said[k]}" for k in sorted(said)) or "없다"))
+    r.note("배열의 길이 " + " · ".join(f"{k} {real[k]}" for k in sorted(real)))
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -1380,6 +1547,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_26(led), check_27(led),
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
+        check_36(led), check_37(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
