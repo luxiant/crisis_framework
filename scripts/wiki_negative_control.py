@@ -756,6 +756,108 @@ def inj_37_count(root):
     raise SystemExit("원장 계수 표의 행을 찾지 못했다")
 
 
+def _excl_block(root: Path) -> list[str]:
+    """사본의 `EXCL` 블록이 든 분할 이름. 주입 셋이 유니버스를 이것으로 읽는다."""
+    text = (root / "docs" / "baseline.md").read_text(encoding="utf-8")
+    m = check_wiki.EXCL_BLOCK.search(text)
+    if m is None:
+        raise SystemExit("EXCL 블록을 찾지 못했다")
+    return [x.group(1) for x in
+            map(check_wiki.EXCL_LINE.match, m.group(1).splitlines()) if x]
+
+
+def _excl_paras(root: Path):
+    """사본의 등록 관계 선언과 그 배타성 문단.
+
+    문단마다 (문면, 모든 쌍이 배타적이라 적었는가) 를 든다. 그 판별을 검증기의 함수로 하므로
+    주입과 판정이 같은 것을 읽는다. 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡는다.
+    """
+    led = check_wiki.Ledger(root)
+    forms = check_wiki.heading_rules(led)[1].get(check_wiki.EXCLUSIVITY_WORD, [])
+    got = check_wiki.excl_registry(led)
+    if got is None:
+        raise SystemExit("등록 관계를 드는 선언이 없어 주입 대상이 없다")
+    decl, parts, excl = got
+    paras = []
+    for p in decl.paras:
+        head = check_wiki.para_heading(p)
+        if head is None:
+            continue
+        for f in forms:
+            if check_wiki.heading_fill(f, head) is not None:
+                paras.append((p, check_wiki.EXCL_ALL_MARK in f))
+                break
+    return led, decl, parts, excl, paras
+
+
+def inj_38_para(root):
+    """`EXCL` 블록의 분할에서 배타성 문단을 지운다. 그 분할의 문단이 없으면 실패해야 한다."""
+    _led, decl, _parts, _excl, paras = _excl_paras(root)
+    if not paras:
+        raise SystemExit("배타성 문단이 없어 주입 대상이 없다")
+    para = paras[0][0]
+    f = root / decl.rel
+    text = f.read_text(encoding="utf-8")
+    if text.count(para + "\n\n") != 1:
+        raise SystemExit("배타성 문단의 문면을 파일에서 한 번으로 찾지 못했다")
+    f.write_text(text.replace(para + "\n\n", "", 1), encoding="utf-8")
+    return check_wiki.para_heading(para)
+
+
+def inj_38_pair(root):
+    """모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다.
+
+    문단은 그대로 두고 관계만 지운다. 그 방향을 재지 않으면 「문단과 관계를 함께 본다」와
+    「문단만 본다」가 갈리지 않는다.
+    """
+    led, decl, parts, _excl, paras = _excl_paras(root)
+    labels = check_wiki.concept_labels(led, decl.rel)
+    forms = check_wiki.heading_rules(led)[1][check_wiki.EXCLUSIVITY_WORD]
+    all_form = next(f for f in forms if check_wiki.EXCL_ALL_MARK in f)
+    target = None
+    for name in _excl_block(root):
+        label = labels.get(name)
+        cells = parts.get(name) or []
+        if not label or len(cells) < 2:
+            continue
+        for para, is_all in paras:
+            fill = check_wiki.heading_fill(all_form, check_wiki.para_heading(para) or "")
+            if is_all and fill is not None and fill.startswith(label):
+                target = (name, cells[0], cells[1])
+                break
+        if target:
+            break
+    if target is None:
+        raise SystemExit("모든 쌍이 배타적이라 적은 분할이 없어 주입 대상이 없다")
+    name, a, b = target
+    f = root / decl.rel
+    lines = f.read_text(encoding="utf-8").splitlines()
+    want = {frozenset((a, b))}
+    for i, ln in enumerate(lines):
+        m = check_wiki.EXCLUDES_ROW.search(ln)
+        if m and frozenset(m.groups()) in want:
+            del lines[i]
+            f.write_text("\n".join(lines) + "\n", encoding="utf-8")
+            return f"{name}: {a} 와 {b}"
+    raise SystemExit(f"`{a}` 와 `{b}` 의 배타 관계 줄을 찾지 못했다")
+
+
+def inj_38_empty(root):
+    """`EXCL` 블록을 비운다. 비어 있으면 통과가 아니라 실패다.
+
+    이 항이 없으면 블록이 비었을 때 통과시키는 구현이 음성 대조를 통과한다. 검사 34 의 같은
+    항이 그 사유로 이미 서 있다.
+    """
+    f = root / "docs" / "baseline.md"
+    text = f.read_text(encoding="utf-8")
+    new = re.sub(r"<!-- EXCL:BEGIN -->\n.*?<!-- EXCL:END -->",
+                 "<!-- EXCL:BEGIN -->\n<!-- EXCL:END -->",
+                 text, count=1, flags=re.S)
+    if new == text:
+        raise SystemExit("EXCL 블록을 찾지 못했다")
+    f.write_text(new, encoding="utf-8")
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -807,6 +909,9 @@ CASES = [
     ("36",  "wiki36-root-surface",          "무시 파일에서 /* 줄을 지운다",                  inj_36_open,         None, None),
     ("36",  "wiki36-root-surface",          "없는 이름으로 되살림 줄을 더한다",              inj_36_ghost,        None, None),
     ("37",  "wiki37-claude-ledger-count",   "원장 계수 표의 한 행의 수를 하나 틀리게 적는다",  inj_37_count,        None, None),
+    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록의 분할에서 배타성 문단을 지운다",      inj_38_para,         None, None),
+    ("38",  "wiki38-partition-exclusivity",  "모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다", inj_38_pair, None, None),
+    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty,        None, None),
 ]
 
 

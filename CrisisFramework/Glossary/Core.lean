@@ -91,6 +91,28 @@ inductive Concept where
   | heldAssetShare
   /-- 제공된 몫. 담보로 내놓아 어느 제공에 묶인 지분. -/
   | pledgedAssetShare
+  /-- 화폐성. 청구권이 액면가를 약속하는 모양이며 아래 셋의 상위 개념이다. -/
+  | moneyness
+  /-- 화폐. 요구 시 액면가를 약속한다. -/
+  | money
+  /-- 화폐 유사. 만기 시 액면가를 약속하며 명시된 만기가 익일 초과 1년 미만이다. -/
+  | moneyLike
+  /-- 그 밖의 청구권. 위 둘 가운데 어느 것도 들지 않는다. -/
+  | nonMoney
+  /-- 액면가 약속의 강도. 정부로부터의 근접성이며 아래 넷의 상위 개념이다. -/
+  | parPromiseStrength
+  /-- 순수 공적 화폐. 공적 자산이 떠받치고 공적 백스톱이 직접 받친다. -/
+  | publicMoney
+  /-- 부보 화폐. 사적 자산이 떠받치고 공적 백스톱이 직접 받친다. -/
+  | insuredMoney
+  /-- 공적 그림자 화폐. 공적 자산이 떠받치고 공적 백스톱이 간접으로만 받친다. -/
+  | publicShadowMoney
+  /-- 순수 사적 화폐. 사적 자산이 떠받치고 공적 백스톱이 받치지 않는다. -/
+  | privateShadowMoney
+  /-- 담보권을 세우는 제공. 소유권이 제공자에게 남는다. -/
+  | securityInterestPledge
+  /-- 소유권을 넘기는 제공. 같은 종류의 것을 돌려줄 의무가 선다. -/
+  | titleTransferPledge
   deriving DecidableEq, Repr
 
 /--
@@ -139,9 +161,10 @@ inductive SourceTag where
 V-2에 따라 정확히 넷이다. 다섯 번째 생성자를 추가하려면 규율 개정이 선행되어야 하며,
 그 필요 자체를 P-1의 수확으로 기록해야 한다.
 
-**알려진 미해결:** 화폐성이 배타적 분할이 아니라 스펙트럼이라는 사실이 이 넷으로
-표현되지 않는다. 현재 구멍 목록에 등재되어 있고, 집계 정리는 이 문제에 걸리지 않으므로
-이번 단계에서는 개정하지 않는다.
+**다섯 번째 관계를 더하지 않기로 했다.** 화폐성이 스펙트럼이라는 것을 이 넷으로 적을 수 없다는
+것이 구멍으로 서 있었으나, 그 분할은 명시된 만기로 배타적으로 서므로 이 넷이 담는다. 담기지 않는
+것은 화폐성의 정도이고 그것이 가격 위험으로 재어져 수를 요구하므로, 무차원인 이 파일이 담지 못하는
+것이 층의 귀결이다. 그 정도를 담는 층은 구멍으로 등재되어 있다.
 -/
 -- DD:CF-77
 inductive ConceptRel where
@@ -229,6 +252,52 @@ inductive ConceptRel where
 두면 둘이 상위 개념의 특수 사례이고 서로 겹치지 않는다는 것만 서며, 둘이 전부라는 것은 서지 않는다.
 비율의 두 용법이 같은 형으로 등재된 선례가 위에 있다.
 
+**분할의 완전성은 여집합의 귀결이다(V-7).** 화폐성의 분할에서 그 밖의 청구권이 앞의 둘에 들지
+않는 것을 모두 받으므로 그렇다. 저자가 정의하는 등급은 둘이고 명시된 만기가 1년 이상인 청구권을 등급으로
+세우지 않으므로, 셋째 칸은 그 나머지를 받는 자리다.
+
+**화폐성 분할의 모든 쌍이 배타적이다.** 등급을 가르는 것이 명시된 만기이고 그것이 한 시점에 한
+값이므로 세 쌍이 전부 배타적이며, 그 세 쌍을 아래가 등록한다. 경계가 스펙트럼이라는 저자의 단서는
+화폐성이 정도를 갖는다는 것이고 그 정도는 가격 위험으로 재어지므로, 분할의 배타성이 아니라 분할과
+실질의 대응이 거친 자리다. 그 정도를 담는 층은 구멍으로 등재되어 있다.
+
+**화폐성 분할의 V-4 사례.** 저자가 정기예금을 해지 가능한 것과 양도 가능한 것으로 가르고 해지
+가능한 것이 벌칙을 치르면 만기 전에 전환된다고 적는다(Pozsar 2014 각주 7 과 각주 14). 그 청구권의
+명시된 만기는 만기 시 액면가를 약속하므로 화폐 유사 칸에 서는데 벌칙을 치르면 요구 시 전환이
+서므로, 이 분할이 그 자리를 가르지 못한다. 같은 각주가 요구불예금과 정기예금을 개념적 골포스트라
+부르고 실물의 예금 종류를 열거한다.
+
+**액면가 약속의 강도를 분할로 두지 않고 정제와 배타로 둔다.** 네 범주가 전부라는 근거가 없으므로
+완전성을 주장하지 않으며, V-7 이 분할의 완전성을 가정으로 두는 자리를 애초에 만들지 않는다. 그래서
+V-4 가 요구하는 분할의 사례도 걸리지 않는다. 저자가 그 그림이 핵심 기관과 수단만 담고 무부보 예금
+밖의 사적 어음은 담지 않는다고 적는 것이 그 근거다(Pozsar 2014 본문과 각주 15). 넷이 서로 겹치지
+않는 것은 두 축의 값이 각각 한 값이기 때문이고, 그 축은 무엇이 떠받치는가와 공적 백스톱이 직접
+받치는가 간접으로 받치는가 받치지 않는가다. 두 축을 개념으로 등재하지 않는 까닭은 네 범주의
+완전성을 주장하지 않아 곱의 귀결을 세울 필요가 없고, 등재하면 V-4 가 분할마다 사례를 요구하는데 그
+사례가 네 범주의 사례와 같은 자리에서 나와 입도가 양쪽에서 갈리기 때문이다. 비율의 두 용법이 같은
+형으로 등재된 선례가 위에 있다.
+
+**화폐성과 강도에 `measuredBy` 를 붙이지 않는다.** 현행 `SourceTag` 의 입도에서 둘이 전부 자금순환표
+하나로 모이고 통화지표의 줄이라는 것은 그 입도 아래이므로, 그 상태로 붙이면 G-2 에 걸린다. 그리고
+통화지표를 소스로 쓰면 위계가 그 지표의 정의에 매달리는 문제가 선행 추출에서 이미 제기되어 구멍으로
+서 있다. 담보 축 셋과 비율 둘에 붙이지 않은 것과 같은 형이다.
+
+**담보 제공의 법적 형태 분할의 모든 쌍이 배타적이다.** 쌍이 하나이고 그것을 아래가 등록한다. 한
+제공에서 소유권이 넘어가는 것과 담보권만 서는 것이 함께 성립하지 않는다.
+
+**분할의 완전성을 주장하지 않는다(V-7).** 담보 제공의 법적 형태에서 두 칸 밖의 형식이 법역마다
+있을 수 있으며, 그 열거를 드는 관측층 선언의 docstring 이 같은 판정을 이미 든다.
+
+**담보 제공의 법적 형태 분할의 V-4 사례.** 같은 기능을 영국법은 소유권 이전으로 뉴욕법은 담보권
+설정으로 짜고 반환 대상이 등가물과 그 물건으로 갈리며 도산 시 처리도 일괄정산과 담보권 실행으로
+갈린다(ISDA Credit Support Annex 두 양식). 그리고 2014년 산둥성 두 항구에서 소유권을 넘기는 구조로
+한 재고 금융에서 재고가 장부에서 제거되어 담보 제공 공시가 비었다(Minko 2016 §2.4.1).
+
+**법적 형태 둘의 측정 대응이 다르다.** 재무제표에서 담보로 제공된 자산의 장부금액을 드는 주석이
+담보권만 담고 감독 규범의 자산 부담 공시가 둘 다 담으므로, 담보권 쪽에 두 소스가 붙고 소유권 이전
+쪽에 한 소스가 붙는다. 그 칸의 정본은 담보로 제공한 자산의 공시 경로를 드는 관측층 선언이다.
+V-5 가 요구하는 판정의 재료가 이 자리에서 선다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -273,6 +342,25 @@ def registry : List ConceptRel :=
   , .excludes .heldAssetShare .pledgedAssetShare
   , .measuredBy .heldAssetShare .exchangeWarehouseReport
   , .measuredBy .pledgedAssetShare .encumberedAssetNote
+  , .partitions .moneyness [.money, .moneyLike, .nonMoney]
+  , .excludes .money .moneyLike
+  , .excludes .money .nonMoney
+  , .excludes .moneyLike .nonMoney
+  , .refines .publicMoney .parPromiseStrength
+  , .refines .insuredMoney .parPromiseStrength
+  , .refines .publicShadowMoney .parPromiseStrength
+  , .refines .privateShadowMoney .parPromiseStrength
+  , .excludes .publicMoney .insuredMoney
+  , .excludes .publicMoney .publicShadowMoney
+  , .excludes .publicMoney .privateShadowMoney
+  , .excludes .insuredMoney .publicShadowMoney
+  , .excludes .insuredMoney .privateShadowMoney
+  , .excludes .publicShadowMoney .privateShadowMoney
+  , .partitions .pledge [.securityInterestPledge, .titleTransferPledge]
+  , .excludes .securityInterestPledge .titleTransferPledge
+  , .measuredBy .securityInterestPledge .encumberedAssetNote
+  , .measuredBy .securityInterestPledge .assetEncumbranceDisclosure
+  , .measuredBy .titleTransferPledge .assetEncumbranceDisclosure
   ]
 
 end CrisisFramework.Glossary

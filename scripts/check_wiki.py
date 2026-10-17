@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 서른일곱을 돈다. 실패시키는 것 스물아홉과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 서른여덟을 돈다. 실패시키는 것 서른과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -947,7 +947,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "31", "32", "33", "34", "35", "36", "37", "29", "30"]
+         "28", "31", "32", "33", "34", "35", "36", "37", "38", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -1535,6 +1535,208 @@ def check_37(led: Ledger) -> Report:
     return r
 
 
+# 검사 38 이 읽는 V-8 의 대상 분할. `docs/baseline.md` §5 의 `EXCL` 블록이며 정본은 같은 파일의
+# §7-2-1 이다. 등록 관계를 드는 선언이 하나라 표지도 하나이고 그 번호가 머리말의 경계보다 앞서서
+# 경계를 번호로는 가를 수 없으므로, 분할의 이름을 레지스터로 닫는다(SPEC §2.1).
+EXCL_BLOCK = re.compile(r"<!-- EXCL:BEGIN -->\n(.*?)<!-- EXCL:END -->", re.S)
+EXCL_LINE = re.compile(r"^EXCL=(\S+)$")
+# 배타성 문단을 가리키는 **예약 낱말**. 검사 38 이 이것으로 `HEADING` 블록에서 두 형을 꺼내고
+# 머리말이 이것을 드는 문단을 고르며, 그 낱말이 블록에 실재하는지를 단언이 지킨다. 검사 33 의
+# `REJECTION_WORD` 와 같은 형이다. **두 형의 문면에 실제로 서는 낱말이어야 고르는 자리가 비지
+# 않으므로 「배타성」이 아니라 「배타적」이다.** 「배타」만 쓰면 두 형이 함께 걸린다.
+EXCLUSIVITY_WORD = "배타적"
+# 배타성 문단의 두 꼴을 가르는 조각. 블록의 한 줄이 예약 낱말과 조항과 형만 들고 꼴을 가를 열을
+# 두지 않으므로 형의 문면으로 가르며, 그 조각이 두 형 가운데 한쪽에만 서는 것을 단언이 지킨다.
+EXCL_ALL_MARK = "모든 쌍이 배타적"
+# 검사 38 이 읽는 등록 관계의 선언. 분할과 배타 관계가 전부 그 하나에 서므로 자리를 상수로 둔다.
+# 선언이 둘로 갈리면 이 상수가 가리키는 자리가 비어 그 사실이 실패로 드러난다.
+EXCL_DECL = "CrisisFramework.Glossary.registry"
+# 등록 관계의 본문에서 분할과 배타 관계를 뽑는 꼴. 칸의 목록이 두 줄에 걸친 자리가 이미 있으므로
+# 줄 단위로 읽지 않고 본문을 통째로 훑는다.
+PARTITIONS_ROW = re.compile(r"\.partitions\s+\.(\w+)\s*\[([^\]]*)\]", re.S)
+EXCLUDES_ROW = re.compile(r"\.excludes\s+\.(\w+)\s+\.(\w+)")
+PART_ITEM = re.compile(r"\.(\w+)")
+# 생성자와 그 docstring. 첫 마디가 그 개념의 한국어 이름이고 배타성 문단의 머리말이 그 이름으로
+# 분할을 드므로, 식별자로 선 `EXCL` 블록과 한국어로 선 머리말을 맺는 자리가 이것이다.
+CTOR_DOC = re.compile(r"/--\s*(.*?)\s*-/\s*\n\s*\|\s*(\w+)", re.S)
+
+
+def _lean_code(src: str) -> str:
+    """Lean 소스에서 코드만 남기고 주석을 지운다. `_lean_comments` 의 거울이다.
+
+    등록 관계를 드는 선언의 docstring 이 `partitions` 와 `excludes` 를 산문으로 들고 있어서,
+    지우지 않으면 그 산문이 관계로 잡힌다. 주석 안의 문면이 코드로 오인되지 않게 하라는 요구가
+    음성 대조의 근거에 이미 서 있다(CLAUDE.md §5-5).
+    """
+    out, i, depth, n = [], 0, 0, len(src)
+    while i < n:
+        if src.startswith("/-", i):
+            depth += 1; i += 2; out.append("  "); continue
+        if src.startswith("-/", i) and depth:
+            depth -= 1; i += 2; out.append("  "); continue
+        if depth:
+            out.append("\n" if src[i] == "\n" else " "); i += 1; continue
+        if src.startswith("--", i):
+            j = src.find("\n", i)
+            end = n if j < 0 else j
+            out.append(" " * (end - i)); i = end; continue
+        out.append(src[i]); i += 1
+    return "".join(out)
+
+
+def heading_fill(form: str, head: str) -> str | None:
+    """형의 가변 구간에 든 문면. 형과 머리말이 맞지 않으면 None 이다.
+
+    맞는지의 판정은 `heading_matches` 를 그대로 부르고 이 함수는 그 자리의 문면만 꺼낸다. 두
+    구현이 갈리면 같은 머리말이 한쪽에서 맞고 다른 쪽에서 비므로 판정을 나누어 쓰지 않는다.
+    가변 구간이 하나인 형만 받으며, 그것을 검사 38 이 부르기 전에 단언한다.
+    """
+    if not heading_matches(form, head):
+        return None
+    pre, suf = form.split("*", 1)
+    return head[len(pre):len(head) - len(suf)]
+
+
+def excl_registry(led: Ledger) -> tuple[DocDecl, dict[str, list[str]], set[frozenset]] | None:
+    """등록 관계를 드는 선언과 그 본문이 든 분할과 배타 관계. 선언이 없으면 None 이다.
+
+    본문은 그 선언이 선 줄부터 다음 최상위 선언이나 이름공간의 끝까지다. 분할은 이름마다 칸의
+    목록이고 배타 관계는 순서를 묻지 않는 쌍의 집합이다. V-2 가 그 관계를 대칭으로 두므로
+    등록된 순서를 판정에 쓰지 않는다.
+    """
+    d = next((x for x in led.doc_decls() if x.full == EXCL_DECL), None)
+    if d is None:
+        return None
+    lines = (led.root / d.rel).read_text(encoding="utf-8").splitlines()
+    end = len(lines)
+    for i in range(d.line, len(lines)):
+        if TOP_DECL.match(lines[i]) or NAMESPACE_END.match(lines[i]):
+            end = i
+            break
+    body = _lean_code("\n".join(lines[d.line - 1:end]))
+    parts = {m.group(1): PART_ITEM.findall(m.group(2))
+             for m in PARTITIONS_ROW.finditer(body)}
+    excl = {frozenset(m.groups()) for m in EXCLUDES_ROW.finditer(body)}
+    return d, parts, excl
+
+
+def concept_labels(led: Ledger, rel: str) -> dict[str, str]:
+    """생성자 이름과 그 docstring 의 첫 마디. 그 마디가 그 개념의 한국어 이름이다.
+
+    `EXCL` 블록은 분할을 식별자로 들고 배타성 문단의 머리말은 한국어 이름으로 드므로 둘을 맺는
+    자리가 있어야 한다. 그 이름을 블록에 다시 적지 않는 까닭은 같은 이름이 두 자리에 살면
+    한쪽을 고칠 때 다른 쪽이 조용히 낡기 때문이고, 생성자 docstring 의 첫 마디가 그 이름의
+    정본으로 이미 서 있다(SPEC §0.2).
+    """
+    out: dict[str, str] = {}
+    for m in CTOR_DOC.finditer((led.root / rel).read_text(encoding="utf-8")):
+        doc = re.sub(r"\s+", " ", m.group(1)).strip()
+        out.setdefault(m.group(2), doc.split(".")[0].strip())
+    return out
+
+
+def check_38(led: Ledger) -> Report:
+    r = Report("38", "wiki38-partition-exclusivity",
+               "EXCL 블록이 든 분할마다 배타성 문단이 하나 있고, 모든 쌍이 배타적이라 적은 "
+               "분할은 그 쌍마다 배타 관계가 등록되어 있으며, 배타적이지 않은 쌍이 있다고 적은 "
+               "분할은 등록되지 않은 쌍을 갖는가", "fail")
+    # 유니버스. 블록이 비어 있으면 통과가 아니라 실패다. 가리킬 대상이 없는데 통과시키면 이
+    # 검사가 공허해진다. 검사 28 과 34 와 35 와 37 이 같은 요구를 둔다.
+    names = [m.group(1) for m in
+             map(EXCL_LINE.match, _baseline_block(led, EXCL_BLOCK).splitlines()) if m]
+    if not names:
+        r.bad("docs/baseline.md 의 EXCL 블록이 없거나 비어 있다")
+        return r
+    _, forms = heading_rules(led)
+    # 예약 낱말과 두 꼴을 가르는 조각이 그 블록에 실재하는지 단언한다. 블록에서 빠지면 좌변이
+    # 조용히 비므로, 박아 둔 값이 아니라 단언이 지키는 값이 된다(검사 33 과 같은 형).
+    if EXCLUSIVITY_WORD not in forms:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에 예약 낱말 `{EXCLUSIVITY_WORD}` 이 없다")
+        return r
+    all_forms = [f for f in forms[EXCLUSIVITY_WORD] if EXCL_ALL_MARK in f]
+    some_forms = [f for f in forms[EXCLUSIVITY_WORD] if EXCL_ALL_MARK not in f]
+    if len(all_forms) != 1 or len(some_forms) != 1:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에서 예약 낱말 `{EXCLUSIVITY_WORD}` 의 형이 "
+              f"`{EXCL_ALL_MARK}` 를 든 것 {len(all_forms)} 과 들지 않은 것 "
+              f"{len(some_forms)} 으로 갈리지 않는다")
+        return r
+    # 가변 구간이 하나인 것을 단언한다. `heading_fill` 이 그 형만 받고, 검사 34 도 둘 이상인
+    # 형을 위반으로 내므로 그 제한이 두 검사에 같이 걸린다.
+    for f in forms[EXCLUSIVITY_WORD]:
+        if f.count("*") != 1:
+            r.bad(f"HEADING 블록의 형 `{f}` 가 가변 구간을 하나 두지 않는다")
+    if r.violations:
+        return r
+
+    got = excl_registry(led)
+    if got is None:
+        r.bad(f"등록 관계를 드는 선언 `{EXCL_DECL}` 이 리포 소스에 없다")
+        return r
+    decl, parts, excl = got
+    labels = concept_labels(led, decl.rel)
+
+    # 배타성 문단. 머리말이 예약 낱말을 드는 것을 먼저 고르고 그 뒤에 두 형과 맞대어, 가변
+    # 구간의 문면과 두 꼴 가운데 어느 것인지를 함께 얻는다. 고르는 자리를 검사 34 와 같은 꼴로
+    # 두므로 낱말을 드는데 어느 형과도 맞지 않는 머리말이 그 검사에서와 같이 위반으로 선다.
+    paras: list[tuple[str, bool]] = []
+    for p in decl.paras:
+        head = para_heading(p)
+        if head is None or EXCLUSIVITY_WORD not in head:
+            continue
+        fill = heading_fill(all_forms[0], head)
+        if fill is not None:
+            paras.append((fill, True))
+            continue
+        fill = heading_fill(some_forms[0], head)
+        if fill is not None:
+            paras.append((fill, False))
+            continue
+        r.bad(f"{decl.rel}:{decl.line}: `{decl.full}` 의 머리말 `{head}` 가 예약 낱말 "
+              f"`{EXCLUSIVITY_WORD}` 을 드는데 그 낱말의 두 형 가운데 어느 것과도 맞지 않는다")
+
+    n_all = n_pair = 0
+    for name in names:
+        # ㉠ 블록의 이름이 그 선언에서 분할로 실재하는가. 유령 이름을 막는다.
+        if name not in parts:
+            r.bad(f"EXCL 블록의 `{name}` 을 분할로 드는 partitions 행이 `{EXCL_DECL}` 에 없다")
+            continue
+        label = labels.get(name)
+        if not label:
+            r.bad(f"EXCL 블록의 `{name}` 의 한국어 이름을 그 생성자의 docstring 에서 "
+                  f"읽을 수 없다")
+            continue
+        # ㉡ 그 분할의 배타성 문단이 하나인가. 머리말의 가변 구간이 그 한국어 이름으로 시작하는
+        # 것을 그 분할의 문단으로 본다. 그 이름에 한정어가 붙어 선 자리가 있어 완전일치로는
+        # 맺히지 않는다.
+        hit = [x for x in paras if x[0].startswith(label)]
+        if len(hit) != 1:
+            r.bad(f"{decl.rel}:{decl.line}: EXCL 블록의 `{name}`(`{label}`) 에 걸린 배타성 "
+                  f"문단이 {len(hit)} 개다. 하나여야 한다")
+            continue
+        _, is_all = hit[0]
+        cells = parts[name]
+        pairs = [frozenset((a, b)) for i, a in enumerate(cells) for b in cells[i + 1:]]
+        n_pair += len(pairs)
+        missing = [tuple(sorted(x)) for x in pairs if x not in excl]
+        if is_all:
+            n_all += 1
+            # ㉢ 모든 쌍이 배타적이라 적었으면 그 쌍마다 배타 관계가 서야 한다.
+            if missing:
+                r.bad(f"`{name}` 의 배타성 문단이 모든 쌍이 배타적이라 적는데 배타 관계가 없는 "
+                      f"쌍이 있다: " + " · ".join(f"{a} 와 {b}" for a, b in missing))
+        elif not missing:
+            # ㉣ 배타적이지 않은 쌍이 있다고 적었으면 등록되지 않은 쌍이 하나 이상 있어야 한다.
+            # **어느 쌍인지를 본문에서 파싱하지 않는다.** 머리말이 꼴만 가르고 쌍의 판정은 배타
+            # 관계의 실물이 내므로, 본문을 읽으면 검사 33 의 좌변을 머리말로 좁힌 결정이 든
+            # 오탐의 위험이 이 자리에 다시 선다(SPEC §2.1).
+            r.bad(f"`{name}` 의 배타성 문단이 배타적이지 않은 쌍이 있다고 적는데 그 칸의 모든 "
+                  f"쌍에 배타 관계가 등록되어 있다")
+    outside = sum(1 for p in parts if p not in names)
+    r.note(f"EXCL 블록의 분할 {len(names)} · 모든 쌍이 배타적인 것 {n_all} · 쌍의 전량 "
+           f"{n_pair} · 블록에 들지 않은 분할 {outside}")
+    r.note("블록에 들지 않은 분할은 소급되지 않고 미정리분의 크기만 보고된다(SPEC §2.1)")
+    return r
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -1547,7 +1749,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_26(led), check_27(led),
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
-        check_36(led), check_37(led),
+        check_36(led), check_37(led), check_38(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -1574,7 +1776,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른일곱)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른여덟)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
