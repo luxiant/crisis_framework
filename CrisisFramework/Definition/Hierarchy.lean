@@ -109,7 +109,10 @@ theorem ParStrength.atLeastAsStrong_refl (s : ParStrength) :
 것이 관측되어야 한다. 원문이 네 범주를 한 차례로 들고 그 차례로 강도가 감소한다고 적으므로,
 그런 셋이 서면 그 차례가 순서가 아니다.
 
-**가정을 두지 않는다.**
+**가정과 그 배제 사례(T-4·T-5):** 두 비교가 참이라는 것을 가정으로 진술에 명시한다. 그 가정을
+떼면 어느 두 범주 사이에서도 비교가 참이어야 하는데, 원문이 네 범주를 공적 화폐에서 순수 사적
+화폐까지 정부로부터의 근접성 한 차례로 들므로(Pozsar 2014) 맨 뒤가 맨 앞보다 약하지 않다는 것은
+거짓이다. 가정은 그 자리를 배제한다.
 -/
 -- DD:CF-1163
 theorem ParStrength.atLeastAsStrong_trans (a b c : ParStrength)
@@ -140,7 +143,10 @@ theorem ParStrength.atLeastAsStrong_total (a b : ParStrength) :
 서로 다른 범주 둘이 양방향으로 약하지 않은 것이 관측되어야 한다. 그러면 그 둘의 액면가 약속이
 같은 강도이므로 범주를 둘로 가른 근거가 사라진다.
 
-**가정을 두지 않는다.**
+**가정과 그 배제 사례(T-4·T-5):** 양방향의 비교가 둘 다 참이라는 것을 가정으로 진술에 명시한다.
+그 가정을 떼면 두 범주가 언제나 같아야 하는데, 원문의 매트릭스가 공적 화폐를 공적 백스톱과 공적
+자산이 함께 선 칸에 두고 순수 사적 화폐를 그 둘이 모두 없는 칸에 두므로(Pozsar 2014) 그 둘이
+같다는 것은 거짓이다. 가정은 그 자리를 배제한다.
 -/
 -- DD:CF-1163
 theorem ParStrength.atLeastAsStrong_antisymm (a b : ParStrength)
@@ -270,7 +276,11 @@ theorem MoneyAsset.aboveOrEqual_refl {Entity : Type} (M : MoneyAsset Entity) (m 
 주체 셋이 있어 첫째가 둘째보다 아래에 있지 않고 둘째가 셋째보다 아래에 있지 않은데 첫째가
 셋째보다 아래에 있는 것이 관측되어야 한다. 그러면 강도 위의 비교가 추이적이지 않다.
 
-**가정을 두지 않는다.**
+**가정과 그 배제 사례(T-4·T-5):** 세 주체 사이의 두 비교가 참이라는 것을 가정으로 진술에
+명시한다. 그 가정을 떼면 보유하는 것이 있는 주체가 보유하는 것이 없는 주체보다 위에 있어야
+하는데, 이 판정이 보유하는 것이 없는 자리를 최상단으로 두므로 그 자리를 아래에 둔 비교는 거짓을
+낸다. 중앙은행이 그 자리이고 원문이 위계 최상단을 그 기능으로 가른다(Pozsar 2014). 가정은 그
+자리를 배제한다.
 -/
 -- DD:CF-1165
 theorem MoneyAsset.aboveOrEqual_trans {Entity : Type} (M : MoneyAsset Entity)

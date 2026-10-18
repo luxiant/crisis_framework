@@ -36,9 +36,9 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `collateral-7` (2026-10-11, `dad314e`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | 1차 세션 |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `collateral-7` (2026-10-11, `163dabe`) |
-| 관측층 | 무차원 | `[]` | `collateral-7` (2026-10-11, `655fda7`) |
-| 용어집 | 없음 | `[]` | `hierarchy-2` (2026-10-17, `6c66c55`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
+| 관측층 | 무차원 | `[]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
+| 용어집 | 없음 | `[]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
