@@ -858,6 +858,61 @@ def inj_38_empty(root):
     f.write_text(new, encoding="utf-8")
 
 
+def inj_39_ghost(root):
+    """어느 아크의 `holes` 에 이연 레지스터에 없는 id 를 적는다."""
+    doc = arcs(root)
+    if not doc.get("arcs"):
+        raise SystemExit("arcs.json 에 아크가 없어 주입 대상이 없다")
+    live = {e.get("id") for e in load(root, "deferred")["deferred"]}
+    ghost = "CF-9039"
+    if ghost in live:
+        raise SystemExit(f"{ghost} 가 이연 레지스터에 이미 있어 주입이 서지 않는다")
+    doc["arcs"][0].setdefault("holes", []).append(ghost)
+    save_arcs(root, doc)
+    return f"{doc['arcs'][0].get('name')}: {ghost}"
+
+
+def ko_word(value: int) -> str:
+    """값을 한글 수사로 적는다. 검증기의 `ko_count` 가 읽는 꼴의 역이다.
+
+    주입이 수를 하나 틀리게 적는 자리에서 쓴다. 조합의 두 표를 검증기에서 가져오므로 주입과
+    판정이 같은 어휘를 쓰고, 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡는다.
+    """
+    unit = {v: w for w, v in check_wiki.COUNT_KO_UNIT.items()}
+    for tens, base in sorted(check_wiki.COUNT_KO_TENS.items(),
+                             key=lambda x: -x[1]):
+        if value >= base:
+            rest = value - base
+            if rest and rest not in unit:
+                raise SystemExit(f"{value} 를 한글 수사로 적을 수 없다")
+            return tens + (unit[rest] if rest else "")
+    if value not in unit:
+        raise SystemExit(f"{value} 를 한글 수사로 적을 수 없다")
+    return unit[value]
+
+
+def inj_40_count(root):
+    """계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다.
+
+    명세의 머리 계수가 든 전체 계수를 하나 올린다. 자리를 하나만 건드리는 주입이므로 그 자리와
+    정본이 어긋나는 것이 잡혀야 하고, 일곱 자리마다 따로 돌리지 않는다. 판정 대상 하나에 한 번만
+    돌린다는 요구가 그것을 든다.
+    """
+    name, rel, pat, _keys = check_wiki.COUNT_PLACES[0]
+    f = root / rel
+    text = f.read_text(encoding="utf-8")
+    m = pat.search(text)
+    if m is None:
+        raise SystemExit(f"`{name}` 의 자리를 찾지 못했다")
+    said = check_wiki.ko_count(m.group(1))
+    if said is None:
+        raise SystemExit(f"`{name}` 이 든 수사 `{m.group(1)}` 를 값으로 읽을 수 없다")
+    wrong = ko_word(said + 1)
+    at, end = m.span(1)
+    f.write_text(text[:at] + wrong + text[end:], encoding="utf-8")
+    return f"{name}: {m.group(1)}→{wrong}"
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -912,6 +967,8 @@ CASES = [
     ("38",  "wiki38-partition-exclusivity",  "EXCL 블록의 분할에서 배타성 문단을 지운다",      inj_38_para,         None, None),
     ("38",  "wiki38-partition-exclusivity",  "모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다", inj_38_pair, None, None),
     ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty,        None, None),
+    ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None, None),
+    ("40",  "wiki40-check-count-places",    "계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
 ]
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 서른여덟을 돈다. 실패시키는 것 서른과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔을 돈다. 실패시키는 것 서른둘과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -947,7 +947,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "31", "32", "33", "34", "35", "36", "37", "38", "29", "30"]
+         "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -1737,6 +1737,178 @@ def check_38(led: Ledger) -> Report:
     r.note("블록에 들지 않은 분할은 소급되지 않고 미정리분의 크기만 보고된다(SPEC §2.1)")
     return r
 
+
+def check_39(led: Ledger) -> Report:
+    r = Report("39", "wiki39-arc-holes-exist",
+               "arcs.json 의 모든 아크의 holes 가 든 id 가 이연 레지스터에 실재하는가", "fail")
+    # 유니버스는 이연 레지스터 하나다. 구멍은 정의 구멍과 탐구 미결이므로 그 거처가 그 파일이며,
+    # 원장 전체에서 찾으면 결정이나 기각에 선 id 를 구멍으로 든 것이 통과한다(SPEC §1).
+    live = {e.get("id") for e in led.reg["deferred"]}
+    n = dead = 0
+    for name in sorted(led.arcs):
+        for h in led.arcs[name].get("holes") or []:
+            n += 1
+            if h not in live:
+                r.bad(f"{h}: 아크 `{name}` 의 holes 가 든 id 가 이연 레지스터에 없다")
+                continue
+            if h in led.dead:
+                dead += 1
+    # 폐기 여부는 보지 않는다. 범위 밖 아크를 가리키는 구멍의 처분이 그 구멍을 배열에 그대로
+    # 두게 하므로 폐기된 구멍이 남는 것이 정상이고, 그것을 실패로 보면 그 처분이 세운 형과
+    # 정면으로 부딪힌다. 실재를 보는 축과 처분을 보는 축이 달라서 그 배열의 처분을 재는 검사
+    # 20 과 21 은 아크 종료 커밋에서만 돌고 실재를 재는 이 검사는 상시로 돈다(SPEC §2.1).
+    r.note(f"아크 {len(led.arcs)} · 구멍 지목 {n} · 그 가운데 폐기된 것 {dead}")
+    r.note("폐기 여부는 보지 않는다. 처분을 보는 축은 아크 종료 시에만 도는 검사 20 과 21 이 "
+           "든다(SPEC §2.1)")
+    return r
+
+
+# 검사 40 이 읽는 계수 자리 일곱. SPEC §2.1 이 그 일곱을 들고 정렬 상수의 길이가 전체 계수의
+# 정본이다(CF-1175). 나머지 여섯 자리는 그 값이나 그 가름을 산문으로 든다.
+#
+# **자리마다 어느 값을 드는지가 다르다.** 전체 계수와 실패시키는 것과 보고만 하는 것과 아크 종료
+# 시에만 도는 것이 네 수로 갈려 서므로, 한 자리의 수를 전체 계수와 바로 맞대면 가름을 드는 자리가
+# 전부 어긋난 것으로 선다. 그래서 자리마다 어느 값을 드는지를 함께 둔다(SPEC §2.1).
+COUNT_TOTAL = "전체"
+COUNT_FAIL = "실패시키는 것"
+COUNT_REPORT = "보고만 하는 것"
+COUNT_ARC = "아크 종료 시에만 도는 것"
+COUNT_SPEC = "docs/decisions/SPEC.md"
+COUNT_VERIFY = "scripts/verify.sh"
+COUNT_WIKI = "scripts/check_wiki.py"
+# 정렬 상수의 목록. 돌고 있는 모듈의 `ORDER` 를 세지 않고 뿌리의 소스에서 읽는다. 음성 대조가
+# 사본을 뿌리로 지목하므로 자기 모듈을 세면 사본의 그 자리에 든 주입을 보지 못하며, 나머지 여섯
+# 자리도 전부 뿌리에서 읽어 일곱이 한 판을 본다.
+COUNT_ORDER_LIST = re.compile(r"^ORDER = \[(.*?)\]", re.M | re.S)
+COUNT_ORDER_ITEM = re.compile(r'"[^"]+"')
+# 명세 §2.1 의 절 제목과 그 표의 행. 제목은 자리 2 이고 행의 수는 자리 3 이다. 머리와 가름 줄은
+# 첫 칸이 검사 번호가 아니라 세지 않는다.
+COUNT_SPEC_HEADING = re.compile(r"^### 2\.1 실패시키는 검사 \(([가-힣]+)\)$", re.M)
+COUNT_SPEC_ROW = re.compile(r"^\|\s*\*\*\S+\*\*\s*\|")
+# 산문으로 계수를 드는 자리 다섯. 자리마다 (이름, 경로, 꼴, 그 꼴이 드는 값의 차례) 다.
+COUNT_PLACES = (
+    ("SPEC.md §2 의 머리 계수", COUNT_SPEC,
+     re.compile(r"검사는 ([가-힣]+)이다\. 실패시키는 것 ([가-힣]+), 보고만 하는 것 ([가-힣]+), "
+                r"아크 종료 시에만 도는 것 ([가-힣]+)이다\."),
+     (COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC)),
+    ("SPEC.md §2.1 의 절 제목", COUNT_SPEC, COUNT_SPEC_HEADING, (COUNT_FAIL,)),
+    ("verify.sh 의 머리 주석", COUNT_VERIFY,
+     re.compile(r"원장 검증기 check_wiki\.py 호출 \(SPEC\.md §2 의 검사 ([가-힣]+)\)"),
+     (COUNT_TOTAL,)),
+    ("check_wiki.py 의 머리 주석", COUNT_WIKI,
+     re.compile(r"§2 의 검사 ([가-힣]+)을 돈다\. 실패시키는 것 ([가-힣]+)과 "
+                r"보고만 하는 것 ([가-힣]+)과\s*아크 종료 시에만 도는 것 ([가-힣]+)이다\."),
+     (COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC)),
+    ("check_wiki.py 의 명령행 설명", COUNT_WIKI,
+     re.compile(r'ArgumentParser\(description="원장 검증기 \(SPEC\.md §2 의 검사 ([가-힣]+)\)"\)'),
+     (COUNT_TOTAL,)),
+)
+# 한글 수사를 값으로 읽는 표. 검사 36 의 `KO_NUMERAL` 을 쓰지 않는 까닭은 그 표가 스물까지의 닫힌
+# 목록이고 표 밖의 수사를 실패로 내는 것이 그 검사의 처분이라는 데 있다. 검사의 계수가 이미 서른을
+# 넘었으므로 이 자리는 열 자리와 한 자리를 조합해 읽는다.
+COUNT_KO_UNIT = {"하나": 1, "둘": 2, "셋": 3, "넷": 4, "다섯": 5, "여섯": 6, "일곱": 7,
+                 "여덟": 8, "아홉": 9}
+COUNT_KO_TENS = {"열": 10, "스물": 20, "서른": 30, "마흔": 40, "쉰": 50, "예순": 60,
+                 "일흔": 70, "여든": 80, "아흔": 90}
+
+
+def ko_count(word: str) -> int | None:
+    """한글 수사를 값으로 읽는다. 「마흔둘」처럼 열 자리와 한 자리를 붙인 꼴까지 받는다."""
+    if word in COUNT_KO_UNIT:
+        return COUNT_KO_UNIT[word]
+    for tens, base in COUNT_KO_TENS.items():
+        if word == tens:
+            return base
+        if word.startswith(tens) and word[len(tens):] in COUNT_KO_UNIT:
+            return base + COUNT_KO_UNIT[word[len(tens):]]
+    return None
+
+
+def spec_fail_rows(text: str) -> int | None:
+    """명세 §2.1 의 표의 행 수. 절 제목을 한 번으로 찾지 못하면 셀 자리가 없으므로 None 이다."""
+    lines = text.splitlines()
+    at = [i for i, ln in enumerate(lines) if COUNT_SPEC_HEADING.match(ln)]
+    if len(at) != 1:
+        return None
+    rows = 0
+    for ln in lines[at[0] + 1:]:
+        if COUNT_SPEC_ROW.match(ln):
+            rows += 1
+        elif rows and not ln.startswith("|"):
+            break
+    return rows
+
+
+def check_40(led: Ledger) -> Report:
+    r = Report("40", "wiki40-check-count-places",
+               "검사의 계수가 실리는 일곱 자리가 ORDER 의 길이와 같은 값을 드는가", "fail")
+    text: dict[str, str] = {}
+    for rel in (COUNT_SPEC, COUNT_VERIFY, COUNT_WIKI):
+        f = led.root / rel
+        if not f.is_file():
+            r.bad(f"{rel} 이 없다")
+            return r
+        text[rel] = f.read_text(encoding="utf-8")
+    # ㉠ 정본. 정렬 상수의 길이가 전체 계수다. 목록을 읽을 수 없으면 맞댈 상대가 없으므로
+    # 통과가 아니라 실패다. 검사 28 과 34 와 35 와 37 과 38 이 같은 요구를 둔다.
+    m = COUNT_ORDER_LIST.search(text[COUNT_WIKI])
+    if m is None:
+        r.bad(f"{COUNT_WIKI} 에서 정렬 상수 `ORDER` 의 목록을 읽을 수 없다")
+        return r
+    order = len(COUNT_ORDER_ITEM.findall(m.group(1)))
+    # 자리마다 (이름, 어느 값을 드는가, 그 수) 다. 한 자리가 네 값을 다 들면 넷이 선다.
+    places: list[tuple[str, str, int]] = [
+        ("check_wiki.py 의 정렬 상수", COUNT_TOTAL, order)]
+    # ㉡ 명세의 표의 행 수. 산문이 아니라 세어서 얻는 자리다.
+    rows = spec_fail_rows(text[COUNT_SPEC])
+    if rows is None:
+        r.bad(f"{COUNT_SPEC} 의 §2.1 절 제목을 한 번으로 찾지 못해 표의 행을 셀 수 없다")
+    else:
+        places.append(("SPEC.md §2.1 의 표의 행", COUNT_FAIL, rows))
+    # ㉢ 산문으로 계수를 드는 자리 다섯. 자리가 없거나 둘 이상이면 어느 것이 그 자리인지 갈리지
+    # 않으므로 실패로 낸다. 문면이 바뀌어 꼴이 맞지 않게 된 것도 이 자리에서 선다.
+    for name, rel, pat, keys in COUNT_PLACES:
+        hit = pat.findall(text[rel])
+        if len(hit) != 1:
+            r.bad(f"`{name}` 이 계수를 드는 자리가 {len(hit)} 개다. 하나여야 한다")
+            continue
+        words = hit[0] if isinstance(hit[0], tuple) else (hit[0],)
+        for key, word in zip(keys, words):
+            value = ko_count(word)
+            if value is None:
+                r.bad(f"`{name}` 이 든 수사 `{word}` 를 값으로 읽을 수 없다")
+            else:
+                places.append((name, key, value))
+    # ㉣ 전체 계수를 드는 자리는 정본과 바로 맞댄다.
+    for name, key, value in places:
+        if key == COUNT_TOTAL and value != order:
+            r.bad(f"`{name}` 이 전체 계수를 {value} 로 드는데 정렬 상수의 길이가 {order} 이다")
+    # ㉤ 가름을 드는 자리는 같은 종류끼리 맞댄다. 한 자리가 낡으면 그 종류의 수가 자리마다 갈린다.
+    part: dict[str, int] = {}
+    for key in (COUNT_FAIL, COUNT_REPORT, COUNT_ARC):
+        got = [(n, v) for n, k, v in places if k == key]
+        if not got:
+            r.bad(f"`{key}` 의 계수를 드는 자리가 하나도 없다")
+            continue
+        if len({v for _, v in got}) != 1:
+            r.bad(f"`{key}` 의 계수가 자리마다 갈린다: "
+                  + " · ".join(f"{n} {v}" for n, v in got))
+            continue
+        part[key] = got[0][1]
+    # ㉥ 가름의 합이 전체다. 이 단언이 없으면 가름의 세 수가 서로만 맞아도 통과해 그 셋이 정본과
+    # 끊기고, 표의 행 수가 정본에 맺히는 자리도 이것뿐이다.
+    if len(part) == 3 and sum(part.values()) != order:
+        r.bad("가름의 합 " + " + ".join(f"{k} {v}" for k, v in part.items())
+              + f" = {sum(part.values())} 가 정렬 상수의 길이 {order} 와 다르다")
+    # 자리의 수는 이 검사가 세지 않고 보고에 낸다. 그 수의 정본은 명세의 산문이므로 이 검사가
+    # 그것을 읽으면 자기 유니버스를 자기가 정하게 된다.
+    r.note(f"정본은 정렬 상수의 길이 {order} 다. 계수를 드는 자리 "
+           f"{len({n for n, _, _ in places})} · 그 자리가 든 수 {len(places)}")
+    for name, key, value in places:
+        r.note(f"{name} — {key} {value}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -1749,7 +1921,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_26(led), check_27(led),
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
-        check_36(led), check_37(led), check_38(led),
+        check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -1776,7 +1948,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 서른여덟)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
