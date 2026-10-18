@@ -113,6 +113,9 @@ inductive Concept where
   | securityInterestPledge
   /-- 소유권을 넘기는 제공. 같은 종류의 것을 돌려줄 의무가 선다. -/
   | titleTransferPledge
+  /-- 그 주체에게 화폐인 것. 한 주체가 자기보다 위계가 높은 주체의 화폐부채로 보유하는 것이며,
+      무엇이 그것인지가 주체마다 다르다. -/
+  | nodeMoneyAsset
   deriving DecidableEq, Repr
 
 /--
@@ -298,6 +301,16 @@ V-4 가 요구하는 분할의 사례도 걸리지 않는다. 저자가 그 그�
 쪽에 한 소스가 붙는다. 그 칸의 정본은 담보로 제공한 자산의 공시 경로를 드는 관측층 선언이다.
 V-5 가 요구하는 판정의 재료가 이 자리에서 선다.
 
+**그 주체에게 화폐인 것을 청구권의 정제로 둔다.** 보유되는 것이 청구권이고 그것이 화폐인지 화폐
+유사인지가 이 개념의 판별선이 아니므로 등급 쪽에 붙이지 않는다. 분할로 두지 않는 까닭은 청구권이
+이 개념과 그 밖의 것으로 갈린다는 완전성을 주장할 근거가 없는 것이며, 비율 둘과 액면가 약속의
+강도를 정제와 배타로 둔 것과 같은 형이다. 보유의 상대가 누구인지는 성질이어서 V-1 에 따라 정의층이
+받는다.
+
+**그 주체에게 화폐인 것에 `measuredBy` 를 붙이지 않는다.** 현행 `SourceTag` 의 입도에서 그것이
+자금순환표와 규제 공시로 모이고 어느 줄인지가 그 입도 아래이므로, 그 상태로 붙이면 G-2 에 걸린다.
+화폐성과 강도와 담보 축 셋과 비율 둘에 붙이지 않은 것과 같은 사유다.
+
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -361,6 +374,7 @@ def registry : List ConceptRel :=
   , .measuredBy .securityInterestPledge .encumberedAssetNote
   , .measuredBy .securityInterestPledge .assetEncumbranceDisclosure
   , .measuredBy .titleTransferPledge .assetEncumbranceDisclosure
+  , .refines .nodeMoneyAsset .claim
   ]
 
 end CrisisFramework.Glossary

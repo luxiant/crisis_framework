@@ -1296,6 +1296,15 @@ def check_33(led: Ledger) -> Report:
            f"· 좌→우 미포착 {missed} · 우→좌 유령 {ghost} · 경계 HEADING_SINCE={since}")
     r.note(f"경계 밖에서 기각 문단을 든 선언 {outside} "
            f"(소급하지 않기로 한 미등재분의 크기이며 실패가 아니라 보고다)")
+    # 경계가 선언의 표지에 걸리므로, 표지가 경계보다 앞인 선언이 뒤에 새 기각 항목을 받으면
+    # 좌변과 우변의 유령 판정이 둘 다 그 선언을 뺀다. 그 빈틈의 크기를 보고로 든다. 판정을
+    # 더하지 않는 까닭은 경계를 선언의 표지에 걸지 항목의 번호에 걸지가 아직 처분되지 않았기
+    # 때문이다. 실재하지 않는 선언을 가리키는 것은 이 줄이 세지 않으며 유령 판정이 이미 든다.
+    gap = [full for full in sorted(right)
+           if (d := by_full.get(full)) is not None and d.no < since]
+    r.note(f"경계 밖 선언을 가리켜 이 검사가 맞대지 않는 기각 항목 "
+           f"{sum(len(right[full]) for full in gap)} (선언 {len(gap)} · 경계를 어디에 "
+           f"걸지는 처분되지 않았다)")
     return r
 
 
