@@ -165,7 +165,7 @@ C-8이 정하며 세 가지다. 분류의 판정은 결정 세션이 하고 Clau
 
 ## 5. 기계 판독 블록
 
-아래 다섯 블록은 `scripts/verify.sh`와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
+아래 일곱 블록은 `scripts/verify.sh`와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
 `KEY=VALUE` 형태를 유지하며, 한 줄에 하나씩 적는다.
 
 <!-- BASELINE:BEGIN -->
@@ -246,6 +246,43 @@ DOCFORM=decisions|name|retirements.json
 DOCFORM=extractions|pattern|extraction-[0-9]{2}-[a-z0-9-]+\.md
 DOCFORM=phases|pattern|<ARC>-[1-9][0-9]*-closure\.md
 <!-- DOCFORM:END -->
+
+<!-- R11:BEGIN -->
+R11_DIST=30
+R11_EXEMPT=CF-252
+R11_EXEMPT=CF-601
+R11_EXEMPT=CF-602
+R11_EXEMPT=CF-613
+R11_EXEMPT=CF-653
+R11_EXEMPT=CF-678
+R11_EXEMPT=CF-715
+R11_EXEMPT=CF-720
+R11_EXEMPT=CF-907
+R11_EXEMPT=CF-935
+R11_EXEMPT=CF-993
+R11_EXEMPT=CF-1054
+R11_EXEMPT=CF-1055
+R11_EXEMPT=CF-1095
+R11_EXEMPT=CF-1163
+R11_EXEMPT=CF-1166
+R11_EXEMPT=CF-1193
+R11_EXEMPT=CF-1202
+<!-- R11:END -->
+
+<!-- FIRED:BEGIN -->
+FIRED_FIRSTLOAD_EXEMPT=6
+<!-- FIRED:END -->
+
+`R11` 블록은 원장의 산문 필드가 조항에 붙은 특정 주석을 지목하는 것을 보는 검사가 읽는다.
+`R11_DIST` 는 규율 ID 토큰과 「주석」 사이에 허용하는 거리이고 `R11_EXEMPT` 는 면제하는 항목의
+ID 다. 면제를 두는 까닭은 원장이 수정 불가여서 이미 실린 위반을 고칠 수단이 폐기 레코드뿐인
+것이며, 갈래와 그 사유는 원장이 든다. **목록에 항을 더하는 것은 결정 세션의 조작이고 집행이
+그것을 고쳐 통과시키지 않는다.**
+
+`FIRED` 블록은 발화한 이연 항목이 어느 아크에도 배정되지 않은 것을 보는 검사가 읽는다. 첫 적재의
+항은 그 검사가 면제하는데 그 면제가 영구적이므로, 면제되는 항의 수를 값으로 고정해 새로 발화하는
+항이 그 안에 조용히 들어오는 자리를 막는다. **그 값은 줄어들 수 있고 늘어날 수 없다.** 줄어드는
+것은 그 항이 처분된 것이고 늘어나는 것은 면제가 자란 것이다.
 
 ---
 

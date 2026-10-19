@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔을 돈다. 실패시키는 것 서른둘과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔하나를 돈다. 실패시키는 것 서른셋과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -947,7 +947,8 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
-         "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "29", "30"]
+         "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
+         "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -1139,8 +1140,17 @@ def check_31(led: Ledger) -> Report:
             exempt += 1
             continue
         r.bad(f"{e.get('id')}: 발화한({kind}) 이연 항목이 어느 아크의 holes 에도 없다")
+    # 면제가 영구적이므로 그 계수를 값 정본과 맞댄다. 맞대지 않으면 새로 발화하는 첫 적재 항이
+    # 그 면제 안으로 조용히 들어오고, 이 검사가 그것을 배정 없음으로 잡을 자리를 잃는다.
+    # 값은 줄어들 수 있고 늘어날 수 없다. 줄어드는 것은 그 항이 처분된 것이다(SPEC §2.1).
+    want = fired_exempt_count(led)
+    if want is None:
+        r.bad("docs/baseline.md 의 FIRED 블록에 FIRED_FIRSTLOAD_EXEMPT 가 없다")
+    elif exempt != want:
+        r.bad(f"첫 적재 면제가 {exempt}건인데 FIRED 블록의 값은 {want} 이다. "
+              f"늘어난 쪽을 값으로 맞추면 면제가 조용히 넓어지므로 고쳐 맞추지 않는다")
     r.note(f"발화 {n_fired}건 · 그 가운데 배정된 것 {n_assigned}건 "
-           f"· 첫 적재(charter-6) 면제 {exempt}건"
+           f"· 첫 적재(charter-6) 면제 {exempt}건 (FIRED 블록의 값 {want})"
            + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
               if dropped else " · 뺀 폐기분 0건"))
     return r
@@ -1186,6 +1196,19 @@ DOCFORM_ASK = "그 이름을 맞추지 말고 결정 세션에 묻는다"
 # 열이 없기 때문이며, 그 항의 규율 ID 를 드는 항이 셋이라 ID 로는 골라지지 않는다. 그래서
 # 상수가 남되 **단언이 지키는 부류로 옮겨 간다**(SPEC §2.1).
 REJECTION_WORD = "기각한 대체 정의"
+# 검사 41 이 읽는 R-11 지목의 재기. `docs/baseline.md` §5 의 `R11` 블록이 거리와 면제 항목의
+# 목록을 들며, 값을 코드에 박지 않고 그 블록이 들게 한다(SPEC §2.1).
+R11_BLOCK = re.compile(r"<!-- R11:BEGIN -->\n(.*?)<!-- R11:END -->", re.S)
+R11_DIST_LINE = re.compile(r"^R11_DIST=(\d+)$")
+R11_EXEMPT_LINE = re.compile(r"^R11_EXEMPT=(\S+)$")
+# 검사 41 의 유니버스. 네 레지스터의 산문 필드 여섯이다. 원장 ID 를 드는 필드와 분류를 드는
+# 필드는 산문이 아니라 뺀다.
+R11_FIELDS = ("statement", "basis", "reason", "candidate", "for", "original")
+# 지목을 가리키는 낱말. 규율 ID 토큰 뒤 `R11_DIST` 자 안에 이것이 따르면 적발이다.
+R11_WORD = "주석"
+# 검사 31 이 읽는 첫 적재 면제의 계수. `docs/baseline.md` §5 의 `FIRED` 블록이 든다.
+FIRED_BLOCK = re.compile(r"<!-- FIRED:BEGIN -->\n(.*?)<!-- FIRED:END -->", re.S)
+FIRED_EXEMPT_LINE = re.compile(r"^FIRED_FIRSTLOAD_EXEMPT=(\d+)$")
 
 
 def _baseline_block(led: Ledger, pattern: re.Pattern) -> str:
@@ -1208,6 +1231,30 @@ def heading_rules(led: Ledger) -> tuple[int | None, dict[str, list[str]]]:
         if m:
             forms.setdefault(m.group(1), []).append(m.group(3))
     return since, forms
+
+
+def r11_rules(led: Ledger) -> tuple[int | None, set[str]]:
+    """`R11` 블록이 든 거리와 면제 항목의 id."""
+    dist: int | None = None
+    exempt: set[str] = set()
+    for line in _baseline_block(led, R11_BLOCK).splitlines():
+        m = R11_DIST_LINE.match(line)
+        if m:
+            dist = int(m.group(1))
+            continue
+        m = R11_EXEMPT_LINE.match(line)
+        if m:
+            exempt.add(m.group(1))
+    return dist, exempt
+
+
+def fired_exempt_count(led: Ledger) -> int | None:
+    """`FIRED` 블록이 든 첫 적재 면제의 계수."""
+    for line in _baseline_block(led, FIRED_BLOCK).splitlines():
+        m = FIRED_EXEMPT_LINE.match(line)
+        if m:
+            return int(m.group(1))
+    return None
 
 
 def heading_matches(form: str, head: str) -> bool:
@@ -1236,7 +1283,8 @@ def para_heading(para: str) -> str | None:
 def check_33(led: Ledger) -> Report:
     r = Report("33", "wiki33-rejection-registered",
                "경계 안 선언의 docstring 기각 문단마다 기각 레지스터에 for_decl 로 그 선언을 "
-               "드는 항목이 있고 그 역도 서는가", "fail")
+               "드는 항목이 있고, for_decl 을 든 항목 전량에 대해 그 선언이 실재하고 그 "
+               "docstring 이 기각 문단을 드는가", "fail")
     since, forms = heading_rules(led)
     if since is None:
         r.bad("docs/baseline.md 의 HEADING 블록에 HEADING_SINCE 가 없다")
@@ -1281,14 +1329,14 @@ def check_33(led: Ledger) -> Report:
             # 안이든 밖이든 결함이다.
             ghost += 1
             r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 에 해당하는 선언이 리포 소스에 없다")
-        elif d.no >= since and not has_rejection(d):
+        elif not has_rejection(d):
             ghost += 1
             r.bad(f"기각 항목 {ids} 의 for_decl `{full}` 의 docstring 이 기각 문단을 "
                   f"들지 않는다")
-            # 이 판정에 좌변과 같은 경계를 건다. 검사의 제목이 「경계 안 선언의 … 그 역도
-            # 서는가」이므로 그 역도 그 범위의 역인데, 구현의 좌변만 경계로 좁혀져 있고
-            # 우변은 선언 전량을 훑고 있었다. 좌변을 머리말로 좁히기 전에는 본문까지 보았으므로
-            # 경계 밖 선언이 우연히 통과했고, 좁히는 순간 그 비대칭이 드러났다(SPEC §2.1).
+            # 이 판정에 경계를 걸지 않는다. 경계를 선언의 표지에 걸면 표지가 경계보다 앞인
+            # 선언이 좌변과 우변에서 함께 빠지는데, `for_decl` 이 소급되지 않은 선택 필드라
+            # 그것을 든 항목은 전부 경계 뒤에 쓰였다. 그래서 경계를 항목 쪽으로 옮긴 것이
+            # 소급이 아니다. 좌변은 그대로 경계 안으로 좁혀 둔다(SPEC §2.1).
     # 계수를 맞대지 않는다. 한 선언에 원장 항목이 둘 이상인 것과 기각 문단이 둘 이상인 것이
     # 있어 양쪽 계수가 갈리므로 존재 검사로 둔다(SPEC §2.1).
     outside = sum(1 for d in decls if d.no < since and has_rejection(d))
@@ -1296,15 +1344,6 @@ def check_33(led: Ledger) -> Report:
            f"· 좌→우 미포착 {missed} · 우→좌 유령 {ghost} · 경계 HEADING_SINCE={since}")
     r.note(f"경계 밖에서 기각 문단을 든 선언 {outside} "
            f"(소급하지 않기로 한 미등재분의 크기이며 실패가 아니라 보고다)")
-    # 경계가 선언의 표지에 걸리므로, 표지가 경계보다 앞인 선언이 뒤에 새 기각 항목을 받으면
-    # 좌변과 우변의 유령 판정이 둘 다 그 선언을 뺀다. 그 빈틈의 크기를 보고로 든다. 판정을
-    # 더하지 않는 까닭은 경계를 선언의 표지에 걸지 항목의 번호에 걸지가 아직 처분되지 않았기
-    # 때문이다. 실재하지 않는 선언을 가리키는 것은 이 줄이 세지 않으며 유령 판정이 이미 든다.
-    gap = [full for full in sorted(right)
-           if (d := by_full.get(full)) is not None and d.no < since]
-    r.note(f"경계 밖 선언을 가리켜 이 검사가 맞대지 않는 기각 항목 "
-           f"{sum(len(right[full]) for full in gap)} (선언 {len(gap)} · 경계를 어디에 "
-           f"걸지는 처분되지 않았다)")
     return r
 
 
@@ -1805,7 +1844,7 @@ COUNT_PLACES = (
      re.compile(r"원장 검증기 check_wiki\.py 호출 \(SPEC\.md §2 의 검사 ([가-힣]+)\)"),
      (COUNT_TOTAL,)),
     ("check_wiki.py 의 머리 주석", COUNT_WIKI,
-     re.compile(r"§2 의 검사 ([가-힣]+)을 돈다\. 실패시키는 것 ([가-힣]+)과 "
+     re.compile(r"§2 의 검사 ([가-힣]+)[을를] 돈다\. 실패시키는 것 ([가-힣]+)과 "
                 r"보고만 하는 것 ([가-힣]+)과\s*아크 종료 시에만 도는 것 ([가-힣]+)이다\."),
      (COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC)),
     ("check_wiki.py 의 명령행 설명", COUNT_WIKI,
@@ -1918,6 +1957,47 @@ def check_40(led: Ledger) -> Report:
     return r
 
 
+def check_41(led: Ledger) -> Report:
+    r = Report("41", "wiki41-rule-comment-pointer",
+               "원장의 산문 필드가 규율 조항에 붙은 특정 주석을 지목하는가", "fail")
+    dist, exempt = r11_rules(led)
+    # 블록을 읽지 못하면 통과가 아니라 실패다. 거리가 없으면 재기가 서지 않고 면제가 비면
+    # 이미 실린 열여덟이 전부 적발로 나므로, 둘 다 맞댈 상대가 없는 것이다(SPEC §2.1).
+    if dist is None:
+        r.bad("docs/baseline.md 의 R11 블록에 R11_DIST 가 없다")
+        return r
+    if not exempt:
+        r.bad("docs/baseline.md 의 R11 블록에 R11_EXEMPT 가 하나도 없다")
+        return r
+    # 면제 항이 원장에 없으면 그 항이 조용히 비어 목록만 넓어진 것을 알 수 없다. 검사 33 이
+    # 예약 낱말의 실재를 단언하는 것과 같은 형이다(SPEC §2.1).
+    for eid in sorted(exempt):
+        if eid not in led.by_id:
+            r.bad(f"R11 블록의 면제 항 `{eid}` 이 원장에 없다")
+    hit = 0
+    waived: set[str] = set()
+    for _name, e in led.entries:
+        eid = str(e.get("id"))
+        for f in R11_FIELDS:
+            s = str(e.get(f) or "")
+            # 규율 ID 의 꼴은 검사 23·24 가 쓰는 것을 그대로 쓴다. 꼴을 다시 짜면 한쪽을
+            # 고칠 때 다른 쪽이 조용히 낡는다. 원장 ID 의 접두사 `CF` 는 그 계열에 없고
+            # 토큰의 앞을 막는 자리가 `CF-1070` 의 `F` 를 걸러 유니버스에서 저절로 빠진다.
+            for m in RULE_TOKEN.finditer(s):
+                if R11_WORD not in s[m.end():m.end() + dist]:
+                    continue
+                if eid in exempt:
+                    waived.add(eid)
+                    continue
+                hit += 1
+                r.bad(f"{eid}: {f} 의 `{m.group(0)}` 뒤 {dist} 자 안에 "
+                      f"`{R11_WORD}` 이 따른다")
+    r.note(f"유니버스는 네 레지스터의 산문 필드 {len(R11_FIELDS)} "
+           f"· 거리 R11_DIST={dist} · 면제 항 {len(exempt)}")
+    r.note(f"적발 {hit} · 면제 목록으로 넘긴 항목 {len(waived)}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -1931,6 +2011,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
+        check_41(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -1957,7 +2038,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔하나)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

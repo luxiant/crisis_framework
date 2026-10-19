@@ -872,6 +872,32 @@ def inj_39_ghost(root):
     return f"{doc['arcs'][0].get('name')}: {ghost}"
 
 
+def inj_41_pointer(root):
+    """면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다.
+
+    면제 목록을 값 정본에서 읽어 주입과 판정이 같은 목록을 쓰게 한다. 전사하면 한쪽을 고칠 때
+    다른 쪽이 조용히 낡는다. 폐기되지 않은 조항을 고르는 까닭은 폐기된 것을 고르면 규율 ID
+    토큰을 보는 검사 23 이 먼저 잡아 이 주입이 그 뒤에 가려지는 것이다.
+    """
+    led = check_wiki.Ledger(root)
+    _dist, exempt = check_wiki.r11_rules(led)
+    if not exempt:
+        raise SystemExit("R11 블록의 면제 목록이 비어 주입과 판정이 같은 목록을 쓰지 못한다")
+    live = sorted(tok for tok, owner in led.name_owner.items()
+                  if owner not in led.dead)
+    if not live:
+        raise SystemExit("폐기되지 않은 규율 조항이 없어 주입이 서지 않는다")
+    tok = live[0]
+    doc = load(root, "decisions")
+    target = next((e for e in doc["decisions"] if e.get("id") not in exempt), None)
+    if target is None:
+        raise SystemExit("면제 목록 밖의 항목이 없어 주입 대상이 없다")
+    target["statement"] = (str(target.get("statement") or "")
+                           + f" {tok} 에 붙은 주석을 지목한다.")
+    save(root, "decisions", doc)
+    return f"{target.get('id')}: {tok} 에 붙은 주석"
+
+
 def ko_word(value: int) -> str:
     """값을 한글 수사로 적는다. 검증기의 `ko_count` 가 읽는 꼴의 역이다.
 
@@ -969,6 +995,7 @@ CASES = [
     ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty,        None, None),
     ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None, None),
     ("40",  "wiki40-check-count-places",    "계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
+    ("41",  "wiki41-rule-comment-pointer",  "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None, None),
 ]
 
 
