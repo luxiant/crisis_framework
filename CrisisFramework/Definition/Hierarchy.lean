@@ -78,14 +78,22 @@ inductive ParStrength where
 -/
 -- DD:CF-1163
 def ParStrength.atLeastAsStrong : ParStrength → ParStrength → Bool
-  | .publicMoney, _ => true
+  | .publicMoney, .publicMoney => true
+  | .publicMoney, .insuredMoney => true
+  | .publicMoney, .publicShadowMoney => true
+  | .publicMoney, .privateShadowMoney => true
   | .insuredMoney, .publicMoney => false
-  | .insuredMoney, _ => true
+  | .insuredMoney, .insuredMoney => true
+  | .insuredMoney, .publicShadowMoney => true
+  | .insuredMoney, .privateShadowMoney => true
   | .publicShadowMoney, .publicMoney => false
   | .publicShadowMoney, .insuredMoney => false
-  | .publicShadowMoney, _ => true
+  | .publicShadowMoney, .publicShadowMoney => true
+  | .publicShadowMoney, .privateShadowMoney => true
+  | .privateShadowMoney, .publicMoney => false
+  | .privateShadowMoney, .insuredMoney => false
+  | .privateShadowMoney, .publicShadowMoney => false
   | .privateShadowMoney, .privateShadowMoney => true
-  | .privateShadowMoney, _ => false
 
 /--
 강도의 비교는 반사적이다.
@@ -248,7 +256,8 @@ def MoneyAssetFamily.constant {Entity : Type} (M : MoneyAsset Entity) :
 -- DD:CF-1164
 def MoneyAsset.aboveOrEqual {Entity : Type} (M : MoneyAsset Entity) (m n : Entity) : Bool :=
   match M.heldStrength m, M.heldStrength n with
-  | none, _ => true
+  | none, none => true
+  | none, some _ => true
   | some _, none => false
   | some a, some b => a.atLeastAsStrong b
 
@@ -289,7 +298,11 @@ theorem MoneyAsset.aboveOrEqual_trans {Entity : Type} (M : MoneyAsset Entity)
   revert hab hbc
   unfold MoneyAsset.aboveOrEqual
   cases ha : M.heldStrength a with
-  | none => intro _ _; rfl
+  | none =>
+    intro _ _
+    cases hc : M.heldStrength c with
+    | none => rfl
+    | some _ => rfl
   | some x =>
     cases hb : M.heldStrength b with
     | none => intro h _; exact Bool.noConfusion h
@@ -313,7 +326,10 @@ theorem MoneyAsset.aboveOrEqual_total {Entity : Type} (M : MoneyAsset Entity)
     M.aboveOrEqual m n = true ∨ M.aboveOrEqual n m = true := by
   unfold MoneyAsset.aboveOrEqual
   cases hm : M.heldStrength m with
-  | none => exact Or.inl rfl
+  | none =>
+    cases hn : M.heldStrength n with
+    | none => exact Or.inl rfl
+    | some _ => exact Or.inl rfl
   | some a =>
     cases hn : M.heldStrength n with
     | none => exact Or.inr rfl

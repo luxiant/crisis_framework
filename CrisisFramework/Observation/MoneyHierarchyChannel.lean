@@ -2,7 +2,8 @@
 관측층 — 화폐성 위계의 공시 경로
 
 규율: L-14(관측층은 값을 담지 않고 사상의 명세만 담는다), L-10(관측층은 수를 쓰지 않는다),
-      A-3(witness 의무), D-1·D-2(docstring 3항목), D-8(witness 예외).
+      A-3(witness 의무), D-1·D-2(docstring 3항목), D-8(witness 예외),
+      T-2(반증 조건), T-4(가정의 명시).
 
 **받침을 두 칸으로 가른다.** 공적 백스톱이 명시적으로 받치는 것은 예금보험 가입 여부로 관측되고
 묵시적으로만 받치는 것은 그렇지 않다. 한 칸으로 두면 앞쪽에 소스가 있는 것이 뒤쪽의 결손을 덮으며,
@@ -13,6 +14,10 @@
 
 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
+import CrisisFramework.Definition.Hierarchy
+import CrisisFramework.Observation.CompetencyQuestion
+
+open CrisisFramework.Definition
 
 namespace CrisisFramework.Observation
 
@@ -115,5 +120,168 @@ def flowOfFundsStrengthChannel {Entity : Type} : HierarchyChannel Entity where
   resolvesAssetSide := true
   resolvesExplicitBackstop := true
   resolvesImplicitBackstop := false
+
+/--
+`CQ-fin-8` 의 답 자리를 공시 경로 하나의 판독과 정의층의 보유 유도 순서로 채운다.
+
+**대응 비형식 개념:** 그 항이 한 시점에 주체 둘의 상대 위치를 묻는다. 경로가 그 판정의 입력을
+내지 못하면 답이 접히고, 입력을 내면 보유 유도 순서가 셋 가운데 하나를 낸다. 앞이 위에 있는
+것과 아래에 있는 것과 둘이 동급인 것이다.
+
+**동급을 거짓으로 내지 않는다.** 보유 유도 순서에서 동급이 되는 두 주체를 가르는 후보가 둘인데
+어느 것도 구조에 서지 않으므로, 동급을 거짓으로 내면 구조가 재지 못하는 것을 재었다고 주장한다.
+그 둘은 주체에 붙는 유동성 풋의 위계와 자산에 붙는 담보 설계의 상태 의존성이며, 색인이 달라
+뒤를 쓰려면 보유로 한 겹 더 유도해야 한다. 그래서 그 자리는 구조가 그 대상을 담지 않는다는
+까닭으로 접는다. 그 동급이 실제로 서는 쌍은 정의층의 반대칭성 부정 정리가 이미 든다.
+
+**이 물음이 인자에 따라 두 축으로 갈린다.** 동급이 아닌 쌍에 대해서는 무엇을 재야 하는지가
+전부 정해졌고 구조가 그것을 내므로 정의 공백을 벗어나며, 접히는 것은 공시가 묵시적 받침을
+가르지 않기 때문이라 조달로 풀린다. 동급인 쌍에 대해서는 그것을 가를 순서가 형식층에 없으므로
+정의 공백에 남는다.
+
+**이 정의가 배제하는 사례:**
+2013년 사이프러스에서 대형 무부보 예금자가 손실을 입은 것. 원문의 각주가 규제당국이 은행을
+정리할 때 늘 재량을 쥐며 주권의 재정 능력과 의지가 실제 순위를 좌우한다고 적는다
+(Pozsar 2014 각주 13). 이 조립은 경로의 칸과 강도의 비교만 읽으므로 그 재량이 순위를 뒤집는
+것을 담지 않는다.
+
+**기각한 대체 정의:**
+동급을 거짓으로 접는 안. 물음이 앞의 주체가 위에 있는가를 묻고 동급이면 위에 있지 않은 것이
+사실이나, 그 거짓은 뒤의 주체가 위에 있다는 것을 뜻하지 않으며 실물에서 그 둘은 동급이 아니다.
+그 둘을 가르는 것이 구조 밖에 있으므로 거짓으로 접으면 구조가 재지 못하는 것을 재었다고
+주장한다. 경로의 판정을 묻지 않고 구조의 판정만 내는 안도 기각했다. 경로가 묵시적 받침을
+가르지 않으면 강도가 둘로만 서서 네 범주 위의 순서가 서지 않으므로, 그 판정을 앞에 두지 않으면
+재는 자리가 없는 답이 값으로 선다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-1221
+def monetaryHierarchyOrderFrom {Time Entity : Type}
+    (ch : HierarchyChannel Entity) (M : Time → MoneyAsset Entity) :
+    CQ.MonetaryHierarchyOrder Time Entity where
+  answer := fun m n t =>
+    if ch.answersOrder m n then
+      if (M t).aboveOrEqual m n then
+        if (M t).aboveOrEqual n m then .undetermined .structureLacksTarget
+        else .holds
+      else .fails
+    else .undetermined .noMeasurementSource
+
+/--
+경로가 상대 위치 판정의 입력을 내지 못하면 답이 소스 없음으로 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+경로가 네 칸 가운데 하나라도 가르지 못하는데 답이 값을 내는 것이 관측되어야 한다. 그러면 그
+답이 경로가 내지 않은 입력을 쓴 것이므로 이 조립이 경로를 읽지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로가 두 주체에 대해 입력을 내지 못한다는 것을 가정으로
+진술에 명시한다. 그 가정을 떼면 어느 경로에서도 답이 접혀야 하는데, 네 칸을 모두 가르는 경로가
+서면 구조의 판정이 답으로 올라오므로 거짓이다. 가정은 그 자리를 배제한다.
+-/
+-- DD:CF-1221
+theorem monetaryHierarchyOrderFrom_undetermined_of_no_source
+    {Time Entity : Type} (ch : HierarchyChannel Entity) (M : Time → MoneyAsset Entity)
+    (m n : Entity) (t : Time) (h : ch.answersOrder m n = false) :
+    (monetaryHierarchyOrderFrom ch M).answer m n t
+      = .undetermined .noMeasurementSource := by
+  show (if ch.answersOrder m n = true then _ else _) = _
+  rw [h]
+  rfl
+
+/--
+경로가 입력을 내고 앞의 주체가 엄격히 위에 있으면 답이 참이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+앞의 주체가 뒤보다 아래에 있지 않고 뒤가 앞보다 아래에 있는데 답이 참이 아닌 것이 관측되어야
+한다. 그러면 이 조립이 보유 유도 순서의 판정을 답으로 올리지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로가 입력을 낸다는 것과 한 방향의 비교가 참이고 반대
+방향이 거짓이라는 것을 가정으로 진술에 명시한다. 반대 방향의 가정을 떼면 동급인 쌍이 참을
+내야 하는데 이 조립이 그 자리를 구조의 결손으로 접으므로 거짓이다. 가정은 그 자리를 배제한다.
+-/
+-- DD:CF-1221
+theorem monetaryHierarchyOrderFrom_holds_of_strictly_above
+    {Time Entity : Type} (ch : HierarchyChannel Entity) (M : Time → MoneyAsset Entity)
+    (m n : Entity) (t : Time) (hch : ch.answersOrder m n = true)
+    (hmn : (M t).aboveOrEqual m n = true) (hnm : (M t).aboveOrEqual n m = false) :
+    (monetaryHierarchyOrderFrom ch M).answer m n t = .holds := by
+  show (if ch.answersOrder m n = true then
+          if (M t).aboveOrEqual m n = true then
+            if (M t).aboveOrEqual n m = true then _ else _
+          else _
+        else _) = _
+  rw [hch, hmn, hnm]
+  rfl
+
+/--
+경로가 입력을 내고 앞의 주체가 아래에 있으면 답이 거짓이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+앞의 주체가 뒤보다 아래에 있는데 답이 거짓이 아닌 것이 관측되어야 한다. 그러면 이 조립이 그
+방향의 판정을 답으로 올리지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로가 입력을 낸다는 것과 한 방향의 비교가 거짓이라는 것을
+가정으로 진술에 명시한다. 그 가정을 떼면 동급인 쌍과 앞이 위인 쌍이 거짓을 내야 하는데 이
+조립이 그 둘을 다른 칸으로 보내므로 거짓이다. 가정은 그 자리를 배제한다. 반대 방향의 비교가
+참이라는 것을 가정으로 더 들지 않는 까닭은 보유 유도 순서의 전체성이 그것을 이미 주므로 그
+가정이 쓰이지 않는 것이다.
+-/
+-- DD:CF-1221
+theorem monetaryHierarchyOrderFrom_fails_of_below
+    {Time Entity : Type} (ch : HierarchyChannel Entity) (M : Time → MoneyAsset Entity)
+    (m n : Entity) (t : Time) (hch : ch.answersOrder m n = true)
+    (hmn : (M t).aboveOrEqual m n = false) :
+    (monetaryHierarchyOrderFrom ch M).answer m n t = .fails := by
+  show (if ch.answersOrder m n = true then
+          if (M t).aboveOrEqual m n = true then _ else _
+        else _) = _
+  rw [hch, hmn]
+  rfl
+
+/--
+경로가 입력을 내고 두 주체가 동급이면 답이 구조의 결손으로 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+양방향의 비교가 둘 다 참인데 답이 구조의 결손을 내지 않는 것이 관측되어야 한다. 그러면 이
+조립이 동급을 참이나 거짓으로 접은 것이므로, 구조가 가르지 못하는 두 주체의 상대 위치를
+재었다고 주장한다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로가 입력을 낸다는 것과 양방향의 비교가 둘 다 참이라는
+것을 가정으로 진술에 명시한다. 그 가정을 떼면 엄격히 위이거나 아래인 쌍이 구조의 결손을 내야
+하는데 이 조립이 그 둘을 참과 거짓으로 내므로 거짓이다. 가정은 그 자리를 배제한다. 그 가정이
+충족되는 쌍이 실재하는 것은 정의층이 원문 표의 주체 다섯 위에서 반대칭성의 부정을 세워 이미
+든다.
+-/
+-- DD:CF-1221
+theorem monetaryHierarchyOrderFrom_tie_undetermined
+    {Time Entity : Type} (ch : HierarchyChannel Entity) (M : Time → MoneyAsset Entity)
+    (m n : Entity) (t : Time) (hch : ch.answersOrder m n = true)
+    (hmn : (M t).aboveOrEqual m n = true) (hnm : (M t).aboveOrEqual n m = true) :
+    (monetaryHierarchyOrderFrom ch M).answer m n t
+      = .undetermined .structureLacksTarget := by
+  show (if ch.answersOrder m n = true then
+          if (M t).aboveOrEqual m n = true then
+            if (M t).aboveOrEqual n m = true then _ else _
+          else _
+        else _) = _
+  rw [hch, hmn, hnm]
+  rfl
+
+/--
+자금순환표 경로에서는 어느 두 주체의 상대 위치도 소스 없음으로 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 경로가 공적 백스톱의 묵시적 받침을 가르는 칸을 참으로 드는 것이 관측되어야 한다. 그러면
+묵시적 받침을 범주별로 가르는 공시가 선 것이므로 그 결손이 해소됐다.
+
+**가정을 두지 않는다.**
+-/
+-- DD:CF-1222
+theorem flowOfFundsStrengthChannel_order_undetermined
+    {Time Entity : Type} (M : Time → MoneyAsset Entity) (m n : Entity) (t : Time) :
+    (monetaryHierarchyOrderFrom flowOfFundsStrengthChannel M).answer m n t
+      = .undetermined .noMeasurementSource := by
+  exact monetaryHierarchyOrderFrom_undetermined_of_no_source
+    flowOfFundsStrengthChannel M m n t rfl
 
 end CrisisFramework.Observation
