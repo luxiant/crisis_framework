@@ -36,8 +36,8 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `collateral-7` (2026-10-11, `dad314e`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | 1차 세션 |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
-| 관측층 | 무차원 | `[]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `hierarchy-4` (2026-10-19, `96e7ae3`) |
+| 관측층 | 무차원 | `[]` | `hierarchy-4` (2026-10-19, `96e7ae3`) |
 | 용어집 | 없음 | `[]` | `hierarchy-3` (2026-10-18, `6d8c2ef`) |
 | 동학층 | `ℝ` | **미측정** | |
 
