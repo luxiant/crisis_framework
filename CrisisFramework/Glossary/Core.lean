@@ -116,6 +116,10 @@ inductive Concept where
   /-- 그 주체에게 화폐인 것. 한 주체가 자기보다 위계가 높은 주체의 화폐부채로 보유하는 것이며,
       무엇이 그것인지가 주체마다 다르다. -/
   | nodeMoneyAsset
+  /-- 지급능력. 자산의 합이 부채의 합에 모자라지 않은 상태. -/
+  | solvency
+  /-- 인출 충족. 그 구간에 돌려달라는 요구를 당장 내줄 수 있는 것으로 전부 맞출 수 있는 상태. -/
+  | withdrawalCoverage
   deriving DecidableEq, Repr
 
 /--
@@ -382,6 +386,7 @@ def registry : List ConceptRel :=
   , .measuredBy .securityInterestPledge .assetEncumbranceDisclosure
   , .measuredBy .titleTransferPledge .assetEncumbranceDisclosure
   , .refines .nodeMoneyAsset .claim
+  , .measuredBy .solvency .regulatoryFiling
   ]
 
 end CrisisFramework.Glossary
