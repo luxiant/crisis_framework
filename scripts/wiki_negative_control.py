@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import pathlib
 import re
 import shutil
 import subprocess
@@ -939,6 +940,140 @@ def inj_40_count(root):
     return f"{name}: {m.group(1)}→{wrong}"
 
 
+# ----------------------------------------------------- 검사 42 · 조항 목록의 거울
+
+def _clause_block(root: Path) -> tuple[pathlib.Path, str]:
+    """값 정본의 경로와 그 본문. 블록이 없으면 주입이 설 자리가 없으므로 멈춘다."""
+    f = root / "docs" / "baseline.md"
+    s = f.read_text(encoding="utf-8")
+    if check_wiki.SESSIONCLAUSE_BLOCK.search(s) is None:
+        raise SystemExit("값 정본에 SESSIONCLAUSE 블록이 없어 주입이 서지 않는다")
+    return f, s
+
+
+def inj_42_drop(root):
+    """블록에서 살아 있는 조항 하나를 지운다.
+
+    지울 조항을 블록과 원장에서 함께 고른다. 블록의 줄만 보고 고르면 그것이 폐기된 조항일 때
+    주입이 다른 갈래를 재게 된다. 판정과 같은 읽기를 쓰는 까닭은 전사하면 한쪽을 고칠 때 다른
+    쪽이 조용히 낡는 것이다.
+    """
+    led = check_wiki.Ledger(root)
+    _series, clauses = check_wiki.sessionclause_rules(led)
+    live = sorted(c for c in clauses
+                  if any(i not in led.dead
+                         for i in [o for n, o in led.name_owner.items() if n == c]))
+    if not live:
+        raise SystemExit("블록에 살아 있는 조항이 없어 주입이 서지 않는다")
+    tok = live[0]
+    f, s = _clause_block(root)
+    line = f"SESSIONCLAUSE={tok}\n"
+    if s.count(line) != 1:
+        raise SystemExit(f"블록에서 `{tok}` 의 줄을 한 번으로 집지 못했다")
+    f.write_text(s.replace(line, ""), encoding="utf-8")
+    return tok
+
+
+def inj_42_retired(root):
+    """블록에 폐기된 조항 하나를 더한다. 실패 문면이 「전부 폐기됐다」를 들어야 한다."""
+    led = check_wiki.Ledger(root)
+    series, clauses = check_wiki.sessionclause_rules(led)
+    dead = sorted(n for n, owner in led.name_owner.items()
+                  if n not in clauses and owner in led.dead
+                  and (lambda m: m is not None and (m.group(2) or "PH-R") in series)(
+                      check_wiki.RULE_TOKEN.fullmatch(n)))
+    if not dead:
+        raise SystemExit("블록 밖의 폐기된 조항이 없어 주입이 서지 않는다")
+    tok = dead[0]
+    f, s = _clause_block(root)
+    f.write_text(s.replace("<!-- SESSIONCLAUSE:END -->",
+                           f"SESSIONCLAUSE={tok}\n<!-- SESSIONCLAUSE:END -->"),
+                 encoding="utf-8")
+    return tok
+
+
+def inj_42_ghost(root):
+    """블록에 원장에 없는 이름을 더한다. 실패 문면이 「원장에 없다」를 들어야 한다.
+
+    계열은 블록이 든 것에서 고르고 번호는 그 계열의 현행 최대보다 크게 잡는다. 계열 밖의 이름을
+    쓰면 검사가 다른 갈래로 가른다.
+    """
+    led = check_wiki.Ledger(root)
+    series, _clauses = check_wiki.sessionclause_rules(led)
+    ser = sorted(series)[0]
+    used = [int(m.group(3)) for m in
+            (check_wiki.RULE_TOKEN.fullmatch(n) for n in led.name_owner)
+            if m is not None and m.group(2) == ser]
+    tok = f"{ser}-{max(used, default=0) + 90}"
+    f, s = _clause_block(root)
+    f.write_text(s.replace("<!-- SESSIONCLAUSE:END -->",
+                           f"SESSIONCLAUSE={tok}\n<!-- SESSIONCLAUSE:END -->"),
+                 encoding="utf-8")
+    return tok
+
+
+def inj_42_empty(root):
+    """블록을 비운다. 통과가 아니라 실패여야 한다."""
+    f, s = _clause_block(root)
+    f.write_text(check_wiki.SESSIONCLAUSE_BLOCK.sub(
+        "<!-- SESSIONCLAUSE:BEGIN -->\n<!-- SESSIONCLAUSE:END -->", s), encoding="utf-8")
+    return "SESSIONCLAUSE"
+
+
+# ------------------------------------------------- 검사 35 · 추출 기록 번호의 축
+
+def _extraction_pattern(root: Path):
+    """추출 기록의 꼴과 그 디렉터리의 번호별 파일 목록. 번호 그룹이 없으면 멈춘다."""
+    led = check_wiki.Ledger(root)
+    s = (root / "docs" / "baseline.md").read_text(encoding="utf-8")
+    m = check_wiki.DOCFORM_BLOCK.search(s)
+    if m is None:
+        raise SystemExit("값 정본에 DOCFORM 블록이 없어 주입이 서지 않는다")
+    for line in m.group(1).splitlines():
+        g = check_wiki.DOCFORM_LINE.match(line)
+        if g is None or g.group(2) != "pattern":
+            continue
+        rx = re.compile(g.group(3).replace(
+            "<ARC>", "(?:" + "|".join(re.escape(a) for a in sorted(led.arcs)) + ")"))
+        if check_wiki.DOCFORM_NUM_GROUP not in rx.groupindex:
+            continue
+        d = root / "docs" / g.group(1)
+        seen: dict = {}
+        for f in sorted(d.glob("*")) if d.is_dir() else []:
+            hit = rx.fullmatch(f.name)
+            if hit:
+                seen.setdefault(hit.group(check_wiki.DOCFORM_NUM_GROUP), []).append(f)
+        return g.group(1), seen
+    raise SystemExit("번호 그룹을 든 DOCFORM 패턴 줄이 없어 주입이 서지 않는다")
+
+
+def inj_35_dupnum(root):
+    """같은 번호를 가진 추출 기록을 둔다. 번호 중복은 실패다."""
+    d, seen = _extraction_pattern(root)
+    if not seen:
+        raise SystemExit("그 꼴에 든 파일이 없어 주입이 서지 않는다")
+        # 번호를 실물에서 읽는다. 박아 두면 그 번호의 파일이 사라질 때 주입이 조용히 빈다.
+    num = sorted(seen)[0]
+    return _plant(root, f"{d}/extraction-{num}-duplicate-probe.md")
+
+
+def inj_35_gapnum(root):
+    """중간 번호의 추출 기록을 옮겨 결번을 만든다.
+
+    **잡히지 않아야 하는 항이다.** 결번은 어긋남이 아니라 보고이므로 새 위반 줄이 나지 않아야
+    한다. 보고 줄에 결번이 들었는지는 이 하네스가 보지 않는다.
+    """
+    _d, seen = _extraction_pattern(root)
+    nums = sorted(seen)
+    if len(nums) < 3:
+        raise SystemExit("번호가 셋 미만이라 중간 번호를 고를 수 없다")
+    num = nums[len(nums) // 2]
+    for f in seen[num]:
+        f.unlink()
+    return num
+
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -996,6 +1131,12 @@ CASES = [
     ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None, None),
     ("40",  "wiki40-check-count-places",    "계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
     ("41",  "wiki41-rule-comment-pointer",  "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에서 살아 있는 조항 하나를 지운다",        inj_42_drop,    None, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에 폐기된 조항 하나를 더한다",             inj_42_retired, None, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에 원장에 없는 이름을 더한다",             inj_42_ghost,   None, None),
+    ("42",  "wiki42-session-clause-mirror", "블록을 비운다",                               inj_42_empty,   None, None),
+    ("35",  "wiki35-doc-form",              "같은 번호를 가진 추출 기록을 둔다",            inj_35_dupnum,  None, None),
+    ("35",  "wiki35-doc-form",              "중간 번호의 추출 기록을 옮겨 결번을 만든다",   inj_35_gapnum,  None, None, "nocatch"),
 ]
 
 
