@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔하나를 돈다. 실패시키는 것 서른셋과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔둘을 돈다. 실패시키는 것 서른넷과 보고만 하는 것 다섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -948,6 +948,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
+         "42",
          "29", "30"]
 
 
@@ -1188,6 +1189,10 @@ DOCFORM_LINE = re.compile(r"^DOCFORM=([^|]*)\|([^|]*)\|(.*)$")
 # 입고 들어온다(SPEC §2.1).
 DOCFORM_HEAD = "합의되지 않은 형태의 문서 유입 시도"
 DOCFORM_ASK = "그 이름을 맞추지 말고 결정 세션에 묻는다"
+# 번호를 묶는 명명 그룹의 이름. 이 그룹을 든 패턴 줄에만 같은 디렉터리의 번호 중복과 결번을
+# 본다. 그룹이 없는 줄에서는 아무것도 더하지 않으며, 종료 문서의 꼴이 그 경우다. 그 꼴은 번호가
+# 같으면 이름도 같아 구조적으로 겹칠 수 없기 때문이다(SPEC §2.1).
+DOCFORM_NUM_GROUP = "docnum"
 # 기각 문단을 가리키는 **예약 낱말**. 검사 33 의 좌변이 이것으로 선다.
 #
 # 본문의 부분 문자열을 재던 상수를 예약 낱말로 갈음했다. 그 낱말은 기각을 가리키는 머리말에만
@@ -1206,6 +1211,15 @@ R11_EXEMPT_LINE = re.compile(r"^R11_EXEMPT=(\S+)$")
 R11_FIELDS = ("statement", "basis", "reason", "candidate", "for", "original")
 # 지목을 가리키는 낱말. 규율 ID 토큰 뒤 `R11_DIST` 자 안에 이것이 따르면 적발이다.
 R11_WORD = "주석"
+# 검사 42 가 읽는 세션 지시의 조항 목록. `docs/baseline.md` 의 `SESSIONCLAUSE` 블록이 계열과
+# 조항을 든다. 계열을 열거하는 까닭은 구멍과 미결의 ID 가 규율 조항과 같은 꼴을 쓰는데 세션
+# 지시가 그 둘의 전량을 들지 않아 유니버스에서 빠지기 때문이다. **세션 지시 자체는 검사의
+# 대상이 아니다.** 그 문서가 리포에 없으므로 이 검사가 재는 것은 블록과 원장이며, 블록이 그
+# 문서의 거울이 되는 것은 사람이 지킨다(SPEC §2.1).
+SESSIONCLAUSE_BLOCK = re.compile(
+    r"<!-- SESSIONCLAUSE:BEGIN -->\n(.*?)<!-- SESSIONCLAUSE:END -->", re.S)
+SESSIONCLAUSE_SERIES_LINE = re.compile(r"^SESSIONCLAUSE_SERIES=(.*)$")
+SESSIONCLAUSE_LINE = re.compile(r"^SESSIONCLAUSE=(\S+)$")
 # 검사 31 이 읽는 첫 적재 면제의 계수. `docs/baseline.md` §5 의 `FIRED` 블록이 든다.
 FIRED_BLOCK = re.compile(r"<!-- FIRED:BEGIN -->\n(.*?)<!-- FIRED:END -->", re.S)
 FIRED_EXEMPT_LINE = re.compile(r"^FIRED_FIRSTLOAD_EXEMPT=(\d+)$")
@@ -1458,6 +1472,35 @@ def check_35(led: Ledger) -> Report:
             continue
         r.bad(f"{DOCFORM_HEAD} — docs/{rel.as_posix()} 가 그 디렉터리에 허용된 어느 형에도 "
               f"맞지 않는다. {DOCFORM_ASK}")
+    # 번호를 묶는 명명 그룹을 든 패턴 줄에만 같은 디렉터리의 번호 중복과 결번을 더해 본다.
+    # 번호 중복은 그 이름이 무엇을 가리키는지를 되돌릴 수 없게 하므로 실패이고, 결번은 어긋남이
+    # 아니라 보고다. 원장이 수정 불가여서 그 번호를 지목한 항목이 이미 실려 있으면 중복을 고칠
+    # 수단이 없고, 번호를 배정하다 쓰지 않은 자리가 남는 것은 정상이며 다음 번호를 고를 때 그
+    # 자리가 보이는 것이 값이다(SPEC §2.1).
+    for d in sorted(forms):
+        for _kind, val, rx in forms[d]:
+            if rx is None or DOCFORM_NUM_GROUP not in rx.groupindex:
+                continue
+            seen: dict[str, list[str]] = {}
+            for p in files:
+                rel = p.relative_to(base)
+                if rel.parent.as_posix() != d:
+                    continue
+                m = rx.fullmatch(rel.name)
+                if m:
+                    seen.setdefault(m.group(DOCFORM_NUM_GROUP), []).append(rel.name)
+            for k in sorted(k for k, v in seen.items() if len(v) > 1):
+                r.bad(f"docs/{d}/ 에서 번호 `{k}` 를 가진 파일이 {len(seen[k])} 개다: "
+                      + ", ".join(sorted(seen[k])))
+            nums = sorted(int(k) for k in seen)
+            missing = [n for n in range(nums[0], nums[-1] + 1) if n not in set(nums)] \
+                if nums else []
+            w = max((len(k) for k in seen), default=0)
+            r.note(f"docs/{d}/ 의 `{val}` — 그 꼴에 든 파일 "
+                   f"{sum(len(v) for v in seen.values())} · 서로 다른 번호 {len(seen)} "
+                   f"· 결번 {len(missing)}"
+                   + (" (" + ", ".join(f"{n:0{w}d}" for n in missing) + ")"
+                      if missing else ""))
     r.note(f"docs/ 의 파일 {len(files)} · 디렉터리 {len(dirs)} · 허용 디렉터리 {len(rows)}")
     r.note("디렉터리별 파일: "
            + " · ".join(f"{k} {per[k]}" for k in sorted(per)))
@@ -1957,6 +2000,21 @@ def check_40(led: Ledger) -> Report:
     return r
 
 
+def sessionclause_rules(led: Ledger) -> tuple[set[str], set[str]]:
+    """`SESSIONCLAUSE` 블록이 든 계열과 조항."""
+    series: set[str] = set()
+    clauses: set[str] = set()
+    for line in _baseline_block(led, SESSIONCLAUSE_BLOCK).splitlines():
+        m = SESSIONCLAUSE_SERIES_LINE.match(line)
+        if m:
+            series.update(m.group(1).split())
+            continue
+        m = SESSIONCLAUSE_LINE.match(line)
+        if m:
+            clauses.add(m.group(1))
+    return series, clauses
+
+
 def check_41(led: Ledger) -> Report:
     r = Report("41", "wiki41-rule-comment-pointer",
                "원장의 산문 필드가 규율 조항에 붙은 특정 주석을 지목하는가", "fail")
@@ -1998,6 +2056,53 @@ def check_41(led: Ledger) -> Report:
     return r
 
 
+def check_42(led: Ledger) -> Report:
+    r = Report("42", "wiki42-session-clause-mirror",
+               "세션 지시가 드는 조항 목록이 원장에서 유도되는 살아 있는 규율 조항과 "
+               "양방향으로 맞는가", "fail")
+    series, left = sessionclause_rules(led)
+    # 블록이 없거나 비어 있으면 통과가 아니라 실패다. 좌변이 비면 우변이 무엇이든 한쪽 방향의
+    # 어긋남이 0 으로 나온다. 검사 28 과 34 와 35 와 37 과 38 과 40 이 같은 요구를 둔다.
+    if not series:
+        r.bad("docs/baseline.md 의 SESSIONCLAUSE 블록에 SESSIONCLAUSE_SERIES 가 없다")
+        return r
+    if not left:
+        r.bad("docs/baseline.md 의 SESSIONCLAUSE 블록에 SESSIONCLAUSE 줄이 하나도 없다")
+        return r
+    # 규율 ID 의 꼴은 검사 23·24 가 쓰는 것을 그대로 쓴다. 꼴을 다시 짜면 한쪽을 고칠 때 다른
+    # 쪽이 조용히 낡는다. `PH-R` 만 번호를 하이픈 없이 붙이므로 그 계열의 이름을 따로 집는다.
+    def series_of(n: str) -> str | None:
+        m = RULE_TOKEN.fullmatch(n)
+        return None if m is None else (m.group(2) or "PH-R")
+
+    owners: dict[str, list[str]] = {}
+    for _name, e in led.entries:
+        for n in e.get("names", []) or []:
+            owners.setdefault(n, []).append(str(e.get("id")))
+    # 우변은 그 계열에 들고 **살아 있는** 것이다. 살아 있음은 저장하지 않고 유도한다. 그 ID 를
+    # `names` 로 드는 항목이 전부 폐기 레코드의 대상이면 죽은 것이고, 하나라도 살아 있으면
+    # 살아 있는 것이다(SPEC §0.2).
+    right = {n for n, ids in owners.items()
+             if series_of(n) in series and any(i not in led.dead for i in ids)}
+    # ㉠ 좌변에 없고 우변에 있는 것. 세션 지시가 들지 않는 살아 있는 조항이다.
+    for n in sorted(right - left):
+        r.bad(f"살아 있는 조항 `{n}` 이 SESSIONCLAUSE 블록에 없다. 원장에서 그것을 "
+              f"`names` 로 드는 항목: {', '.join(sorted(owners[n]))}")
+    # ㉡ 좌변에 있고 우변에 없는 것. **두 경우를 문면이 가른다.** 원장에 그 이름이 아예 없는
+    #    것과, 있으나 그것을 드는 항목이 전부 폐기된 것이다. 한 방향만 재면 빠진 조항과 죽은
+    #    조항이 갈리지 않으며, 그 어긋남이 실측된 자리가 둘이고 방향이 서로 달랐다.
+    for n in sorted(left - right):
+        if series_of(n) not in series:
+            r.bad(f"SESSIONCLAUSE 블록의 `{n}` 이 SESSIONCLAUSE_SERIES 가 든 계열 밖이다")
+        elif n not in owners:
+            r.bad(f"SESSIONCLAUSE 블록의 `{n}` 을 `names` 로 드는 항목이 원장에 없다")
+        else:
+            r.bad(f"SESSIONCLAUSE 블록의 `{n}` 을 드는 항목이 전부 폐기됐다: "
+                  + ", ".join(sorted(owners[n])))
+    r.note(f"좌변 {len(left)} · 우변 {len(right)} · 계열 {len(series)}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -2011,7 +2116,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
-        check_41(led),
+        check_41(led), check_42(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2038,7 +2143,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔하나)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔둘)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

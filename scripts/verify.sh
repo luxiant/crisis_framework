@@ -6,11 +6,12 @@
 #   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
 #   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
 #                    감사 대상 선언은 매 실행마다 훑어 잡아 임시 프로브 파일로 찍는다
+#                    공리 출력이 비어 있지 않은 선언의 목록과 계수를 층별로 보고에 낸다 (실패시키지 않는다)
 #   step8-layertype  층별 수 타입 정적 검사 (CLAUDE.md §2 의 층별 금지 표)
 #   step9-propfree   정의층 structure 필드와 inductive 생성자의 Prop 금지
 #   step5-mutation   변이 검사 — 최상위 theorem 과 example 의 결론 전체를 ¬ ( ) 로 감싸 반드시 실패함을 확인
 #                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
-#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 마흔하나)
+#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 마흔둘)
 #                    아크 종료 검사 셋은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
 #   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)
 #
@@ -263,9 +264,22 @@ print('['+', '.join(ex)+']' if ex else '[]')
 
 AUDITED=0
 AUDIT_DETAIL=()
+# 공리 출력이 비어 있지 않은 선언의 누계와 층별 내역. 기준선 초과가 없다는 것과 공리 출력이
+# 비어 있다는 것이 다른 사실인데 둘을 가르는 출력이 없었다. 차분은 그 층의 기준선과 맞대므로
+# 기준선이 비어 있지 않은 층에서는 비어 있지 않은 값이 전부 통과로 묻힌다. 관측층의 기준선이
+# 비어 있어 그 층의 선언이 아래 층 선언을 부르면 초과가 서는데, 그 초과가 설 자리를 미리
+# 드러내는 것이 이 보고의 몫이다. **실패시키지 않는다.** 지금 서 있는 호출이 전부 막히고,
+# 초과분이 도구 구현에서 오는 종류라 처리가 회피이며, 기준선을 올리면 추적 의무가 그 층에서
+# 무력해지기 때문이다. 보고로 두면 발원지를 깨끗하게 만드는 작업의 대상 목록이 매 회차
+# 갱신된다. 패턴의 모양으로 가르지 않고 공리를 직접 재는 까닭은, 와일드카드를 든 선언을 세는
+# 쪽이 유한집합과 몫 구성에서 오는 공리를 전부 놓치고 맨 끝 포괄 분기 하나뿐인 선언도 공리를
+# 내는 것이 실측됐기 때문이다.
+NONEMPTY=0
+NONEMPTY_DETAIL=()
 audit_layer() {
   local label=$1 key=$2 probe=$3; shift 3
-  local base measured c got ex n=0
+  local base measured c got ex n=0 ne=0
+  local -a nonempty=()
   base=$(sed -n '/<!-- BASELINE:BEGIN -->/,/<!-- BASELINE:END -->/p' "$BASELINE_DOC" \
          | sed -n "s/^$key=//p")
   if [ -z "$base" ]; then
@@ -289,6 +303,9 @@ audit_layer() {
       bad "$c: 공리 출력을 찾지 못함"
       continue
     fi
+    if [ "$got" != "[]" ]; then
+      ne=$((ne + 1)); nonempty+=("$c  $got")
+    fi
     ex=$(excess_of "$got" "$base")
     if [ "$ex" = "[]" ]; then
       if [ "$got" = "$base" ]; then ok "$c: $got (기준선과 동일)"
@@ -298,6 +315,12 @@ audit_layer() {
     fi
   done
   AUDIT_DETAIL+=("$label $n")
+  rep "$label 공리 출력이 비어 있지 않은 선언 $ne / $n"
+  if [ "$ne" -gt 0 ]; then
+    printf '       %s\n' "${nonempty[@]}"
+  fi
+  NONEMPTY=$((NONEMPTY + ne))
+  NONEMPTY_DETAIL+=("$label $ne")
 }
 
 # 디렉터리가 층을 결정한다. 층마다 docs/baseline.md 의 키와 실효 기준선을 내는 프로브가
@@ -322,6 +345,8 @@ rm -rf "$AUDIT"
 
 detail=$(printf '%s · ' "${AUDIT_DETAIL[@]}"); detail=${detail% · }
 ok "공리 감사 대상 선언 $AUDITED ($detail)"
+ne_detail=$(printf '%s · ' "${NONEMPTY_DETAIL[@]}"); ne_detail=${ne_detail% · }
+rep "공리 출력이 비어 있지 않은 선언 $NONEMPTY / $AUDITED ($ne_detail). 실패시키지 않는다"
 
 step step8-layertype '층별 수 타입 정적 검사 (L-10)'
 # CLAUDE.md §2 의 층별 금지 표를 주석을 지운 코드에서 대조한다. 디렉터리가 층을 결정한다.
