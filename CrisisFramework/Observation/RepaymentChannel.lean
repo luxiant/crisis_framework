@@ -64,6 +64,9 @@ structure RepaymentChannel (Entity : Type) where
   /-- 자산이 줄어든 까닭을 가르는가. 강제 매각과 자발적 축소와 상환에 따른 소멸이 서로 다른
       까닭이며 그 축이 무엇인지는 구멍으로 남아 있다. -/
   resolvesReductionCause : Bool
+  /-- 지급 의무가 선 액수와 그 구간에 내준 액수를 함께 가르는가. 회계층의 판정이 그 둘을 받으므로
+      한쪽만 드는 경로는 이 칸이 거짓이다. -/
+  resolvesRepaymentFailure : Bool
 
 /--
 witness (A-3).
@@ -79,6 +82,7 @@ def RepaymentChannel.noSource {Entity : Type} : RepaymentChannel Entity where
   resolvesCashLike := false
   resolvesWithdrawal := false
   resolvesReductionCause := false
+  resolvesRepaymentFailure := false
 
 /--
 지급능력을 답할 수 있는가.
@@ -150,6 +154,30 @@ def RepaymentChannel.answersReduction {Entity : Type}
   C.coversEntity n && C.resolvesTotals && C.resolvesReductionCause
 
 /--
+상환 실패를 답할 수 있는가.
+
+**대응 비형식 개념:** 이 경로가 지급 의무가 선 액수를 그 구간에 다 내주었는지를 낼 수 있는가.
+회계층의 판정이 의무액과 지급액을 받는다.
+
+**이 정의가 배제하는 사례:**
+2008년 9월 리먼브러더스의 파산 신청. 도산 절차의 등재가 상환 실패의 사실을 날짜와 함께 들지만
+의무액과 지급액을 들지 않으므로, 이 판정이 그 등재만으로는 참을 내지 못한다. 실패했다는 사실이
+공표되는 것과 그 두 액수가 공표되는 것이 다르다.
+
+**기각한 대체 정의:**
+지급능력 판정을 부르는 안. 두 판정이 읽는 칸이 다르고 서로를 함의하지 않으며 한쪽만 서는 경로가
+양쪽에 다 있다. 부르면 실패를 가렸으나 지급능력 조건이 판정 불가인 경로가 답하지 못함으로 접히고,
+그 접힘이 구조 자신이 인출 충족에서 기각한 과잉 요구와 같은 형이 된다. 두 총액의 칸을 함께 요구하는
+안도 같은 사유로 기각했으며, 그 기각은 인출 충족의 판정에서 이미 섰다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-1353
+def RepaymentChannel.answersRepaymentFailure {Entity : Type}
+    (C : RepaymentChannel Entity) (n : Entity) : Bool :=
+  C.coversEntity n && C.resolvesRepaymentFailure
+
+/--
 재무제표 경로.
 
 **대응 비형식 개념:** 공표 재무제표에서 읽는 경로. 자산 총액과 부채 총액을 들고 공시 대상인
@@ -177,35 +205,43 @@ def financialStatementRepaymentChannel {Entity : Type} (discloses : Entity → B
   resolvesCashLike := false
   resolvesWithdrawal := false
   resolvesReductionCause := false
+  resolvesRepaymentFailure := false
 
 /--
-재무제표 경로는 세 판정 어느 것에서도 답을 내지 못한다.
+재무제표 경로는 네 판정 어느 것에서도 답을 내지 못한다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 공표 재무제표가 두 총액을 통화별로 가르거나,
-당장 내줄 수 있는 것의 액수와 그 구간의 유출을 함께 들거나, 자산이 줄어든 까닭을 가르는 것.
-셋 가운데 하나라도 관측되면 그 칸이 참으로 바뀌어 이 명제가 깨진다.
+당장 내줄 수 있는 것의 액수와 그 구간의 유출을 함께 들거나, 자산이 줄어든 까닭을 가르거나,
+지급 의무가 선 액수와 그 구간에 내준 액수를 함께 드는 것. 넷 가운데 하나라도 관측되면 그 칸이
+참으로 바뀌어 이 명제가 깨진다.
 
 **가정과 그 배제 사례(T-4·T-5):** 그 주체가 공시 대상이라는 가정을 진술에 명시한다. 공시
-대상이 아닌 주체에서는 대상 포괄의 칸이 거짓이어서 세 판정이 다른 까닭으로 거짓을 내므로, 이
+대상이 아닌 주체에서는 대상 포괄의 칸이 거짓이어서 네 판정이 다른 까닭으로 거짓을 내므로, 이
 명세가 재려는 것이 그 자리에서 흐려진다. 가정은 그 자리를 배제한다.
 
 **이 정리가 소스 없음을 구조로 남긴다.** 두 총액이 공시되는데도 지급능력을 답하지 못하는 것이
 이 진술의 요지이며, 회계층의 판정이 통화로 색인된 총액을 받기 때문이다. L-12 가 환산을 금지한
 것이 관측의 자리에서 결손으로 되돌아온다.
+
+**넷째 갈래가 드는 결손은 앞 셋과 다르다.** 앞 셋은 공시가 그 칸을 들지 않는 것이고 넷째는 공시가
+상환의 결과를 기재하면서 그 두 액수를 따로 들지 않는 것이다. 재무제표가 이자비용과 차입금 상환액을
+드나 그것이 의무액과 지급액으로 갈리지 않는다.
 -/
--- DD:CF-1264
+-- DD:CF-1356
 theorem financialStatementRepaymentChannel_answers_none {Entity : Type}
     (discloses : Entity → Bool) (n : Entity) (hn : discloses n = true) :
     (financialStatementRepaymentChannel discloses).answersSolvency n = false ∧
     (financialStatementRepaymentChannel discloses).answersWithdrawalCoverage n = false ∧
-    (financialStatementRepaymentChannel discloses).answersReduction n = false := by
-  -- 세 판정이 전부 칸 셋의 `&&` 연쇄이므로, 경로의 칸 값을 그 자리에 넣고 대상 포괄의 칸을
+    (financialStatementRepaymentChannel discloses).answersReduction n = false ∧
+    (financialStatementRepaymentChannel discloses).answersRepaymentFailure n = false := by
+  -- 네 판정이 전부 칸의 `&&` 연쇄이므로, 경로의 칸 값을 그 자리에 넣고 대상 포괄의 칸을
   -- 가정으로 참으로 바꾼 뒤 `Bool` 의 계산으로 닫는다. 전면 `simp` 를 쓰지 않고 보조정리를
-  -- 명시 고정한다(C-9). 세 갈래가 같은 꼴이므로 한 전술 블록을 셋에 함께 건다.
-  refine ⟨?_, ?_, ?_⟩ <;>
+  -- 명시 고정한다(C-9). 네 갈래가 같은 꼴이므로 한 전술 블록을 넷에 함께 건다. 갈래가 셋에서
+  -- 넷으로 늘었으므로 `refine` 의 구멍과 고정 목록이 하나씩 늘었다.
+  refine ⟨?_, ?_, ?_, ?_⟩ <;>
     · simp only [RepaymentChannel.answersSolvency,
         RepaymentChannel.answersWithdrawalCoverage, RepaymentChannel.answersReduction,
-        financialStatementRepaymentChannel]
+        RepaymentChannel.answersRepaymentFailure, financialStatementRepaymentChannel]
       rw [hn]
       rfl
 

@@ -113,6 +113,11 @@ def HierarchyChannel.answersOrder {Entity : Type}
 
 **이 값이 공시의 현행 입도에 매인다.** 묵시적 받침을 범주별로 가르는 공시가 서면 이 값이 낡고,
 그 낡음이 해소를 알리는 신호다.
+
+**이 경로가 용어집의 개념 둘에 대응한다.** 화폐성과 액면가 약속의 강도가 그 둘이며, 그 둘에
+`measuredBy` 가 붙지 않은 자리를 이 경로의 칸이 받는다. N-1 이 산문층과 형식층의 양방향 참조를
+요구하므로 이 문단이 형식층에서 그 두 개념을 지목하는 자리다. 그 둘의 측정 소스 없음은 이 경로의
+묵시적 받침 칸과 아래의 순서 판정 정리가 이미 등재한다.
 -/
 -- DD:CF-1168
 def flowOfFundsStrengthChannel {Entity : Type} : HierarchyChannel Entity where
