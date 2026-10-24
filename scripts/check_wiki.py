@@ -897,8 +897,20 @@ def check_16(led: Ledger) -> Report:
 
 def check_17(led: Ledger) -> Report:
     r = Report("17", "wiki17-reopen-null", "reopen_when: null 인 항의 계수", "report")
-    nulls = [e for e in led.reg["deferred"] if e.get("reopen_when") is None]
-    r.note(f"reopen_when: null {len(nulls)}건")
+    nulls: list[dict] = []
+    dropped: list[str] = []
+    for e in led.reg["deferred"]:
+        if e.get("reopen_when") is not None:
+            continue
+        # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 함께 세면 트리거를 쓸 수 없는 항의 수를
+        # 밖에서 셀 수 없다(CF-684). 뺀 건수와 그 ID 는 같은 줄에 남긴다.
+        if e.get("id") in led.dead:
+            dropped.append(str(e.get("id")))
+            continue
+        nulls.append(e)
+    r.note(f"reopen_when: null {len(nulls)}건"
+           + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
+              if dropped else " · 뺀 폐기분 0건"))
     for e in nulls:
         r.note(f"{e.get('id')} — names {e.get('names')}")
     return r

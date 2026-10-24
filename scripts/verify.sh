@@ -12,7 +12,8 @@
 #   step5-mutation   변이 검사 — 최상위 theorem 과 example 의 결론 전체를 ¬ ( ) 로 감싸 반드시 실패함을 확인
 #                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
 #   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 마흔셋)
-#                    아크 종료 검사 셋은 `--arc-close` 를 주지 않으므로 여기서 돌지 않는다
+#                    아크 종료 검사 셋은 첫 인자로 아크 이름을 주면 함께 돌고
+#                    주지 않으면 돌지 않는다 (`bash scripts/verify.sh <아크>`)
 #   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)
 #
 # 각 단계는 선언된 단계 id 를 [step:<id>] 로 출력에 낸다. 원장의 tier: invariant
@@ -646,8 +647,14 @@ else
 fi
 rm -rf "$mut_dir"
 
+# 첫 인자를 아크 이름으로 읽어 원장 검증기에 `--arc-close` 로 넘긴다. 주지 않으면 그 인자
+# 없이 부르므로 호출이 글자대로 그대로다. 아크를 닫는 커밋이 한 아크에서 가장 무거운 커밋인데,
+# 그것을 가르는 검사 셋의 판정이 이 출력 밖에서만 돌 수 있었다(W-3). 단계 id 는 바꾸지 않는다.
+arc_close_args=()
+[ -n "${1:-}" ] && arc_close_args=(--arc-close "$1")
+
 step step6-ledger '`check_wiki.py` 호출'
-if python3 scripts/check_wiki.py; then
+if python3 scripts/check_wiki.py "${arc_close_args[@]}"; then
   ok "원장 검증 전량 통과"
 else
   bad "원장 검증 실패 — 위 [check:*] 줄이 어느 검사인지 든다 (SPEC.md §2)"
