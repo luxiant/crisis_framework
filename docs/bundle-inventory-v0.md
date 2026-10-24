@@ -208,7 +208,7 @@
 
 ## 보조 (Tier B) — 필요 시 참조 (26편)
 
-**전략적 보완성·다중균형 (Morris·Shin 계열, 9편)** — 대차대조표 primitive가 아니라 신념·조정 primitive. PH-3(동학층) 또는 실패 양태 분할 시 참조.
+**전략적 보완성·다중균형 (Morris·Shin 계열, 9편)** — 대차대조표 primitive가 아니라 신념·조정 primitive. 동학층 진입 또는 실패 양태 분할 시 참조.
 Unique equilibrium in self-fulfilling currency attacks (1998), Global games (2001), Coordination risk and the price of debt (2002), Liquidity black holes (2003), Catalytic finance (2003), Beauty contests (Allen·Morris·Shin), Rethinking multiple equilibria, Communication and monetary policy (2003), Does one Soros make a difference? (Corsetti·Dasgupta·Morris·Shin, Cowles DP 1273)
 
 **규제·정책 (10편)** — B-5에 따라 처방은 비추출. 제약의 규제적 원천 확인용.
@@ -219,11 +219,16 @@ Theory of supply chains: a working capital approach (2023, E-20), Elasticity of 
 
 **기타 (5편)** — Disclosures and asset returns (2002), Liquidity management by bond funds March 2020 (2021), Following the imprint of ECB APP, US dollar's slide April 2025, Subprime lending and real estate markets (Wachter·Pavlov·Pozsar 2008)
 
-## PH-4 전파 — 현 단계 범위 밖, 보관 (1편)
+**발행자 공시의 실물 (1편)** — 상환 경로의 칸을 재는 실물. 재무제표가 지급 의무액과 지급액을 따로
+드는지를 가릴 때 참조한다. 이 페이즈는 읽지 않으며, 그 칸을 거짓으로 둔 판정이 「조달은 그 반증
+조건이 관측되는지를 뒤에 가린다」로 끝나므로 그 가림이 설 때 연다.
+Circle Annual Report 2025 (2026년 묶음 조달분)
+
+## 전파 아크의 재료 — 현 아크의 판별선 밖, 보관 (1편)
 
 Liquidity risk and contagion (Cifuentes·Ferrucci·Shin, Bank of England WP 264)
 
-## PH-5 예측층 — 현 단계 범위 밖, 보관 (2편)
+## 예측 — 재유입 범위 밖, 보관 (2편)
 
 Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of Growth-at-Risk (Adrian·Grinberg·Liang·Malik 2018)
 
@@ -238,6 +243,26 @@ Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of
 | Golden Fetters | Eichengreen (781쪽) | **D-3 사례 공급원.** 금본위제는 중앙은행의 외화(금) 축 제약(J-4 · K-3)의 정본 사례 |
 | Global FX markets when hedging takes centre stage | Huang·Krohn·Sushko 2025 (BIS QR) | **J-3 관측 과제 보조.** FX 스왑 총액 데이터 원천 |
 | Uncovering FX settlement risk | Conway 외 2025 (BIS QR) | 위와 같다 |
+
+---
+
+## 유동성 규제와 중앙은행 담보 정책 (4편)
+
+`hierarchy-6` 이 당장 내줄 수 있는 것의 경계와 부채 만기 구간의 입도와 묵시적 받침의 공시 경로를
+결판내려고 들였다. 뭉치의 어느 편도 감독 규범의 적격 자산 분류와 중앙은행의 담보 정책을 적지
+않아서 감독 규범 하나와 중앙은행의 공시 셋을 함께 열었다. 넷이 추출 기록 하나(E-49)를 가지며,
+그 기록이 찾는 차이가 감독 규범과 중앙은행 정책 사이에 있어서 편마다 가르지 않았다.
+
+**이 무리의 넷은 `hierarchy-5` 가 세운 구멍 둘의 재개 조건이 지목한 조달처다.** 그 둘이 재개
+조건을 추출 기록의 이름으로 적게 한 규약보다 앞서 섰으므로 그 조건이 발화할 수 없는 꼴로 서 있었고,
+그래서 발화를 기다리지 않고 추출로 해소했다. 그 경위는 `hierarchy-6` 의 폐기 레코드가 든다.
+
+| 파일 | 발행자·판 | 쓰임 |
+|---|---|---|
+| Basel III The Liquidity Coverage Ratio and liquidity risk monitoring tools | BCBS 2013년 1월판 | 고유동성자산 3단 분류와 범주별 가중, 30일 구간과 범주별 유출률. 머리말의 앞 두 물음을 결판냈고 E-49 §4-1 과 §4-2 가 그 해소를 든다 |
+| Bank of England Level B Collateral Set | 영란은행 2026년 6월 18일판 | 적격 집합과 판별 조건 둘. 머리말의 셋째 물음을 결판냈고 E-49 §4-3 이 그 해소를 든다 |
+| Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations | 영란은행 2026년 6월 18일판 | 범주와 잔존만기의 할인율 격자. 액면가 약속 강도의 자산 쪽 측정값 후보 |
+| Changes to collateral eligibility in the Sterling Monetary Framework | 영란은행 2026년 6월 11일 시장 공고 | 적격성이 시점 함수라는 것과 등급 분할의 폐지 예정 |
 
 ---
 
@@ -269,18 +294,19 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | 계약 표현 | 14 | — |
 | 증거금과 담보의 규범 | 3 | — |
 | 다른 CQ 덩어리의 재료 | 7 | — |
-| Tier B | 26 | — |
-| PH-4 보관 | 1 | — |
-| PH-5 보관 | 2 | — |
+| Tier B | 27 | — |
+| 전파 아크의 재료 보관 | 1 | — |
+| 예측 보관 | 2 | — |
 | Tier C 제외 권고 | 11 | — |
 | 배제 사례와 관측 과제의 보조 | 3 | — |
+| 유동성 규제와 중앙은행 담보 정책 | 4 | — |
 | 담보 속도와 재담보의 계량 | 2 | — |
 | 상품 담보 금융 | 2 | — |
-| **구성원 합계** | **140** | **2** |
+| **구성원 합계** | **145** | **2** |
 
-zip 안 구성원은 138편이다.
+zip 안 구성원은 143편이다.
 
-**zip 대조.** `macro_models.zip` 의 파일 142개는 zip 안 구성원 138편과 해시가 같은 중복 사본 3개와
+**zip 대조.** `macro_models.zip` 의 파일 147개는 zip 안 구성원 143편과 해시가 같은 중복 사본 3개와
 같은 문헌의 다른 발간본 1개다. 셋째 항이 BCBS 발간본과 IOSCO 발간본이며, 구성원으로는 하나이고
 파일로는 둘이다.
 

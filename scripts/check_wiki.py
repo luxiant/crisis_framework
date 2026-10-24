@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔둘을 돈다. 실패시키는 것 서른넷과 보고만 하는 것 다섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔셋을 돈다. 실패시키는 것 서른넷과 보고만 하는 것 여섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -606,8 +606,13 @@ def check_12(led: Ledger) -> Report:
             if not ARTIFACT_PATH.match(ref) or ".." in ref:
                 r.bad(f"{e.get('id')}: artifact 의 ref 가 리포 경로의 형식이 아니다 — {ref!r}")
         elif kind == "extraction":
-            # 번호를 강제하지 않는다. S-5 가 지목 참조한 편에 E-nn 이 배정될 자리를
-            # 두지 않으므로 형식을 요구하면 등재가 막힌다(SPEC §3.3).
+            # 새 규약의 번호로 읽히면 형식을 만족한다. 그 번호의 기록이 섰는지는 이 검사가
+            # 보지 않으며 검사 43 이 본다. 실재를 요구하면 발화 조건이 이미 충족된 트리거만
+            # 등재할 수 있게 되어 발화 탐지와 정반대로 선다(SPEC §3.3).
+            if extraction_ref_number(ref) is not None:
+                continue
+            # 번호를 강제하지 않는다. 그 규약 앞에 선 항은 논문 지목을 들며 소급해 고치지
+            # 않으므로, 그 자리는 대기열에서 해소되는지만 본다(SPEC §3.3).
             if not qflat:
                 r.bad(f"{e.get('id')}: reading-queue-v0.md 를 읽을 수 없어 extraction 을 해소하지 못한다")
             elif re.sub(r"\s+", "", ref) not in qflat:
@@ -789,6 +794,43 @@ def check_25(led: Ledger) -> Report:
     return r
 
 
+# `extraction` 트리거의 `ref` 를 추출 기록의 번호로 읽는 사상. 검사 12 와 발화 판정과 검사 43 이
+# 이 하나를 공유한다(SPEC §3.3). 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 둘이 다른 수를
+# 내는 것을 어느 검사도 잡지 못한다.
+EXTRACTION_REF_NO = re.compile(r"^(?:E-)?(\d{1,2})$")
+
+
+def extraction_ref_number(ref: str) -> int | None:
+    """`extraction` 트리거의 `ref` 를 추출 기록의 번호로 읽는다.
+
+    번호로 읽히지 않으면 `None` 이다. 새 규약 앞에 선 항은 논문 지목이나 조달처의 서술을 들고
+    있으므로 그 자리가 `None` 으로 나오며, 소급해 고치지 않는다(SPEC §3.3).
+    """
+    m = EXTRACTION_REF_NO.match(ref.strip())
+    return int(m.group(1)) if m else None
+
+
+def extraction_record(led: "Ledger", n: int) -> Path | None:
+    """그 번호의 추출 기록 파일. 서 있지 않으면 `None` 이다."""
+    d = led.root / "docs" / "extractions"
+    hits = sorted(d.glob(f"extraction-{n:02d}-*.md")) if d.is_dir() else []
+    return hits[0] if hits else None
+
+
+def phases_closed_after(led: "Ledger", phase: str) -> int | None:
+    """그 페이즈 뒤로 닫힌 페이즈의 수. 닫힘은 종료 문서의 실재로 본다.
+
+    페이즈의 순서는 `arcs.json` 의 아크 순서와 아크마다의 `phases` 순서가 든다. 그 페이즈가
+    그 목록에 없으면 셀 자리가 없으므로 `None` 이다.
+    """
+    order = [p for a in led.arcs.values() for p in (a.get("phases") or [])]
+    if phase not in order:
+        return None
+    d = led.root / "docs" / "phases"
+    return sum(1 for p in order[order.index(phase) + 1:]
+               if (d / f"{p}-closure.md").is_file())
+
+
 def trigger_fired(led: Ledger, e: dict) -> tuple[bool, str, str]:
     """이연 항목의 `reopen_when` 이 충족됐는가와 그 종류와 사유를 낸다.
 
@@ -806,14 +848,22 @@ def trigger_fired(led: Ledger, e: dict) -> tuple[bool, str, str]:
         hit = p.exists()
         why = f"경로 `{ref}` 가 실재한다"
     elif kind == "extraction":
-        # 그 논문의 추출 기록이 섰는가를 파일명으로 본다. 본문으로 보면 다른 추출 기록이
-        # 그 논문을 인용한 자리가 발화로 잡힌다.
-        flat = re.sub(r"[^a-z0-9]", "", ref.lower())
-        d = led.root / "docs" / "extractions"
-        for f in (sorted(d.glob("*.md")) if d.is_dir() else []):
-            if flat and flat in re.sub(r"[^a-z0-9]", "", f.stem.lower()):
+        # 새 규약은 `ref` 가 추출 기록의 번호를 들므로 그 번호의 기록이 섰는가로 본다. 번호로
+        # 읽히지 않는 항은 그 규약 앞에 선 것이므로 옛 판정을 그대로 쓴다(SPEC §3.3).
+        n = extraction_ref_number(ref)
+        if n is not None:
+            f = extraction_record(led, n)
+            if f is not None:
                 hit, why = True, f"추출 기록 `{f.name}` 이 섰다"
-                break
+        else:
+            # 그 논문의 추출 기록이 섰는가를 파일명으로 본다. 본문으로 보면 다른 추출 기록이
+            # 그 논문을 인용한 자리가 발화로 잡힌다.
+            flat = re.sub(r"[^a-z0-9]", "", ref.lower())
+            d = led.root / "docs" / "extractions"
+            for f in (sorted(d.glob("*.md")) if d.is_dir() else []):
+                if flat and flat in re.sub(r"[^a-z0-9]", "", f.stem.lower()):
+                    hit, why = True, f"추출 기록 `{f.name}` 이 섰다"
+                    break
     elif kind == "arc_phase":
         a = led.arcs.get(ref)
         hit = bool(a) and a.get("status") == "open"
@@ -948,7 +998,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42",
+         "42", "43",
          "29", "30"]
 
 
@@ -2103,6 +2153,45 @@ def check_42(led: Ledger) -> Report:
     return r
 
 
+def check_43(led: Ledger) -> Report:
+    r = Report("43", "wiki43-extraction-trigger-age",
+               "살아 있는 extraction 트리거 가운데 발화할 수 없는 것과 "
+               "발화할 수 있는데 깨우지 않은 항의 나이", "report")
+    live = [e for e in led.reg["deferred"]
+            if isinstance(e.get("reopen_when"), dict)
+            and e["reopen_when"].get("kind") == "extraction"
+            and e.get("id") not in led.dead]
+    cannot: list[str] = []
+    stale: list[str] = []
+    for e in live:
+        eid = str(e.get("id"))
+        ref = str(e["reopen_when"].get("ref") or "")
+        n = extraction_ref_number(ref)
+        if n is None:
+            cannot.append(f"{eid} — `ref` 가 번호로 읽히지 않는다: {ref!r}")
+            continue
+        f = extraction_record(led, n)
+        if f is None:
+            cannot.append(f"{eid} — 번호 {n:02d} 의 추출 기록이 아직 없다")
+            continue
+        origin = e.get("origin") or {}
+        phase = str(origin.get("phase") or "")
+        closed = phases_closed_after(led, phase)
+        age = "셀 자리가 없다" if closed is None else f"{closed}"
+        stale.append(f"{eid} — 선 날 {origin.get('date')} · 그 뒤로 닫힌 페이즈 {age} · "
+                     f"`{f.name}` 이 섰다")
+    # 둘을 한 검사로 묶는 까닭은 같은 유니버스를 재기 때문이다. 따로 세우면 한쪽을 고칠 때 다른
+    # 쪽이 조용히 낡고, 둘이 다른 수를 내는 것을 어느 검사도 잡지 못한다(SPEC §2.2).
+    r.note(f"유니버스는 살아 있는 extraction 트리거 {len(live)}건")
+    r.note(f"발화할 수 없는 항 {len(cannot)}건")
+    for line in cannot:
+        r.note(line)
+    r.note(f"발화할 수 있는데 깨우지 않은 항 {len(stale)}건")
+    for line in stale:
+        r.note(line)
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -2116,7 +2205,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_28(led), check_31(led), check_32(led),
         check_33(led), check_34(led), check_35(led),
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
-        check_41(led), check_42(led),
+        check_41(led), check_42(led), check_43(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2143,7 +2232,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔둘)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔셋)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

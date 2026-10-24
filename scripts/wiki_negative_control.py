@@ -317,11 +317,30 @@ def _out_of_scope_arc(root) -> str:
     """범위 밖인 아크 하나의 이름. **아크 레코드에서 고르고 박아 두지 않는다.**
 
     이름을 박으면 그 아크의 처분이 바뀔 때 주입이 조건을 만들지 못하면서 음성 대조가
-    통과한다."""
-    for x in arcs(root)["arcs"]:
+    통과한다.
+
+    **그 상태의 아크가 산 레코드에 없으면 사본의 아크 하나를 그 상태로 바꾼 뒤 조건을 짓는다.**
+    이름을 박지 않는 것과 그 상태의 아크가 리포에 실재하기를 요구하는 것이 다르며, 아크의 처분은
+    이 프로젝트가 계속 고치는 값이므로 실재를 전제로 두면 처분이 바뀌는 회차마다 음성 대조 전량이
+    멈춘다. 고르는 규칙도 이름을 박지 않고 `reserved` 이며 답할 항을 들지 않는 아크 가운데 레코드의
+    열거 순서로 첫째를 집는다. 그 상태가 아직 일하지 않은 아크를 뜻해 범위 밖과 가장 가까우므로
+    사본에 생기는 딴 위반이 가장 적고, 답할 항이 없는 아크를 고르면 검사 28 의 주입이 그 번호를
+    다른 아크에서 조달할 수 있다. **바꾼 사본이 그 주입의 유니버스이며 리포의 실물은 그대로다.**
+
+    **지을 수 없는 전제가 남으면 그때는 그대로 멈춘다.** 조용히 통과하는 것보다 멈추는 것이 옳다는
+    이 구성기의 설계는 그대로이고, 바뀐 것은 지을 수 있는 전제의 범위다.
+    """
+    doc = arcs(root)
+    for x in doc["arcs"]:
         if x.get("status") == check_wiki.ARC_OUT_OF_SCOPE:
             return x["name"]
-    raise SystemExit("음성 대조: 범위 밖인 아크가 없어 검사 12·28 의 조건을 만들 수 없다")
+    for x in doc["arcs"]:
+        if x.get("status") == "reserved" and not (x.get("cq") or []):
+            x["status"] = check_wiki.ARC_OUT_OF_SCOPE
+            save_arcs(root, doc)
+            return x["name"]
+    raise SystemExit("음성 대조: 범위 밖인 아크를 사본에서도 지을 수 없어 "
+                     "검사 12·28 의 조건을 만들 수 없다")
 
 
 def inj_28_out_of_scope(root):
@@ -472,6 +491,18 @@ def inj_16(root):
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
         "CF-9016", {"kind": "artifact", "ref": "docs/arcs.json"}))
+    save(root, "deferred", doc)
+
+
+def inj_43(root):
+    """실재하지 않는 번호를 `extraction` 트리거의 `ref` 로 둔 항을 등재한다.
+
+    그 항이 「발화할 수 없는 항」으로 세어져야 한다. 번호의 꼴을 만족하므로 검사 12 는 그것을
+    형식으로 받으며, 그 번호의 기록이 실재하는지를 보는 자리가 검사 43 하나임이 이 주입으로
+    선다. 추출 기록의 번호가 두 자리이고 현행 열이 49 까지이므로 97 을 고른다."""
+    doc = load(root, "deferred")
+    doc["deferred"].append(deferred_stub(
+        "CF-9043", {"kind": "extraction", "ref": "E-97"}))
     save(root, "deferred", doc)
 
 
@@ -1101,6 +1132,7 @@ CASES = [
     ("25",  "wiki25-marker-missing",       "최상위 선언 하나의 표지를 지운다",             inj_25,          None, None),
     ("16",  "wiki16-trigger-fired",        "충족된 트리거를 등재한다",                     inj_16,  "CF-9016", None),
     ("17",  "wiki17-reopen-null",          "reopen_when 을 null 로 둔 항을 늘린다",        inj_17,  "CF-9017", None),
+    ("43",  "wiki43-extraction-trigger-age", "실재하지 않는 번호를 extraction 의 ref 로 둔다",  inj_43,  "CF-9043", None),
     ("18",  "wiki18-blocking-disposition", "blocking 구멍을 등재한다",                     inj_18,  "CF-9018", None),
     ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19,  "CF-100",  None),
     ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
@@ -1169,7 +1201,11 @@ def main() -> int:
             b = base["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
             g = got["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
 
-            if num in ("16", "17", "18", "19"):
+            # 보고 부류인지를 **기준선의 판정에서 유도한다.** 번호를 박으면 새로 선 보고 검사가
+            # 실패 부류로 갈려 「새 위반 줄 없음」으로 어긋남이 나며, 그 문면에서 검사의 결함과
+            # 가름의 결함이 갈리지 않는다. 검사 43 이 그 자리였다. 보고만 하는 검사는 위반 줄을
+            # 내지 않으므로 기준선의 판정이 `REPORT` 인 것이 그 부류의 정의와 같다.
+            if b["verdict"] == "REPORT":
                 new_notes = [n for n in g["notes"] if n not in b["notes"]]
                 hit = any((marker or "") in n for n in new_notes)
                 ok = bool(new_notes) and hit

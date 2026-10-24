@@ -119,7 +119,7 @@
       "name": "network",
       "discriminator": "노드 위의 그래프를 어떻게 합성하는가",
       "phases": [],
-      "status": "out_of_scope",
+      "status": "reserved",
       "opened": null,
       "closed": null,
       "holes": [],

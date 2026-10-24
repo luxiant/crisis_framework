@@ -25,7 +25,7 @@ O-1 ★ 구간 종료 시점에 보류된 논문 목록. 뭉치 전체는 `bundl
 
 | 논문 | 대상 구멍 | 기대 재료 |
 |---|---|---|
-| Danielsson · Shin · Zigrand (2012), *Procyclical Leverage and Endogenous Risk* | **H-02** (실제 위험에 측정 대응 없음) | 측정 위험 ↔ 실제 위험의 되먹임을 정면으로 다루는 유일한 편. H-03(부도확률 불변 ≠ VaR/E 불변)도 여기 걸림 |
+| Danielsson · Shin · Zigrand (2012), *Procyclical Leverage and Endogenous Risk* | **H-02** (실제 위험에 측정 대응 없음) · `CF-152` | 측정 위험 ↔ 실제 위험의 되먹임을 정면으로 다루는 유일한 편. H-03(부도확률 불변 ≠ VaR/E 불변)도 여기 걸림. **구 ID 와 새 ID 가 함께 선다.** `H-02` 가 `CF-155` 와 `CF-156` 에 사상되고 `CF-152` 가 「실제 위험의 측정 대응」을 들어 그 둘과 같은 것을 드는 중복 후보이며, 그 처분은 이 편을 읽을 때 셋이 함께 발화하는 자리에서 선다 |
 | Morris · Shin (2016), *Illiquidity Component of Credit Risk* | **H-22** (해소됨) · 기록 소실 복구 · **소진** | 지급불능 / 유동성 분해. **소진됐다.** 다시 읽어 S-7 에 따라 세운 추출 기록이 `docs/extractions/extraction-17-morris-shin-2016.md` (E-17) 이다 |
 | Danielsson · Shin · Zigrand (2004), *The Impact of Risk Regulation on Price Dynamics* | H-09 (되먹임이 가정에 의존) | 규제 제약 → 가격 동학. 동학층 진입 시 |
 | Clack · McGonagle (2019), *Smart Derivatives Contracts* | **H-66** (관측자 상대성) · **소진** | 사건이 일어나는 층위 넷과 그 관측의 어려움. `claim-5` 가 읽고 E-35 를 세웠다 |
@@ -89,24 +89,25 @@ O-2·O-3 종료 후 미해결 구멍이 남아 있으면 이 순서로 재개한
 | 상 | Aramonte · Schrimpf · Shin (2021), *Non-bank Financial Intermediaries* | 비은행 노드 유형 목록. K-2(단계 열거) 보조 |
 | 중 | Shin (2009), *Securitisation and Financial Stability* | 증권화가 총 부채를 확장하는 메커니즘. K-5 보조 |
 | 중 | Adrian · Shin (2010), *The Changing Nature of Financial Intermediation* (SR 439) | 시장성 조달의 부상 |
-| 중 | Adrian · Etula · Muir, *Financial Intermediaries and the Cross-Section of Asset Returns* | 레버리지가 가격 인자. PH-5 접속점 |
+| 중 | Adrian · Etula · Muir, *Financial Intermediaries and the Cross-Section of Asset Returns* | 레버리지가 가격 인자. 예측 접속점이며 그 자리는 형식층 넷에 들지 않는다 |
 | 하 | Adrian · Boyarchenko (2012), *Intermediary Leverage Cycles* | DSGE. 대표주체라 노드 없음 — B-3 주의 |
 | 하 | Adrian · Shin (2008), SR 346 | SR 328(E-02)과 중복 큼 |
 | 하 | Adrian · Shin (2009), SR 360 | 14쪽 요약판 |
 | 하 | Adrian · Shin (2008), *Liquidity and Financial Contagion* (FSR 챕터) | 위 셋과 중복 |
 | 하 | Adrian · Shin (2009), SR 382, *The Shadow Banking System* | O-2 보조로 재배치 |
+| 중 | Pozsar (2015), *A Macro View of Shadow Banking* | O-2 비★ 잔여. 레버드 베타와 도매조달. **조달이 들어와 묶음 안에 있다.** S-4 의 포화 카운트에 든다 |
 
 ---
 
-## 4. 다른 단계에서 필요해질 것
+## 4. 다른 자리에서 필요해질 것
 
-현 단계(PH-0~3) 범위 밖이지만 뭉치에 있고 나중에 쓴다.
+현 아크의 판별선 밖이지만 뭉치에 있고 나중에 쓴다. 아래 표의 첫 칸은 폐기된 단계 축을 쓰던 자리이며, 층으로 번역되는 것은 층을 쓰고 아크로 번역되는 것은 아크를 쓰며 어느 쪽도 아닌 것은 대기 조건을 직접 든다.
 
 | 단계 | 문헌군 |
 |---|---|
-| PH-3 (동학층) | Morris·Shin 전략적 보완성 8편 — 신념·조정 primitive. 대차대조표 primitive와 다른 계통이므로 층 진입 시 별도 판정 필요 |
-| PH-4 (전파) | di Iasio·Pozsar 2편(형식 모형), Cifuentes·Ferrucci·Shin *Liquidity Risk and Contagion* |
-| PH-5 (예측) | Adrian·Boyarchenko·Giannone *Vulnerable Growth*, Adrian 외 *Term Structure of Growth-at-Risk* |
+| 동학층 | Morris·Shin 전략적 보완성 8편 — 신념·조정 primitive. 대차대조표 primitive와 다른 계통이므로 층 진입 시 별도 판정 필요 |
+| `propagation` 아크 | di Iasio·Pozsar 2편(형식 모형), Cifuentes·Ferrucci·Shin *Liquidity Risk and Contagion*. **di Iasio·Pozsar 는 이미 추출됐고 그 기록이 E-48 이다.** 남은 것은 Cifuentes·Ferrucci·Shin 하나다 |
+| 재유입 범위 밖 | Adrian·Boyarchenko·Giannone *Vulnerable Growth*, Adrian 외 *Term Structure of Growth-at-Risk*. 예측은 형식층 넷에 들지 않으며 그 자리를 세우는 결정이 아직 없다. R-12 가 재유입 범위를 층으로 재므로 이 묶음은 그 범위 밖이다 |
 | 노드 유형 확장 | Banerjee·Shin·Vidal Pastor *Elasticity of Money in Production Networks*. 비금융기업 대차대조표를 든다. **Kim·Shin *Theory of Supply Chains* 는 이 배정에서 빠졌다.** `claim-4` 가 E-19 와 짝으로 당겨 읽었고 그 추출 기록이 E-20 이다 |
 | J-3 관측 과제 | BIS 2025 Triennial 계열 3편 (뭉치. 둘은 관측 과제의 보조이고 하나는 Tier C) — FX 스왑 총액 복원 데이터 |
 | 제약의 규제적 원천 | 규제·정책 10편. B-5에 따라 처방은 비추출, 제약의 근거만 확인 |
@@ -132,3 +133,18 @@ CQ 에 직결되어 구간 순서 밖에서 들어왔다. **지목 참조한 편
 
 **비★ 구간 셋이 모두 열려 있고 어느 것도 S-4 로 종료되지 않았다.** 구멍이 지목으로 조달되는 동안
 구간이 열린 채 남는 것은 정상이다. 종료 판정이 필요해지는 때는 **지목으로 조달할 구멍이 마르는 때**다.
+
+---
+
+## 6. 「즉시」 구간의 한 묶음이 재유입 범위 밖으로 밀렸다
+
+**§1 의 첫 행이 드는 Danielsson · Shin · Zigrand 계열 셋은 즉시 구간에 서 있으나 읽는 자리가
+뒤로 밀렸다.** 그 셋이 재는 것이 실제 위험의 측정 대응이고 그 자리가 동학층에 서므로, R-12 가
+재유입 대상의 범위를 층으로 재어 동학층 산출을 뺀 판정이 그대로 걸린다.
+
+**표제를 고치지 않는다.** 표제를 고치면 그 편이 뒤로 밀린 사실이 기록되지 않는다. §1 이 「구멍이
+열릴 때 즉시」로 서는 것은 그 구멍이 깨는 시점을 드는 것이고, 그 구멍이 아직 깨지 않았다는 것이
+이 절이 드는 사실이다.
+
+**조달이 들어왔으나 여는 이유를 만들지 않는다.** 묶음에 그 셋이 있다는 것과 이 프로젝트가 그것을
+소비할 자리가 있다는 것이 다르다.
