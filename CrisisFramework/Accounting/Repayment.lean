@@ -29,6 +29,7 @@
 
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import CrisisFramework.Definition.Claim
+import CrisisFramework.Definition.Hierarchy
 import CrisisFramework.Definition.Trigger
 
 open Finset
@@ -84,6 +85,32 @@ def isSolvent (assetTotal liabilityTotal : ℤ) : Bool :=
 -- DD:CF-1260
 def meetsWithdrawal (withdrawn cashLike : ℤ) : Bool :=
   decide (withdrawn ≤ cashLike)
+
+/--
+상환 실패.
+
+**대응 비형식 개념:** 한 구간에 지급 의무가 선 액수를 그 구간에 내준 액수가 다 맞추지 못한 상태.
+초석 명제의 넷째 절이 실제 상환 실패를 위계 하단에 두고 상단은 디폴트하지 않고 조정한다고 적으므로,
+그 절이 가르는 두 상태 가운데 앞의 것이다.
+
+**이 정의가 배제하는 사례:**
+신용장에서 제시 서류가 조건과 불일치하여 개설은행이 지급을 거절한 것(UCP 600 제16조). 조건이
+충족되지 않아 지급 의무가 발생하지 않았으므로 의무액이 영이고 이 판정이 거짓을 낸다. 그리고 은행이
+정기예금의 조기 인출을 위약금 없이 허용해 약정 만기 전에 내준 것(바젤 III LCR 제83절)도 배제한다.
+계약이 요구하지 않은 것을 내준 것이므로 내준 액수가 의무액을 넘어 이 판정이 거짓을 낸다.
+
+**기각한 대체 정의:**
+상환 실패를 세 경로로 분할하는 안. V-5 가 측정 대응이 다르지 않은 둘을 가르지 못하게 하고, 실패의
+세 경로가 같은 데이터로 측정되어 그 분기가 확인되지 않은 것으로 남아 있다. 분할하면 판정이 셋으로
+쪼개져 각각이 자기 인자를 받았을 것이므로 그 기각이 이 판정의 수를 정한다. 지급능력 판정을 부르는
+안도 기각했다. 두 판정이 읽는 값이 다르고 서로를 함의하지 않으므로 부르면 자산 총액과 부채 총액이
+이 판정의 서명에 들어오고, 그 둘이 읽히지 않는 자리에서 이 판정이 설 수 없게 된다.
+
+**수 체계를 받지 않는다.** 두 인자가 `ℤ` 이며 회계층의 기본 수 체계다.
+-/
+-- DD:CF-1316
+def failsRepayment (dueAmount paidAmount : ℤ) : Bool :=
+  decide (paidAmount < dueAmount)
 
 /--
 부채 총계.
@@ -239,5 +266,42 @@ theorem exists_adjustmentWithoutInsolvency :
   -- 인출 충족이 거짓이고, 자산이 1 에서 영으로 줄어도 부채가 영이면 지급능력이 두 시점에서
   -- 모두 참이다. 네 판정이 전부 `ℤ` 위의 닫힌 리터럴 비교라 `decide` 가 기준선 이하에서 닫는다.
   exact ⟨1, 0, 1, 0, 0, 0, by decide, by decide, by decide, by decide⟩
+
+/--
+위계가 엄격히 갈리는 두 주체에 대해 상단이 조정하고 하단이 실패하는 배치가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 위계가 엄격히 갈린 두 주체에서 상단이 조정으로
+살아남고 하단이 상환에 실패하는 배치가 하나도 서지 않는다는 것. 그것이 관측되면 초석 명제의 넷째
+절이 자리를 잃는다. 앞선 존재 진술이 조정으로 살아남는 자리를 세우되 위계 위치를 들지 않았으므로,
+이 진술은 그 자리에 위계를 색인으로 더한다.
+
+**존재 형태로 진술하는 까닭(T-6):** 위계 위치와 두 총액이 독립이고 둘을 잇는 고리가 구조에 없으므로
+전칭으로 세우면 그 고리를 가정으로 얹어야 하고 T-4 가 그것을 명시하게 한다. 존재로 세우면 그 배치가
+실현 가능하다는 것만 주장하며, 어느 조건에서 서는지는 전파를 다루는 아크가 받는다.
+
+**가정을 두지 않는다.**
+
+**위계는 액면가 약속의 강도로만 들어온다.** 두 주체의 강도를 받아 앞이 뒤보다 엄격히 강한 배치를
+세우며, 그 강도가 주체의 위계 위치를 유도한다. 강도 밖의 축은 이 진술이 들지 않는다.
+-/
+-- DD:CF-1316
+theorem exists_upperAdjustsLowerFails :
+    ∃ (upper lower : CrisisFramework.Definition.ParStrength)
+      (dueUpper paidUpper dueLower paidLower : ℤ)
+      (assetUpperBefore assetUpperAfter liabilityUpper : ℤ),
+      upper.atLeastAsStrong lower = true ∧
+      lower.atLeastAsStrong upper = false ∧
+      failsRepayment dueUpper paidUpper = false ∧
+      failsRepayment dueLower paidLower = true ∧
+      assetUpperAfter < assetUpperBefore ∧
+      isSolvent assetUpperBefore liabilityUpper = true ∧
+      isSolvent assetUpperAfter liabilityUpper = true := by
+  -- 존재 진술이므로 배치를 하나 들면 닫힌다. 강도를 순수 공적과 부보로 두면 앞이 뒤보다
+  -- 엄격히 강하고, 상단의 의무액과 지급액을 둘 다 영으로 두면 상환 실패가 거짓이며 하단의
+  -- 의무액 1 에 지급액 영을 두면 참이다. 상단의 자산이 1 에서 영으로 줄어도 부채가 영이면
+  -- 지급능력이 두 시점에서 모두 참이다. 아홉 값이 전부 닫힌 리터럴이고 일곱 판정이 유한 열거와
+  -- `ℤ` 위의 비교라 `decide` 가 기준선 이하에서 닫는다.
+  exact ⟨.publicMoney, .insuredMoney, 0, 0, 1, 0, 1, 0, 0,
+    by decide, by decide, by decide, by decide, by decide, by decide, by decide⟩
 
 end CrisisFramework.Accounting
