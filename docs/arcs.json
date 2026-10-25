@@ -107,13 +107,48 @@
     },
     {
       "name": "propagation",
-      "discriminator": "되먹임 루프를 어떤 점화식으로 쓰는가",
-      "phases": [],
-      "status": "reserved",
-      "opened": null,
+      "discriminator": "위계 위치가 대차대조표 제약의 어느 계수로 들어가는가",
+      "phases": [
+        "propagation-1",
+        "propagation-2",
+        "propagation-3",
+        "propagation-4",
+        "propagation-5",
+        "propagation-6",
+        "propagation-7",
+        "propagation-8"
+      ],
+      "status": "open",
+      "opened": "2026-10-25",
       "closed": null,
-      "holes": [],
-      "cq": []
+      "holes": [
+        "CF-207",
+        "CF-218",
+        "CF-834",
+        "CF-1005",
+        "CF-1006",
+        "CF-1007",
+        "CF-1150",
+        "CF-1181",
+        "CF-1183",
+        "CF-1185",
+        "CF-1186",
+        "CF-1189",
+        "CF-1272",
+        "CF-1289",
+        "CF-1293",
+        "CF-1294",
+        "CF-1295",
+        "CF-1297",
+        "CF-1298",
+        "CF-1404",
+        "CF-1405",
+        "CF-1406"
+      ],
+      "cq": [
+        "CQ-fin-8",
+        "CQ-fin-9"
+      ]
     },
     {
       "name": "network",
