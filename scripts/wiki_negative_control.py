@@ -1105,6 +1105,171 @@ def inj_35_gapnum(root):
 
 
 
+def inj_26(root):
+    """꼬리의 `clarifies` 를 원장에 없는 id 로 바꾼다.
+
+    검사 27 이 대상의 실재와 비폐기를 검사 26 의 몫으로 두고 건너뛰므로 이 주입이 검사 26
+    하나만 겨눈다. 꼬리를 든 항목을 원장에서 골라 그 필드만 바꾸고 `resolves` 는 그대로 둔다.
+    """
+    tail = pick(root, "decisions", lambda e: e.get("clarifies") is not None)
+    ghost = "CF-99026"
+    led = check_wiki.Ledger(root)
+    if ghost in led.by_id:
+        raise SystemExit(f"{ghost} 가 원장에 이미 있어 없는 id 로 쓰지 못한다")
+    edit(root, "decisions", tail["id"], lambda e: e.__setitem__("clarifies", ghost))
+    return ghost
+
+
+def inj_27(root):
+    """꼬리의 `resolves` 의 `phrase` 를 대상 항목의 산문에 없는 값으로 바꾼다.
+
+    `clarifies` 는 그대로 두어 검사 26 이 걸리지 않게 한다. 대상이 살아 있는 꼬리를 고르는
+    까닭은 검사 27 이 폐기된 대상을 건너뛰어 주입이 조건을 만들지 못하는 것이다.
+    """
+    led = check_wiki.Ledger(root)
+    tail = pick(root, "decisions",
+                lambda e: (e.get("clarifies") in led.by_id
+                           and e.get("clarifies") not in led.dead
+                           and isinstance(e.get("resolves"), list)
+                           and e.get("resolves")))
+    tgt = led.by_id[tail["clarifies"]]
+    prose = str(tgt.get("statement") or "") + str(tgt.get("basis") or "")
+    phrase = "음성 대조가 주입한 지목 문구다"
+    if phrase in prose:
+        raise SystemExit("주입할 문구가 대상의 산문에 이미 있어 조건을 만들지 못한다")
+
+    def bend(e):
+        e["resolves"][0]["phrase"] = phrase
+
+    edit(root, "decisions", tail["id"], bend)
+    return phrase
+
+
+# 검사 29 의 주입이 쓰는 아크. **답할 항과 그 처분이 일대일인 닫힌 아크여야 한다.** 일대일이
+# 아닌 아크를 쓰면 한 처분을 바꿔도 다른 처분이 남아 그 검사가 통과하여 주입이 공허해진다.
+# 그 조건을 주입 안에서 단언하므로, 원장이 달라져 조건이 깨지면 조용히 통과하지 않고 선다.
+INJ_29_ARC = "claim"
+
+
+def inj_29(root):
+    """닫힌 아크의 한 처분 항목이 드는 답할 항의 값을 그 아크의 다른 답할 항으로 바꾼다.
+
+    바꾼 뒤에도 그 값이 고정 절에 있으므로 「고정 절에 없다」가 아니라 「그 처분을 드는 것이
+    없다」 하나만 새로 선다. 고정 절 밖의 번호로 바꾸면 한 주입이 두 위반을 내어 어느 쪽이
+    이 검사의 몫인지가 갈리지 않는다.
+    """
+    led = check_wiki.Ledger(root)
+    a = led.arcs.get(INJ_29_ARC)
+    if a is None or a.get("status") != "closed":
+        raise SystemExit(f"아크 `{INJ_29_ARC}` 가 없거나 닫혀 있지 않다")
+    cqs = [str(x) for x in (a.get("cq") or [])]
+    if len(cqs) < 2:
+        raise SystemExit(f"아크 `{INJ_29_ARC}` 의 답할 항이 둘 미만이라 다른 번호로 바꾸지 못한다")
+    holder: dict = {}
+    for _n, e in led.entries:
+        if not (isinstance(e.get("origin"), dict)
+                and e["origin"].get("arc") == INJ_29_ARC):
+            continue
+        for item in (e.get("cq_disposition") or []):
+            if isinstance(item, dict):
+                holder.setdefault(str(item.get("cq")), []).append(e["id"])
+    if any(len(holder.get(c, [])) != 1 for c in cqs):
+        raise SystemExit(f"아크 `{INJ_29_ARC}` 의 답할 항과 처분이 일대일이 아니라 주입이 공허해진다")
+    victim, other = cqs[0], cqs[1]
+    eid = holder[victim][0]
+
+    def bend(e):
+        for item in e["cq_disposition"]:
+            if isinstance(item, dict) and str(item.get("cq")) == victim:
+                item["cq"] = other
+
+    for reg in ("decisions", "deferred", "retirements", "rejected"):
+        if any(x["id"] == eid for x in load(root, reg)[reg]):
+            edit(root, reg, eid, bend)
+            break
+    else:
+        raise SystemExit(f"{eid} 를 어느 레지스터에서도 찾지 못했다")
+    return victim
+
+
+def inj_30(root):
+    """어느 아크의 `cq` 에서 번호를 지워 어느 아크에도 걸리지 않은 답할 항을 만든다.
+
+    고를 자리를 이름 순으로 정해 판마다 같은 주입이 서게 한다. 아크 종료 검사는 이 항에서
+    돌지 않으므로 닫힌 아크를 골라도 그 검사가 함께 걸리지 않는다.
+    """
+    doc = arcs(root)
+    for a in sorted(doc["arcs"], key=lambda x: x["name"]):
+        if a.get("cq"):
+            gone = str(a["cq"].pop())
+            save_arcs(root, doc)
+            return gone
+    raise SystemExit("답할 항을 든 아크가 없어 지울 자리가 없다")
+
+
+# 지목 범위 세 갈래의 주입이 쓰는 문면. 갈래마다 그 갈래가 적발하는 꼴을 하나 담고 다른 갈래의
+# 꼴은 담지 않는다. `{tok}` 은 주입이 살아 있는 규율 조항으로 채운다.
+#
+# 표지와 절 번호는 실재하지 않는 값을 쓴다. 이 문면의 몫이 적발되는 것이므로 실재하는 조작이나
+# 절을 쓰면 그것을 지목한 자리로 읽히는데, 주입은 무엇도 지목하지 않는다. `Z` 로 여는 것이
+# 이 파일이 주입한 이름에 쓰는 접두사다.
+INJ_POINTER_LINE = {
+    "POINTER_COMMENT": "\n음성 대조가 주입한 문면이다. {tok} 의 주석이 그 자리를 든다.\n",
+    "POINTER_EPHEMERAL": "\n음성 대조가 주입한 문면이다. 조작 표지 Z9-O9 를 지목한다.\n",
+    "POINTER_SECTION": "\n음성 대조가 주입한 문면이다. 그 요구는 §99.7 이 든다.\n",
+}
+# 주입을 받는 영구 문면. 집행 문면이 그 검사의 유니버스에 들고 덧붙이는 자리가 말미라 다른
+# 검사의 앵커를 밀지 않는다.
+INJ_POINTER_DOC = "CLAUDE.md"
+
+
+def _inject_pointer(root, key):
+    """지목 범위의 한 갈래만 하나 늘린다.
+
+    **늘린 갈래와 그 수를 주입 안에서 단언한다.** 그 검사가 갈래마다 따로 맞대므로 다른 갈래가
+    함께 움직이면 어느 갈래의 탐지를 재는지가 갈리지 않으며, 늘지 않으면 주입이 공허해진다.
+    적발을 세는 쪽은 검증기에 선 함수를 그대로 부른다. 전사하면 한쪽을 고칠 때 다른 쪽이
+    조용히 낡는다.
+    """
+    led = check_wiki.Ledger(root)
+    dist, _exempt = check_wiki.r11_rules(led)
+    if dist is None:
+        raise SystemExit("R11 블록에 거리가 없어 주입과 판정이 같은 값을 쓰지 못한다")
+    before = {k: len(v) for k, v in
+              check_wiki.pointer_hits(led.pointer_scan_targets(), dist).items()}
+    # 폐기된 조항을 고르면 규율 ID 토큰을 보는 검사 24 가 먼저 잡아 이 주입이 그 뒤에 가려진다.
+    live = sorted(tok for tok, owner in led.name_owner.items() if owner not in led.dead)
+    if not live:
+        raise SystemExit("폐기되지 않은 규율 조항이 없어 주입이 서지 않는다")
+    f = root / INJ_POINTER_DOC
+    f.write_text(f.read_text(encoding="utf-8")
+                 + INJ_POINTER_LINE[key].format(tok=live[0]), encoding="utf-8")
+    after = {k: len(v) for k, v in
+             check_wiki.pointer_hits(
+                 check_wiki.Ledger(root).pointer_scan_targets(), dist).items()}
+    for k in before:
+        want = before[k] + 1 if k == key else before[k]
+        if after[k] != want:
+            raise SystemExit(f"주입이 {k} 를 {before[k]} 에서 {after[k]} 로 바꿨다. "
+                             f"{want} 여야 한다")
+    return key
+
+
+def inj_41_comment(root):
+    """규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다."""
+    return _inject_pointer(root, "POINTER_COMMENT")
+
+
+def inj_41_ephemeral(root):
+    """소진 문서의 식별자 꼴을 하나 더한다."""
+    return _inject_pointer(root, "POINTER_EPHEMERAL")
+
+
+def inj_41_section(root):
+    """앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다."""
+    return _inject_pointer(root, "POINTER_SECTION")
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -1169,6 +1334,13 @@ CASES = [
     ("42",  "wiki42-session-clause-mirror", "블록을 비운다",                               inj_42_empty,   None, None),
     ("35",  "wiki35-doc-form",              "같은 번호를 가진 추출 기록을 둔다",            inj_35_dupnum,  None, None),
     ("35",  "wiki35-doc-form",              "중간 번호의 추출 기록을 옮겨 결번을 만든다",   inj_35_gapnum,  None, None, "nocatch"),
+    ("26",  "wiki26-clarify-target",        "clarifies 를 없는 id 로 바꾼다",               inj_26,         None, None),
+    ("27",  "wiki27-clarify-resolves",      "phrase 를 대상의 산문에 없는 값으로 바꾼다",   inj_27,         None, None),
+    ("30",  "wiki30-cq-unclaimed",          "어느 아크의 cq 에서 번호를 지워 미배정으로 만든다", inj_30,    "CQ-fin-", None),
+    ("29",  "wiki29-arc-cq",                "닫힌 아크의 한 처분 항목의 답할 항 값을 다른 번호로 바꾼다", inj_29, None, INJ_29_ARC),
+    ("41",  "wiki41-rule-comment-pointer",  "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment,   None, None),
+    ("41",  "wiki41-rule-comment-pointer",  "소진 문서의 식별자 꼴을 하나 더한다",          inj_41_ephemeral, None, None),
+    ("41",  "wiki41-rule-comment-pointer",  "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None, None),
 ]
 
 
