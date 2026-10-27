@@ -6,8 +6,12 @@
       "name": "primary",
       "discriminator": "아크 개념 이전의 작업 전체. PH-0 부터 PH-2 초입까지 걸치므로 판별선 하나 규칙의 예외이며, 소급 선언이라 opened 가 없고 closed 는 선언 시점이다",
       "phases": [
-        "primary-1",
-        "primary-2"
+        {
+          "name": "primary-1"
+        },
+        {
+          "name": "primary-2"
+        }
       ],
       "status": "closed",
       "opened": null,
@@ -19,26 +23,66 @@
       "name": "charter",
       "discriminator": "이 연구를 무엇으로 규율하고 어떤 단위로 진행하는가",
       "phases": [
-        "charter-1",
-        "charter-2",
-        "charter-3",
-        "charter-4",
-        "charter-5",
-        "charter-6",
-        "charter-7",
-        "charter-8",
-        "charter-9",
-        "charter-10",
-        "charter-11",
-        "charter-12",
-        "charter-13",
-        "charter-14",
-        "charter-15",
-        "charter-16",
-        "charter-17",
-        "charter-18",
-        "charter-19",
-        "charter-20"
+        {
+          "name": "charter-1"
+        },
+        {
+          "name": "charter-2"
+        },
+        {
+          "name": "charter-3"
+        },
+        {
+          "name": "charter-4"
+        },
+        {
+          "name": "charter-5"
+        },
+        {
+          "name": "charter-6"
+        },
+        {
+          "name": "charter-7"
+        },
+        {
+          "name": "charter-8"
+        },
+        {
+          "name": "charter-9"
+        },
+        {
+          "name": "charter-10"
+        },
+        {
+          "name": "charter-11"
+        },
+        {
+          "name": "charter-12"
+        },
+        {
+          "name": "charter-13"
+        },
+        {
+          "name": "charter-14"
+        },
+        {
+          "name": "charter-15"
+        },
+        {
+          "name": "charter-16"
+        },
+        {
+          "name": "charter-17"
+        },
+        {
+          "name": "charter-18"
+        },
+        {
+          "name": "charter-19"
+        },
+        {
+          "name": "charter-20"
+        }
       ],
       "status": "closed",
       "opened": "2026-09-19",
@@ -50,13 +94,27 @@
       "name": "claim",
       "discriminator": "청구권은 누구에게 무엇을 언제 요구하는가",
       "phases": [
-        "claim-1",
-        "claim-2",
-        "claim-3",
-        "claim-4",
-        "claim-5",
-        "claim-6",
-        "claim-7"
+        {
+          "name": "claim-1"
+        },
+        {
+          "name": "claim-2"
+        },
+        {
+          "name": "claim-3"
+        },
+        {
+          "name": "claim-4"
+        },
+        {
+          "name": "claim-5"
+        },
+        {
+          "name": "claim-6"
+        },
+        {
+          "name": "claim-7"
+        }
       ],
       "status": "closed",
       "opened": "2026-09-23",
@@ -74,15 +132,33 @@
       "name": "collateral",
       "discriminator": "담보는 무엇을 얼마나 몇 번 떠받치는가",
       "phases": [
-        "collateral-1",
-        "collateral-2",
-        "collateral-3",
-        "collateral-4",
-        "collateral-5",
-        "collateral-6",
-        "collateral-7",
-        "collateral-8",
-        "collateral-9"
+        {
+          "name": "collateral-1"
+        },
+        {
+          "name": "collateral-2"
+        },
+        {
+          "name": "collateral-3"
+        },
+        {
+          "name": "collateral-4"
+        },
+        {
+          "name": "collateral-5"
+        },
+        {
+          "name": "collateral-6"
+        },
+        {
+          "name": "collateral-7"
+        },
+        {
+          "name": "collateral-8"
+        },
+        {
+          "name": "collateral-9"
+        }
       ],
       "status": "closed",
       "opened": "2026-10-02",
@@ -109,14 +185,74 @@
       "name": "propagation",
       "discriminator": "위계 위치가 대차대조표 제약의 어느 계수로 들어가는가",
       "phases": [
-        "propagation-1",
-        "propagation-2",
-        "propagation-3",
-        "propagation-4",
-        "propagation-5",
-        "propagation-6",
-        "propagation-7",
-        "propagation-8"
+        {
+          "name": "propagation-1",
+          "builds": "규율. 앞 아크가 넘긴 절차 결함 가운데 조항 둘과 판정 주석 하나를 발행하고 현재 국면 절의 낡은 세 문면에서 값의 전사를 걷으며 아크 개막의 카드를 싣는다",
+          "holes": []
+        },
+        {
+          "name": "propagation-2",
+          "builds": "설비. 아크 상태가 가르는 것과 계수 자리의 유니버스와 음성 대조의 빈틈 넷과 페이즈 레코드의 객체화를 받고 영구 문면의 지목 범위에 기계 관문을 세운다",
+          "holes": [
+            "CF-1405",
+            "CF-1406"
+          ]
+        },
+        {
+          "name": "propagation-3",
+          "builds": "처분. 판별선 밖 열하나를 폐기 레코드와 새 구멍의 쌍으로 처분하고 뭉치 인벤토리의 구성원 행마다 추출 기록 번호를 들게 한다",
+          "holes": [
+            "CF-207",
+            "CF-218",
+            "CF-834",
+            "CF-1005",
+            "CF-1006",
+            "CF-1150",
+            "CF-1183",
+            "CF-1185",
+            "CF-1186",
+            "CF-1189",
+            "CF-1295"
+          ]
+        },
+        {
+          "name": "propagation-4",
+          "builds": "정의층. 유동성 풋의 위계와 중앙은행 받침의 노드 색인을 세우고 그 측정 사상 명세를 병행한다. `CQ-fin-8` 의 남은 칸이 이 자리에서 처분된다",
+          "holes": [
+            "CF-1181",
+            "CF-1294"
+          ]
+        },
+        {
+          "name": "propagation-5",
+          "builds": "정의층과 관측층. 부채를 핵심과 비핵심으로 가르는 분할을 세우고 단기 부채 총계를 공시에서 읽는 수단을 병행한다",
+          "holes": [
+            "CF-1289",
+            "CF-1293"
+          ]
+        },
+        {
+          "name": "propagation-6",
+          "builds": "회계층. 제약식에 보유를 넣고 위계 위치에서 계수가 나오는 고리를 세우며 노드 종류별 관측 칸을 병행한다",
+          "holes": [
+            "CF-1007",
+            "CF-1297",
+            "CF-1298"
+          ]
+        },
+        {
+          "name": "propagation-7",
+          "builds": "진술. 초석 명제 넷째 절을 존재 진술로 세워 시험하고 축소의 까닭을 가르는 축과 `CQ-fin-9` 의 조립을 세운다. `CQ-fin-9` 의 남은 칸이 이 자리에서 처분된다",
+          "holes": [
+            "CF-1272",
+            "CF-1404"
+          ]
+        },
+        {
+          "name": "propagation-8",
+          "builds": "병합 전용. 앞 페이즈의 미전사분을 받아 원장에 넣고 아크를 닫는다. 새 낙착을 낳지 않는다",
+          "holes": []
+        }
       ],
       "status": "open",
       "opened": "2026-10-25",
@@ -177,13 +313,27 @@
       "name": "hierarchy",
       "discriminator": "위계는 누가 누구 위에 서고 그 자리가 무엇을 가르는가",
       "phases": [
-        "hierarchy-1",
-        "hierarchy-2",
-        "hierarchy-3",
-        "hierarchy-4",
-        "hierarchy-5",
-        "hierarchy-6",
-        "hierarchy-7"
+        {
+          "name": "hierarchy-1"
+        },
+        {
+          "name": "hierarchy-2"
+        },
+        {
+          "name": "hierarchy-3"
+        },
+        {
+          "name": "hierarchy-4"
+        },
+        {
+          "name": "hierarchy-5"
+        },
+        {
+          "name": "hierarchy-6"
+        },
+        {
+          "name": "hierarchy-7"
+        }
       ],
       "status": "closed",
       "opened": "2026-10-15",

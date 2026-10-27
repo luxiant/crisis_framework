@@ -176,8 +176,9 @@ def inj_03p(root):
     이름이 함께 뒤로 가므로 유도가 스스로 유지된다."""
     a = arcs(root)
     charter = next(x for x in a["arcs"] if x["name"] == "charter")
-    phase = f"charter-{max(int(p.rsplit('-', 1)[1]) for p in charter['phases']) + 1}"
-    if phase in charter["phases"]:
+    declared = check_wiki.arc_phase_names(charter)
+    phase = f"charter-{max(int(p.rsplit('-', 1)[1]) for p in declared) + 1}"
+    if phase in declared:
         raise SystemExit(f"유도한 페이즈 `{phase}` 가 이미 선언돼 있어 주입이 조건을 만들지 못한다")
     edit(root, "decisions", "CF-24", lambda e: e["origin"].__setitem__("phase", phase))
     doc = arcs(root)

@@ -335,6 +335,20 @@ class Ledger:
         return out
 
 
+def arc_phase_names(a: dict) -> list[str]:
+    """아크 레코드가 선언한 페이즈의 이름. 순서는 그 배열의 것이다.
+
+    페이즈 레코드가 객체이고 이름이 `name` 필드에 서므로, 배열의 원소를 이름으로 바로 쓰는
+    자리는 객체와 문자열을 맞대어 한 건도 맞지 않게 된다. **그 배열을 읽는 자리가 넷이고 넷이
+    같은 사상을 쓰므로 여기 하나를 나누어 쓴다.** 전사하면 한쪽을 고칠 때 다른 쪽이 조용히
+    낡고, 둘이 다른 목록을 내는 것을 어느 검사도 잡지 못한다(SPEC §3.2).
+
+    객체가 아닌 원소는 이름을 내지 않는다. 그 꼴은 스키마를 어긴 것이므로 이름을 지어내 받으면
+    낡은 꼴이 조용히 서고, 내지 않으면 그 페이즈를 미선언으로 보는 검사가 소리 내어 걸린다.
+    """
+    return [str(p.get("name")) for p in (a.get("phases") or []) if isinstance(p, dict)]
+
+
 # --------------------------------------------------------------------------- 검사
 
 def check_01(led: Ledger) -> Report:
@@ -378,7 +392,7 @@ def _undeclared(led: Ledger) -> list[tuple[dict, str, str]]:
         a = led.arcs.get(arc)
         if a is None:
             continue
-        if phase not in (a.get("phases") or []):
+        if phase not in arc_phase_names(a):
             out.append((e, arc, phase))
     return out
 
@@ -424,7 +438,7 @@ def check_04a(led: Ledger) -> Report:
         if a is None:
             r.bad(f"패치의 아크 `{arc}` 가 arcs.json 에 없다")
             continue
-        if p.get("from") not in (a.get("phases") or []):
+        if p.get("from") not in arc_phase_names(a):
             r.bad(f"아크 `{arc}` 의 패치가 없는 페이즈 `{p.get('from')}` 에서 옮겼다고 적는다")
     r.note(f"move·split 패치 {n}건")
     return r
@@ -848,7 +862,7 @@ def phases_closed_after(led: "Ledger", phase: str) -> int | None:
     페이즈의 순서는 `arcs.json` 의 아크 순서와 아크마다의 `phases` 순서가 든다. 그 페이즈가
     그 목록에 없으면 셀 자리가 없으므로 `None` 이다.
     """
-    order = [p for a in led.arcs.values() for p in (a.get("phases") or [])]
+    order = [p for a in led.arcs.values() for p in arc_phase_names(a)]
     if phase not in order:
         return None
     d = led.root / "docs" / "phases"
@@ -1270,7 +1284,7 @@ def check_31(led: Ledger) -> Report:
 def check_32(led: Ledger) -> Report:
     r = Report("32", "wiki32-closure-phase",
                "페이즈 종료 문서의 페이즈가 어느 아크의 phases 에 선언되어 있는가", "fail")
-    declared = {p for a in led.arcs.values() for p in (a.get("phases") or [])}
+    declared = {p for a in led.arcs.values() for p in arc_phase_names(a)}
     d = led.root / "docs" / "phases"
     docs = sorted(d.glob("*-closure.md")) if d.is_dir() else []
     for f in docs:
