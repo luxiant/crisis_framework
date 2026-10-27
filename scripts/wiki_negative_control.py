@@ -951,7 +951,7 @@ def ko_word(value: int) -> str:
 
 
 def inj_40_count(root):
-    """계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다.
+    """계수 자리 가운데 하나의 수를 하나 틀리게 적는다.
 
     명세의 가름을 함께 드는 자리가 든 전체 계수를 하나 올린다. 자리를 하나만 건드리는 주입이므로
     그 자리와 정본이 어긋나는 것이 잡혀야 하고, 자리마다 따로 돌리지 않는다. 판정 대상 하나에 한
@@ -1493,7 +1493,7 @@ CASES = [
     ("38",  "wiki38-partition-exclusivity",  "모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다", inj_38_pair, None, None),
     ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty,        None, None),
     ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None, None),
-    ("40",  "wiki40-check-count-places",    "계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
+    ("40",  "wiki40-check-count-places",    "계수 자리 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
     ("41",  "wiki41-rule-comment-pointer",  "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None, None),
     ("42",  "wiki42-session-clause-mirror", "블록에서 살아 있는 조항 하나를 지운다",        inj_42_drop,    None, None),
     ("42",  "wiki42-session-clause-mirror", "블록에 폐기된 조항 하나를 더한다",             inj_42_retired, None, None),

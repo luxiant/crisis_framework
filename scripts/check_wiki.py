@@ -2046,7 +2046,7 @@ def check_39(led: Ledger) -> Report:
     return r
 
 
-# 검사 40 이 읽는 계수 자리 일곱. SPEC §2.1 이 그 일곱을 들고 정렬 상수의 길이가 전체 계수의
+# 검사 40 이 읽는 계수 자리. SPEC §2 의 세 절이 그 자리를 들고 정렬 상수의 길이가 전체 계수의
 # 정본이다(CF-1175). 나머지 여섯 자리는 그 값이나 그 가름을 산문으로 든다.
 #
 # **자리마다 어느 값을 드는지가 다르다.** 전체 계수와 실패시키는 것과 보고만 하는 것과 아크 종료
@@ -2149,7 +2149,7 @@ def count_spec_sections(text: str) -> tuple[list[tuple[str, str, int, int]], lis
 
 def check_40(led: Ledger) -> Report:
     r = Report("40", "wiki40-check-count-places",
-               "검사의 계수가 실리는 일곱 자리가 ORDER 의 길이와 같은 값을 드는가", "fail")
+               "검사의 계수가 실리는 자리가 ORDER 의 길이와 같은 값을 드는가", "fail")
     text: dict[str, str] = {}
     for rel in (COUNT_SPEC, COUNT_VERIFY, COUNT_WIKI):
         f = led.root / rel
