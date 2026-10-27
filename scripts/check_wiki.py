@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔셋을 돈다. 실패시키는 것 서른넷과 보고만 하는 것 여섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔여섯을 돈다. 실패시키는 것 서른일곱과 보고만 하는 것 여섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -341,7 +341,7 @@ def arc_phase_names(a: dict) -> list[str]:
     페이즈 레코드가 객체이고 이름이 `name` 필드에 서므로, 배열의 원소를 이름으로 바로 쓰는
     자리는 객체와 문자열을 맞대어 한 건도 맞지 않게 된다. **그 배열을 읽는 자리가 넷이고 넷이
     같은 사상을 쓰므로 여기 하나를 나누어 쓴다.** 전사하면 한쪽을 고칠 때 다른 쪽이 조용히
-    낡고, 둘이 다른 목록을 내는 것을 어느 검사도 잡지 못한다(SPEC §3.2).
+    낡고, 둘이 다른 목록을 내는 것을 어느 검사도 잡지 못한다(SPEC §3.6).
 
     객체가 아닌 원소는 이름을 내지 않는다. 그 꼴은 스키마를 어긴 것이므로 이름을 지어내 받으면
     낡은 꼴이 조용히 서고, 내지 않으면 그 페이즈를 미선언으로 보는 검사가 소리 내어 걸린다.
@@ -615,7 +615,7 @@ def check_11(led: Ledger) -> Report:
 
 
 # 범위 밖인 아크의 상태 값. 아크가 영영 열리지 않는다는 처분이며 검사 12 와 28 이 그 값을
-# 읽는다. 어휘의 정본은 SPEC §3.2 의 아크 레코드 필드 표다.
+# 읽는다. 어휘의 정본은 SPEC §3.6 의 아크 레코드 필드 표다.
 ARC_OUT_OF_SCOPE = "out_of_scope"
 
 
@@ -1072,7 +1072,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43",
+         "42", "43", "44", "45", "46",
          "29", "30"]
 
 
@@ -2064,28 +2064,8 @@ COUNT_WIKI = "scripts/check_wiki.py"
 # 자리도 전부 뿌리에서 읽어 일곱이 한 판을 본다.
 COUNT_ORDER_LIST = re.compile(r"^ORDER = \[(.*?)\]", re.M | re.S)
 COUNT_ORDER_ITEM = re.compile(r'"[^"]+"')
-# 명세 §2.1 의 절 제목과 그 표의 행. 제목은 자리 2 이고 행의 수는 자리 3 이다. 머리와 가름 줄은
-# 첫 칸이 검사 번호가 아니라 세지 않는다.
-COUNT_SPEC_HEADING = re.compile(r"^### 2\.1 실패시키는 검사 \(([가-힣]+)\)$", re.M)
+# 명세 §2 의 표의 행. 머리와 가름 줄은 첫 칸이 검사 번호가 아니라 세지 않는다.
 COUNT_SPEC_ROW = re.compile(r"^\|\s*\*\*\S+\*\*\s*\|")
-# 산문으로 계수를 드는 자리 다섯. 자리마다 (이름, 경로, 꼴, 그 꼴이 드는 값의 차례) 다.
-COUNT_PLACES = (
-    ("SPEC.md §2 의 머리 계수", COUNT_SPEC,
-     re.compile(r"검사는 ([가-힣]+)이다\. 실패시키는 것 ([가-힣]+), 보고만 하는 것 ([가-힣]+), "
-                r"아크 종료 시에만 도는 것 ([가-힣]+)이다\."),
-     (COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC)),
-    ("SPEC.md §2.1 의 절 제목", COUNT_SPEC, COUNT_SPEC_HEADING, (COUNT_FAIL,)),
-    ("verify.sh 의 머리 주석", COUNT_VERIFY,
-     re.compile(r"원장 검증기 check_wiki\.py 호출 \(SPEC\.md §2 의 검사 ([가-힣]+)\)"),
-     (COUNT_TOTAL,)),
-    ("check_wiki.py 의 머리 주석", COUNT_WIKI,
-     re.compile(r"§2 의 검사 ([가-힣]+)[을를] 돈다\. 실패시키는 것 ([가-힣]+)과 "
-                r"보고만 하는 것 ([가-힣]+)과\s*아크 종료 시에만 도는 것 ([가-힣]+)이다\."),
-     (COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC)),
-    ("check_wiki.py 의 명령행 설명", COUNT_WIKI,
-     re.compile(r'ArgumentParser\(description="원장 검증기 \(SPEC\.md §2 의 검사 ([가-힣]+)\)"\)'),
-     (COUNT_TOTAL,)),
-)
 # 한글 수사를 값으로 읽는 표. 검사 36 의 `KO_NUMERAL` 을 쓰지 않는 까닭은 그 표가 스물까지의 닫힌
 # 목록이고 표 밖의 수사를 실패로 내는 것이 그 검사의 처분이라는 데 있다. 검사의 계수가 이미 서른을
 # 넘었으므로 이 자리는 열 자리와 한 자리를 조합해 읽는다.
@@ -2093,6 +2073,35 @@ COUNT_KO_UNIT = {"하나": 1, "둘": 2, "셋": 3, "넷": 4, "다섯": 5, "여섯
                  "여덟": 8, "아홉": 9}
 COUNT_KO_TENS = {"열": 10, "스물": 20, "서른": 30, "마흔": 40, "쉰": 50, "예순": 60,
                  "일흔": 70, "여든": 80, "아흔": 90}
+# 한글 수사의 꼴. 위 두 표에서 지어 쓰며 따로 적지 않는다. 전사하면 표에 수사를 더하는 회차가
+# 이 꼴을 잊어 그 수사를 쓴 자리가 유니버스에서 조용히 빠진다. 긴 것을 앞에 두는 까닭은
+# 「마흔여섯」이 「마흔」으로 잘려 값이 달라지는 것을 막는 것이다.
+COUNT_KO_FORM = "(?:" + "|".join(sorted(
+    [t + u for t in COUNT_KO_TENS for u in COUNT_KO_UNIT]
+    + list(COUNT_KO_TENS) + list(COUNT_KO_UNIT), key=len, reverse=True)) + ")"
+# 계수를 드는 자리를 유도하는 꼴 셋. 규약의 정본은 SPEC §2 의 머리이며, 열거를 쓰지 않는 까닭은
+# 검사를 하나 더하는 회차가 열거에서 한 자리를 잊으면 그대로 통과하고 그 낡음을 어느 검사도 보지
+# 않는다는 것이다.
+#
+# **가름을 함께 드는 자리**는 전체 계수 뒤에 세 가름이 그 순서로 따른다. 사이에 끼는 문면의 길이를
+# 묶는 까닭은 묶지 않으면 한 파일의 멀리 떨어진 두 문면이 한 자리로 붙어 잡히는 것이다.
+#
+# **전체만 드는 자리**는 명세의 그 절을 지목하고 이어 조사 없이 수사를 든다. 그 지목을 함께 요구하는
+# 까닭은 「검사 셋의 판정」처럼 검사의 수를 세지 않는 산문이 그 지목 없이 같은 꼴로 서기 때문이며,
+# 요구하지 않으면 그런 자리가 여섯 잡혀 이 검사가 제 유니버스를 잃는다.
+#
+# **절 제목**은 괄호의 수사가 그 절의 표의 행 수를 들고, 어느 가름을 드는지는 제목의 낱말에서
+# 유도한다. 번호를 박지 않으므로 절이 하나 더 서면 그 자리가 저절로 유니버스에 든다.
+COUNT_GROUP_FORM = re.compile(
+    r"검사[는은]?\s*(" + COUNT_KO_FORM + r")(?:이다|을|를)"
+    r"[^\n]{0,40}?실패시키는 것\s*(" + COUNT_KO_FORM + r")"
+    r".{0,60}?보고만 하는 것\s*(" + COUNT_KO_FORM + r")"
+    r".{0,60}?아크 종료 시에만 도는 것\s*(" + COUNT_KO_FORM + r")", re.S)
+COUNT_TOTAL_FORM = re.compile(r"§2 의 검사\s(" + COUNT_KO_FORM + r")")
+COUNT_SECTION_HEAD = re.compile(r"^### 2\.\d+ ")
+COUNT_HEADING_FORM = re.compile(r"^### 2\.\d+ (.+?) \((" + COUNT_KO_FORM + r")\)$")
+COUNT_HEADING_KIND = {"실패시키는": COUNT_FAIL, "보고만 하는": COUNT_REPORT,
+                      "아크 종료": COUNT_ARC}
 
 
 def ko_count(word: str) -> int | None:
@@ -2107,19 +2116,35 @@ def ko_count(word: str) -> int | None:
     return None
 
 
-def spec_fail_rows(text: str) -> int | None:
-    """명세 §2.1 의 표의 행 수. 절 제목을 한 번으로 찾지 못하면 셀 자리가 없으므로 None 이다."""
+def count_spec_sections(text: str) -> tuple[list[tuple[str, str, int, int]], list[str]]:
+    """§2 의 절 제목마다 (제목, 어느 가름인가, 제목이 든 수, 그 절의 표의 행 수) 와 결손의 목록.
+
+    괄호에 수사를 들지 않는 절 제목과 낱말에서 가름이 유도되지 않는 절 제목을 결손으로 낸다.
+    건너뛰면 그 절이 계수를 들지 않는 절로 읽혀 유니버스에서 조용히 빠지고, 그 빠짐을 어느
+    검사도 보지 않는다.
+    """
+    out: list[tuple[str, str, int, int]] = []
+    bad: list[str] = []
     lines = text.splitlines()
-    at = [i for i, ln in enumerate(lines) if COUNT_SPEC_HEADING.match(ln)]
-    if len(at) != 1:
-        return None
-    rows = 0
-    for ln in lines[at[0] + 1:]:
-        if COUNT_SPEC_ROW.match(ln):
-            rows += 1
-        elif rows and not ln.startswith("|"):
-            break
-    return rows
+    for i, ln in enumerate(lines):
+        if not COUNT_SECTION_HEAD.match(ln):
+            continue
+        m = COUNT_HEADING_FORM.match(ln)
+        if m is None:
+            bad.append(f"절 제목 `{ln.strip()}` 이 괄호에 수사를 들지 않아 계수 자리에서 빠진다")
+            continue
+        kind = next((k for w, k in COUNT_HEADING_KIND.items() if w in m.group(1)), None)
+        if kind is None:
+            bad.append(f"절 제목 `{ln.strip()}` 의 낱말에서 어느 가름인지 유도되지 않는다")
+            continue
+        rows = 0
+        for x in lines[i + 1:]:
+            if COUNT_SPEC_ROW.match(x):
+                rows += 1
+            elif rows and not x.startswith("|"):
+                break
+        out.append((ln.strip(), kind, ko_count(m.group(2)) or 0, rows))
+    return out, bad
 
 
 def check_40(led: Ledger) -> Report:
@@ -2142,26 +2167,32 @@ def check_40(led: Ledger) -> Report:
     # 자리마다 (이름, 어느 값을 드는가, 그 수) 다. 한 자리가 네 값을 다 들면 넷이 선다.
     places: list[tuple[str, str, int]] = [
         ("check_wiki.py 의 정렬 상수", COUNT_TOTAL, order)]
-    # ㉡ 명세의 표의 행 수. 산문이 아니라 세어서 얻는 자리다.
-    rows = spec_fail_rows(text[COUNT_SPEC])
-    if rows is None:
-        r.bad(f"{COUNT_SPEC} 의 §2.1 절 제목을 한 번으로 찾지 못해 표의 행을 셀 수 없다")
-    else:
-        places.append(("SPEC.md §2.1 의 표의 행", COUNT_FAIL, rows))
-    # ㉢ 산문으로 계수를 드는 자리 다섯. 자리가 없거나 둘 이상이면 어느 것이 그 자리인지 갈리지
-    # 않으므로 실패로 낸다. 문면이 바뀌어 꼴이 맞지 않게 된 것도 이 자리에서 선다.
-    for name, rel, pat, keys in COUNT_PLACES:
-        hit = pat.findall(text[rel])
-        if len(hit) != 1:
-            r.bad(f"`{name}` 이 계수를 드는 자리가 {len(hit)} 개다. 하나여야 한다")
-            continue
-        words = hit[0] if isinstance(hit[0], tuple) else (hit[0],)
-        for key, word in zip(keys, words):
-            value = ko_count(word)
-            if value is None:
-                r.bad(f"`{name}` 이 든 수사 `{word}` 를 값으로 읽을 수 없다")
-            else:
-                places.append((name, key, value))
+    # ㉡ 산문의 자리를 꼴로 유도한다. **열거를 쓰지 않는 까닭은 검사를 하나 더하는 회차가
+    # 열거에서 한 자리를 잊으면 그대로 통과하고 그 낡음을 어느 검사도 보지 않는다는 것이다.**
+    # 가름을 함께 드는 자리가 그 전체 계수도 들므로, 그 자리에 겹치는 전체 자리를 다시 세지
+    # 않는다. 세면 한 문면이 두 자리로 보고된다.
+    for rel in (COUNT_SPEC, COUNT_VERIFY, COUNT_WIKI):
+        spans: list[tuple[int, int]] = []
+        for g in COUNT_GROUP_FORM.finditer(text[rel]):
+            spans.append(g.span())
+            for key, word in zip((COUNT_TOTAL, COUNT_FAIL, COUNT_REPORT, COUNT_ARC),
+                                 g.groups()):
+                places.append((f"{rel} 의 가름을 함께 드는 자리", key, ko_count(word) or 0))
+        for t in COUNT_TOTAL_FORM.finditer(text[rel]):
+            if any(a <= t.start(1) < b for a, b in spans):
+                continue
+            places.append((f"{rel} 의 전체 계수를 드는 자리", COUNT_TOTAL,
+                           ko_count(t.group(1)) or 0))
+    # ㉢ 절 제목이 든 수와 그 절의 표의 행 수. 둘을 따로 올려 그 둘이 갈리는 것도 이 자리에서
+    # 선다. 절을 번호로 박지 않으므로 절이 하나 더 서면 그 자리가 저절로 유니버스에 든다.
+    sections, head_bad = count_spec_sections(text[COUNT_SPEC])
+    for line in head_bad:
+        r.bad(line)
+    if not sections:
+        r.bad(f"{COUNT_SPEC} 에서 계수를 드는 절 제목을 하나도 찾지 못했다")
+    for title, kind, said, rows in sections:
+        places.append((f"{COUNT_SPEC} 의 절 제목 `{title}`", kind, said))
+        places.append((f"{COUNT_SPEC} 의 `{title}` 의 표의 행", kind, rows))
     # ㉣ 전체 계수를 드는 자리는 정본과 바로 맞댄다.
     for name, key, value in places:
         if key == COUNT_TOTAL and value != order:
@@ -2205,6 +2236,166 @@ def sessionclause_rules(led: Ledger) -> tuple[set[str], set[str]]:
         if m:
             clauses.add(m.group(1))
     return series, clauses
+
+
+# 검사 44 가 읽는 자리 셋. 음성 대조의 사례 목록과 검사가 선언한 단계 id 와 명세의 주입 시험 칸이며,
+# **셋을 전부 뿌리의 소스에서 읽는다.** 돌고 있는 모듈의 값을 세면 사본을 뿌리로 지목한 음성 대조가
+# 그 사본에 든 주입을 보지 못해 그 주입이 공허해진다. 검사 40 의 정렬 상수가 같은 사유로 그렇게 선다.
+NC_SOURCE = "scripts/wiki_negative_control.py"
+NC_CASES_LIST = re.compile(r"^CASES = \[(.*?)^\]", re.M | re.S)
+NC_CASE_ROW = re.compile(r'^\s*\("([^"]+)",\s*"([^"]+)"', re.M)
+REPORT_DECL = re.compile(r'Report\(\s*"([^"]+)",\s*"([^"]+)"')
+# 명세 §2 의 표의 행에서 번호와 칸을 뽑는 꼴. 주입 시험 칸이 마지막 열이다.
+SPEC_ROW_CELLS = re.compile(r"^\|\s*\*\*(\S+?)\*\*\s*\|(.*)\|\s*$")
+
+
+def spec_injection_cells(text: str) -> dict[str, str]:
+    """§2 의 절마다 그 표의 행의 (검사 번호, 주입 시험 칸). 칸이 비면 빈 문자열이다."""
+    out: dict[str, str] = {}
+    inside = False
+    for ln in text.splitlines():
+        if COUNT_SECTION_HEAD.match(ln):
+            inside = True
+            continue
+        if ln.startswith("## ") or (ln.startswith("### ") and not COUNT_SECTION_HEAD.match(ln)):
+            inside = False
+        if not inside:
+            continue
+        m = SPEC_ROW_CELLS.match(ln)
+        if m:
+            out[m.group(1)] = m.group(2).rsplit("|", 1)[-1].strip()
+    return out
+
+
+def check_44(led: Ledger) -> Report:
+    r = Report("44", "wiki44-injection-mirror",
+               "주입 시험 칸이 든 검사마다 음성 대조에 사례가 있고 그 역도 서며, "
+               "사례가 전사한 단계 id 가 그 검사의 선언과 같은가", "fail")
+    spec = led.root / COUNT_SPEC
+    nc = led.root / NC_SOURCE
+    wiki = led.root / COUNT_WIKI
+    for f in (spec, nc, wiki):
+        if not f.is_file():
+            r.bad(f"{f.name} 이 없다")
+            return r
+    cells = spec_injection_cells(spec.read_text(encoding="utf-8"))
+    # 좌변이 비면 우변이 무엇이든 한쪽 방향의 어긋남이 0 으로 난다. 검사 28 과 34 와 35 와 37 과
+    # 38 과 40 과 42 가 같은 요구를 둔다.
+    if not cells:
+        r.bad(f"{COUNT_SPEC} 의 §2 에서 표의 행을 하나도 읽지 못했다")
+        return r
+    m = NC_CASES_LIST.search(nc.read_text(encoding="utf-8"))
+    if m is None:
+        r.bad(f"{NC_SOURCE} 에서 사례 목록 `CASES` 를 읽을 수 없다")
+        return r
+    cases = NC_CASE_ROW.findall(m.group(1))
+    if not cases:
+        r.bad(f"{NC_SOURCE} 의 사례 목록이 비어 있다")
+        return r
+    declared = dict(REPORT_DECL.findall(wiki.read_text(encoding="utf-8")))
+    want = {num for num, cell in cells.items() if cell}
+    got = {num for num, _step in cases}
+    for num in sorted(want - got):
+        r.bad(f"검사 {num} 의 주입 시험 칸이 섰는데 음성 대조의 사례 목록에 그 항이 없다")
+    for num in sorted(got - want):
+        r.bad(f"음성 대조가 검사 {num} 의 사례를 드는데 §2 의 그 행에 주입 시험 칸이 없다")
+    # 사례 이름이 전사한 단계 id 를 그 검사의 선언과 맞댄다. 이름을 맞대지 않으면 그 전사가 낡아도
+    # 걸리지 않고, 그 낡음은 사례 이름이 실재하지 않는 단계를 가리키는 꼴로만 남는다.
+    for num, step in cases:
+        if num not in declared:
+            r.bad(f"음성 대조의 사례가 드는 검사 {num} 를 {COUNT_WIKI} 의 어느 검사도 선언하지 않는다")
+        elif declared[num] != step:
+            r.bad(f"검사 {num} 의 사례가 전사한 단계 id `{step}` 가 그 검사의 선언 "
+                  f"`{declared[num]}` 와 다르다")
+    r.note(f"주입 시험 칸이 든 검사 {len(want)} · 사례 목록의 검사 {len(got)} · 사례 항 {len(cases)}")
+    r.note(f"좌에서 우로 미포착 {len(want - got)} · 우에서 좌로 유령 {len(got - want)}")
+    return r
+
+
+def check_45(led: Ledger) -> Report:
+    r = Report("45", "wiki45-phase-hole-assignment",
+               "열려 있는 아크의 페이즈 레코드가 구멍을 나누어 들고 그 합집합이 아크의 구멍과 "
+               "양방향으로 맞으며, 아크 전량에서 페이즈 배열의 원소가 객체인가", "fail")
+    n_obj = n_open = 0
+    # ㉠ 원소의 형을 아크 전량에서 본다. 이름을 뽑는 사상이 객체가 아닌 원소를 건너뛰므로, 이
+    # 자리가 없으면 그 페이즈가 미선언으로 보여 검사 3 과 4-a 와 32 가 원인과 다른 문면으로 걸린다.
+    for name in sorted(led.arcs):
+        for i, ph in enumerate(led.arcs[name].get("phases") or [], 1):
+            n_obj += 1
+            if not isinstance(ph, dict):
+                r.bad(f"아크 `{name}` 의 페이즈 배열의 {i} 번째 원소가 객체가 아니다: `{ph}`")
+    # ㉡ 열려 있는 아크에서만 `builds` 와 `holes` 를 요구한다. 그 강제가 아크를 열 때 걸리므로
+    # 이미 닫힌 아크는 그 자리가 없고, 소급해 채우면 그 페이즈가 섰던 시점의 전제가 왜곡된다.
+    for name in sorted(led.arcs):
+        a = led.arcs[name]
+        if a.get("status") != "open":
+            continue
+        n_open += 1
+        union: dict[str, list[str]] = {}
+        for ph in a.get("phases") or []:
+            if not isinstance(ph, dict):
+                continue
+            pname = str(ph.get("name"))
+            for field in ("builds", "holes"):
+                if field not in ph:
+                    r.bad(f"열려 있는 아크 `{name}` 의 페이즈 `{pname}` 가 `{field}` 를 들지 않는다")
+            for h in (ph.get("holes") or []):
+                union.setdefault(str(h), []).append(pname)
+        for h, owners in sorted(union.items()):
+            if len(owners) > 1:
+                r.bad(f"아크 `{name}` 의 구멍 `{h}` 를 페이즈 {len(owners)} 개가 함께 든다: "
+                      + " · ".join(owners))
+        arc_holes = {str(x) for x in (a.get("holes") or [])}
+        for h in sorted(arc_holes - set(union)):
+            r.bad(f"아크 `{name}` 의 구멍 `{h}` 가 어느 페이즈에도 배정되지 않았다")
+        for h in sorted(set(union) - arc_holes):
+            r.bad(f"아크 `{name}` 의 페이즈가 그 아크의 구멍 배열에 없는 `{h}` 를 든다")
+        r.note(f"아크 `{name}` — 구멍 {len(arc_holes)} · 페이즈 합집합 {len(union)}")
+    r.note(f"페이즈 레코드 {n_obj} · 열려 있는 아크 {n_open}")
+    return r
+
+
+# 검사 46 이 읽는 블록 목록과 그 블록을 읽는 쪽. **읽는 쪽이 둘이다.** 검증기와 검증 스크립트이며,
+# 공리 기준선의 블록을 읽는 쪽이 검증 스크립트이므로 유니버스를 검증기로만 두면 그 하나가 유령으로
+# 난다. 이름을 대문자로 묶는 까닭은 같은 줄에 선 경로의 홑따옴표를 블록 이름으로 읽지 않는 것이다.
+SPEC_BLOCK_SENTENCE = re.compile(r"지금 그런 블록은(.*?)이다")
+SPEC_BLOCK_NAME = re.compile(r"`([A-Z][A-Z0-9]*)`")
+BLOCK_READ_FORM = re.compile(r"<!--\s*([A-Z][A-Z0-9]*):BEGIN|([A-Z][A-Z0-9]*):BEGIN")
+BLOCK_READERS = (COUNT_WIKI, COUNT_VERIFY)
+
+
+def check_46(led: Ledger) -> Report:
+    r = Report("46", "wiki46-block-list-mirror",
+               "§5 가 드는 기계 판독 블록의 목록이 실제로 읽히는 블록과 양방향으로 맞는가", "fail")
+    f = led.root / COUNT_SPEC
+    if not f.is_file():
+        r.bad(f"{COUNT_SPEC} 이 없다")
+        return r
+    m = SPEC_BLOCK_SENTENCE.search(f.read_text(encoding="utf-8"))
+    if m is None:
+        r.bad(f"{COUNT_SPEC} 에서 기계 판독 블록의 목록을 읽을 수 없다")
+        return r
+    listed = set(SPEC_BLOCK_NAME.findall(m.group(1)))
+    if not listed:
+        r.bad(f"{COUNT_SPEC} 의 기계 판독 블록 목록이 비어 있다")
+        return r
+    read: dict[str, list[str]] = {}
+    for rel in BLOCK_READERS:
+        g = led.root / rel
+        if not g.is_file():
+            r.bad(f"{rel} 이 없다")
+            return r
+        for x in BLOCK_READ_FORM.finditer(g.read_text(encoding="utf-8")):
+            read.setdefault(x.group(1) or x.group(2), []).append(rel)
+    for name in sorted(listed - set(read)):
+        r.bad(f"목록이 드는 블록 `{name}` 를 읽는 자리가 검증기에도 검증 스크립트에도 없다")
+    for name in sorted(set(read) - listed):
+        r.bad(f"블록 `{name}` 를 {' · '.join(sorted(set(read[name])))} 가 읽는데 "
+              f"§5 의 목록이 그것을 들지 않는다")
+    r.note(f"목록이 든 블록 {len(listed)} · 읽히는 블록 {len(read)}")
+    for name in sorted(read):
+        r.note(f"{name} — {' · '.join(sorted(set(read[name])))}")
+    return r
 
 
 def check_41(led: Ledger) -> Report:
@@ -2388,6 +2579,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_33(led), check_34(led), check_35(led),
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
+        check_44(led), check_45(led), check_46(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2414,7 +2606,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔셋)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔여섯)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

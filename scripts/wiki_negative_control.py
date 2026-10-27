@@ -953,23 +953,27 @@ def ko_word(value: int) -> str:
 def inj_40_count(root):
     """계수 자리 일곱 가운데 하나의 수를 하나 틀리게 적는다.
 
-    명세의 머리 계수가 든 전체 계수를 하나 올린다. 자리를 하나만 건드리는 주입이므로 그 자리와
-    정본이 어긋나는 것이 잡혀야 하고, 일곱 자리마다 따로 돌리지 않는다. 판정 대상 하나에 한 번만
-    돌린다는 요구가 그것을 든다.
+    명세의 가름을 함께 드는 자리가 든 전체 계수를 하나 올린다. 자리를 하나만 건드리는 주입이므로
+    그 자리와 정본이 어긋나는 것이 잡혀야 하고, 자리마다 따로 돌리지 않는다. 판정 대상 하나에 한
+    번만 돌린다는 요구가 그것을 든다.
+
+    **자리를 그 검사의 꼴로 찾는다.** 그 검사가 유니버스를 열거에서 꼴 유도로 바꿨으므로 열거의
+    첫 항을 집던 앞 판은 설 자리가 없어졌다. 꼴을 전사하면 그 검사가 꼴을 고칠 때 이 주입이
+    조용히 공허해진다.
     """
-    name, rel, pat, _keys = check_wiki.COUNT_PLACES[0]
+    rel = check_wiki.COUNT_SPEC
     f = root / rel
     text = f.read_text(encoding="utf-8")
-    m = pat.search(text)
+    m = check_wiki.COUNT_GROUP_FORM.search(text)
     if m is None:
-        raise SystemExit(f"`{name}` 의 자리를 찾지 못했다")
+        raise SystemExit(f"{rel} 에서 가름을 함께 드는 자리를 찾지 못했다")
     said = check_wiki.ko_count(m.group(1))
     if said is None:
-        raise SystemExit(f"`{name}` 이 든 수사 `{m.group(1)}` 를 값으로 읽을 수 없다")
+        raise SystemExit(f"그 자리가 든 수사 `{m.group(1)}` 를 값으로 읽을 수 없다")
     wrong = ko_word(said + 1)
     at, end = m.span(1)
     f.write_text(text[:at] + wrong + text[end:], encoding="utf-8")
-    return f"{name}: {m.group(1)}→{wrong}"
+    return f"{rel} 의 전체 계수: {m.group(1)}→{wrong}"
 
 
 # ----------------------------------------------------- 검사 42 · 조항 목록의 거울
@@ -1271,6 +1275,168 @@ def inj_41_section(root):
     return _inject_pointer(root, "POINTER_SECTION")
 
 
+# 검사 44 의 주입이 만지는 자리. 사례 목록을 소스의 문면으로 고치는 까닭은 그 검사가 사본의
+# 소스를 읽기 때문이며, 돌고 있는 이 모듈의 값을 고쳐도 사본에는 닿지 않는다.
+NC_IN_COPY = ("scripts", "wiki_negative_control.py")
+NC_LIST_FORM = re.compile(r"^CASES = \[(.*?)^\]", re.M | re.S)
+NC_ROW_FORM = re.compile(r'^[ \t]*\("([^"]+)",\s*"([^"]+)".*?\),[ \t]*$', re.M)
+
+
+def _nc_rows(root):
+    """사본의 사례 목록과 그 행. (파일, 전문, 목록의 범위, 행의 목록) 을 낸다."""
+    f = root.joinpath(*NC_IN_COPY)
+    src = f.read_text(encoding="utf-8")
+    m = NC_LIST_FORM.search(src)
+    if m is None:
+        raise SystemExit("사본의 사례 목록을 읽지 못했다")
+    rows = list(NC_ROW_FORM.finditer(src, m.start(1), m.end(1)))
+    if not rows:
+        raise SystemExit("사본의 사례 목록에서 행을 하나도 읽지 못했다")
+    return f, src, rows
+
+
+def inj_44_drop(root):
+    """한 검사의 주입 항을 사례 목록에서 지운다.
+
+    사례가 하나뿐인 검사를 고른다. 둘 이상인 검사의 한 항만 지우면 다른 항이 남아 그 검사의
+    번호가 여전히 목록에 서고 주입이 공허해진다.
+    """
+    f, src, rows = _nc_rows(root)
+    nums = [m.group(1) for m in rows]
+    victim = next((m for m in rows if nums.count(m.group(1)) == 1), None)
+    if victim is None:
+        raise SystemExit("사례가 하나뿐인 검사가 없어 지울 자리가 없다")
+    f.write_text(src[:victim.start()] + src[victim.end() + 1:], encoding="utf-8")
+    return victim.group(1)
+
+
+def inj_44_ghost(root):
+    """명세에 없는 번호로 사례를 더한다."""
+    f, src, rows = _nc_rows(root)
+    ghost = "9944"
+    if any(m.group(1) == ghost for m in rows):
+        raise SystemExit(f"번호 {ghost} 가 사례 목록에 이미 있어 없는 번호로 쓰지 못한다")
+    row = f'    ("{ghost}", "wiki{ghost}-ghost", "음성 대조가 주입한 항이다", inj_01, None, None),\n'
+    f.write_text(src[:rows[0].start()] + row + src[rows[0].start():], encoding="utf-8")
+    return ghost
+
+
+def inj_44_step(root):
+    """사례 목록의 한 항이 전사한 단계 id 를 다른 값으로 바꾼다."""
+    f, src, rows = _nc_rows(root)
+    first = rows[0]
+    bent = first.group(0).replace(f'"{first.group(2)}"', '"wiki-음성-대조가-바꾼-단계"', 1)
+    f.write_text(src[:first.start()] + bent + src[first.end():], encoding="utf-8")
+    return first.group(2)
+
+
+def _open_arc(root):
+    """열려 있는 아크의 레코드. 그 아크가 없으면 주입이 조건을 만들지 못한다."""
+    doc = arcs(root)
+    a = next((x for x in doc["arcs"] if x.get("status") == "open"), None)
+    if a is None:
+        raise SystemExit("열려 있는 아크가 없어 주입이 조건을 만들지 못한다")
+    return doc, a
+
+
+def inj_45_hole_drop(root):
+    """한 페이즈의 `holes` 에서 구멍 하나를 지운다."""
+    doc, a = _open_arc(root)
+    ph = next((x for x in a["phases"] if x.get("holes")), None)
+    if ph is None:
+        raise SystemExit("구멍을 든 페이즈가 없어 지울 자리가 없다")
+    gone = str(ph["holes"].pop())
+    save_arcs(root, doc)
+    return gone
+
+
+def inj_45_hole_dup(root):
+    """두 페이즈가 같은 구멍을 들게 한다."""
+    doc, a = _open_arc(root)
+    src = next((x for x in a["phases"] if x.get("holes")), None)
+    dst = next((x for x in a["phases"]
+                if x is not src and isinstance(x.get("holes"), list)), None)
+    if src is None or dst is None:
+        raise SystemExit("구멍을 옮겨 담을 페이즈 둘을 찾지 못했다")
+    dst["holes"].append(src["holes"][0])
+    save_arcs(root, doc)
+    return src["holes"][0]
+
+
+def inj_45_builds_drop(root):
+    """열려 있는 아크의 페이즈 객체에서 `builds` 를 지운다."""
+    doc, a = _open_arc(root)
+    ph = next((x for x in a["phases"] if "builds" in x), None)
+    if ph is None:
+        raise SystemExit("`builds` 를 든 페이즈가 없어 지울 자리가 없다")
+    ph.pop("builds")
+    save_arcs(root, doc)
+    return ph["name"]
+
+
+def inj_45_string(root):
+    """닫힌 아크의 페이즈 원소를 문자열로 되돌린다.
+
+    어디서도 지목되지 않는 페이즈를 고른다. 원장의 `origin.phase` 나 종료 문서나 패치가 그
+    이름을 들면 그 페이즈가 미선언으로 보여 검사 셋이 함께 걸리고, 그러면 한 주입이 겨눈 검사와
+    다른 검사를 함께 실패시킨다.
+    """
+    doc = arcs(root)
+    led = check_wiki.Ledger(root)
+    used = {(e.get("origin") or {}).get("phase") for _n, e in led.entries}
+    used |= {p.get("from") for p in led.patches} | {p.get("phase") for p in led.patches}
+    used |= {f.name[:-len("-closure.md")]
+             for f in (root / "docs" / "phases").glob("*-closure.md")}
+    for a in doc["arcs"]:
+        if a.get("status") == "open":
+            continue
+        for i, ph in enumerate(a.get("phases") or []):
+            if isinstance(ph, dict) and ph.get("name") not in used:
+                a["phases"][i] = ph["name"]
+                save_arcs(root, doc)
+                return ph["name"]
+    raise SystemExit("어디서도 지목되지 않는 닫힌 아크의 페이즈가 없어 되돌릴 자리가 없다")
+
+
+# 검사 46 의 주입이 만지는 줄. 목록의 이름을 담은 문장이며 그 꼴의 정본은 검증기가 든다.
+SPEC_IN_COPY = ("docs", "decisions", "SPEC.md")
+
+
+def _spec_block_list(root):
+    """사본의 기계 판독 블록 목록 문장. (파일, 전문, 그 범위) 를 낸다."""
+    f = root.joinpath(*SPEC_IN_COPY)
+    src = f.read_text(encoding="utf-8")
+    m = check_wiki.SPEC_BLOCK_SENTENCE.search(src)
+    if m is None:
+        raise SystemExit("사본에서 기계 판독 블록의 목록을 읽지 못했다")
+    return f, src, m
+
+
+def inj_46_drop(root):
+    """목록에서 블록 이름 하나를 지운다."""
+    f, src, m = _spec_block_list(root)
+    names = check_wiki.SPEC_BLOCK_NAME.findall(m.group(1))
+    if not names:
+        raise SystemExit("목록이 든 블록 이름이 없어 지울 자리가 없다")
+    gone = names[0]
+    bent = m.group(1).replace(f"`{gone}` 과 ", "", 1)
+    if bent == m.group(1):
+        raise SystemExit(f"목록에서 `{gone}` 를 지우는 꼴을 찾지 못했다")
+    f.write_text(src[:m.start(1)] + bent + src[m.end(1):], encoding="utf-8")
+    return gone
+
+
+def inj_46_ghost(root):
+    """어느 검사도 읽지 않는 이름을 목록에 더한다."""
+    f, src, m = _spec_block_list(root)
+    ghost = "NOSUCHBLOCK"
+    if ghost in m.group(1):
+        raise SystemExit(f"`{ghost}` 가 목록에 이미 있어 읽히지 않는 이름으로 쓰지 못한다")
+    bent = m.group(1) + f" 그리고 `{ghost}` 가 그 목록에 더 선다"
+    f.write_text(src[:m.start(1)] + bent + src[m.end(1):], encoding="utf-8")
+    return ghost
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
@@ -1342,6 +1508,15 @@ CASES = [
     ("41",  "wiki41-rule-comment-pointer",  "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment,   None, None),
     ("41",  "wiki41-rule-comment-pointer",  "소진 문서의 식별자 꼴을 하나 더한다",          inj_41_ephemeral, None, None),
     ("41",  "wiki41-rule-comment-pointer",  "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None, None),
+    ("44",  "wiki44-injection-mirror",      "한 검사의 주입 항을 사례 목록에서 지운다",     inj_44_drop,  None, None),
+    ("44",  "wiki44-injection-mirror",      "명세에 없는 번호로 사례를 더한다",             inj_44_ghost, None, None),
+    ("44",  "wiki44-injection-mirror",      "사례 목록의 한 항이 전사한 단계 id 를 다른 값으로 바꾼다", inj_44_step, None, None),
+    ("45",  "wiki45-phase-hole-assignment", "한 페이즈의 holes 에서 구멍 하나를 지운다",    inj_45_hole_drop,   None, None),
+    ("45",  "wiki45-phase-hole-assignment", "두 페이즈가 같은 구멍을 들게 한다",            inj_45_hole_dup,    None, None),
+    ("45",  "wiki45-phase-hole-assignment", "열려 있는 아크의 페이즈 객체에서 builds 를 지운다", inj_45_builds_drop, None, None),
+    ("45",  "wiki45-phase-hole-assignment", "닫힌 아크의 페이즈 원소를 문자열로 되돌린다",  inj_45_string,      None, None),
+    ("46",  "wiki46-block-list-mirror",     "목록에서 블록 이름 하나를 지운다",             inj_46_drop,  None, None),
+    ("46",  "wiki46-block-list-mirror",     "어느 검사도 읽지 않는 이름을 더한다",          inj_46_ghost, None, None),
 ]
 
 
