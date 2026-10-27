@@ -234,6 +234,31 @@ class Ledger:
             out.append((str(f.relative_to(self.root)), _lean_comments(f.read_text(encoding="utf-8"))))
         return out
 
+    def pointer_scan_targets(self) -> list[tuple[str, str]]:
+        """검사 41 이 훑을 (표시 경로, 훑을 텍스트) 목록.
+
+        리포에 영구히 남는 문면이 유니버스다. 집행 문면과 회차 기록과 `docs/` 아래의 마크다운과
+        Lean 파일이며, 추출 기록은 뺀다. Lean 은 주석만 훑는다. 그 조항이 거는 자리가 docstring
+        과 주석이고, 식별자는 영어라 금지 갈래의 꼴이 코드에 서지 않기 때문이다.
+
+        **원장 네 파일은 파일로 훑지 않는다.** 그 산문 필드는 검사 41 의 R-11 갈래가 항목
+        단위로 따로 받으며, 파일로도 훑으면 같은 자리가 두 번 세어진다(SPEC §2.1).
+        """
+        out = []
+        for rel in ("CLAUDE.md", "BUILD_LOG.md"):
+            f = self.root / rel
+            if f.is_file():
+                out.append((rel, f.read_text(encoding="utf-8")))
+        for f in sorted((self.root / "docs").rglob("*.md")):
+            rel = str(f.relative_to(self.root))
+            if any(rel.startswith(x) for x in POINTER_SKIP):
+                continue
+            out.append((rel, f.read_text(encoding="utf-8")))
+        for f in self.lean_files:
+            out.append((str(f.relative_to(self.root)),
+                        _lean_comments(f.read_text(encoding="utf-8"))))
+        return out
+
     def doc_decls(self) -> list[DocDecl]:
         """최상위 선언마다 그 `DD:` 표지의 번호와 docstring 의 문단을 낸다.
 
@@ -916,24 +941,47 @@ def check_17(led: Ledger) -> Report:
     return r
 
 
+# 검사 18 의 유니버스. `ref` 가 아크의 이름을 드는 트리거의 종류이며, 그 둘만 아크를 가리킨다.
+# `artifact` 는 경로를 들고 `extraction` 은 추출 기록의 번호를 들므로 아크로 묶을 수 없다.
+# 이 유니버스를 `blocking` 하나로 좁히면 아크를 가리키는 다른 종류의 구멍이 처분됐는지 자고
+# 있는지가 어느 보고에도 나지 않는다(SPEC §2.2).
+ARC_POINTING_KINDS = ("arc_phase", "blocking")
+
+
 def check_18(led: Ledger) -> Report:
-    r = Report("18", "wiki18-blocking-disposition", "아크별 blocking 구멍의 처분 내역", "report")
+    r = Report("18", "wiki18-arc-hole-disposition", "아크별 구멍의 처분 내역", "report")
     rows: dict = {}
     dropped: list[str] = []
     for e in led.reg["deferred"]:
         rw = e.get("reopen_when")
-        if isinstance(rw, dict) and rw.get("kind") == "blocking":
+        if isinstance(rw, dict) and rw.get("kind") in ARC_POINTING_KINDS:
             # 폐기된 구멍은 처분이 끝난 것이므로 목록에서 뺀다. 뺀 건수는 출력에 남긴다(CF-684).
             if e.get("id") in led.dead:
                 dropped.append(str(e.get("id")))
                 continue
-            rows.setdefault(str(rw.get("ref")), []).append(e.get("id"))
-    r.note(f"blocking 구멍 {sum(len(v) for v in rows.values())}건, 아크 {len(rows)}개"
+            rows.setdefault(str(rw.get("ref")), []).append(
+                (str(e.get("id")), str(rw.get("kind"))))
+    kinds: dict = {}
+    for holes in rows.values():
+        for _id, kind in holes:
+            kinds[kind] = kinds.get(kind, 0) + 1
+    r.note(f"아크를 가리키는 구멍 {sum(len(v) for v in rows.values())}건, 아크 {len(rows)}개"
+           + (" · 종류별 " + " · ".join(f"{k} {n}" for k, n in sorted(kinds.items()))
+              if kinds else " · 종류별 없음")
            + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
               if dropped else " · 뺀 폐기분 0건"))
-    for arc, ids in sorted(rows.items()):
+    # 아크마다 상태와 구멍의 종류를 함께 싣는다. 상태만 실으면 범위 밖인 아크를 가리키는 구멍이
+    # 처분된 것과 자고 있는 것이 그 줄에서 갈리지 않고, 종류만 실으면 그 아크가 열렸는지가
+    # 갈리지 않는다. 둘이 함께 서야 그 가름이 보고 줄 하나에서 선다(`CF-1491`).
+    for arc, holes in sorted(rows.items()):
         a = led.arcs.get(arc) or {}
-        r.note(f"{arc} (status {a.get('status')}) — {', '.join(ids)}")
+        # 번호 순으로 낸다. 문자열로 정렬하면 `CF-834` 가 `CF-1405` 뒤에 서서 읽는 쪽이 그 줄을
+        # 번호로 훑을 수 없다. 번호로 읽히지 않는 id 는 맨 뒤에 모아 문자열 순으로 둔다.
+        def by_number(pair: tuple[str, str]) -> tuple[int, str]:
+            m = ID_FORM.match(pair[0])
+            return (int(m.group(1)) if m else 1 << 30, pair[0])
+        r.note(f"{arc} (status {a.get('status')}) — "
+               + ", ".join(f"{i} ({k})" for i, k in sorted(holes, key=by_number)))
     return r
 
 
@@ -1273,6 +1321,31 @@ R11_EXEMPT_LINE = re.compile(r"^R11_EXEMPT=(\S+)$")
 R11_FIELDS = ("statement", "basis", "reason", "candidate", "for", "original")
 # 지목을 가리키는 낱말. 규율 ID 토큰 뒤 `R11_DIST` 자 안에 이것이 따르면 적발이다.
 R11_WORD = "주석"
+# 검사 41 이 읽는 갈래별 적발 계수. `docs/baseline.md` §5 의 `POINTER` 블록이며 **그 값은 이
+# 검사가 처음 설 때 이 검사 자신이 낸 것이다.** 그 계수가 아래 패턴의 꼴에 달려 있으므로 블록과
+# 탐지기를 같은 코드에서 나오게 두며, 그 꼴을 바꾸는 회차가 블록을 함께 고친다. 둘을 다른 코드로
+# 두면 어느 쪽이 옳은지 맞댈 상대가 없어지고, 그 어긋남이 실제로 한 번 섰다(SPEC §2.1).
+POINTER_BLOCK = re.compile(r"<!-- POINTER:BEGIN -->\n(.*?)<!-- POINTER:END -->", re.S)
+POINTER_LINE = re.compile(r"^(POINTER_[A-Z]+)=(\d+)$")
+POINTER_KEYS = ("POINTER_COMMENT", "POINTER_EPHEMERAL", "POINTER_SECTION")
+# 유니버스에서 빼는 경로. 추출 기록은 인용한 편 자신의 절 번호를 구조적으로 많이 들고 그 번호가
+# 꼴로는 리포 밖 문서의 절과 갈리지 않으며, 그 디렉터리가 검사 24 에서도 역사 기록 경로로 빠져
+# 있다. 원장 네 파일은 그 산문 필드를 아래의 R-11 갈래가 따로 받으므로 파일로 훑지 않는다.
+POINTER_SKIP = ("docs/extractions/",)
+# 갈래 2 의 꼴. 소진 문서가 자기 안에서 쓰는 조작 표지와 그 문서의 파일 이름 접두사다. 그 둘은
+# 페이즈가 끝나면 이관되어 도달 불가가 되므로 리포에 남는 문면이 그것을 지목하면 열 수 없다.
+POINTER_TAG = re.compile(r"(?<![0-9A-Za-z])[A-Z]\d+-O\d+(?![0-9A-Za-z])")
+POINTER_EPHEMERAL_FILE = re.compile(r"IMPLEMENTATION_PLAN|ENTRY_CARD")
+# 갈래 3 의 꼴과 그 면제 둘. 출처 표지가 앞에 오는 자리는 규율 조항의 역추적을 붙인 자리이고,
+# 리포 안 문서의 이름이 앞에 오면 그 절이 그 경로로 열린다. 자기 문서의 절 제목에 선 번호는
+# 그 문서가 자기 절을 가리키는 것이므로 적발로 세지 않으며, 그 제목은 머리 기호로 시작하는
+# 줄과 굵은 표지로 시작하는 줄에서 모은다.
+POINTER_SECTION_NO = re.compile(r"§\s*(\d+(?:[.-]\d+)*)")
+POINTER_OWN_HEADING = re.compile(r"^(?:#+|\*\*)\s*(\d+(?:[.-]\d+)*)")
+POINTER_SOURCE_MARK = "←"
+POINTER_DOC_NAME = re.compile(
+    r"SPEC\.md|baseline\.md|CLAUDE\.md|BUILD_LOG\.md|arcs\.json"
+    r"|reading-queue|bundle-inventory|docs/|scripts/")
 # 검사 42 가 읽는 세션 지시의 조항 목록. `docs/baseline.md` 의 `SESSIONCLAUSE` 블록이 계열과
 # 조항을 든다. 계열을 열거하는 까닭은 구멍과 미결의 ID 가 규율 조항과 같은 꼴을 쓰는데 세션
 # 지시가 그 둘의 전량을 들지 않아 유니버스에서 빠지기 때문이다. **세션 지시 자체는 검사의
@@ -1307,6 +1380,49 @@ def heading_rules(led: Ledger) -> tuple[int | None, dict[str, list[str]]]:
         if m:
             forms.setdefault(m.group(1), []).append(m.group(3))
     return since, forms
+
+
+def pointer_block(led: Ledger) -> dict[str, int]:
+    """`POINTER` 블록이 든 갈래별 적발 계수."""
+    got: dict[str, int] = {}
+    for line in _baseline_block(led, POINTER_BLOCK).splitlines():
+        m = POINTER_LINE.match(line)
+        if m:
+            got[m.group(1)] = int(m.group(2))
+    return got
+
+
+def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[str]]:
+    """갈래별 적발의 자리. 키는 `POINTER_KEYS` 이고 값은 `<경로>:<줄> <적발한 꼴>` 이다.
+
+    **블록을 심는 쪽과 그것을 맞대는 쪽이 이 하나를 함께 쓴다.** 두 자리에 전사하면 한쪽을
+    고칠 때 다른 쪽이 조용히 낡고, 그 둘이 다른 수를 내는 것을 어느 검사도 잡지 못한다.
+
+    유니버스를 인자로 받는 까닭은 그 수집기가 파일 전량을 읽으므로 부르는 쪽이 그 수를 함께
+    쓸 때 두 번 읽게 되는 것이다.
+    """
+    out: dict[str, list[str]] = {k: [] for k in POINTER_KEYS}
+    for rel, text in targets:
+        lines = text.splitlines()
+        # 그 문서 자신의 절 제목에 선 번호. 자기 절을 가리키는 것은 적발이 아니다.
+        own = {m.group(1) for ln in lines
+               for m in [POINTER_OWN_HEADING.match(ln)] if m}
+        for i, ln in enumerate(lines, 1):
+            for m in RULE_TOKEN.finditer(ln):
+                if R11_WORD in ln[m.end():m.end() + dist]:
+                    out["POINTER_COMMENT"].append(f"{rel}:{i} `{m.group(0)}`")
+            for m in POINTER_TAG.finditer(ln):
+                out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
+            for m in POINTER_EPHEMERAL_FILE.finditer(ln):
+                out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
+            for m in POINTER_SECTION_NO.finditer(ln):
+                head = ln[:m.start()]
+                if POINTER_SOURCE_MARK in head or POINTER_DOC_NAME.search(head):
+                    continue
+                if m.group(1) in own:
+                    continue
+                out["POINTER_SECTION"].append(f"{rel}:{i} `{m.group(0)}`")
+    return out
 
 
 def r11_rules(led: Ledger) -> tuple[int | None, set[str]]:
@@ -2079,7 +2195,7 @@ def sessionclause_rules(led: Ledger) -> tuple[set[str], set[str]]:
 
 def check_41(led: Ledger) -> Report:
     r = Report("41", "wiki41-rule-comment-pointer",
-               "원장의 산문 필드가 규율 조항에 붙은 특정 주석을 지목하는가", "fail")
+               "리포의 영구 문면이 리포 밖에서만 뜻을 갖는 식별자를 지목하는가", "fail")
     dist, exempt = r11_rules(led)
     # 블록을 읽지 못하면 통과가 아니라 실패다. 거리가 없으면 재기가 서지 않고 면제가 비면
     # 이미 실린 열여덟이 전부 적발로 나므로, 둘 다 맞댈 상대가 없는 것이다(SPEC §2.1).
@@ -2112,9 +2228,49 @@ def check_41(led: Ledger) -> Report:
                 hit += 1
                 r.bad(f"{eid}: {f} 의 `{m.group(0)}` 뒤 {dist} 자 안에 "
                       f"`{R11_WORD}` 이 따른다")
-    r.note(f"유니버스는 네 레지스터의 산문 필드 {len(R11_FIELDS)} "
+    r.note(f"R-11 갈래의 유니버스는 네 레지스터의 산문 필드 {len(R11_FIELDS)} "
            f"· 거리 R11_DIST={dist} · 면제 항 {len(exempt)}")
-    r.note(f"적발 {hit} · 면제 목록으로 넘긴 항목 {len(waived)}")
+    r.note(f"R-11 갈래의 적발 {hit} · 면제 목록으로 넘긴 항목 {len(waived)}")
+
+    # 두 번째 몫. 리포의 영구 문면이 리포 밖에서만 뜻을 갖는 식별자를 지목하는가를 갈래 셋으로
+    # 나누어 세고 값 정본의 블록과 맞댄다. **늘면 실패시키고 줄면 통과시킨다.** 그 조항이
+    # 소급하지 않으므로 이미 쓰인 문면이 전량 적발로 나오며, 계수를 고정해 앞으로 쓰는 문면이
+    # 그 수를 늘리는 자리를 막는 것이 이 몫의 처분이다.
+    #
+    # **갈래마다 따로 맞대는 까닭은 합으로 맞대면 한 갈래를 고치고 다른 갈래를 더해도 통과한다는
+    # 것이다.** 앞의 R-11 갈래를 이 계수에 섞지 않는 까닭도 같다. 그 갈래는 적발 하나로 바로
+    # 실패해야 하는데 계수로 맞대면 다른 자리가 줄어든 회차에 그것이 가려진다.
+    want = pointer_block(led)
+    if not want:
+        r.bad("docs/baseline.md 의 POINTER 블록을 읽을 수 없다")
+        return r
+    missing = [k for k in POINTER_KEYS if k not in want]
+    if missing:
+        r.bad("POINTER 블록에 " + " · ".join(missing) + " 이 없다")
+        return r
+    targets = led.pointer_scan_targets()
+    hits = pointer_hits(targets, dist)
+    r.note(f"지목 범위 갈래의 유니버스는 영구 문면 {len(targets)} 개"
+           f" · 유니버스 밖: {list(POINTER_SKIP)} 과 원장 네 파일")
+    for key in POINTER_KEYS:
+        got = len(hits[key])
+        if got > want[key]:
+            r.bad(f"{key} 의 적발이 {got} 인데 값 정본의 블록이 {want[key]} 를 든다. "
+                  f"{got - want[key]} 만큼 늘었다")
+            # 어느 파일에서 늘었는지를 파일별 계수로 낸다. 적발의 자리를 전량 열거하면 역사
+            # 기록의 몫이 수백 줄로 나서 새로 선 자리가 그 안에 묻히는데, 파일별 계수는 앞
+            # 회차의 기록과 맞대어 그 자리를 좁힐 수 있다.
+            per: dict[str, int] = {}
+            for place in hits[key]:
+                per[place.split(":")[0]] = per.get(place.split(":")[0], 0) + 1
+            for rel, n in sorted(per.items(), key=lambda x: (-x[1], x[0])):
+                r.note(f"{key} — {rel} {n}")
+        elif got < want[key]:
+            r.note(f"{key} 의 적발 {got} 가 블록의 {want[key]} 보다 "
+                   f"{want[key] - got} 적다. 그 자리가 정리된 것이므로 통과시키며, 블록의 그 "
+                   f"키를 같은 회차에 함께 내리는 것은 결정 세션의 조작이다")
+        else:
+            r.note(f"{key} 의 적발 {got} 가 블록의 값과 같다")
     return r
 
 

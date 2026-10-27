@@ -1133,7 +1133,7 @@ CASES = [
     ("16",  "wiki16-trigger-fired",        "충족된 트리거를 등재한다",                     inj_16,  "CF-9016", None),
     ("17",  "wiki17-reopen-null",          "reopen_when 을 null 로 둔 항을 늘린다",        inj_17,  "CF-9017", None),
     ("43",  "wiki43-extraction-trigger-age", "실재하지 않는 번호를 extraction 의 ref 로 둔다",  inj_43,  "CF-9043", None),
-    ("18",  "wiki18-blocking-disposition", "blocking 구멍을 등재한다",                     inj_18,  "CF-9018", None),
+    ("18",  "wiki18-arc-hole-disposition", "blocking 구멍을 등재한다",                      inj_18,  "CF-9018", None),
     ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19,  "CF-100",  None),
     ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
     ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21,  None, "charter"),
