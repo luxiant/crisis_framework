@@ -16,7 +16,7 @@
 출력이 낸다. 머리 문면이 계수를 들면 검사가 늘 때마다 낡는데 그 낡음을 어느 검사도 보지 않으며,
 `collateral-5` 가 받은 판에서 실제로 한 수가 어긋나 있었다.
 
-셋째는 **잡히지 않아야 하는 항**이며 `CASES` 의 일곱째 자리에 `"nocatch"` 를 둔 항이 그것이다.
+셋째는 **잡히지 않아야 하는 항**이며 `CASES` 의 여섯째 자리에 `"nocatch"` 를 둔 항이 그것이다.
 새 위반 줄이 나지 않아야 통과다. 검사 5 가 날짜로 가르므로 닫힌 날 이전 날짜의 항목은 잡히지
 않아야 하고, 그 방향을 재지 않으면 「날짜를 보지 않고 여전히 전량을 잡는다」와 갈리지 않는다.
 """
@@ -489,10 +489,12 @@ def inj_25(root):
 
 
 def inj_16(root):
+    eid = "CF-9016"
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
-        "CF-9016", {"kind": "artifact", "ref": "docs/arcs.json"}))
+        eid, {"kind": "artifact", "ref": "docs/arcs.json"}))
     save(root, "deferred", doc)
+    return eid
 
 
 def inj_43(root):
@@ -501,29 +503,37 @@ def inj_43(root):
     그 항이 「발화할 수 없는 항」으로 세어져야 한다. 번호의 꼴을 만족하므로 검사 12 는 그것을
     형식으로 받으며, 그 번호의 기록이 실재하는지를 보는 자리가 검사 43 하나임이 이 주입으로
     선다. 추출 기록의 번호가 두 자리이고 현행 열이 49 까지이므로 97 을 고른다."""
+    eid = "CF-9043"
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
-        "CF-9043", {"kind": "extraction", "ref": "E-97"}))
+        eid, {"kind": "extraction", "ref": "E-97"}))
     save(root, "deferred", doc)
+    return eid
 
 
 def inj_17(root):
+    eid = "CF-9017"
     doc = load(root, "deferred")
-    doc["deferred"].append(deferred_stub("CF-9017", None))
+    doc["deferred"].append(deferred_stub(eid, None))
     save(root, "deferred", doc)
+    return eid
 
 
 def inj_18(root):
+    eid = "CF-9018"
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
-        "CF-9018", {"kind": "blocking", "ref": "network"}))
+        eid, {"kind": "blocking", "ref": "network"}))
     save(root, "deferred", doc)
+    return eid
 
 
 def inj_19(root):
+    eid = "CF-100"
     doc = load(root, "decisions")
-    doc["decisions"] = [e for e in doc["decisions"] if e["id"] != "CF-100"]
+    doc["decisions"] = [e for e in doc["decisions"] if e["id"] != eid]
     save(root, "decisions", doc)
+    return eid
 
 
 def inj_20(root):
@@ -1437,86 +1447,120 @@ def inj_46_ghost(root):
     return ghost
 
 
+def inj_47_ghost(root):
+    """어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다.
+
+    **자리를 그 검사의 꼴로 찾는다.** 그 검사가 유니버스를 표의 머리에서 유도하므로 절이나 줄을
+    집으면 표가 하나 더 설 때 이 주입이 다른 자리를 겨누게 되고, 꼴을 전사하면 그 검사가 꼴을
+    고칠 때 이 주입이 조용히 공허해진다.
+
+    번호를 선언된 검사에서 빼어 고른다. 실재하는 번호를 적으면 그 칸이 다른 검사를 가리키는
+    꼴이 되어 이 주입이 아무것도 겨누지 않는다.
+    """
+    f = root / check_wiki.COUNT_SPEC
+    text = f.read_text(encoding="utf-8")
+    rows, _outside = check_wiki.spec_field_rows(text)
+    target = next((x for x in rows if x[3]), None)
+    if target is None:
+        raise SystemExit(f"{check_wiki.COUNT_SPEC} 에 검사 칸이 선 필드 표의 행이 없다")
+    declared = set(dict(check_wiki.REPORT_DECL.findall(
+        (root / check_wiki.COUNT_WIKI).read_text(encoding="utf-8"))))
+    ghost = next((str(n) for n in range(90, 100) if str(n) not in declared), None)
+    if ghost is None:
+        raise SystemExit("선언되지 않은 번호를 고를 자리가 없어 주입이 서지 않는다")
+    line, _sec, field, _cell, at = target
+    lines = text.splitlines(keepends=True)
+    raw = lines[line - 1]
+    tail = "\n" if raw.endswith("\n") else ""
+    inner = raw.rstrip("\n").strip()
+    parts = check_wiki.SPEC_CELL_SPLIT.split(inner[1:-1])
+    parts[at] = parts[at].rstrip() + check_wiki.SPEC_CHECK_JOIN + ghost + " "
+    lines[line - 1] = "|" + "|".join(parts) + "|" + tail
+    f.write_text("".join(lines), encoding="utf-8")
+    return f"{field}: {ghost}"
+
+
 CASES = [
-    ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01,  None, None),
-    ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02,  None, None),
-    ("3",   "wiki3-origin-phase",          "선언되지 않은 페이즈를 적는다",                inj_03,  None, None),
-    ("3-a", "wiki3a-phase-form",           "다른 아크의 페이즈명을 적는다",                inj_03a, None, None),
-    ("3",   "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None, None),
-    ("4-a", "wiki4a-patch-from",           "없는 페이즈를 from 에 적는다",                 inj_04a, None, None),
-    ("5",   "wiki5-closed-arc",            "닫힌 날 뒤의 날짜로 항목을 쓴다",              inj_05,  None, None),
-    ("5",   "wiki5-closed-arc",            "닫힌 날 앞의 날짜로 항목을 쓴다",              inj_05_before, None, None, "nocatch"),
-    ("6",   "wiki6-tier-vocab",            "tactical 을 적는다",                           inj_06,  None, None),
-    ("7",   "wiki7-invariant-check",       "없는 단계명을 적는다",                         inj_07,  None, None),
-    ("8",   "wiki8-retire-target",         "같은 대상을 두 번 폐기한다",                   inj_08,  None, None),
-    ("9",   "wiki9-retire-reason",         "reason 을 비운다",                             inj_09,  None, None),
-    ("10",  "wiki10-ghost-ref",            "폐기된 id 를 related 에 넣는다",               inj_10,  None, None),
-    ("11",  "wiki11-reopen-kind",          "kind 를 비운다",                               inj_11,  None, None),
-    ("12",  "wiki12-reopen-ref",           "아크가 아닌 문자열을 arc_phase 에 적는다",     inj_12,  None, None),
-    ("13",  "wiki13-dd-target",            "없는 id 를 줄 주석에 적는다",                  inj_13,  None, None),
-    ("14",  "wiki14-dd-layer",             "회계층 파일에서 정의층 항목을 지목한다",       inj_14,  None, None),
-    ("15",  "wiki15-names-unique",         "같은 규율 ID 를 두 항목에 적는다",             inj_15,  None, None),
-    ("23",  "wiki23-rule-ghost",           "폐기한 날 뒤의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_after,  None, None),
-    ("23",  "wiki23-rule-ghost",           "폐기한 날 앞의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_before, None, None, "nocatch"),
-    ("23",  "wiki23-rule-ghost",           "폐기한 날과 같은 날짜로 폐기된 규율 ID 를 적는다", inj_23_same,   None, None),
-    ("24",  "wiki24-doc-rule-ghost",       "상주 문서에 없는 규율 ID 를 적는다",           inj_24_missing,  None, None),
-    ("24",  "wiki24-doc-rule-ghost",       "선언되지 않은 폐기 규율을 적는다",             inj_24_retired,  None, None),
-    ("25",  "wiki25-marker-missing",       "최상위 선언 하나의 표지를 지운다",             inj_25,          None, None),
-    ("16",  "wiki16-trigger-fired",        "충족된 트리거를 등재한다",                     inj_16,  "CF-9016", None),
-    ("17",  "wiki17-reopen-null",          "reopen_when 을 null 로 둔 항을 늘린다",        inj_17,  "CF-9017", None),
-    ("43",  "wiki43-extraction-trigger-age", "실재하지 않는 번호를 extraction 의 ref 로 둔다",  inj_43,  "CF-9043", None),
-    ("18",  "wiki18-arc-hole-disposition", "blocking 구멍을 등재한다",                      inj_18,  "CF-9018", None),
-    ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19,  "CF-100",  None),
-    ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20,  None, "charter"),
-    ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21,  None, "charter"),
-    ("28",  "wiki28-cq-exists",            "범위 밖인 아크의 cq 에 고정 절의 번호를 적는다", inj_28_out_of_scope, None, None),
-    ("31",  "wiki31-hole-unassigned",      "열린 아크의 페이즈로 발화하는 이연 항을 쓴다",  inj_31,  None, None),
-    ("32",  "wiki32-closure-phase",         "선언되지 않은 페이즈 이름으로 종료 문서를 둔다",  inj_32, None, None),
-    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 머리말에 그 예약 낱말을 둔다",    inj_33_heading, None, None),
-    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 본문에만 그 낱말을 둔다",         inj_33_body,  None, None, "nocatch"),
-    ("33",  "wiki33-rejection-registered",  "for_decl 값을 없는 선언 이름으로 바꾼다",       inj_33_right, None, None),
-    ("34",  "wiki34-heading-form",          "경계 안 머리말의 마침표를 지운다",              inj_34_period, None, None),
-    ("34",  "wiki34-heading-form",          "HEADING 블록을 비운다",                        inj_34_empty,  None, None),
-    ("35",  "wiki35-doc-form",              "청사진을 docs/ 에 둔다",                       inj_35_plan,         None, None),
-    ("35",  "wiki35-doc-form",              "패치 조각을 docs/ 에 둔다",                    inj_35_patch,        None, None),
-    ("35",  "wiki35-doc-form",              "별지를 docs/ 에 둔다",                         inj_35_annex,        None, None),
-    ("35",  "wiki35-doc-form",              "종료 문서가 아닌 것을 phases/ 에 둔다",         inj_35_phases_other, None, None),
-    ("35",  "wiki35-doc-form",              "선언되지 않은 아크 이름으로 종료 문서를 둔다",   inj_35_phases_arc,   None, None),
-    ("35",  "wiki35-doc-form",              "추출 기록의 접두사를 어긴다",                   inj_35_extraction,   None, None),
-    ("35",  "wiki35-doc-form",              "파일 이름에 대문자와 밑줄을 쓴다",              inj_35_case,         None, None),
-    ("35",  "wiki35-doc-form",              "허용되지 않은 디렉터리를 만든다",               inj_35_dir,          None, None),
-    ("35",  "wiki35-doc-form",              "원장 디렉터리에 새 파일을 둔다",                inj_35_ledger,       None, None),
-    ("36",  "wiki36-root-surface",          "무시 파일에서 /* 줄을 지운다",                  inj_36_open,         None, None),
-    ("36",  "wiki36-root-surface",          "없는 이름으로 되살림 줄을 더한다",              inj_36_ghost,        None, None),
-    ("37",  "wiki37-claude-ledger-count",   "원장 계수 표의 한 행의 수를 하나 틀리게 적는다",  inj_37_count,        None, None),
-    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록의 분할에서 배타성 문단을 지운다",      inj_38_para,         None, None),
-    ("38",  "wiki38-partition-exclusivity",  "모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다", inj_38_pair, None, None),
-    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty,        None, None),
-    ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None, None),
-    ("40",  "wiki40-check-count-places",    "계수 자리 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None, None),
-    ("41",  "wiki41-rule-comment-pointer",  "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None, None),
-    ("42",  "wiki42-session-clause-mirror", "블록에서 살아 있는 조항 하나를 지운다",        inj_42_drop,    None, None),
-    ("42",  "wiki42-session-clause-mirror", "블록에 폐기된 조항 하나를 더한다",             inj_42_retired, None, None),
-    ("42",  "wiki42-session-clause-mirror", "블록에 원장에 없는 이름을 더한다",             inj_42_ghost,   None, None),
-    ("42",  "wiki42-session-clause-mirror", "블록을 비운다",                               inj_42_empty,   None, None),
-    ("35",  "wiki35-doc-form",              "같은 번호를 가진 추출 기록을 둔다",            inj_35_dupnum,  None, None),
-    ("35",  "wiki35-doc-form",              "중간 번호의 추출 기록을 옮겨 결번을 만든다",   inj_35_gapnum,  None, None, "nocatch"),
-    ("26",  "wiki26-clarify-target",        "clarifies 를 없는 id 로 바꾼다",               inj_26,         None, None),
-    ("27",  "wiki27-clarify-resolves",      "phrase 를 대상의 산문에 없는 값으로 바꾼다",   inj_27,         None, None),
-    ("30",  "wiki30-cq-unclaimed",          "어느 아크의 cq 에서 번호를 지워 미배정으로 만든다", inj_30,    "CQ-fin-", None),
-    ("29",  "wiki29-arc-cq",                "닫힌 아크의 한 처분 항목의 답할 항 값을 다른 번호로 바꾼다", inj_29, None, INJ_29_ARC),
-    ("41",  "wiki41-rule-comment-pointer",  "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment,   None, None),
-    ("41",  "wiki41-rule-comment-pointer",  "소진 문서의 식별자 꼴을 하나 더한다",          inj_41_ephemeral, None, None),
-    ("41",  "wiki41-rule-comment-pointer",  "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None, None),
-    ("44",  "wiki44-injection-mirror",      "한 검사의 주입 항을 사례 목록에서 지운다",     inj_44_drop,  None, None),
-    ("44",  "wiki44-injection-mirror",      "명세에 없는 번호로 사례를 더한다",             inj_44_ghost, None, None),
-    ("44",  "wiki44-injection-mirror",      "사례 목록의 한 항이 전사한 단계 id 를 다른 값으로 바꾼다", inj_44_step, None, None),
-    ("45",  "wiki45-phase-hole-assignment", "한 페이즈의 holes 에서 구멍 하나를 지운다",    inj_45_hole_drop,   None, None),
-    ("45",  "wiki45-phase-hole-assignment", "두 페이즈가 같은 구멍을 들게 한다",            inj_45_hole_dup,    None, None),
-    ("45",  "wiki45-phase-hole-assignment", "열려 있는 아크의 페이즈 객체에서 builds 를 지운다", inj_45_builds_drop, None, None),
-    ("45",  "wiki45-phase-hole-assignment", "닫힌 아크의 페이즈 원소를 문자열로 되돌린다",  inj_45_string,      None, None),
-    ("46",  "wiki46-block-list-mirror",     "목록에서 블록 이름 하나를 지운다",             inj_46_drop,  None, None),
-    ("46",  "wiki46-block-list-mirror",     "어느 검사도 읽지 않는 이름을 더한다",          inj_46_ghost, None, None),
+    ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
+    ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
+    ("3",   "wiki3-origin-phase",          "선언되지 않은 페이즈를 적는다",                inj_03, None),
+    ("3-a", "wiki3a-phase-form",           "다른 아크의 페이즈명을 적는다",                inj_03a, None),
+    ("3",   "wiki3-origin-phase",          "권한을 준 패치를 지운다",                      inj_03p, None),
+    ("4-a", "wiki4a-patch-from",           "없는 페이즈를 from 에 적는다",                 inj_04a, None),
+    ("5",   "wiki5-closed-arc",            "닫힌 날 뒤의 날짜로 항목을 쓴다",              inj_05, None),
+    ("5",   "wiki5-closed-arc",            "닫힌 날 앞의 날짜로 항목을 쓴다",              inj_05_before, None, "nocatch"),
+    ("6",   "wiki6-tier-vocab",            "tactical 을 적는다",                           inj_06, None),
+    ("7",   "wiki7-invariant-check",       "없는 단계명을 적는다",                         inj_07, None),
+    ("8",   "wiki8-retire-target",         "같은 대상을 두 번 폐기한다",                   inj_08, None),
+    ("9",   "wiki9-retire-reason",         "reason 을 비운다",                             inj_09, None),
+    ("10",  "wiki10-ghost-ref",            "폐기된 id 를 related 에 넣는다",               inj_10, None),
+    ("11",  "wiki11-reopen-kind",          "kind 를 비운다",                               inj_11, None),
+    ("12",  "wiki12-reopen-ref",           "아크가 아닌 문자열을 arc_phase 에 적는다",     inj_12, None),
+    ("13",  "wiki13-dd-target",            "없는 id 를 줄 주석에 적는다",                  inj_13, None),
+    ("14",  "wiki14-dd-layer",             "회계층 파일에서 정의층 항목을 지목한다",       inj_14, None),
+    ("15",  "wiki15-names-unique",         "같은 규율 ID 를 두 항목에 적는다",             inj_15, None),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날 뒤의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_after, None),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날 앞의 날짜로 폐기된 규율 ID 를 적는다",  inj_23_before, None, "nocatch"),
+    ("23",  "wiki23-rule-ghost",           "폐기한 날과 같은 날짜로 폐기된 규율 ID 를 적는다", inj_23_same, None),
+    ("24",  "wiki24-doc-rule-ghost",       "상주 문서에 없는 규율 ID 를 적는다",           inj_24_missing, None),
+    ("24",  "wiki24-doc-rule-ghost",       "선언되지 않은 폐기 규율을 적는다",             inj_24_retired, None),
+    ("25",  "wiki25-marker-missing",       "최상위 선언 하나의 표지를 지운다",             inj_25, None),
+    ("16",  "wiki16-trigger-fired",        "충족된 트리거를 등재한다",                     inj_16, None),
+    ("17",  "wiki17-reopen-null",          "reopen_when 을 null 로 둔 항을 늘린다",        inj_17, None),
+    ("43",  "wiki43-extraction-trigger-age", "실재하지 않는 번호를 extraction 의 ref 로 둔다",  inj_43, None),
+    ("18",  "wiki18-arc-hole-disposition", "blocking 구멍을 등재한다",                      inj_18, None),
+    ("19",  "wiki19-id-gap",               "항목을 지워 결번을 만든다",                    inj_19, None),
+    ("20",  "wiki20-arc-holes",            "해소도 이관도 안 된 구멍을 든 채 닫는다",      inj_20, "charter"),
+    ("21",  "wiki21-arc-blocking",         "발화도 해소도 이월도 안 된 blocking 을 든다",  inj_21, "charter"),
+    ("28",  "wiki28-cq-exists",            "범위 밖인 아크의 cq 에 고정 절의 번호를 적는다", inj_28_out_of_scope, None),
+    ("31",  "wiki31-hole-unassigned",      "열린 아크의 페이즈로 발화하는 이연 항을 쓴다",  inj_31, None),
+    ("32",  "wiki32-closure-phase",         "선언되지 않은 페이즈 이름으로 종료 문서를 둔다",  inj_32, None),
+    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 머리말에 그 예약 낱말을 둔다",    inj_33_heading, None),
+    ("33",  "wiki33-rejection-registered",  "경계 안 문단의 본문에만 그 낱말을 둔다",         inj_33_body, None, "nocatch"),
+    ("33",  "wiki33-rejection-registered",  "for_decl 값을 없는 선언 이름으로 바꾼다",       inj_33_right, None),
+    ("34",  "wiki34-heading-form",          "경계 안 머리말의 마침표를 지운다",              inj_34_period, None),
+    ("34",  "wiki34-heading-form",          "HEADING 블록을 비운다",                        inj_34_empty, None),
+    ("35",  "wiki35-doc-form",              "청사진을 docs/ 에 둔다",                       inj_35_plan, None),
+    ("35",  "wiki35-doc-form",              "패치 조각을 docs/ 에 둔다",                    inj_35_patch, None),
+    ("35",  "wiki35-doc-form",              "별지를 docs/ 에 둔다",                         inj_35_annex, None),
+    ("35",  "wiki35-doc-form",              "종료 문서가 아닌 것을 phases/ 에 둔다",         inj_35_phases_other, None),
+    ("35",  "wiki35-doc-form",              "선언되지 않은 아크 이름으로 종료 문서를 둔다",   inj_35_phases_arc, None),
+    ("35",  "wiki35-doc-form",              "추출 기록의 접두사를 어긴다",                   inj_35_extraction, None),
+    ("35",  "wiki35-doc-form",              "파일 이름에 대문자와 밑줄을 쓴다",              inj_35_case, None),
+    ("35",  "wiki35-doc-form",              "허용되지 않은 디렉터리를 만든다",               inj_35_dir, None),
+    ("35",  "wiki35-doc-form",              "원장 디렉터리에 새 파일을 둔다",                inj_35_ledger, None),
+    ("36",  "wiki36-root-surface",          "무시 파일에서 /* 줄을 지운다",                  inj_36_open, None),
+    ("36",  "wiki36-root-surface",          "없는 이름으로 되살림 줄을 더한다",              inj_36_ghost, None),
+    ("37",  "wiki37-claude-ledger-count",   "원장 계수 표의 한 행의 수를 하나 틀리게 적는다",  inj_37_count, None),
+    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록의 분할에서 배타성 문단을 지운다",      inj_38_para, None),
+    ("38",  "wiki38-partition-exclusivity",  "모든 쌍이 배타적이라 적은 분할의 배타 관계 한 쌍을 지운다", inj_38_pair, None),
+    ("38",  "wiki38-partition-exclusivity",  "EXCL 블록을 비운다",                            inj_38_empty, None),
+    ("39",  "wiki39-arc-holes-exist",       "어느 아크의 holes 에 이연 레지스터에 없는 id 를 적는다", inj_39_ghost, None),
+    ("40",  "wiki40-check-count-places",    "계수 자리 가운데 하나의 수를 하나 틀리게 적는다", inj_40_count, None),
+    ("41",  "wiki41-pointer-scope",  "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에서 살아 있는 조항 하나를 지운다",        inj_42_drop, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에 폐기된 조항 하나를 더한다",             inj_42_retired, None),
+    ("42",  "wiki42-session-clause-mirror", "블록에 원장에 없는 이름을 더한다",             inj_42_ghost, None),
+    ("42",  "wiki42-session-clause-mirror", "블록을 비운다",                               inj_42_empty, None),
+    ("35",  "wiki35-doc-form",              "같은 번호를 가진 추출 기록을 둔다",            inj_35_dupnum, None),
+    ("35",  "wiki35-doc-form",              "중간 번호의 추출 기록을 옮겨 결번을 만든다",   inj_35_gapnum, None, "nocatch"),
+    ("26",  "wiki26-clarify-target",        "clarifies 를 없는 id 로 바꾼다",               inj_26, None),
+    ("27",  "wiki27-clarify-resolves",      "phrase 를 대상의 산문에 없는 값으로 바꾼다",   inj_27, None),
+    ("30",  "wiki30-cq-unclaimed",          "어느 아크의 cq 에서 번호를 지워 미배정으로 만든다", inj_30, None),
+    ("29",  "wiki29-arc-cq",                "닫힌 아크의 한 처분 항목의 답할 항 값을 다른 번호로 바꾼다", inj_29, INJ_29_ARC),
+    ("41",  "wiki41-pointer-scope",  "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment, None),
+    ("41",  "wiki41-pointer-scope",  "소진 문서의 식별자 꼴을 하나 더한다",          inj_41_ephemeral, None),
+    ("41",  "wiki41-pointer-scope",  "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None),
+    ("44",  "wiki44-injection-mirror",      "한 검사의 주입 항을 사례 목록에서 지운다",     inj_44_drop, None),
+    ("44",  "wiki44-injection-mirror",      "명세에 없는 번호로 사례를 더한다",             inj_44_ghost, None),
+    ("44",  "wiki44-injection-mirror",      "사례 목록의 한 항이 전사한 단계 id 를 다른 값으로 바꾼다", inj_44_step, None),
+    ("45",  "wiki45-phase-hole-assignment", "한 페이즈의 holes 에서 구멍 하나를 지운다",    inj_45_hole_drop, None),
+    ("45",  "wiki45-phase-hole-assignment", "두 페이즈가 같은 구멍을 들게 한다",            inj_45_hole_dup, None),
+    ("45",  "wiki45-phase-hole-assignment", "열려 있는 아크의 페이즈 객체에서 builds 를 지운다", inj_45_builds_drop, None),
+    ("45",  "wiki45-phase-hole-assignment", "닫힌 아크의 페이즈 원소를 문자열로 되돌린다",  inj_45_string, None),
+    ("46",  "wiki46-block-list-mirror",     "목록에서 블록 이름 하나를 지운다",             inj_46_drop, None),
+    ("46",  "wiki46-block-list-mirror",     "어느 검사도 읽지 않는 이름을 더한다",          inj_46_ghost, None),
+    ("47",  "wiki47-spec-field-check-no",   "어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다", inj_47_ghost, None),
 ]
 
 
@@ -1539,11 +1583,14 @@ def main() -> int:
         base_arc = run_checker(make_copy(tmp / "base-arc"), arc_close="charter")
 
         for case, cid in zip(CASES, case_id):
-            num, step, desc, fn, marker, arc = case[:6]
+            num, step, desc, fn, arc = case[:5]
             # 기대 방향이다. 기본은 잡히는 것이고 "nocatch" 는 잡히지 않아야 하는 항이다.
-            expect = case[6] if len(case) > 6 else "catch"
+            expect = case[5] if len(case) > 5 else "catch"
             work = make_copy(tmp / f"case-{num.replace('-', '')}")
-            extra = fn(work)
+            # **표지가 주입 자신에게서 나온다.** 사례 목록이 그것을 상수로 들면 주입이 심는 값을
+            # 고치는 회차가 그 상수를 잊어도 어느 검사도 걸리지 않으며, 그 낡음은 보고 부류의
+            # 판정이 제 표지를 잃고 「새 보고 줄이 있다」로 떨어지는 꼴로만 남는다.
+            marker = fn(work)
             got = run_checker(work, arc_close=arc)
             base = base_arc if arc else base_plain
             b = base["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
@@ -1554,10 +1601,19 @@ def main() -> int:
             # 가름의 결함이 갈리지 않는다. 검사 43 이 그 자리였다. 보고만 하는 검사는 위반 줄을
             # 내지 않으므로 기준선의 판정이 `REPORT` 인 것이 그 부류의 정의와 같다.
             if b["verdict"] == "REPORT":
+                # 판정은 기준선 차분으로 그대로 두고 표지의 거처만 옮긴다. 주입이 새로 만든
+                # 자리의 줄은 같은 꼴의 줄이 뒤 회차의 기준선에 서더라도 여전히 새 줄이다.
+                #
+                # **표지가 비면 통과시키지 않는다.** 빈 표지는 어느 줄에나 들어 있는 것으로
+                # 읽혀 판정이 「새 보고 줄이 있다」로 떨어지고, 그러면 주입이 겨눈 자리가
+                # 보고에 잡혔는지를 재지 않는다.
                 new_notes = [n for n in g["notes"] if n not in b["notes"]]
-                hit = any((marker or "") in n for n in new_notes)
-                ok = bool(new_notes) and hit
-                detail = new_notes[0] if new_notes else "보고 줄에 변화 없음"
+                if not marker:
+                    ok = False
+                    detail = "보고 부류인데 주입이 표지를 돌려주지 않았다"
+                else:
+                    ok = bool(new_notes) and any(str(marker) in n for n in new_notes)
+                    detail = new_notes[0] if new_notes else "보고 줄에 변화 없음"
             elif expect == "nocatch":
                 new_v = [v for v in g["violations"] if v not in b["violations"]]
                 ok = not new_v
@@ -1567,8 +1623,6 @@ def main() -> int:
                 new_v = [v for v in g["violations"] if v not in b["violations"]]
                 ok = g["verdict"] == "FAIL" and bool(new_v)
                 detail = new_v[0] if new_v else "새 위반 줄 없음"
-                if extra:
-                    detail = detail.replace(str(extra), str(extra))
             rows.append((cid, num, desc, b["verdict"], g["verdict"], ok, detail))
             shutil.rmtree(work)
     finally:

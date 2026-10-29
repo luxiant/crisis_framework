@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔여섯을 돈다. 실패시키는 것 서른일곱과 보고만 하는 것 여섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔일곱을 돈다. 실패시키는 것 서른여덟과 보고만 하는 것 여섯과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1072,7 +1072,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46",
+         "42", "43", "44", "45", "46", "47",
          "29", "30"]
 
 
@@ -2060,8 +2060,8 @@ COUNT_SPEC = "docs/decisions/SPEC.md"
 COUNT_VERIFY = "scripts/verify.sh"
 COUNT_WIKI = "scripts/check_wiki.py"
 # 정렬 상수의 목록. 돌고 있는 모듈의 `ORDER` 를 세지 않고 뿌리의 소스에서 읽는다. 음성 대조가
-# 사본을 뿌리로 지목하므로 자기 모듈을 세면 사본의 그 자리에 든 주입을 보지 못하며, 나머지 여섯
-# 자리도 전부 뿌리에서 읽어 일곱이 한 판을 본다.
+# 사본을 뿌리로 지목하므로 자기 모듈을 세면 사본의 그 자리에 든 주입을 보지 못하며, 나머지
+# 자리도 전부 뿌리에서 읽어 그 자리 전량이 한 판을 본다.
 COUNT_ORDER_LIST = re.compile(r"^ORDER = \[(.*?)\]", re.M | re.S)
 COUNT_ORDER_ITEM = re.compile(r'"[^"]+"')
 # 명세 §2 의 표의 행. 머리와 가름 줄은 첫 칸이 검사 번호가 아니라 세지 않는다.
@@ -2398,8 +2398,108 @@ def check_46(led: Ledger) -> Report:
     return r
 
 
+# 검사 47 이 읽는 필드 표. **표를 머리에서 가른다.** 첫 칸이 `필드` 인 표가 그 부류이고 그 가운데
+# 머리가 `검사` 열을 든 것이 유니버스다. 검사 칸의 자리를 열 번호로 박지 않는 까닭은 §3.6 의 표
+# 둘이 형 칸을 들지 않아 열이 셋이고 나머지가 넷이라는 데 있으며, 박으면 그 가정이 틀린다.
+# 절을 번호로 박지 않으므로 필드 표가 하나 더 서면 그 표가 저절로 유니버스에 든다.
+SPEC_FIELD_HEAD = "필드"
+SPEC_FIELD_CHECK = "검사"
+SPEC_TABLE_RULE = re.compile(r"^:?-{2,}:?$")
+# 칸을 가르는 꼴. 역슬래시로 막은 세로줄은 칸의 경계가 아니라 `invariant\|policy` 처럼 한 칸 안의
+# 문면이므로 가르지 않는다. 가르면 형 칸이 둘로 쪼개져 검사 칸의 자리가 한 칸씩 밀린다.
+SPEC_CELL_SPLIT = re.compile(r"(?<!\\)\|")
+# 검사 번호의 꼴. 숫자와 그 뒤에 붙는 알파벳 한 자이며 가운뎃점으로 여럿을 잇는다.
+SPEC_CHECK_NO = re.compile(r"^\d+(?:-[a-z])?$")
+SPEC_CHECK_JOIN = "·"
+
+
+def md_cells(line: str) -> list[str] | None:
+    """마크다운 표의 한 줄에서 칸을 뽑는다. 표의 줄이 아니면 `None` 이다."""
+    t = line.strip()
+    if not (t.startswith("|") and t.endswith("|")):
+        return None
+    return [c.strip() for c in SPEC_CELL_SPLIT.split(t[1:-1])]
+
+
+def spec_field_rows(text: str) -> tuple[list[tuple[int, str, str, str, int]], list[str]]:
+    """필드 표의 행마다 (줄 번호, 절 제목, 필드 칸, 검사 칸, 검사 열의 자리) 와 유니버스 밖의 표.
+
+    검사 열을 들지 않는 필드 표는 유니버스 밖이며 그 사실을 보고에 낸다. 건너뛰면 그 표가
+    유니버스에 든 것인지 검사 칸이 비어 있는 것인지가 보고에서 갈리지 않는다.
+    """
+    rows: list[tuple[int, str, str, str, int]] = []
+    outside: list[str] = []
+    lines = text.splitlines()
+    sec = ""
+    i = 0
+    while i < len(lines):
+        if lines[i].startswith("#"):
+            sec = lines[i].strip()
+        head = md_cells(lines[i])
+        rule = md_cells(lines[i + 1]) if i + 1 < len(lines) else None
+        if head and rule and all(SPEC_TABLE_RULE.match(c) for c in rule if c):
+            if head[:1] == [SPEC_FIELD_HEAD]:
+                if SPEC_FIELD_CHECK in head:
+                    at = head.index(SPEC_FIELD_CHECK)
+                    for j in range(i + 2, len(lines)):
+                        body = md_cells(lines[j])
+                        if body is None:
+                            break
+                        if at < len(body):
+                            rows.append((j + 1, sec, body[0], body[at], at))
+                else:
+                    outside.append(f"{sec} 의 {lines[i].strip()}")
+            i += 2
+            continue
+        i += 1
+    return rows, outside
+
+
+def check_47(led: Ledger) -> Report:
+    r = Report("47", "wiki47-spec-field-check-no",
+               "이 명세의 필드 표가 검사 칸에 든 번호가 실재하는 검사인가", "fail")
+    spec = led.root / COUNT_SPEC
+    wiki = led.root / COUNT_WIKI
+    for f in (spec, wiki):
+        if not f.is_file():
+            r.bad(f"{f.name} 이 없다")
+            return r
+    rows, outside = spec_field_rows(spec.read_text(encoding="utf-8"))
+    # 좌변이 비면 우변이 무엇이든 어긋남이 0 으로 난다. 검사 40 과 44 와 46 이 같은 요구를 둔다.
+    if not rows:
+        r.bad(f"{COUNT_SPEC} 에서 필드 표의 행을 하나도 읽지 못했다")
+        return r
+    # 실재의 정본은 선언이다. 뿌리의 소스에서 읽는 까닭은 음성 대조가 사본을 뿌리로 지목하므로
+    # 돌고 있는 모듈을 세면 사본의 그 자리에 든 주입을 보지 못한다는 것이다. 검사 44 가 같은
+    # 자리를 같은 꼴로 읽는다.
+    declared = set(dict(REPORT_DECL.findall(wiki.read_text(encoding="utf-8"))))
+    if not declared:
+        r.bad(f"{COUNT_WIKI} 에서 검사의 선언을 하나도 읽지 못했다")
+        return r
+    cited: set[str] = set()
+    filled = 0
+    for line, _sec, field, cell, _at in rows:
+        if not cell:
+            continue
+        filled += 1
+        for tok in (x.strip() for x in cell.split(SPEC_CHECK_JOIN)):
+            if not SPEC_CHECK_NO.match(tok):
+                r.bad(f"{COUNT_SPEC}:{line} 의 {field} 의 검사 칸이 번호의 꼴이 아닌 "
+                      f"`{tok}` 를 든다")
+                continue
+            cited.add(tok)
+            if tok not in declared:
+                r.bad(f"{COUNT_SPEC}:{line} 의 {field} 가 검사 {tok} 를 드는데 "
+                      f"{COUNT_WIKI} 의 어느 검사도 그 번호를 선언하지 않는다")
+    r.note(f"필드 표의 행 {len(rows)} · 검사 칸이 선 행 {filled} · 그 칸이 든 번호 {len(cited)}")
+    r.note(f"{COUNT_WIKI} 가 선언한 검사 {len(declared)} · 유니버스 밖의 필드 표 {len(outside)}")
+    for x in outside:
+        r.note(f"유니버스 밖 — {x}")
+    return r
+
+
 def check_41(led: Ledger) -> Report:
-    r = Report("41", "wiki41-rule-comment-pointer",
+    r = Report("41", "wiki41-pointer-scope",
                "리포의 영구 문면이 리포 밖에서만 뜻을 갖는 식별자를 지목하는가", "fail")
     dist, exempt = r11_rules(led)
     # 블록을 읽지 못하면 통과가 아니라 실패다. 거리가 없으면 재기가 서지 않고 면제가 비면
@@ -2579,7 +2679,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_33(led), check_34(led), check_35(led),
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
-        check_44(led), check_45(led), check_46(led),
+        check_44(led), check_45(led), check_46(led), check_47(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2606,7 +2706,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔여섯)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔일곱)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
