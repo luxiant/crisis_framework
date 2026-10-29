@@ -20,11 +20,11 @@
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
-| ★ | Procyclical leverage and value-at-risk | Adrian·Shin 2013 (NBER 18943) | VaR 제약 → 레버리지 함수. 제약식이 명시된 판본. **첫 번째 대상** |
-| ★ | Liquidity and leverage | Adrian·Shin 2008 (SR 328) | 경기순응성의 원전. 딜러 대차대조표 실증 |
-| ★ | Financial intermediaries and monetary economics | Adrian·Shin 2010 (SR 398) | 핸드북 판본. 루프의 통화정책 연결 |
-| ★ | Margins, debt capacity, and systemic risk | Aramonte·Schrimpf·Shin 2023 | 헤어컷·마진 제약. 비은행 확장 |
-| ★ | Non-core bank liabilities and financial vulnerability | Hahm·Shin·Shin 2012 | 핵심/비핵심 부채 분할. 용어 분할 재료 |
+| ★ | Procyclical leverage and value-at-risk | Adrian·Shin 2013 (NBER 18943) | E-01. VaR 제약 → 레버리지 함수. 제약식이 명시된 판본. **첫 번째 대상** |
+| ★ | Liquidity and leverage | Adrian·Shin 2008 (SR 328) | E-02. 경기순응성의 원전. 딜러 대차대조표 실증 |
+| ★ | Financial intermediaries and monetary economics | Adrian·Shin 2010 (SR 398) | E-03. 핸드북 판본. 루프의 통화정책 연결 |
+| ★ | Margins, debt capacity, and systemic risk | Aramonte·Schrimpf·Shin 2023 | E-04. 헤어컷·마진 제약. 비은행 확장 |
+| ★ | Non-core bank liabilities and financial vulnerability | Hahm·Shin·Shin 2012 | E-05. 핵심/비핵심 부채 분할. 용어 분할 재료 |
 | | Financial intermediaries, financial stability, and monetary policy | Adrian·Shin 2008 (SR 346) | SR 328과 중복 큼 |
 | | Money, liquidity, and monetary policy | Adrian·Shin 2009 (SR 360) | 14쪽 요약판 |
 | | Liquidity and financial contagion (FSR 특집 내 챕터) | Adrian·Shin 2008 | 190쪽 편집본. 해당 챕터만 |
@@ -36,8 +36,8 @@
 | | Financial intermediaries and the cross-section of asset returns | Adrian·Etula·Muir | 레버리지 = 가격 인자. 실증. 구조만 추출 |
 | | Non-bank financial intermediaries and financial stability | Aramonte·Schrimpf·Shin 2021 | 비은행 노드 유형 목록 |
 | | Securitisation and financial stability | Shin 2009 (EJ) | 총 부채 확장 메커니즘 |
-| | Marking-to-market: panacea or Pandora's box | Plantin·Sapra·Shin 2007 | 가격 → 제약 경로의 회계적 근거 |
-| | Illiquidity component of credit risk | Morris·Shin 2016 | 지급불능/유동성 분해. 실패 양태 분할 재료 |
+| | Marking-to-market: panacea or Pandora's box | Plantin·Sapra·Shin 2007 | E-16. 가격 → 제약 경로의 회계적 근거 |
+| | Illiquidity component of credit risk | Morris·Shin 2016 | E-17. 지급불능/유동성 분해. 실패 양태 분할 재료 |
 | | Reflections on Northern Rock | Shin 2009 (JEP) | **D-3 역사 사례 공급원** |
 | | Leveraged losses | Greenlaw·Hatzius·Kashyap·Shin 2008 | **D-3 역사 사례 공급원** |
 
@@ -45,27 +45,27 @@
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
-| ★ | Federal Reserve Bank of New York Staff Reports on Shadow Banking | Pozsar·Adrian·Ashcraft·Boesky 2010/12 | **지도.** 노드 = (기관유형 × 단계)의 원전. J-1·K-2 |
-| ★ | Shadow Banking: The Money View | Pozsar 2014 (OFR) | 화폐성 위계. PH-R3 중심 구조물 |
-| ★ | Institutional Cash Pools and the Triffin Dilemma | Pozsar 2011 (IMF) | 수요 측. 안전자산 수요 노드 |
+| ★ | Federal Reserve Bank of New York Staff Reports on Shadow Banking | Pozsar·Adrian·Ashcraft·Boesky 2010/12 | E-06. **지도.** 노드 = (기관유형 × 단계)의 원전. J-1·K-2 |
+| ★ | Shadow Banking: The Money View | Pozsar 2014 (OFR) | E-07. 화폐성 위계. PH-R3 중심 구조물 |
+| ★ | Institutional Cash Pools and the Triffin Dilemma | Pozsar 2011 (IMF) | E-09. 수요 측. 안전자산 수요 노드 |
 | ★ | The Nonbank-Bank Nexus and the Shadow Banking System | Pozsar·Singh 2011 (IMF) | **담보 재사용·연쇄.** K-5 직결 |
 | | The Rise and Fall of the Shadow Banking System | Pozsar 2008 | 초기 서술 |
 | | A Macro View of Shadow Banking | Pozsar 2015 | 레버드 베타·도매조달 |
-| | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | 위계 + 딜러 중심 최종대부자. J-4 |
+| | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | E-10. 위계 + 딜러 중심 최종대부자. J-4 |
 | | Shadow Banking: Economics and Policy (파일명 `Shadow Banking.pdf`) | Claessens·Pozsar·Ratnovski·Singh 2012 (IMF SDN) | 개관 |
-| | The Federal Reserve's TALF | Ashcraft·Malz·Pozsar 2012 | 중앙은행 노드의 담보 대출. J-4 |
+| | The Federal Reserve's TALF | Ashcraft·Malz·Pozsar 2012 | E-11. 중앙은행 노드의 담보 대출. J-4 |
 | | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | 형식 모형. Holmström-Tirole 계열 |
-| | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | 위와 동일 모형의 다른 판본으로 추정 |
+| | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | E-48. 위와 동일 모형의 다른 판본으로 추정 |
 | | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 |
 
 ## O-3 통화 확장 — 달러·국경 간 청구권·CIP (18편)
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
-| ★ | Global Banking Glut and Loan Risk Premium | Shin 2012 (IMF ER) | 유럽 은행의 달러 중개. 통화 축 원전 |
-| ★ | Capital Flows and the Risk-Taking Channel of Monetary Policy | Bruno·Shin 2013 | 달러 조달 ↔ 레버리지 ↔ 자본 흐름 |
-| ★ | Cross-Border Banking and Global Liquidity | Bruno·Shin 2014 | 위 논문의 실증 |
-| ★ | The dollar, bank leverage and the deviation from CIP | Avdjiev·Du·Koch·Shin 2017 | **FX 스왑·CIP 이탈.** J-3 관측 과제 직결 |
+| ★ | Global Banking Glut and Loan Risk Premium | Shin 2012 (IMF ER) | E-12. 유럽 은행의 달러 중개. 통화 축 원전 |
+| ★ | Capital Flows and the Risk-Taking Channel of Monetary Policy | Bruno·Shin 2013 | E-13. 달러 조달 ↔ 레버리지 ↔ 자본 흐름 |
+| ★ | Cross-Border Banking and Global Liquidity | Bruno·Shin 2014 | E-14. 위 논문의 실증 |
+| ★ | The dollar, bank leverage and the deviation from CIP | Avdjiev·Du·Koch·Shin 2017 | E-15. **FX 스왑·CIP 이탈.** J-3 관측 과제 직결 |
 | | The dollar, bank leverage, and real economic activity | Erik·Lombardi·Mihaljek·Shin 2020 | 달러-레버리지 관계 변화 |
 | | Global dollar credit and carry trades | Bruno·Shin 2016 | 기업 달러 차입 |
 | | Currency depreciation and EM corporate distress | Bruno·Shin 2018 | 통화 불일치 실증. J-2 정의 검증 |
