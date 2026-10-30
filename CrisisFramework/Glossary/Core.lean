@@ -122,6 +122,28 @@ inductive Concept where
   | withdrawalCoverage
   /-- 상환 실패. 지급 의무가 선 액수를 그 구간에 내준 액수가 다 맞추지 못한 상태. -/
   | repaymentFailure
+  /-- 유동성 풋. 만기 불일치를 운영하는 주체가 공황에서 추가 유동성에 닿는 선택권이며, 그 여지가
+      모두에게 같지 않아 주체 사이에 위계를 이룬다. -/
+  | liquidityPut
+  /-- 사적 유동성 풋. 집행이 사적 시장 참가자에 달린 유동성 풋이다. -/
+  | privateLiquidityPut
+  /-- 공적 유동성 풋. 집행이 중앙은행에 달린 유동성 풋이다. -/
+  | publicLiquidityPut
+  /-- 자금조달 유동성 접근. 자산을 담보로 빌려 유동성에 닿는 선택권이다. -/
+  | fundingLiquidityAccess
+  /-- 시장 유동성 접근. 자산을 팔아 유동성에 닿는 선택권이다. -/
+  | marketLiquidityAccess
+  /-- 최후대출자 접근. 자산을 중앙은행에 넘겨 유동성에 닿는 선택권이다. -/
+  | lastResortLendingAccess
+  /-- 통화 백스톱 접근. 주권이 갖는 선택권이며 중앙은행이 집행한다. -/
+  | currencyBackstopAccess
+  /-- 신용 풋. 화폐 청구권의 액면가 약속에 붙는 신용 보호이며, 보호의 수준이 청구권마다 달라
+      수단 종류 사이에 위계를 이룬다. -/
+  | creditPut
+  /-- 사적 신용 풋. 제공자가 사적 주체인 신용 풋이다. -/
+  | privateCreditPut
+  /-- 공적 신용 풋. 제공자가 공적 부문인 신용 풋이다. -/
+  | publicCreditPut
   deriving DecidableEq, Repr
 
 /--
@@ -347,6 +369,27 @@ V-5 가 요구하는 판정의 재료가 이 자리에서 선다.
 세 경로가 같은 데이터로 측정되어 G-1 과 G-2 가 어긋난다는 구멍이 그 분기를 확인되지 않은 것으로
 두므로, 분할하면 구멍을 확인된 분기로 승격시킨다.
 
+**풋을 열 개념으로 등재하고 유동성 풋 쪽을 3 단으로 세운다.** 최상위와 집행 주체별 둘과 기능 넷이
+그 3 단이며, 신용 풋 쪽은 최상위와 집행 주체별 둘만 둔다. 사적과 공적이 별도 축이 아니라 기능 축의
+묶음인 까닭은 기능이 그 풋을 누가 집행하는지를 이미 정하는 데 있다. 두 축으로 두면 곱이 원문에 없는
+칸을 허용한다.
+
+**긴급 조달 접근을 별도 개념으로 등재하지 않는다.** 그것과 유동성 풋 사이의 관계가 수단 관계인데
+V-2 의 네 관계로 표현되지 않으며, 원문이 유동성 풋에 그 위계의 이름을 직접 주므로 별도 축이 필요
+하지 않다. 등재하면 관계 없는 개념이 하나 더 서고 그 관계의 결손이 구멍으로 올라간다.
+
+**명시성 축을 유동성 풋에 세우지 않는다.** 신호의 분할이 조건이 문서에 있는가를 축으로 이미 쓰고
+그 분할의 역사 사례가 계약상 크레딧 라인으로 제공한 풋과 암묵적 풋을 가른 것이어서, 그 축이 이미
+유동성 풋 위에서 재어진다. 또 세우면 측정 대응이 같은 둘을 분할하는 것이 되며 색인도 다르다. 기능은
+풋에 붙고 명시성은 그 풋의 발동조건에 붙는다.
+
+**신용 풋의 수단을 등재하지 않는다.** 그 위계가 청구권의 수단 종류에 붙고 국채와 부보예금과 레포와
+머니펀드와 무부보예금의 다섯 단계를 드는데, 그 색인이 주체에 붙는 유동성 풋의 위계와 달라 이 자리가
+받을 것이 아니다.
+
+**풋 둘을 액면가 약속의 강도에 잇지 않는다.** 그 강도가 공적 유동성 풋과 신용 풋의 받침 양태에
+달린 함수인데 V-2 의 네 관계가 함수 관계를 표현하지 않으며, 정제로 두면 강도가 풋의 특수 사례라고
+주장하게 되어 거짓이다. 그 결손은 구멍으로 등재되어 있다.
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -412,6 +455,14 @@ def registry : List ConceptRel :=
   , .measuredBy .titleTransferPledge .assetEncumbranceDisclosure
   , .refines .nodeMoneyAsset .claim
   , .measuredBy .solvency .regulatoryFiling
+  , .refines .privateLiquidityPut .liquidityPut
+  , .refines .publicLiquidityPut .liquidityPut
+  , .refines .fundingLiquidityAccess .privateLiquidityPut
+  , .refines .marketLiquidityAccess .privateLiquidityPut
+  , .refines .lastResortLendingAccess .publicLiquidityPut
+  , .refines .currencyBackstopAccess .publicLiquidityPut
+  , .refines .privateCreditPut .creditPut
+  , .refines .publicCreditPut .creditPut
   ]
 
 end CrisisFramework.Glossary
