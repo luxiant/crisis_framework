@@ -2124,6 +2124,402 @@
    "related": [
     "CF-1175"
    ]
+  },
+  {
+   "id": "CF-1690",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "단계를 기관 유형의 열거로 세우는 안.",
+   "reason": "기관 유형이 의사결정 단위에 대한 관측 투영이므로 노드가 아니며, 유형으로 세우면 한 법인 안의 두 데스크가 서로 다른 여지를 갖는 것이 구조에서 보이지 않게 된다.",
+   "for": "긴급 조달 접근의 단계를 무엇의 열거로 세우는가.",
+   "statement": "단계를 기관 유형의 열거로 세우는 안을 기각한다.",
+   "basis": "노드를 의사결정 단위로 두고 기관유형과 데스크를 관측 투영으로 둔 결정이 그 가름의 정본이며, 원문 표의 주체 열거가 데스크를 따로 드는 것이 그 투영의 실례다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier",
+   "related": [
+    "CF-1618"
+   ]
+  },
+  {
+   "id": "CF-1691",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "여지의 크기를 순서가 아니라 등급의 수로 세우는 안.",
+   "reason": "원문이 그 여지를 더 많은 여지와 제한된 접근 같은 비교로만 들고 어느 등급에도 수를 주지 않으므로, 수를 주면 그 값이 단계 사이의 간격을 뜻하는 것처럼 읽힌다.",
+   "for": "긴급 조달 접근의 단계를 무엇의 열거로 세우는가.",
+   "statement": "여지의 크기를 순서가 아니라 등급의 수로 세우는 안을 기각한다.",
+   "basis": "정의층이 수를 쓰지 않으므로 등급의 수가 설 자리가 없고, 액면가 약속의 강도가 같은 사유로 순위 함수를 기각한 선례가 같은 층에 서 있다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier",
+   "related": [
+    "CF-1618"
+   ]
+  },
+  {
+   "id": "CF-1692",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "네 단계를 용어집의 개념으로 등재하고 순서를 용어집의 관계로 등록하는 안.",
+   "reason": "단계가 기관 유형에 걸려 비형식 개념에 대응하지 않으므로 용어집이 등재하는 대상이 아니다.",
+   "for": "긴급 조달의 네 단계를 용어집에 등재하는가.",
+   "statement": "네 단계를 용어집의 개념으로 등재하고 순서를 용어집의 관계로 등록하는 안을 기각한다.",
+   "basis": "성질을 갖는 정의의 선행 등록 요구가 비형식 개념에 대응하는 것에만 걸리며, 원문 표의 주체 열거가 이미 같은 사유로 표현 수단으로 서서 그 docstring 이 대응 개념을 없음으로 적는다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier",
+   "related": [
+    "CF-1630"
+   ]
+  },
+  {
+   "id": "CF-1693",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "네 단계에 순위 함수를 두어 공역의 값으로 비교하는 안.",
+   "reason": "순위의 공역이 시점 인덱스가 아닌 자리의 자연수가 되어 정의층의 수 체계 제한을 어기며, 패턴 매칭으로 적으면 수를 쓸 수단 자체가 없다.",
+   "for": "네 단계 사이의 순서를 어떤 꼴로 주는가.",
+   "statement": "네 단계에 순위 함수를 두어 공역의 값으로 비교하는 안을 기각한다.",
+   "basis": "액면가 약속의 강도 위의 비교가 같은 사유로 같은 길을 간 선례이며, 그 선언의 기각 문단이 순위를 두면 값이 범주 사이의 간격을 뜻하는 것처럼 읽힌다는 것을 함께 든다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.atLeastAsHigh",
+   "related": [
+    "CF-1618"
+   ]
+  },
+  {
+   "id": "CF-1694",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "각 단계가 닿는 풋의 집합을 포함 관계로 비교해 순서를 유도하는 안.",
+   "reason": "원문이 머니펀드와 딜러에 같은 두 풋을 주고 그 둘을 가르는 것을 여지의 크기에 두므로 포함으로는 그 쌍이 갈리지 않으며, 주권에는 통화 백스톱 하나만 주어 그 집합이 은행의 집합을 포함하지 않는다.",
+   "for": "네 단계 사이의 순서를 어떤 꼴로 주는가.",
+   "statement": "각 단계가 닿는 풋의 집합을 포함 관계로 비교해 순서를 유도하는 안을 기각한다.",
+   "basis": "같은 파일의 존재 정리가 접근 사상이 단사가 아님을 컴파일되는 진술로 들고, 그 반례가 머니펀드와 딜러다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.atLeastAsHigh",
+   "related": [
+    "CF-1619"
+   ]
+  },
+  {
+   "id": "CF-1695",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "사적과 공적을 별도 축으로 세우고 기능을 그 축과의 쌍으로 유도하는 안.",
+   "reason": "기능이 그 풋을 누가 집행하는지를 이미 정하므로 두 축이 독립이 아니며, 쌍으로 유도하면 곱이 여덟이 되어 원문에 없는 칸을 구조가 허용한다.",
+   "for": "유동성 풋의 기능을 어떤 꼴로 열거하는가.",
+   "statement": "사적과 공적을 별도 축으로 세우고 기능을 그 축과의 쌍으로 유도하는 안을 기각한다.",
+   "basis": "액면가 약속의 강도가 두 축의 곱으로 세울 수 없다는 것이 같은 형의 선례이며, 그 선언의 기각 문단이 곱이 여덟이 되어 네 범주 밖의 칸을 허용한다는 것을 든다.",
+   "for_decl": "CrisisFramework.Definition.LiquidityPutKind",
+   "related": [
+    "CF-1624"
+   ]
+  },
+  {
+   "id": "CF-1696",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "명시성을 축으로 더하는 안.",
+   "reason": "명시성이 풋에 붙지 않고 그 풋의 발동조건에 붙으므로 색인이 다르고, 용어집의 신호 분할이 조건이 문서에 있는가를 축으로 이미 쓴다.",
+   "for": "유동성 풋의 기능을 어떤 꼴로 열거하는가.",
+   "statement": "명시성을 축으로 더하는 안을 기각한다.",
+   "basis": "그 신호 분할의 역사 사례가 계약상 크레딧 라인으로 제공한 풋과 암묵적 풋을 가른 것이어서 그 축이 이미 유동성 풋 위에서 재어진다.",
+   "for_decl": "CrisisFramework.Definition.LiquidityPutKind",
+   "related": [
+    "CF-1626"
+   ]
+  },
+  {
+   "id": "CF-1697",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "접근 사상을 시점 인덱스를 갖는 족으로 세우는 안.",
+   "reason": "시점 인덱스를 요구하는 조항이 타입에 걸리고 그 타입 위의 술어에는 걸리지 않으므로 족으로 둘 의무가 없으며, 족으로 두면 시점마다 어느 단계가 어느 풋에 닿는지를 정하는 입력이 필요한데 그 값의 출처가 원문에 없다.",
+   "for": "단계와 풋의 대응을 시점에 매는가.",
+   "statement": "접근 사상을 시점 인덱스를 갖는 족으로 세우는 안을 기각한다.",
+   "basis": "통화 백스톱의 발동이 전시와 금융위기에 걸린다는 원문의 문면이 그 대응을 시점의 함수로 만들므로 결손이 실재하며, 그 결손을 구멍으로 등재해 발화를 기다린다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.reaches",
+   "related": [
+    "CF-1681"
+   ]
+  },
+  {
+   "id": "CF-1698",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "단계를 받지 않고 주체를 바로 받는 안.",
+   "reason": "원문이 접근을 단계의 성질로 들고 주체는 단계에 배정되므로, 주체를 바로 받으면 같은 단계의 두 주체가 다른 접근을 갖는 것을 구조가 허용하면서 그 차이의 근거를 아무 데서도 받지 않는다.",
+   "for": "접근 사상의 정의역을 단계로 두는가 주체로 두는가.",
+   "statement": "단계를 받지 않고 주체를 바로 받는 안을 기각한다.",
+   "basis": "단계 배정 사상이 주체에서 단계로 가는 꼴로 따로 서 있어 두 사상의 합성이 주체의 접근을 내며, 그 분리가 배정의 결손을 값을 갖지 않는 자리로 드러낸다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.reaches",
+   "related": [
+    "CF-1620"
+   ]
+  },
+  {
+   "id": "CF-1699",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "단계에서 주체의 집합으로 가는 사상으로 받는 안.",
+   "reason": "집합으로 받으면 한 주체가 여러 단계에 드는 것을 구조가 허용하는데 원문이 단계마다 기관을 하나씩 들어 그 중복의 근거가 없다.",
+   "for": "주체와 단계의 대응을 어느 방향의 사상으로 받는가.",
+   "statement": "단계에서 주체의 집합으로 가는 사상으로 받는 안을 기각한다.",
+   "basis": "주체에서 단계로 가면 그 결손이 값을 갖지 않는 자리로 서며, 화폐자산 사상이 같은 꼴로 그 자리를 중앙은행 하나로 한정한 선례가 같은 층에 있다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingAccess",
+   "related": [
+    "CF-1620"
+   ]
+  },
+  {
+   "id": "CF-1700",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "값을 갖지 않는 자리를 두지 않고 모든 주체에 단계를 주는 안.",
+   "reason": "원문이 유동성 풋의 위계를 집행하는 쪽으로 중앙은행을 들고 접근하는 쪽으로 들지 않으므로, 모든 주체에 단계를 주면 집행자가 접근자의 위계에 서게 된다.",
+   "for": "접근자의 위계에 들지 않는 주체를 어떻게 담는가.",
+   "statement": "값을 갖지 않는 자리를 두지 않고 모든 주체에 단계를 주는 안을 기각한다.",
+   "basis": "공적 풋 둘이 중앙은행이 집행한다고 원문이 적고 통화 백스톱은 주권이 갖는다고 적어 집행자와 보유자가 갈리며, 그 가름이 원문 표의 배정에서도 선다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingAccess",
+   "related": [
+    "CF-1620"
+   ]
+  },
+  {
+   "id": "CF-1701",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "단계 배정을 시점과 무관한 하나의 사상으로 두는 안.",
+   "reason": "원문이 유동성 풋의 위계를 공황에서의 생존 조건으로 들고 그 조건이 기관의 꼴에 걸리므로, 시점을 받지 않으면 그 이동이 구조에 담기지 않는다.",
+   "for": "단계 배정에 시점 인덱스를 두는가.",
+   "statement": "단계 배정을 시점과 무관한 하나의 사상으로 두는 안을 기각한다.",
+   "basis": "정의층 대상이 시점 인덱스를 갖는 족이어야 하며 화폐자산 사상의 족이 같은 사유로 같은 길을 간 선례가 같은 층에 있다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingAccessFamily",
+   "related": [
+    "CF-1620"
+   ]
+  },
+  {
+   "id": "CF-1702",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "중앙은행을 주권 단계에 배정하는 안.",
+   "reason": "원문이 공적 풋 둘을 중앙은행이 집행한다고 적고 통화 백스톱은 주권이 갖는다고 적으므로 집행자와 보유자가 갈리며, 중앙은행을 주권 단계에 두면 그 가름이 사라진다.",
+   "for": "원문 표의 주체마다 어느 단계를 주는가.",
+   "statement": "중앙은행을 주권 단계에 배정하는 안을 기각한다.",
+   "basis": "같은 표를 받는 화폐자산 사상이 중앙은행을 값을 갖지 않는 자리로 두고 그 까닭을 더 위에 있는 주체의 화폐부채를 보유하지 않는 것으로 들어, 두 사상이 같은 주체에서 같은 꼴의 빈 자리를 갖는다.",
+   "for_decl": "CrisisFramework.Definition.moneyMatrixTierAccess",
+   "related": [
+    "CF-1633"
+   ]
+  },
+  {
+   "id": "CF-1703",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "표에 없는 주권을 열거에 더해 배정하는 안.",
+   "reason": "이 족이 받는 주체 열거가 원문 표의 주체이고 그 표에 주권이 없으므로, 더하면 그 열거가 두 출처를 섞는다.",
+   "for": "원문 표의 주체마다 어느 단계를 주는가.",
+   "statement": "표에 없는 주권을 열거에 더해 배정하는 안을 기각한다.",
+   "basis": "그 열거가 반례의 값을 선언으로 남기려고 세워진 것이어서 표의 범위가 그 열거의 범위이며, 주권의 통화 백스톱은 단계 열거가 이미 담는다.",
+   "for_decl": "CrisisFramework.Definition.moneyMatrixTierAccess",
+   "related": [
+    "CF-1633"
+   ]
+  },
+  {
+   "id": "CF-1704",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "풋 넷마다 칸을 하나씩 두어 넷으로 받는 안.",
+   "reason": "사적 풋 둘이 같은 시장 참가자에 달려 있고 공적 풋 둘이 같은 중앙은행에 달려 있어 그 소스가 둘로 갈리므로, 넷으로 두면 같은 소스를 두 칸이 나누어 받고 그 가름의 근거가 어디에도 없다.",
+   "for": "긴급 조달 접근의 공시 경로에 칸을 몇 두는가.",
+   "statement": "풋 넷마다 칸을 하나씩 두어 넷으로 받는 안을 기각한다.",
+   "basis": "화폐성 위계의 공시 경로가 받침을 두 칸으로 가른 자리가 선례이며, 그 가름의 축이 소스가 갈리는 자리였다.",
+   "for_decl": "CrisisFramework.Observation.EmergencyFundingChannel",
+   "related": [
+    "CF-1622"
+   ]
+  },
+  {
+   "id": "CF-1705",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "칸을 하나만 두어 접근 전체를 가르는지로 받는 안.",
+   "reason": "한 칸으로 두면 사적 풋에 소스가 있는 것이 공적 풋의 결손을 덮는다.",
+   "for": "긴급 조달 접근의 공시 경로에 칸을 몇 두는가.",
+   "statement": "칸을 하나만 두어 접근 전체를 가르는지로 받는 안을 기각한다.",
+   "basis": "화폐성 위계의 공시 경로가 받침을 두 칸으로 가른 사유가 앞쪽에 소스가 있는 것이 뒤쪽의 결손을 덮는다는 것이고, 그 결손이 그 파일의 산출이다.",
+   "for_decl": "CrisisFramework.Observation.EmergencyFundingChannel",
+   "related": [
+    "CF-1622"
+   ]
+  },
+  {
+   "id": "CF-1706",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "사적 풋 칸을 참으로 두는 안.",
+   "reason": "자산을 담보로 빌릴 여지가 그 자산의 적격성에 걸리는 것으로 보이나 적격성을 정하는 쪽이 사적 상대방이고 중앙은행의 목록이 그것을 정하지 않으므로, 참으로 두면 공적 기준으로 사적 접근을 읽었다고 주장하게 된다.",
+   "for": "적격담보 공시가 어느 칸을 내는가.",
+   "statement": "사적 풋 칸을 참으로 두는 안을 기각한다.",
+   "basis": "추출 기록이 중앙은행 적격성만으로는 자산을 고유동성자산으로 범주화하는 근거가 되지 않는다는 감독 규범의 조문을 뽑아 두었고, 그것이 적격성과 시장 접근을 가르는 자리다.",
+   "for_decl": "CrisisFramework.Observation.eligibleCollateralDisclosureChannel",
+   "related": [
+    "CF-1623"
+   ]
+  },
+  {
+   "id": "CF-1707",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "이 경로를 세우지 않고 아무 주체도 보지 않는 경로로 갈음하는 안.",
+   "reason": "그 경로는 구조가 비어 있지 않음을 보이는 자리여서 실재하는 공시를 들지 않으므로, 갈음하면 실재하는 공시가 그 칸을 내지 못한다는 사실이 어디에도 남지 않는다.",
+   "for": "소스 없음을 어느 꼴로 등재하는가.",
+   "statement": "이 경로를 세우지 않고 아무 주체도 보지 않는 경로로 갈음하는 안을 기각한다.",
+   "basis": "소스 없음을 경로마다 등재하고 전칭으로 등재하지 않는 처분이 같은 회차에 섰으며, 그 사유가 참가 자격 문면을 아직 열지 않은 데 있다.",
+   "for_decl": "CrisisFramework.Observation.eligibleCollateralDisclosureChannel",
+   "related": [
+    "CF-1623"
+   ]
+  },
+  {
+   "id": "CF-1708",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "긴급 조달 접근을 별도 개념으로 등재하는 안.",
+   "reason": "그것과 유동성 풋 사이의 관계가 수단 관계인데 등록할 수 있는 관계가 넷뿐이어서 표현되지 않으며, 원문이 유동성 풋에 그 위계의 이름을 직접 주므로 별도 축이 필요하지 않다.",
+   "for": "용어집에 무엇을 개념으로 등재하는가.",
+   "statement": "긴급 조달 접근을 별도 개념으로 등재하는 안을 기각한다.",
+   "basis": "표현되지 않는 분할 결과를 구멍으로 올리는 요구가 걸리므로 등재하면 관계 없는 개념이 하나 더 서고 그 관계의 결손이 구멍으로 올라간다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-1625"
+   ]
+  },
+  {
+   "id": "CF-1709",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "명시성을 유동성 풋의 축으로 세우는 안.",
+   "reason": "측정 대응이 다르지 않은 둘을 분할하는 것이 되며 색인도 다르다. 기능은 풋에 붙고 명시성은 그 풋의 발동조건에 붙는다.",
+   "for": "유동성 풋에 어느 축을 세우는가.",
+   "statement": "명시성을 유동성 풋의 축으로 세우는 안을 기각한다.",
+   "basis": "신호의 분할이 조건이 문서에 있는가를 축으로 이미 쓰고 그 분할의 역사 사례가 계약상 크레딧 라인으로 제공한 풋과 암묵적 풋을 가른 것이어서, 그 축이 이미 유동성 풋 위에서 재어진다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-1626"
+   ]
+  },
+  {
+   "id": "CF-1710",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "풋 둘을 액면가 약속의 강도에 정제로 잇는 안.",
+   "reason": "그 강도가 공적 유동성 풋과 신용 풋의 받침 양태에 달린 함수인데 네 관계가 함수 관계를 표현하지 않으며, 정제로 두면 강도가 풋의 특수 사례라고 주장하게 되어 거짓이다.",
+   "for": "풋과 액면가 약속의 강도를 어느 관계로 잇는가.",
+   "statement": "풋 둘을 액면가 약속의 강도에 정제로 잇는 안을 기각한다.",
+   "basis": "그 강도의 선언이 자기 docstring 에서 네 범주를 두 풋의 받침 양태와 자산 종류의 산출로 적고 있어 관계가 실재하나, 표현 수단이 없어 그 결손이 구멍으로 선다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-1684"
+   ]
+  },
+  {
+   "id": "CF-1711",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "candidate": "유동성 풋과 신용 풋에 분할과 배타를 등록하는 안.",
+   "reason": "유동성 풋과 신용 풋의 배타성은 한 수단이 둘 다일 수 있는지가 판정되지 않아 등록할 수 없고, 분할의 완전성은 원문의 열거에 의존하여 정의만으로 따라 나오지 않는다.",
+   "for": "풋의 관계를 어느 생성자로 등록하는가.",
+   "statement": "유동성 풋과 신용 풋에 분할과 배타를 등록하는 안을 기각한다.",
+   "basis": "액면가 약속의 강도가 네 범주를 정제로만 등록해 둔 것과 같은 자리이며, 그 까닭이 네 범주가 두 축의 곱이 아니라 조합의 열거라서 완전성이 원문에 의존하는 데 있다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-1627"
+   ]
   }
  ]
 }

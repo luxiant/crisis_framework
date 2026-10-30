@@ -1968,6 +1968,131 @@
     "what": "담보가 제공자 자신이 조성한 자산을 담았는지를 가르려는 진술이 막히는 자리"
    },
    "related": []
+  },
+  {
+   "id": "CF-1681",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "단계마다의 접근 사상이 시점을 받지 않는 것을 구멍으로 발행한다",
+   "basis": "원문이 네 단계와 풋 넷을 들 때 각 단계가 패닉에서 쓰는 풋을 드는데, 그 접근이 공적 조치로 바뀐 실제 사례가 있으므로 사상이 시점에 매이지 않으면 그 변화가 구조에 담기지 않는다. 시점 인덱스를 요구하는 조항이 타입에 걸리고 그 타입 위의 술어에는 걸리지 않으므로 이 결손이 그 조항의 위반이 아니며, 액면가 약속의 강도 위의 비교가 이미 같은 형으로 서 있다. **그래서 이 페이즈는 사상을 시점 없이 세우고 그 결손을 배제 사례로 적은 뒤 구멍으로 올린다.** 재개 트리거는 그 사상의 시점 의존을 요구하는 진술이 막히는 자리를 가리킨다. 재는 자리는 원편에서 단계마다의 풋을 드는 절을 여는 명령과 그 조항의 문면을 여는 명령이다.",
+   "layer": "definition",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "propagation",
+    "what": "단계와 풋의 대응을 시점에 매려는 진술이 막히는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1682",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "「어떤 경로도 그 칸을 내지 못한다」로 등재하지 않고 경로 단위로 등재한다",
+   "basis": "중앙은행 대출 제도에 접근할 수 있는 상대방을 참가 자격이 따로 정하는데 그 문면이 뭉치 밖에 있으므로, 읽지 않은 편의 성질을 근거로 쓰지 않는 요구가 그 단정을 막는다. **그 문면을 뭉치에 넣어 읽는 것을 새 구멍으로 발행하고 재개 트리거를 추출로 둔다.** 재는 자리는 뭉치 인벤토리에서 그 체계의 구성원 행을 세는 명령이다.",
+   "layer": "observation",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "중앙은행 대출 제도의 상대방 참가 자격"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1683",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "최후대출자 접근이 자본에 걸리는 것은 제약식의 인자가 되는 자리이므로 회계층의 일이고 이 페이즈의 몫이 아니다",
+   "basis": "정의층이 수를 쓰지 못해 그 조건이 정의층에 서지 않으므로 관측층도 그것을 받지 않으며, 그 자리를 가리키는 새 구멍을 발행하고 재개 트리거가 회계층을 받는 페이즈를 지목한다. 재는 자리는 아크 값 정본에서 회계층을 받는 페이즈의 선언을 뽑는 명령이다.",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "propagation",
+    "what": "최후대출자 접근의 자본 조건이 제약식의 인자로 들어오는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1684",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "풋 둘을 액면가 약속의 강도에 잇지 않고 그 관계를 구멍으로 올린다",
+   "basis": "그 강도의 선언이 자기 docstring 에서 네 범주가 공적 유동성 풋과 신용 풋의 받침 양태에 달린 함수라고 적고 있으므로 두 개념 사이에 관계가 실재하나, 등록할 수 있는 관계가 정제와 배타와 분할과 측정 대응 넷뿐이어서 함수 관계가 표현되지 않는다. 표현되지 않는 분할 결과를 구멍으로 올리는 요구가 그 자리에 걸린다. **정제로 두면 거짓이다.** 강도가 풋의 특수 사례가 아니라 풋을 인자로 받는 값이다. 재는 자리는 그 강도 선언의 docstring 첫 항을 여는 명령과 용어집의 관계 생성자 선언을 여는 명령이다.",
+   "layer": "glossary",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "propagation",
+    "what": "풋과 액면가 약속의 강도를 용어집의 관계로 이으려는 진술이 막히는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1685",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "`CQ-fin-8` 의 남은 칸을 그 구멍으로 넘긴다",
+   "basis": "아크가 닫힐 때 그 아크의 CQ 마다 정의 공백을 벗어났거나 구멍으로 넘어갔는지를 보는 검사가 이월을 통과로 받으므로, 그 칸의 성격이 「아직 세우지 않았다」에서 **「그 동급을 가르는 것이 보유 사상의 입도 밖에 있다」**로 확정되는 것이 이 페이즈의 산출이다. 재는 자리는 그 검사의 명세를 여는 명령이다.",
+   "layer": "definition",
+   "reopen_when": {
+    "kind": "blocking",
+    "ref": "network",
+    "what": "보유 유도 순서의 동급을 발행자로 한 겹 더 유도하려는 진술이 막히는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1686",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "지금 고치지 않고 그 행에 가름을 더하는 조작을 다음 페이즈가 받는다",
+   "basis": "영구 명세의 문면을 고치는 것은 카드가 드는 조작인데 propagation-3 의 카드 파일이 이미 지워졌고, 남은 두 구간이 뭉치 인벤토리와 착지 후 갱신이라 그 범위에 명세가 들지 않는다. 검사가 지금 바르게 돌고 있으므로 그 어긋남이 문면과 코드 사이에만 있다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "propagation",
+    "what": "지목 범위를 보는 검사의 명세 행에 유니버스의 가름을 더하는 자리"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-1687",
+   "origin": {
+    "arc": "propagation",
+    "phase": "propagation-4",
+    "kind": "decision_session",
+    "date": "2026-10-30"
+   },
+   "statement": "그 대조를 재는 검사를 다음 페이즈가 세운다",
+   "basis": "추출 기록 전량에서 배정이 뭉치 밖 참조인 것을 뺀 나머지의 번호가 그 문서에 전량 서는지를 재며, 면제를 열거로 두지 않고 기록의 배정 줄에서 유도하고 한 방향에만 영을 요구한다. 집행이 propagation-3 의 그 구간에서 손으로 돌린 명령이 그 검사의 꼴을 이미 들고 있다.",
+   "layer": "meta",
+   "reopen_when": {
+    "kind": "arc_phase",
+    "ref": "propagation",
+    "what": "뭉치 인벤토리와 추출 기록의 대조를 재는 검사를 세우는 자리"
+   },
+   "related": []
   }
  ]
 }
