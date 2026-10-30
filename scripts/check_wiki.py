@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔일곱을 돈다. 실패시키는 것 서른여덟과 보고만 하는 것 여섯과
+`docs/decisions/SPEC.md` §2 의 검사 마흔아홉을 돈다. 실패시키는 것 서른아홉과 보고만 하는 것 일곱과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1072,7 +1072,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46", "47",
+         "42", "43", "44", "45", "46", "47", "48", "49",
          "29", "30"]
 
 
@@ -1360,6 +1360,11 @@ POINTER_SOURCE_MARK = "←"
 POINTER_DOC_NAME = re.compile(
     r"SPEC\.md|baseline\.md|CLAUDE\.md|BUILD_LOG\.md|arcs\.json"
     r"|reading-queue|bundle-inventory|docs/|scripts/")
+# 갈래 3 의 면제 하나가 더 선다. 추출 기록의 번호가 앞에 오면 그 절 번호는 리포 안의 기록
+# 파일에 일대일로 대응하여 리포 안에서 열리므로 애초에 금지의 대상이 아니다. 면제하지 않으면
+# 그 꼴을 쓰는 자리가 전부 적발로 서서 블록의 값이 금지된 지목이 아니라 정상 지목의 계수를
+# 든다(SPEC §2.1).
+POINTER_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z])E-\d{1,2}(?![0-9A-Za-z])")
 # 검사 42 가 읽는 세션 지시의 조항 목록. `docs/baseline.md` 의 `SESSIONCLAUSE` 블록이 계열과
 # 조항을 든다. 계열을 열거하는 까닭은 구멍과 미결의 ID 가 규율 조항과 같은 꼴을 쓰는데 세션
 # 지시가 그 둘의 전량을 들지 않아 유니버스에서 빠지기 때문이다. **세션 지시 자체는 검사의
@@ -1431,7 +1436,8 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
                 out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
             for m in POINTER_SECTION_NO.finditer(ln):
                 head = ln[:m.start()]
-                if POINTER_SOURCE_MARK in head or POINTER_DOC_NAME.search(head):
+                if (POINTER_SOURCE_MARK in head or POINTER_DOC_NAME.search(head)
+                        or POINTER_EXTRACTION_NO.search(head)):
                     continue
                 if m.group(1) in own:
                     continue
@@ -2665,6 +2671,211 @@ def check_43(led: Ledger) -> Report:
     return r
 
 
+# 검사 48·49 가 읽는 `SOURCING` 블록. `docs/baseline.md` §5 가 경계와 구절의 최소 길이를 들며,
+# 값을 코드에 박지 않고 그 블록이 들게 한다(SPEC §2.1).
+SOURCING_BLOCK = re.compile(r"<!-- SOURCING:BEGIN -->\n(.*?)<!-- SOURCING:END -->", re.S)
+SOURCING_SINCE_LINE = re.compile(r"^SOURCING_SINCE=(\d+)$")
+SOURCING_MINLEN_LINE = re.compile(r"^SOURCING_MINLEN=(\d+)$")
+# 배제 사례 문단을 가리키는 **예약 낱말**. 검사 48 의 둘째 몫이 이 낱말로 그 문단을 고르며,
+# 검사 33 이 기각 문단을 고르는 것과 같은 형이다. 그 낱말이 `HEADING` 블록에 실재하는지를
+# 단언하므로 박아 둔 값이 아니라 **단언이 지키는 값**이다(SPEC §2.1).
+EXCLUSION_WORD = "배제하는 사례"
+# 추출 기록 지목의 꼴. 절 번호는 숫자와 그 사이의 붙임표이며 그 밖의 꼴은 유니버스 밖이다.
+# 뒤를 막는 자리가 점으로 이은 꼴을 통째로 밀어낸다. 막지 않으면 그 앞자리만 잡혀 적지 않은
+# 절을 지목한 것으로 읽힌다(SPEC §2.1).
+EXTRACTION_POINTER = re.compile(
+    r"(?<![0-9A-Za-z])E-(\d{1,2})\s*§\s*(\d+(?:-\d+)*)(?![0-9.-])")
+# 조달처 줄의 꼴. 배제 사례 문단의 말미에 서고 기록 번호와 절 번호와 낫표로 감싼 구절을 든다.
+# 문단의 공백을 접은 뒤에 맞대므로 줄을 걸쳐 쓴 구절도 한 꼴로 읽힌다.
+SOURCING_LINE = re.compile(
+    r"조달처:\s*E-(\d{1,2})\s*§\s*(\d+(?:-\d+)*)\s*「([^」]+)」[.\s]*$")
+# 추출 기록의 절 제목과 그 파일 이름의 번호. 절 제목은 머리 기호 둘 이상에 번호와 마침표가
+# 따르는 줄이며 번호가 그 절의 이름이다.
+EXTRACTION_HEADING = re.compile(r"^#{2,}\s*(\d+(?:-\d+)*)\.\s")
+EXTRACTION_FILE_NO = re.compile(r"^extraction-(\d+)-")
+
+
+def fold(s: str) -> str:
+    """공백을 하나로 접고 앞뒤를 떼어 낸다.
+
+    줄을 걸쳐 쓴 문면을 한 꼴로 맞대는 수단이다. 접지 않으면 두 줄에 걸친 조달처 줄과 그
+    구절이 지목한 절의 문면과 결코 같아지지 않아 그 자리가 전부 위반으로 잡힌다. 머리말의
+    줄바꿈을 접는 `para_heading` 이 같은 사유로 같은 일을 한다.
+    """
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def sourcing_rules(led: Ledger) -> tuple[int | None, int | None]:
+    """`SOURCING` 블록이 든 경계와 구절의 최소 길이."""
+    since: int | None = None
+    minlen: int | None = None
+    for line in _baseline_block(led, SOURCING_BLOCK).splitlines():
+        m = SOURCING_SINCE_LINE.match(line)
+        if m:
+            since = int(m.group(1))
+            continue
+        m = SOURCING_MINLEN_LINE.match(line)
+        if m:
+            minlen = int(m.group(1))
+    return since, minlen
+
+
+def extraction_sections(path: Path) -> dict[str, str]:
+    """추출 기록의 절 번호별 본문. 하위 절의 문면은 그 상위 절의 본문에도 든다.
+
+    하위를 품게 두는 까닭은 `§8` 을 지목한 구절이 `§8-3` 에 서 있는 것이 그 절 **안**에 있는
+    것이라는 데 있다. 품지 않으면 상위 절을 지목한 자리가 전부 미착지로 잡힌다.
+
+    같은 번호의 절이 둘이면 두 본문을 잇는다. 뒤의 것으로 덮으면 앞 절에 선 구절이 조용히
+    사라지고, 그 꼴은 그 기록 자신의 결함이므로 이 사상이 가리지 않는다.
+    """
+    lines = path.read_text(encoding="utf-8").splitlines()
+    heads = [(i, m.group(1)) for i, ln in enumerate(lines)
+             for m in [EXTRACTION_HEADING.match(ln)] if m]
+    out: dict[str, str] = {}
+    for k, (i, no) in enumerate(heads):
+        end = len(lines)
+        for j, nxt in heads[k + 1:]:
+            if not nxt.startswith(no + "-"):
+                end = j
+                break
+        body = "\n".join(lines[i + 1:end])
+        out[no] = out[no] + "\n" + body if no in out else body
+    return out
+
+
+def doc_pointers(led: Ledger) -> list[tuple[str, int, int, str]]:
+    """형식층 docstring 이 드는 추출 기록 지목 전량. (경로, 줄, 기록 번호, 절 번호) 다.
+
+    **검사 48 과 49 가 이 하나를 부른다.** 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 둘이
+    다른 목록을 내는 것을 어느 검사도 잡지 못한다. 검사 33 과 34 가 선언의 수집기를 나누어
+    쓰는 것과 같은 형이다(SPEC §2.1).
+
+    유니버스는 `/-- -/` 블록이며 생성자와 필드의 docstring 도 든다. 선언의 수집기를 쓰지 않는
+    까닭은 그것이 선언마다 마지막 블록 하나만 들어 생성자의 docstring 이 그물 밖에 남는다는
+    것이다. 파일 머리의 `/- -/` 주석은 docstring 이 아니라 들지 않는다.
+
+    **착지의 몫에는 경계를 걸지 않는다.** 경계는 조달처 줄을 요구하는 몫의 유니버스를 가르며,
+    지목이 실재하지 않는 절에 닿는 것은 그 docstring 의 뜻이 서지 않는 것이라 표지의 번호와
+    무관하게 결함이다(SPEC §2.1).
+    """
+    out: list[tuple[str, int, int, str]] = []
+    for f in led.lean_files:
+        src = f.read_text(encoding="utf-8")
+        rel = str(f.relative_to(led.root))
+        for b in DOC_BLOCK.finditer(src):
+            for m in EXTRACTION_POINTER.finditer(b.group(1)):
+                at = b.start(1) + m.start()
+                out.append((rel, src.count("\n", 0, at) + 1,
+                            int(m.group(1)), m.group(2)))
+    return out
+
+
+def check_48(led: Ledger) -> Report:
+    r = Report("48", "wiki48-extraction-sourcing",
+               "형식층 docstring 의 추출 기록 지목이 실재하는 기록의 실재하는 절에 닿고, "
+               "경계 안 선언의 배제 사례 문단이 조달처 줄을 들며 그 구절이 지목한 그 절 안에 "
+               "있는가", "fail")
+    since, minlen = sourcing_rules(led)
+    # 블록을 읽지 못하면 통과가 아니라 실패다. 경계가 없으면 둘째 몫의 유니버스가 서지 않고
+    # 최소 길이가 없으면 구절의 하한이 서지 않는다. 검사 33 과 34 와 41 이 같은 요구를 둔다.
+    if since is None:
+        r.bad("docs/baseline.md 의 SOURCING 블록에 SOURCING_SINCE 가 없다")
+        return r
+    if minlen is None:
+        r.bad("docs/baseline.md 의 SOURCING 블록에 SOURCING_MINLEN 이 없다")
+        return r
+    _since, forms = heading_rules(led)
+    # 예약 낱말이 그 블록에 실재하는지 단언한다. 블록에서 빠지면 둘째 몫의 좌변이 조용히
+    # 비므로, 박아 둔 값이 아니라 단언이 지키는 값이 된다. 검사 33 이 같은 자리를 둔다.
+    if EXCLUSION_WORD not in forms:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에 예약 낱말 `{EXCLUSION_WORD}` 이 없다")
+        return r
+
+    cache: dict[int, dict[str, str]] = {}
+
+    def secs(n: int) -> dict[str, str]:
+        """그 번호의 기록의 절 모음. 기록마다 한 번만 읽는다."""
+        if n not in cache:
+            f = extraction_record(led, n)
+            cache[n] = extraction_sections(f) if f is not None else {}
+        return cache[n]
+
+    # ㉠ 착지. 지목이 실재하는 기록의 실재하는 절에 닿는가.
+    ptrs = doc_pointers(led)
+    landed = 0
+    for rel, line, n, sec in ptrs:
+        f = extraction_record(led, n)
+        if f is None:
+            r.bad(f"{rel}:{line}: 지목 `E-{n:02d} §{sec}` 의 번호에 해당하는 추출 기록이 없다")
+            continue
+        if sec not in secs(n):
+            r.bad(f"{rel}:{line}: 지목 `E-{n:02d} §{sec}` 의 절이 `{f.name}` 에 없다")
+            continue
+        landed += 1
+    # ㉡ 조달처. 경계 안 선언의 배제 사례 문단마다 말미의 조달처 줄과 그 구절을 본다.
+    n_in = n_out = 0
+    for d in led.doc_decls():
+        for p in d.paras:
+            head = para_heading(p)
+            if head is None or EXCLUSION_WORD not in head:
+                continue
+            m = SOURCING_LINE.search(fold(p))
+            if d.no < since:
+                # 경계 밖은 소급하지 않는다. 그 문면이 영구 문면이고 D-2 가 요구하는 세
+                # 항목이 경계 이전에도 서 있으므로, 조달처만 뒤에 걸린 것이다.
+                if m is None:
+                    n_out += 1
+                continue
+            n_in += 1
+            if m is None:
+                r.bad(f"{d.rel}:{d.line}: `{d.full}` 의 배제 사례 문단이 말미에 조달처 "
+                      f"줄을 들지 않는다")
+                continue
+            n, sec, phrase = int(m.group(1)), m.group(2), fold(m.group(3))
+            if sec not in secs(n):
+                continue          # 착지의 몫이 그 자리를 이미 냈다
+            if len(phrase) < minlen:
+                r.bad(f"{d.rel}:{d.line}: `{d.full}` 의 조달처 구절의 길이 {len(phrase)} 가 "
+                      f"최소 길이 {minlen} 보다 짧다")
+                continue
+            if phrase not in fold(secs(n)[sec]):
+                r.bad(f"{d.rel}:{d.line}: `{d.full}` 의 조달처 구절이 지목한 "
+                      f"`E-{n:02d} §{sec}` 안에 없다")
+    r.note(f"형식층 docstring 의 지목 {len(ptrs)} · 그 가운데 착지한 것 {landed} "
+           f"· 지목이 가리킨 기록 {len({n for _r, _l, n, _s in ptrs})}")
+    r.note(f"경계 안 선언의 배제 사례 문단 {n_in} · 경계 SOURCING_SINCE={since} "
+           f"· 구절의 최소 길이 SOURCING_MINLEN={minlen}")
+    r.note(f"경계 밖에서 조달처 줄을 들지 않는 배제 사례 문단 {n_out} "
+           f"(소급하지 않기로 한 미조달분의 크기이며 실패가 아니라 보고다)")
+    return r
+
+
+def check_49(led: Ledger) -> Report:
+    r = Report("49", "wiki49-extraction-unpointed",
+               "어느 형식층 docstring 도 지목하지 않는 추출 기록의 계수와 번호", "report")
+    d = led.root / "docs" / "extractions"
+    files = sorted(d.glob("extraction-*.md")) if d.is_dir() else []
+    # 지목의 수집기를 검사 48 과 나누어 쓴다. 꼴을 다시 짜면 한쪽을 고칠 때 다른 쪽이 조용히
+    # 낡고, 그 낡음은 이 보고의 계수가 그 검사의 유니버스와 갈리는 꼴로만 남는다.
+    ptrs = doc_pointers(led)
+    pointed = {n for _rel, _line, n, _sec in ptrs}
+    rows: list[tuple[int, str]] = []
+    for f in files:
+        m = EXTRACTION_FILE_NO.match(f.name)
+        if m is None:
+            continue          # 이름의 꼴은 검사 35 가 받는다
+        n = int(m.group(1))
+        if n not in pointed:
+            rows.append((n, f.name))
+    r.note(f"유니버스는 추출 기록 {len(files)} · 형식층 docstring 의 지목 {len(ptrs)} "
+           f"· 그 지목이 가리킨 기록 {len(pointed)}")
+    r.note(f"어느 형식층 docstring 도 지목하지 않는 기록 {len(rows)}건")
+    for n, name in sorted(rows):
+        r.note(f"E-{n:02d} — {name}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -2680,6 +2891,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
+        check_48(led), check_49(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2706,7 +2918,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔일곱)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔아홉)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

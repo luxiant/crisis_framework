@@ -1480,6 +1480,134 @@ def inj_47_ghost(root):
     return f"{field}: {ghost}"
 
 
+# 검사 48 의 주입이 세우는 사본의 파일. **주입이 제 대상을 세운다.** 경계 안 표지를 가진 선언이
+# 받은 판에 아직 없으므로 기존 선언을 굽히는 꼴로는 이 주입이 서지 않으며, 경계가 뒤 회차에
+# 올라가도 같은 사유로 공허해지지 않는다. 자리를 정의층에 두는 까닭은 그 검사의 유니버스가
+# 형식층 docstring 이라는 것이다.
+NC48_FILE = ("CrisisFramework", "Definition", "NcSourcingProbe.lean")
+NC48_DECL = "ncSourcingProbe"
+# 실재하지 않는 절 번호. 추출 기록의 절이 두 자리를 넘지 않으므로 이 꼴이 어느 기록에도 없다.
+NC48_GHOST_SECTION = "99-99"
+
+
+def _nc48_material(root):
+    """사본에서 조달처 줄이 설 재료를 고른다.
+
+    (기록 번호, 절 번호, 그 절에 있는 구절, 그 기록의 다른 절에 있는 구절) 을 낸다. **재료를
+    검증기의 수집기로 고른다.** 꼴을 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히
+    공허해지고, 번호를 박으면 기록이 늘거나 절이 덧붙을 때 다른 자리를 겨누게 된다.
+    """
+    led = check_wiki.Ledger(root)
+    _since, minlen = check_wiki.sourcing_rules(led)
+    if minlen is None:
+        raise SystemExit("사본의 SOURCING 블록에서 구절의 최소 길이를 읽지 못했다")
+    want = minlen + 8          # 짧게 줄이는 주입이 하한 아래로 내려갈 여유를 둔다
+    d = root / "docs" / "extractions"
+    for f in sorted(d.glob("extraction-*.md")):
+        m = check_wiki.EXTRACTION_FILE_NO.match(f.name)
+        if m is None:
+            continue
+        secs = check_wiki.extraction_sections(f)
+        picked = []
+        for no in sorted(secs):
+            body = check_wiki.fold(secs[no])
+            # 낫표와 Lean 의 주석 표지를 담은 구절은 쓰지 않는다. 앞은 조달처 줄의 울타리를
+            # 닫아 버리고 뒤는 docstring 을 닫아 버린다.
+            if any(x in body for x in ("「", "」", "-/", "/-")):
+                continue
+            if len(body) >= want:
+                picked.append((no, body[:want]))
+            if len(picked) == 2:
+                break
+        if len(picked) < 2:
+            continue
+        (no_a, phrase), (_no_b, other) = picked
+        if other in check_wiki.fold(secs[no_a]):
+            continue           # 다른 절의 구절이 그 절에도 있으면 그 주입이 공허해진다
+        return int(m.group(1)), no_a, phrase, other
+    raise SystemExit("조달처 줄의 재료가 될 절 둘을 가진 추출 기록이 없다")
+
+
+def _nc48_plant(root, bend):
+    """경계 안 표지를 가진 선언을 사본에 세우고 그 조달처 줄을 굽힌다.
+
+    굽히지 않은 꼴은 그 검사를 통과하므로, 굽힌 자리 하나만이 새 위반 줄을 낸다.
+    """
+    led = check_wiki.Ledger(root)
+    since, minlen = check_wiki.sourcing_rules(led)
+    if since is None:
+        raise SystemExit("사본의 SOURCING 블록에서 경계를 읽지 못했다")
+    rec, sec, phrase, other = _nc48_material(root)
+    if bend == "phrase":
+        src = f"조달처: E-{rec:02d} §{sec} 「{other}」"
+    elif bend == "section":
+        src = f"조달처: E-{rec:02d} §{NC48_GHOST_SECTION} 「{phrase}」"
+    elif bend == "short":
+        src = f"조달처: E-{rec:02d} §{sec} 「{phrase[:minlen - 1]}」"
+    elif bend == "drop":
+        src = ""
+    else:
+        raise SystemExit(f"굽히는 꼴을 알 수 없다: {bend!r}")
+    para = ["**이 정의가 배제하는 사례:**",
+            "음성 대조가 세운 사본 안의 사례이며 리포의 어느 판에도 들어가지 않는다."]
+    if src:
+        para.append(src)
+    f = root.joinpath(*NC48_FILE)
+    f.write_text(
+        "/-\n정의층 — 음성 대조의 조달처 프로브\n\n"
+        "이 파일은 음성 대조가 사본에만 세우는 것이며 리포의 어느 판에도 들어가지 않는다.\n-/\n\n"
+        "namespace CrisisFramework.Definition\n\n"
+        "/--\n음성 대조가 세운 선언.\n\n"
+        "**대응 비형식 개념:** 없다.\n\n"
+        + "\n".join(para) + "\n\n"
+        "**기각한 대체 정의:**\n기각한 것이 없다.\n\n"
+        "**수 체계를 받지 않는다.**\n-/\n"
+        f"-- DD:CF-{since}\n"
+        f"def {NC48_DECL} : Bool := true\n\n"
+        "end CrisisFramework.Definition\n", encoding="utf-8")
+    return f"CrisisFramework.Definition.{NC48_DECL}: E-{rec:02d} §{sec}"
+
+
+def inj_48_phrase(root):
+    """조달처 줄의 구절을 그 기록의 다른 절에 있는 구절로 바꾼다."""
+    return _nc48_plant(root, "phrase")
+
+
+def inj_48_drop(root):
+    """경계 안 선언의 조달처 줄을 지운다."""
+    return _nc48_plant(root, "drop")
+
+
+def inj_48_section(root):
+    """지목의 절 번호를 실재하지 않는 것으로 바꾼다."""
+    return _nc48_plant(root, "section")
+
+
+def inj_48_short(root):
+    """구절을 최소 길이 아래로 줄인다."""
+    return _nc48_plant(root, "short")
+
+
+def inj_49_unpointed(root):
+    """어느 docstring 도 지목하지 않는 추출 기록을 하나 더한다.
+
+    번호를 기존 최대의 다음으로 고른다. 중간 번호를 쓰면 결번이나 번호 중복이 서서 문서
+    양식을 보는 검사가 함께 걸리는데, 그것은 이 주입이 겨눈 자리가 아니다.
+    """
+    d = root / "docs" / "extractions"
+    nums = [int(m.group(1)) for f in d.glob("extraction-*.md")
+            for m in [check_wiki.EXTRACTION_FILE_NO.match(f.name)] if m]
+    if not nums:
+        raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
+    n = max(nums) + 1
+    name = f"extraction-{n:02d}-negative-control-probe.md"
+    (d / name).write_text(
+        f"# 추출 기록 E-{n:02d}\n\n## 0. 이 기록의 지위\n\n"
+        "음성 대조가 사본에만 세우는 기록이며 리포의 어느 판에도 들어가지 않는다.\n",
+        encoding="utf-8")
+    return name
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1561,6 +1689,11 @@ CASES = [
     ("46",  "wiki46-block-list-mirror",     "목록에서 블록 이름 하나를 지운다",             inj_46_drop, None),
     ("46",  "wiki46-block-list-mirror",     "어느 검사도 읽지 않는 이름을 더한다",          inj_46_ghost, None),
     ("47",  "wiki47-spec-field-check-no",   "어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다", inj_47_ghost, None),
+    ("48",  "wiki48-extraction-sourcing",   "조달처 줄의 구절을 그 기록의 다른 절에 있는 구절로 바꾼다", inj_48_phrase, None),
+    ("48",  "wiki48-extraction-sourcing",   "경계 안 선언의 조달처 줄을 지운다",            inj_48_drop, None),
+    ("48",  "wiki48-extraction-sourcing",   "지목의 절 번호를 실재하지 않는 것으로 바꾼다",  inj_48_section, None),
+    ("48",  "wiki48-extraction-sourcing",   "구절을 최소 길이 아래로 줄인다",               inj_48_short, None),
+    ("49",  "wiki49-extraction-unpointed",  "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
 ]
 
 
