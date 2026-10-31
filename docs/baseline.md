@@ -272,7 +272,7 @@ R11_EXEMPT=CF-1202
 <!-- R11:END -->
 
 <!-- FIRED:BEGIN -->
-FIRED_FIRSTLOAD_EXEMPT=5
+FIRED_FIRSTLOAD_EXEMPT=4
 <!-- FIRED:END -->
 
 `R11` 블록은 원장의 산문 필드가 조항에 붙은 특정 주석을 지목하는 것을 보는 검사가 읽는다.
