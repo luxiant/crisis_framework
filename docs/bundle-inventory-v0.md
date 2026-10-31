@@ -58,7 +58,7 @@
 | | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | E-48. 위와 동일 모형의 다른 판본으로 추정 |
 | | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 |
 
-## O-3 통화 확장 — 달러·국경 간 청구권·CIP (19편)
+## O-3 통화 확장 — 달러·국경 간 청구권·CIP (20편)
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
@@ -80,7 +80,8 @@
 | | Central bank balance sheets and financial stability (편집본 내 Shin 챕터) | Shin | 302쪽 편집본. J-4 관련 |
 | | Breaking free of the triple coincidence in international finance | Avdjiev·McCauley·Shin 2016 (BIS WP 524) | 국제금융 통계의 삼중 일치 해체. J-1 의 근거 원전. `claim-4` 가 S-7 로 지목해 읽었다 (E-18). zip 의 Shin 폴더에 있다 |
 | | Exchange rates and the working capital channel of trade fluctuations | Bruno·Kim·Shin 2018 (BIS WP 694) | 교역의 운전자본 경로와 표시 통화·자금조달 통화의 분리. `claim-4` 가 S-7 로 지목해 읽었다 (E-19). zip 의 Shin 폴더에 있다 |
-| | Procyclicality and Monetary Aggregates | Shin·Shin 2011 (NBER WP 16836) | E-51. 핵심/비핵심 분할의 원전이며 보유자 축의 정본. 2원 분류표와 조작적 정의 다섯을 든다. `propagation-5` 가 S-7 로 지목해 읽었다. **zip 밖이며 사용자가 조달했다** |
+| | Procyclicality and Monetary Aggregates | Shin·Shin 2011 (NBER WP 16836) | E-51. 핵심/비핵심 분할의 원전이며 보유자 축의 정본. 2원 분류표와 조작적 정의 다섯을 든다. `propagation-5` 가 S-7 로 지목해 읽었다. 사용자가 묶음에 담아 다시 건넸으므로 **zip 안이다** |
+| | 개방 신흥국의 거시건전성 정책 | Hahm·Mishkin·Shin·Shin 2010 (학술대회 논문집) | E-52. 핵심/비핵심 분할 원전의 실증 짝이며 자기자본의 두 역할을 가른다. 규제 계열의 자본 비율 둘과 예대율 상한의 유형별 면제를 든다. `propagation-6` 이 S-7 로 지목해 읽었다. 사용자가 묶음에 담아 건넸으므로 zip 안이다 |
 
 ---
 
@@ -290,7 +291,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | O-1 | 20 | — |
 | O-2 | 11 | — |
 | O-2 보조 | 1 | — |
-| O-3 | 19 | 1 |
+| O-3 | 20 | — |
 | 교역 금융과 결제 방식 | 19 | 2 |
 | 계약 표현 | 14 | — |
 | 증거금과 담보의 규범 | 3 | — |
@@ -303,11 +304,11 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | 유동성 규제와 중앙은행 담보 정책 | 4 | — |
 | 담보 속도와 재담보의 계량 | 2 | — |
 | 상품 담보 금융 | 2 | — |
-| **구성원 합계** | **146** | **3** |
+| **구성원 합계** | **147** | **2** |
 
-zip 안 구성원은 143편이다.
+zip 안 구성원은 145편이다.
 
-**zip 대조.** `macro_models.zip` 의 파일 147개는 zip 안 구성원 143편과 해시가 같은 중복 사본 3개와
+**zip 대조.** `macro_models.zip` 의 파일 149개는 zip 안 구성원 145편과 해시가 같은 중복 사본 3개와
 같은 문헌의 다른 발간본 1개다. 셋째 항이 BCBS 발간본과 IOSCO 발간본이며, 구성원으로는 하나이고
 파일로는 둘이다.
 
@@ -355,3 +356,14 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 정돈에 들지만 지금 넷뿐이라 얻는 것이 없고, 증감 문단은 현행 값을 전사하지 않고 차이만 들어 낡지
 않는다. 접을 때는 증감만 표로 모으고 경위 문단을 산문으로 남기며, 그 작업은 이 문서를 재편하는
 일로 따로 선다.
+
+**`propagation-6` 에서 소재가 다시 바뀌었고 뭉치가 하나 자랐다.** 사용자가 묶음을 다시 건네면서 둘이
+들어왔다. 하나가 핵심과 비핵심 분할의 원전이고 이미 구성원이면서 zip 밖으로 적혀 있었으므로 소재만
+바뀌고, 다른 하나는 읽기 대기열이 뭉치 밖으로 들고 조달이 선행한다고 적은 편이므로 뭉치가 하나
+자란다. 묶음의 파일이 147 에서 149 로, zip 안 구성원이 143 에서 145 로, 구성원 합계가 146 에서
+147 로 늘고 zip 밖이 3 에서 2 로 줄었다. **한 묶음의 소재 변화가 집계의 두 칸을 서로 다른 방향으로
+움직인 것이 이 회차의 실측이다.** 중복 사본과 같은 문헌의 다른 발간본과 필독 편수는 움직이지 않았다.
+
+**이 문단이 앞 문단의 뒤에 선다.** 덧붙임의 자리가 말미로 고정되어 있고 중간 삽입이 덧붙임이 아니기
+때문이며, 그래서 계산 방법을 드는 문단과 증감을 드는 문단의 순서가 이 절에서 엇갈린다. 그 정돈은 이
+문서를 재편하는 일로 따로 선다.
