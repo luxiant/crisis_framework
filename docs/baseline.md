@@ -142,10 +142,11 @@ C-8이 정하며 세 가지다. 분류의 판정은 결정 세션이 하고 Clau
 | `collateral` | 3 | 원천 / 재담보된 / 재담보 가능 |
 | `margin` | 3 | 레포 헤어컷 / 개시증거금 / 변동증거금 |
 | `money` | 4+2 | 공적 / 부보 / 공적 그림자 / 사적 그림자 + 거래용 / 유동성관리용 |
-| `funding` | 2+ | 소매(핵심) / 도매(비핵심) |
+| `funding` | 3 | 핵심(최종 채권자) / 중간(최종성 미판정) / 비핵심(비최종 채권자) |
 | `intermediation` | 2 | 공적 보증 강도 기준 / 만기 불일치 기준 |
 | `discount` | 3 | 차선 소유자 할인 / 헤어컷 / 할인율 |
 | `impairment` | 2 | 손상 기울기 / 회계상 손상차손 |
+| `core` | 3 | 핵심(최종 채권자) / 중간(최종성 미판정) / 비핵심(비최종 채권자) |
 
 끝의 두 어간은 v5에서 추가됐다. Plantin·Sapra·Shin과 Morris·Shin이 같은 기호 `δ`로 서로 다른
 대상을 가리키는 것이 확인됐기 때문이다.
@@ -194,6 +195,7 @@ funding
 intermediation
 discount
 impairment
+core
 <!-- STEMS:END -->
 
 <!-- CQFIN:BEGIN -->
