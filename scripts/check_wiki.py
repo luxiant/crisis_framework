@@ -1365,6 +1365,12 @@ POINTER_DOC_NAME = re.compile(
 # 그 꼴을 쓰는 자리가 전부 적발로 서서 블록의 값이 금지된 지목이 아니라 정상 지목의 계수를
 # 든다(SPEC §2.1).
 POINTER_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z])E-\d{1,2}(?![0-9A-Za-z])")
+# 갈래 3 의 면제가 하나 더 선다. 추출 기록의 파일 이름이 앞에 오면 그 절 번호는 그 이름이 가리키는
+# 기록 파일로 리포 안에서 열리므로, 앞의 번호 꼴과 같은 사유로 애초에 금지의 대상이 아니다. 꼴은
+# 그 파일 이름의 머리인 `extraction-` 과 두 자리 번호까지이며, 그 뒤에 이어지는 이름의 나머지와
+# 확장자는 묻지 않는다. 그래서 번호까지만 줄여 드는 꼴과 이름 전체를 드는 꼴이 함께 면제된다.
+# 번호의 자릿수는 `docs/baseline.md` 의 `DOCFORM` 블록이 추출 기록의 이름에 거는 형과 같다.
+POINTER_EXTRACTION_FILE = re.compile(r"(?<![0-9A-Za-z])extraction-[0-9]{2}(?![0-9])")
 # 검사 42 가 읽는 세션 지시의 조항 목록. `docs/baseline.md` 의 `SESSIONCLAUSE` 블록이 계열과
 # 조항을 든다. 계열을 열거하는 까닭은 구멍과 미결의 ID 가 규율 조항과 같은 꼴을 쓰는데 세션
 # 지시가 그 둘의 전량을 들지 않아 유니버스에서 빠지기 때문이다. **세션 지시 자체는 검사의
@@ -1437,7 +1443,8 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
             for m in POINTER_SECTION_NO.finditer(ln):
                 head = ln[:m.start()]
                 if (POINTER_SOURCE_MARK in head or POINTER_DOC_NAME.search(head)
-                        or POINTER_EXTRACTION_NO.search(head)):
+                        or POINTER_EXTRACTION_NO.search(head)
+                        or POINTER_EXTRACTION_FILE.search(head)):
                     continue
                 if m.group(1) in own:
                     continue
