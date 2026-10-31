@@ -44,29 +44,40 @@ namespace CrisisFramework.Observation
 칸으로 갈려야 산출이 된다. 만기 분해를 칸으로 두는 안도 기각했다. 세 판정 어느 것도 그 칸을
 읽지 않으며 만기를 가르는 입도가 구멍으로 남아 있다.
 
+**칸 여섯이 주체를 받는다.** 그 여섯이 두 총액을 가르는가와 통화별로 가르는가와 당장 내줄 수 있는
+것과 유출액과 자산 감소의 까닭과 의무액과 지급액을 묻는 것이라 전부 그 주체의 성질이며, 보고 제도의
+성질이 아니다. 같은 층의 다른 경로들이 그 판별선으로 주체를 받는 칸과 받지 않는 칸을 갈라 두었고,
+이 경로가 그 관례보다 앞서 서서 칸 하나만 주체를 받고 있었다.
+
+**유형별 입도가 이 색인의 특수한 경우로 담긴다.** 주체를 받는 칸은 같은 유형의 주체들이 같은 값을
+받는 것을 허용하므로, 발행자 유형별 공시의 입도가 그 허용 안에 든다. 관측층이 사상의 명세만 담으므로
+입도가 실물보다 고운 것이 결함이 아니며, 예대율 상한이 외국은행 국내지점에 적용되지 않는 것이 그
+유형별 가름의 실물 근거다. 노드 종류에서 주체로 가는 사상이 없는 것이 이 자리에서는 결손을 내지
+않는다.
+
 **값을 담지 않는다.** 모든 칸이 판정이며 금액을 들지 않는다.
 -/
 -- DD:CF-1264
 structure RepaymentChannel (Entity : Type) where
   /-- 그 주체가 이 경로의 공표 대상에 드는가. -/
   coversEntity : Entity → Bool
-  /-- 자산 총액과 부채 총액을 함께 가르는가. -/
-  resolvesTotals : Bool
-  /-- 그 두 총액을 통화별로 가르는가. 회계층이 통화 간 환산을 금지하므로 가르지 않으면 지급능력
-      판정의 입력이 서지 않는다. -/
-  resolvesCurrencySplit : Bool
-  /-- 당장 내줄 수 있는 것의 액수를 가르는가. 그 범위가 무엇인지는 구멍으로 남아 있으므로, 이
-      칸은 경로가 그 범위에 대응하는 값을 드는가를 묻는다. -/
-  resolvesCashLike : Bool
-  /-- 그 구간에 돌려달라는 요구로 빠져나간 액수를 가르는가. 기말 잔액의 차이가 아니라 구간 중의
-      유출이다. -/
-  resolvesWithdrawal : Bool
-  /-- 자산이 줄어든 까닭을 가르는가. 강제 매각과 자발적 축소와 상환에 따른 소멸이 서로 다른
-      까닭이며 그 축이 무엇인지는 구멍으로 남아 있다. -/
-  resolvesReductionCause : Bool
-  /-- 지급 의무가 선 액수와 그 구간에 내준 액수를 함께 가르는가. 회계층의 판정이 그 둘을 받으므로
-      한쪽만 드는 경로는 이 칸이 거짓이다. -/
-  resolvesRepaymentFailure : Bool
+  /-- 그 주체의 자산 총액과 부채 총액을 함께 가르는가. -/
+  resolvesTotals : Entity → Bool
+  /-- 그 주체의 두 총액을 통화별로 가르는가. 회계층이 통화 간 환산을 금지하므로 가르지 않으면
+      지급능력 판정의 입력이 서지 않는다. -/
+  resolvesCurrencySplit : Entity → Bool
+  /-- 그 주체가 당장 내줄 수 있는 것의 액수를 가르는가. 그 범위가 무엇인지는 구멍으로 남아 있으므로,
+      이 칸은 경로가 그 범위에 대응하는 값을 드는가를 묻는다. -/
+  resolvesCashLike : Entity → Bool
+  /-- 그 주체에게서 그 구간에 돌려달라는 요구로 빠져나간 액수를 가르는가. 기말 잔액의 차이가 아니라
+      구간 중의 유출이다. -/
+  resolvesWithdrawal : Entity → Bool
+  /-- 그 주체의 자산이 줄어든 까닭을 가르는가. 강제 매각과 자발적 축소와 상환에 따른 소멸이 서로
+      다른 까닭이며 그 축이 무엇인지는 구멍으로 남아 있다. -/
+  resolvesReductionCause : Entity → Bool
+  /-- 그 주체에게 지급 의무가 선 액수와 그 구간에 내준 액수를 함께 가르는가. 회계층의 판정이 그 둘을
+      받으므로 한쪽만 드는 경로는 이 칸이 거짓이다. -/
+  resolvesRepaymentFailure : Entity → Bool
 
 /--
 witness (A-3).
@@ -77,12 +88,12 @@ witness (A-3).
 -- DD:CF-1264
 def RepaymentChannel.noSource {Entity : Type} : RepaymentChannel Entity where
   coversEntity := fun _ => false
-  resolvesTotals := false
-  resolvesCurrencySplit := false
-  resolvesCashLike := false
-  resolvesWithdrawal := false
-  resolvesReductionCause := false
-  resolvesRepaymentFailure := false
+  resolvesTotals := fun _ => false
+  resolvesCurrencySplit := fun _ => false
+  resolvesCashLike := fun _ => false
+  resolvesWithdrawal := fun _ => false
+  resolvesReductionCause := fun _ => false
+  resolvesRepaymentFailure := fun _ => false
 
 /--
 지급능력을 답할 수 있는가.
@@ -105,7 +116,7 @@ def RepaymentChannel.noSource {Entity : Type} : RepaymentChannel Entity where
 -- DD:CF-1264
 def RepaymentChannel.answersSolvency {Entity : Type}
     (C : RepaymentChannel Entity) (n : Entity) : Bool :=
-  C.coversEntity n && C.resolvesTotals && C.resolvesCurrencySplit
+  C.coversEntity n && C.resolvesTotals n && C.resolvesCurrencySplit n
 
 /--
 인출 충족을 답할 수 있는가.
@@ -128,7 +139,7 @@ def RepaymentChannel.answersSolvency {Entity : Type}
 -- DD:CF-1264
 def RepaymentChannel.answersWithdrawalCoverage {Entity : Type}
     (C : RepaymentChannel Entity) (n : Entity) : Bool :=
-  C.coversEntity n && C.resolvesCashLike && C.resolvesWithdrawal
+  C.coversEntity n && C.resolvesCashLike n && C.resolvesWithdrawal n
 
 /--
 자산 감소를 답할 수 있는가.
@@ -151,7 +162,7 @@ def RepaymentChannel.answersWithdrawalCoverage {Entity : Type}
 -- DD:CF-1264
 def RepaymentChannel.answersReduction {Entity : Type}
     (C : RepaymentChannel Entity) (n : Entity) : Bool :=
-  C.coversEntity n && C.resolvesTotals && C.resolvesReductionCause
+  C.coversEntity n && C.resolvesTotals n && C.resolvesReductionCause n
 
 /--
 상환 실패를 답할 수 있는가.
@@ -175,7 +186,7 @@ def RepaymentChannel.answersReduction {Entity : Type}
 -- DD:CF-1353
 def RepaymentChannel.answersRepaymentFailure {Entity : Type}
     (C : RepaymentChannel Entity) (n : Entity) : Bool :=
-  C.coversEntity n && C.resolvesRepaymentFailure
+  C.coversEntity n && C.resolvesRepaymentFailure n
 
 /--
 재무제표 경로.
@@ -200,12 +211,12 @@ def RepaymentChannel.answersRepaymentFailure {Entity : Type}
 def financialStatementRepaymentChannel {Entity : Type} (discloses : Entity → Bool) :
     RepaymentChannel Entity where
   coversEntity := discloses
-  resolvesTotals := true
-  resolvesCurrencySplit := false
-  resolvesCashLike := false
-  resolvesWithdrawal := false
-  resolvesReductionCause := false
-  resolvesRepaymentFailure := false
+  resolvesTotals := fun _ => true
+  resolvesCurrencySplit := fun _ => false
+  resolvesCashLike := fun _ => false
+  resolvesWithdrawal := fun _ => false
+  resolvesReductionCause := fun _ => false
+  resolvesRepaymentFailure := fun _ => false
 
 /--
 재무제표 경로는 네 판정 어느 것에서도 답을 내지 못한다.
