@@ -38,7 +38,7 @@
 | | Securitisation and financial stability | Shin 2009 (EJ) | 총 부채 확장 메커니즘 |
 | | Marking-to-market: panacea or Pandora's box | Plantin·Sapra·Shin 2007 | E-16. 가격 → 제약 경로의 회계적 근거 |
 | | Illiquidity component of credit risk | Morris·Shin 2016 | E-17. 지급불능/유동성 분해. 실패 양태 분할 재료 |
-| | Reflections on Northern Rock | Shin 2009 (JEP) | **D-3 역사 사례 공급원** |
+| | Reflections on Northern Rock | Shin 2009 (JEP) | E-50. **D-3 역사 사례 공급원.** 도매조달 은행의 런. `propagation-5` 가 S-7 로 지목해 읽었다 |
 | | Leveraged losses | Greenlaw·Hatzius·Kashyap·Shin 2008 | **D-3 역사 사례 공급원** |
 
 ## O-2 배관 — 신용중개 연쇄·화폐성 위계·담보 (11편 · 보조 1편)
@@ -58,7 +58,7 @@
 | | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | E-48. 위와 동일 모형의 다른 판본으로 추정 |
 | | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 |
 
-## O-3 통화 확장 — 달러·국경 간 청구권·CIP (18편)
+## O-3 통화 확장 — 달러·국경 간 청구권·CIP (19편)
 
 | # | 파일 | 저자·연도 | 비고 |
 |---|---|---|---|
@@ -80,6 +80,7 @@
 | | Central bank balance sheets and financial stability (편집본 내 Shin 챕터) | Shin | 302쪽 편집본. J-4 관련 |
 | | Breaking free of the triple coincidence in international finance | Avdjiev·McCauley·Shin 2016 (BIS WP 524) | 국제금융 통계의 삼중 일치 해체. J-1 의 근거 원전. `claim-4` 가 S-7 로 지목해 읽었다 (E-18). zip 의 Shin 폴더에 있다 |
 | | Exchange rates and the working capital channel of trade fluctuations | Bruno·Kim·Shin 2018 (BIS WP 694) | 교역의 운전자본 경로와 표시 통화·자금조달 통화의 분리. `claim-4` 가 S-7 로 지목해 읽었다 (E-19). zip 의 Shin 폴더에 있다 |
+| | Procyclicality and Monetary Aggregates | Shin·Shin 2011 (NBER WP 16836) | E-51. 핵심/비핵심 분할의 원전이며 보유자 축의 정본. 2원 분류표와 조작적 정의 다섯을 든다. `propagation-5` 가 S-7 로 지목해 읽었다. **zip 밖이며 사용자가 조달했다** |
 
 ---
 
@@ -289,7 +290,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | O-1 | 20 | — |
 | O-2 | 11 | — |
 | O-2 보조 | 1 | — |
-| O-3 | 18 | — |
+| O-3 | 19 | 1 |
 | 교역 금융과 결제 방식 | 19 | 2 |
 | 계약 표현 | 14 | — |
 | 증거금과 담보의 규범 | 3 | — |
@@ -302,7 +303,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | 유동성 규제와 중앙은행 담보 정책 | 4 | — |
 | 담보 속도와 재담보의 계량 | 2 | — |
 | 상품 담보 금융 | 2 | — |
-| **구성원 합계** | **145** | **2** |
+| **구성원 합계** | **146** | **3** |
 
 zip 안 구성원은 143편이다.
 
@@ -344,8 +345,13 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 규범 둘이고 묶음에 들어올 수 없다. 같은 회차가 읽은 창고증권과 담보권의 규범은 **뭉치 밖 참조로
 두어 이 목록에 들이지 않았다.**
 
-**이 이력을 표로 접지 않는다.** 이 절의 문단 가운데 둘은 계수의 증감이고 둘은 계산 방법이 바뀐
+**`propagation-5` 가 보유자 축의 원전 하나를 들였다.** 구성원 합계가 145 에서 146 으로, zip 밖이
+2 에서 3 으로 늘었다. **zip 안 구성원과 중복 사본과 필독 편수는 움직이지 않았다.** 들어온 편이 zip
+밖이므로 zip 안 구성원이 143 에 머문다. 같은 회차가 뭉치에 이미 있던 도매조달 은행의 런을 다룬 편에
+추출 기록 번호를 처음 적었고, 그것은 구성원 수를 움직이지 않는다.
+
+**이 이력을 표로 접지 않는다.** 이 절의 문단 가운데 넷은 계수의 증감이고 둘은 계산 방법이 바뀐
 경위인데, 뒤의 둘은 표의 칸에 들어가지 않으므로 통째로 접으면 압축이 된다. 증감 문단만 접는 것은
-정돈에 들지만 지금 셋뿐이라 얻는 것이 없고, 증감 문단은 현행 값을 전사하지 않고 차이만 들어 낡지
+정돈에 들지만 지금 넷뿐이라 얻는 것이 없고, 증감 문단은 현행 값을 전사하지 않고 차이만 들어 낡지
 않는다. 접을 때는 증감만 표로 모으고 경위 문단을 산문으로 남기며, 그 작업은 이 문서를 재편하는
 일로 따로 선다.
