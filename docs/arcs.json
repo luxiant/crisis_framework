@@ -259,9 +259,9 @@
           "holes": []
         }
       ],
-      "status": "open",
+      "status": "closed",
       "opened": "2026-10-25",
-      "closed": null,
+      "closed": "2026-11-01",
       "holes": [
         "CF-207",
         "CF-218",
