@@ -36,7 +36,7 @@ namespace CrisisFramework.Observation
 **분할의 완전성을 주장하지 않는다(V-7).** 이 칸들이 공시가 드는 것 전부를 덮는다는 근거가 없으며,
 새 규범이 다른 축을 가르면 칸이 늘어난다(V-7).
 
-**수를 담지 않는다.** 다섯 칸이 모두 판정이고 자산의 특정만 사상으로 받는다(L-14).
+**수를 담지 않는다.** 칸이 판정이거나 자산의 특정이며 어느 쪽도 수 타입을 들지 않는다(L-14).
 -/
 -- DD:CF-977
 structure ShareChannel (Asset : Type) where
@@ -52,6 +52,9 @@ structure ShareChannel (Asset : Type) where
   coversBonded : Bool
   /-- 그 자산을 특정하는가. -/
   resolvesAsset : Asset → Bool
+  /-- 그 자산의 기재값을 금액으로 드는가. 담보 여력의 금액 판본이 보유한 몫에 기재값을 걸어
+      금액으로 서므로, 그 값이 공시에서 읽히지 않으면 그 총계가 재어지지 않는다. -/
+  reportsCarryingAmount : Bool
 
 /-- witness (A-3). `ShareChannel` 이 비어 있지 않음을 보인다. 아무것도 들지 않는 경로. -/
 -- DD:CF-31
@@ -62,6 +65,7 @@ def ShareChannel.noSource {Asset : Type} : ShareChannel Asset where
   coversUnregistered := false
   coversBonded := false
   resolvesAsset := fun _ => false
+  reportsCarryingAmount := false
 
 /--
 그 경로가 그 자산의 보유 몫과 내놓은 몫을 함께 내는가.
@@ -118,6 +122,7 @@ def exchangeWarehouseChannel {Asset : Type} (resolves : Asset → Bool) :
   coversUnregistered := true
   coversBonded := false
   resolvesAsset := resolves
+  reportsCarryingAmount := false
 
 /--
 재무제표 공시의 경로 값.
@@ -150,6 +155,7 @@ def financialStatementShareChannel {Asset : Type} : ShareChannel Asset where
   coversUnregistered := true
   coversBonded := true
   resolvesAsset := fun _ => false
+  reportsCarryingAmount := false
 
 /--
 거래소 창고 경로에 보유자별 몫과 내놓은 몫과 보세창고가 더해지면 답이 선다.
@@ -178,5 +184,61 @@ theorem exchangeWarehouseChannel_answersShare_when_resolved
   -- 가정을 그대로 쓴다. 전면 `simp` 를 부르지 않으며 보조정리도 쓰지 않는다.
   show resolves a = true
   exact hres
+
+/--
+자산의 기재값을 금액으로 읽을 수 있는가.
+
+**대응 비형식 개념:** 그 경로가 특정 자산을 식별하고 보유자별 몫을 들고 그 자산의 기재값을 금액으로
+드는가. 셋이 함께 서야 담보 여력의 금액 판본이 재어지며, 하나라도 없으면 그 총계의 입력이 서지 않는다.
+
+**이 정의가 배제하는 사례:**
+재고자산의 분류별 장부금액 공시. 회계기준이 재고자산의 총 장부금액과 기업에 적합한 분류별 장부금액을
+요구하므로 재고자산 자체는 분류별로 갈리나, 담보 제공분을 드는 조항이 그 분류를 그 자리에 걸지 않는다.
+그래서 어느 자산이 담보로 제공됐는지가 그 공시에 서지 않으며 이 판정이 그 경로에서 거짓을 낸다.
+조달처: E-45 §2-2 「담보 제공분을 단일 금액으로 들고」
+
+**기각한 대체 정의:**
+기존 몫 판정에 그 칸을 더해 받는 안. 그 판정의 진술을 바꾸는 일이고 그 선언을 낳은 결정이 몫의 공시를
+재는 자리로 세웠으므로, 기재값을 그 곱에 더하면 그 판정이 답하는 물음이 둘로 갈린다. 칸만 더하고 판정을
+세우지 않는 안도 기각했다. 그 칸을 읽는 자리가 없어 경로가 그것을 가르는지가 어느 선언에서도 재어지지
+않으며, L-14 가 관측층에 등재되는 소스 없음을 주요 산출물로 드는 자리가 그 칸을 읽는 판정 없이는
+서지 않는다.
+
+**값을 담지 않는다.** 세 칸의 논리곱이며 수 타입을 언급하지 않는다.
+-/
+-- DD:CF-2016
+def ShareChannel.answersCarryingAmount {Asset : Type}
+    (ch : ShareChannel Asset) (a : Asset) : Bool :=
+  ch.resolvesAsset a && ch.reportsHolderShare && ch.reportsCarryingAmount
+
+/--
+서 있는 세 경로가 전부 기재값을 읽지 못한다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 소스가 전무한 경로나 거래소 창고 경로나 재무제표
+몫 경로 가운데 하나가 어느 자산에 대해 이 판정에서 참을 내는 것이 관측되어야 한다. 그러면 그 경로가
+자산을 식별하고 보유자별 몫과 기재값을 함께 드는 것이므로 담보 여력의 금액 판본이 그 경로에서 재어진다.
+
+**가정을 두지 않는다.** 세 경로의 칸이 전부 고정값이고 거래소 창고 경로의 자산 식별만 인자로 받는데,
+그 경로의 보유자별 몫 칸이 거짓이므로 논리곱이 그 인자와 무관하게 거짓이다.
+
+**이 정리가 L-14 의 소스 없음을 형식층에 드는 자리다.** 자산의 기재값을 적격성으로 가르는 공시가
+없다는 것이 이 아크의 산출이며, 그 결손이 데이터 공백이 아니라 관측 명세의 결손이어서 구멍으로
+등재된다.
+-/
+-- DD:CF-2016
+theorem answersCarryingAmount_eq_false_on_all_channels
+    {Asset : Type} (resolves : Asset → Bool) (a : Asset) :
+    (ShareChannel.noSource : ShareChannel Asset).answersCarryingAmount a = false ∧
+      (exchangeWarehouseChannel resolves).answersCarryingAmount a = false ∧
+      (financialStatementShareChannel : ShareChannel Asset).answersCarryingAmount a = false := by
+  -- 세 경로의 칸을 `simp only` 로 펼치면 논리곱이 거짓 항을 품으므로 각 항이 거짓으로 접힌다.
+  -- 전면 `simp` 를 부르지 않으며 세 자리를 `refine` 으로 갈라 각각 닫는다.
+  refine ⟨?_, ?_, ?_⟩
+  · simp only [ShareChannel.answersCarryingAmount, ShareChannel.noSource]
+    rfl
+  · simp only [ShareChannel.answersCarryingAmount, exchangeWarehouseChannel]
+    rw [Bool.and_false]
+  · simp only [ShareChannel.answersCarryingAmount, financialStatementShareChannel]
+    rfl
 
 end CrisisFramework.Observation

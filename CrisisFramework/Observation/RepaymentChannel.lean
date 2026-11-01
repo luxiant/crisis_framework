@@ -5,10 +5,11 @@
       G-1(측정 방법이 다르면 다른 개념), D-1·D-2(docstring 3항목),
       A-3(witness 의무), D-8(witness 예외), T-2(반증 조건), T-4(가정의 명시).
 
-**이 파일은 답을 조립하지 않는다.** 채널이 무엇을 가를 수 있는지만 들고, 그 항의 답을 짓는
-선언은 다음 페이즈가 세운다. 사유가 둘이다. 조립이 정의층의 판정 함수를 부르면 그 공리가 따라와
-이 층의 기준선을 넘기는데 그 부류의 처분이 따로 서 있고, 자산이 줄어든 까닭을 가르는 축이 구멍으로
-남아 그 칸의 답이 아직 서지 않는다.
+**이 파일이 그 항의 답을 조립한다.** 채널이 무엇을 가를 수 있는지를 칸으로 들고, 그 칸을
+읽어 답을 짓는 선언이 같은 파일에 선다. 조립을 막았던 사유가 둘이었고 둘 다 풀렸다. 아래 층의 판정을
+직접 부르면 그 층이 정한 수 체계와 공리가 이 층으로 따라오는데 조립이 그 판정을 주체와 두 시점을 받는
+사상으로 받으므로 그 자리가 서지 않고, 자산이 줄어든 까닭을 가르는 축이 회계층에 서서 조정 칸의 답이
+설 근거가 생겼다.
 
 **칸이 여섯이고 판정이 셋이다.** 어느 판정도 읽지 않는 필드를 두지 않는다는 원칙이 그 수를
 정했다. 만기 분해의 칸을 처음에 두었는데 세 판정 어느 것도 그것을 읽지 않으며, 만기를 가르는
@@ -255,5 +256,126 @@ theorem financialStatementRepaymentChannel_answers_none {Entity : Type}
         RepaymentChannel.answersRepaymentFailure, financialStatementRepaymentChannel]
       rw [hn]
       rfl
+
+/--
+`CQ-fin-9` 의 조립.
+
+**대응 비형식 개념:** 상환 경로가 가르는 칸과 회계층의 세 판정 결과를 받아 그 주체의 상환 결과를
+낸다. 경로가 상환 실패를 답하지 못하면 전량이 소스 없음으로 접히고, 답하면 실패 여부에 따라 지급능력
+칸과 조정 칸 가운데 하나를 채운다.
+
+**이 정의가 배제하는 사례:**
+인출을 채권자 측 제약의 조임으로 다시 읽는 자리. 도매조달 은행의 런에서 인출을 수행한 쪽이 개인이
+아니라 기관투자자였고 그 투자자가 내부 위험관리 규칙이나 규제 규칙에서 오는 제약을 지므로, 빌린 쪽의
+상환 결과가 빌린 쪽의 성질만으로 서지 않는다. 이 조립은 한 주체의 두 시점을 받으며 그 주체에게 빌려
+준 쪽의 제약을 받지 않는다.
+조달처: E-50 §6 「인출을 수행한 쪽이 개인이 아니라 기관투자자였다」
+
+**기각한 대체 정의:**
+회계층의 판정을 직접 부르는 안. 그 판정이 회계층에 살고 그 층이 금액의 수 체계를 정하므로 관측층의
+선언에 수 타입이 들어온다. L-14 가 그 자리를 막으며, 담보부 차입의 경로가 조립이 구조의 판정을
+함수로 받는다는 관례를 이미 세웠다. 상환 실패와 지급능력과 조정을 한 판정으로 묶어 묻는 안도
+기각했다. 답 타입의 세 생성자 가운데 앞의 둘이 저마다 칸을 하나씩 받으므로 실패 여부를 먼저 가린
+뒤에야 어느 칸을 채울지가 정해지며, 묶으면 그 둘 가운데 하나만 서는 경로에서 답이 서지 않는다.
+
+**값을 담지 않는다.** 회계층의 세 판정을 주체와 두 시점을 받는 사상으로 받고 수 타입을 언급하지
+않는다.
+-/
+-- DD:CF-2008
+def repaymentAndAdjustmentFrom {Time Entity : Type}
+    (ch : RepaymentChannel Entity)
+    (failed : Entity → Time → Time → Bool)
+    (solvent : Entity → Time → Time → Bool)
+    (reduced : Entity → Time → Time → Bool) :
+    CQ.RepaymentAndAdjustment Time Entity where
+  answer := fun n t₁ t₂ =>
+    if ch.answersRepaymentFailure n then
+      (if failed n t₁ t₂ then
+        (if ch.answersSolvency n then
+          .failure (if solvent n t₁ t₂ then .holds else .fails)
+         else .failure (.undetermined .noMeasurementSource))
+       else
+        (if ch.answersReduction n then
+          .noFailure (if reduced n t₁ t₂ then .holds else .fails)
+         else .noFailure (.undetermined .noMeasurementSource)))
+    else .undetermined .noMeasurementSource
+
+/--
+경로가 상환 실패를 답하지 못하면 답이 전량 소스 없음으로 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 경로가 상환 실패 판정의 입력을 내지 못하는데
+답이 실패 여부를 드는 생성자를 내는 것이 관측되어야 한다. 그러면 그 답이 경로가 내지 않은 입력을
+쓴 것이므로 이 조립이 경로를 읽지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로가 그 주체에 대해 상환 실패를 답하지 못한다는 것을 가정으로
+진술에 명시한다. 그 가정을 떼면 실패 여부가 가려져 답이 접히지 않으므로 거짓이다. 재무제표 경로가
+네 판정 전부에서 거짓을 낸다는 정리가 같은 파일에 서 있어 그 가정이 실제로 서는 자리가 실재한다.
+-/
+-- DD:CF-2010
+theorem repaymentAndAdjustmentFrom_undetermined_of_no_failure_source
+    {Time Entity : Type} (ch : RepaymentChannel Entity)
+    (failed solvent reduced : Entity → Time → Time → Bool)
+    (n : Entity) (t₁ t₂ : Time) (h : ch.answersRepaymentFailure n = false) :
+    (repaymentAndAdjustmentFrom ch failed solvent reduced).answer n t₁ t₂
+      = .undetermined .noMeasurementSource := by
+  -- 조립의 첫 분기를 가정으로 닫는다. `simp only` 로 조립의 정의만 펼치고 전면 `simp` 를
+  -- 쓰지 않는다. 같은 형이 화폐 위계 경로의 조립에 서 있다.
+  simp only [repaymentAndAdjustmentFrom]
+  rw [h]
+  rfl
+
+/--
+실패한 쪽에서 경로가 지급능력을 답하지 못하면 그 칸이 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 경로가 상환 실패를 답하고 실패가 섰는데 지급능력
+판정의 입력을 내지 못하면서 그 칸이 성립이나 불성립을 드는 것이 관측되어야 한다. 그러면 그 칸이
+경로가 내지 않은 입력을 쓴 것이다.
+
+**가정과 그 배제 사례(T-4·T-5):** 가정이 셋이고 전부 진술에 명시한다. 경로가 상환 실패를 답한다는
+것과 그 구간에 실패가 섰다는 것과 경로가 지급능력을 답하지 못한다는 것이다. 셋째 가정이 배제하는
+자리는 두 총액을 통화별로 가르는 경로이며 거기서 그 칸이 값을 받는다. **앞 항의 조립이 정리 둘을
+가진 것과 수가 다른 까닭은 답 타입의 칸이 둘이어서 접힘의 자리가 하나 더 있다는 것이다.**
+-/
+-- DD:CF-2010
+theorem repaymentAndAdjustmentFrom_failure_undetermined_of_no_solvency_source
+    {Time Entity : Type} (ch : RepaymentChannel Entity)
+    (failed solvent reduced : Entity → Time → Time → Bool)
+    (n : Entity) (t₁ t₂ : Time)
+    (hFail : ch.answersRepaymentFailure n = true)
+    (hFailed : failed n t₁ t₂ = true)
+    (hSolv : ch.answersSolvency n = false) :
+    (repaymentAndAdjustmentFrom ch failed solvent reduced).answer n t₁ t₂
+      = .failure (.undetermined .noMeasurementSource) := by
+  -- 세 분기를 세 가정으로 차례로 닫는다. `simp only` 로 조립의 정의만 펼친다.
+  simp only [repaymentAndAdjustmentFrom]
+  rw [hFail, hFailed, hSolv]
+  rfl
+
+/--
+실패하지 않은 쪽에서 경로가 자산 감소를 답하지 못하면 그 칸이 접힌다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 경로가 상환 실패를 답하고 실패가 서지 않았는데
+자산 감소 판정의 입력을 내지 못하면서 그 칸이 성립이나 불성립을 드는 것이 관측되어야 한다.
+
+**가정과 그 배제 사례(T-4·T-5):** 가정이 셋이고 전부 진술에 명시한다. 경로가 상환 실패를 답한다는
+것과 그 구간에 실패가 서지 않았다는 것과 경로가 자산 감소를 답하지 못한다는 것이다. 셋째 가정이
+배제하는 자리는 자산이 줄어든 까닭을 가르는 경로이며, 그 축이 이 회차에 회계층에 섰으므로 그 칸이
+값을 받는 길이 열렸다. **그 축이 서지 않았던 동안은 이 칸이 구조적으로 접혔고 그것이 이 CQ 의
+조정 칸을 정의 공백에 둔 사유였다.**
+-/
+-- DD:CF-2010
+theorem repaymentAndAdjustmentFrom_noFailure_undetermined_of_no_reduction_source
+    {Time Entity : Type} (ch : RepaymentChannel Entity)
+    (failed solvent reduced : Entity → Time → Time → Bool)
+    (n : Entity) (t₁ t₂ : Time)
+    (hFail : ch.answersRepaymentFailure n = true)
+    (hNotFailed : failed n t₁ t₂ = false)
+    (hRed : ch.answersReduction n = false) :
+    (repaymentAndAdjustmentFrom ch failed solvent reduced).answer n t₁ t₂
+      = .noFailure (.undetermined .noMeasurementSource) := by
+  -- 앞 정리와 같은 꼴이며 둘째 분기의 방향만 바뀐다.
+  simp only [repaymentAndAdjustmentFrom]
+  rw [hFail, hNotFailed, hRed]
+  rfl
 
 end CrisisFramework.Observation
