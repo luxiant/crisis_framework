@@ -1608,6 +1608,73 @@ def inj_49_unpointed(root):
     return name
 
 
+# ----------------------------------------------------- 검사 50 · 뭉치 인벤토리의 거울
+
+def _nc50_inventory(root):
+    """사본의 뭉치 인벤토리 경로와 그 문면과 구성원 행의 번호. 구성원 행을 고르는 쪽은 검증기의
+    함수를 그대로 부른다. 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히 공허해진다."""
+    f = root / check_wiki.INVENTORY_DOC
+    text = f.read_text(encoding="utf-8")
+    left, _rows, _lists = check_wiki.inventory_members(text)
+    if not left:
+        raise SystemExit("사본의 인벤토리에서 구성원 행의 기록 번호를 하나도 읽지 못했다")
+    return f, text, left
+
+
+def inj_50_missing(root):
+    """인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다.
+
+    번호를 기존 기록 최대의 다음으로 고른다. 그 번호의 기록 파일이 없으므로 미포착이 서야
+    하며, 그 행이 원래 든 번호를 지우지 않으므로 유령의 계수는 움직이지 않는다.
+    """
+    f, text, left = _nc50_inventory(root)
+    d = root / "docs" / "extractions"
+    nums = [int(m.group(1)) for g in d.glob("extraction-*.md")
+            for m in [check_wiki.EXTRACTION_FILE_NO.match(g.name)] if m]
+    if not nums:
+        raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
+    n = max(nums) + 1
+    if n > 99:
+        raise SystemExit("기록 번호가 두 자리를 넘어 검사의 꼴이 그 번호를 읽지 못한다")
+    lines = text.split("\n")
+    at = left[min(left)][0] - 1
+    m = check_wiki.INVENTORY_EXTRACTION_NO.search(lines[at])
+    if m is None:
+        raise SystemExit("고른 구성원 행에서 기록 번호를 다시 찾지 못했다")
+    lines[at] = lines[at][:m.end()] + f" · E-{n:02d}" + lines[at][m.end():]
+    f.write_text("\n".join(lines), encoding="utf-8")
+    return f"{check_wiki.INVENTORY_DOC}:{at + 1} 에 E-{n:02d}"
+
+
+def inj_50_ghost(root):
+    """추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다.
+
+    **그 번호를 한 줄에서만 들고 그 줄이 다른 번호를 들지 않는 기록을 고른다.** 다른 줄에도
+    서면 한 줄을 지워도 유령이 서지 않고, 그 줄이 다른 번호를 들면 유령이 둘 이상 늘어 이 주입이
+    겨눈 자리가 흐려진다. 유령이 하나 늘었는지를 주입 안에서 단언한다.
+    """
+    f, text, left = _nc50_inventory(root)
+    before = len(set(left))
+    lines = text.split("\n")
+    for n in sorted(left):
+        where = sorted(set(left[n]))
+        if len(where) != 1:
+            continue
+        at = where[0] - 1
+        others = {int(x.group(1))
+                  for x in check_wiki.INVENTORY_EXTRACTION_NO.finditer(lines[at])}
+        if others != {n}:
+            continue
+        del lines[at]
+        f.write_text("\n".join(lines), encoding="utf-8")
+        after, _rows, _lists = check_wiki.inventory_members(f.read_text(encoding="utf-8"))
+        if len(set(after)) != before - 1 or n in after:
+            raise SystemExit(f"구성원 행을 지웠는데 좌변이 {before} 에서 {len(set(after))} 로 "
+                             f"바뀌었다. 하나만 줄어야 한다")
+        return f"E-{n:02d}"
+    raise SystemExit("한 줄에서만 서고 그 줄이 다른 번호를 들지 않는 기록이 없어 주입이 서지 않는다")
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1694,6 +1761,8 @@ CASES = [
     ("48",  "wiki48-extraction-sourcing",   "지목의 절 번호를 실재하지 않는 것으로 바꾼다",  inj_48_section, None),
     ("48",  "wiki48-extraction-sourcing",   "구절을 최소 길이 아래로 줄인다",               inj_48_short, None),
     ("49",  "wiki49-extraction-unpointed",  "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
+    ("50",  "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
+    ("50",  "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),
 ]
 
 

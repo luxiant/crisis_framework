@@ -48,7 +48,7 @@
 | ★ | Federal Reserve Bank of New York Staff Reports on Shadow Banking | Pozsar·Adrian·Ashcraft·Boesky 2010/12 | E-06. **지도.** 노드 = (기관유형 × 단계)의 원전. J-1·K-2 |
 | ★ | Shadow Banking: The Money View | Pozsar 2014 (OFR) | E-07. 화폐성 위계. PH-R3 중심 구조물 |
 | ★ | Institutional Cash Pools and the Triffin Dilemma | Pozsar 2011 (IMF) | E-09. 수요 측. 안전자산 수요 노드 |
-| ★ | The Nonbank-Bank Nexus and the Shadow Banking System | Pozsar·Singh 2011 (IMF) | **담보 재사용·연쇄.** K-5 직결 |
+| ★ | The Nonbank-Bank Nexus and the Shadow Banking System | Pozsar·Singh 2011 (IMF) | E-08. **담보 재사용·연쇄.** K-5 직결 |
 | | The Rise and Fall of the Shadow Banking System | Pozsar 2008 | 초기 서술 |
 | | A Macro View of Shadow Banking | Pozsar 2015 | 레버드 베타·도매조달 |
 | | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | E-10. 위계 + 딜러 중심 최종대부자. J-4 |

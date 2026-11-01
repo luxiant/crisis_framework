@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 마흔아홉을 돈다. 실패시키는 것 서른아홉과 보고만 하는 것 일곱과
+`docs/decisions/SPEC.md` §2 의 검사 쉰을 돈다. 실패시키는 것 마흔과 보고만 하는 것 일곱과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -238,8 +238,18 @@ class Ledger:
         """검사 41 이 훑을 (표시 경로, 훑을 텍스트) 목록.
 
         리포에 영구히 남는 문면이 유니버스다. 집행 문면과 회차 기록과 `docs/` 아래의 마크다운과
-        Lean 파일이며, 추출 기록은 뺀다. Lean 은 주석만 훑는다. 그 조항이 거는 자리가 docstring
-        과 주석이고, 식별자는 영어라 금지 갈래의 꼴이 코드에 서지 않기 때문이다.
+        Lean 파일과 아크 값 정본의 산문 필드 둘이다. Lean 은 주석만 훑는다. 그 조항이 거는 자리가
+        docstring 과 주석이고, 식별자는 영어라 금지 갈래의 꼴이 코드에 서지 않기 때문이다.
+
+        **추출 기록을 건너뛰지 않는다.** 건너뛰던 근거는 그 디렉터리가 인용한 편 자신의 절
+        번호를 구조적으로 많이 든다는 것이었는데, 기록의 번호가 앞에 오는 절 번호를 면제하는
+        규칙이 그 사이에 섰으므로 그 근거가 소멸했다. 남는 적발은 리포 밖 문서의 절 번호를 든
+        자리다.
+
+        **아크 값 정본은 파일 전량을 훑지 않고 산문 필드 둘만 값으로 꺼내 훑는다.** 그 파일이
+        마크다운이 아니어서 앞의 수집이 받지 않으며, 파일 전량을 텍스트로 훑으면 ID 와 경로가
+        금지 갈래의 꼴에 걸려 거짓 양성이 선다. 필드마다 따로 한 문면으로 두므로 표시 경로가
+        그 필드의 자리를 든다.
 
         **원장 네 파일은 파일로 훑지 않는다.** 그 산문 필드는 검사 41 의 R-11 갈래가 항목
         단위로 따로 받으며, 파일로도 훑으면 같은 자리가 두 번 세어진다(SPEC §2.1).
@@ -250,10 +260,16 @@ class Ledger:
             if f.is_file():
                 out.append((rel, f.read_text(encoding="utf-8")))
         for f in sorted((self.root / "docs").rglob("*.md")):
-            rel = str(f.relative_to(self.root))
-            if any(rel.startswith(x) for x in POINTER_SKIP):
-                continue
-            out.append((rel, f.read_text(encoding="utf-8")))
+            out.append((str(f.relative_to(self.root)), f.read_text(encoding="utf-8")))
+        f = self.root / ARCS_DOC
+        if f.is_file():
+            doc = json.loads(f.read_text(encoding="utf-8"))
+            for array, key, field in POINTER_ARCS_FIELDS:
+                for i, x in enumerate(doc.get(array) or [], 1):
+                    if not isinstance(x, dict) or not isinstance(x.get(field), str):
+                        continue
+                    at = x.get(key) if key else i
+                    out.append((f"{ARCS_DOC}{POINTER_ARCS_MARK}{array}/{at}/{field}", x[field]))
         for f in self.lean_files:
             out.append((str(f.relative_to(self.root)),
                         _lean_comments(f.read_text(encoding="utf-8"))))
@@ -1072,7 +1088,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46", "47", "48", "49",
+         "42", "43", "44", "45", "46", "47", "48", "49", "50",
          "29", "30"]
 
 
@@ -1342,10 +1358,17 @@ R11_WORD = "주석"
 POINTER_BLOCK = re.compile(r"<!-- POINTER:BEGIN -->\n(.*?)<!-- POINTER:END -->", re.S)
 POINTER_LINE = re.compile(r"^(POINTER_[A-Z]+)=(\d+)$")
 POINTER_KEYS = ("POINTER_COMMENT", "POINTER_EPHEMERAL", "POINTER_SECTION")
-# 유니버스에서 빼는 경로. 추출 기록은 인용한 편 자신의 절 번호를 구조적으로 많이 들고 그 번호가
-# 꼴로는 리포 밖 문서의 절과 갈리지 않으며, 그 디렉터리가 검사 24 에서도 역사 기록 경로로 빠져
-# 있다. 원장 네 파일은 그 산문 필드를 아래의 R-11 갈래가 따로 받으므로 파일로 훑지 않는다.
-POINTER_SKIP = ("docs/extractions/",)
+# 아크 값 정본에서 훑는 산문 필드. (배열, 자리를 드는 키, 필드) 이며 키가 없는 배열은 차례로 자리를
+# 든다. 아크마다의 서술 필드와 패치 레코드의 사유 필드 둘만 받고, 파일 전량을 훑지 않는 까닭은
+# ID 와 경로가 금지 갈래의 꼴에 걸려 거짓 양성이 서는 것이다. 표시 경로는 파일 경로 뒤에 표지와
+# 그 필드의 자리를 붙인 꼴이며, 표지가 쌍점이 아닌 까닭은 적발을 파일별로 셀 때 쌍점 앞을 경로로
+# 읽기 때문이다(SPEC §2.1).
+POINTER_ARCS_FIELDS = (("arcs", "name", "discriminator"), ("patches", None, "why"))
+POINTER_ARCS_MARK = "#"
+# 유니버스에서 빼는 것은 원장 네 파일뿐이다. 그 산문 필드를 아래의 R-11 갈래가 따로 받으므로
+# 파일로 훑지 않는다. **추출 기록은 이제 유니버스에 든다.** 그 디렉터리를 빼던 근거가 인용한 편
+# 자신의 절 번호를 구조적으로 많이 든다는 것이었는데, 기록의 번호가 앞에 오는 절 번호를 면제하는
+# 아래 규칙이 그 사이에 서서 그 근거가 소멸했다.
 # 갈래 2 의 꼴. 소진 문서가 자기 안에서 쓰는 조작 표지와 그 문서의 파일 이름 접두사다. 그 둘은
 # 페이즈가 끝나면 이관되어 도달 불가가 되므로 리포에 남는 문면이 그것을 지목하면 열 수 없다.
 POINTER_TAG = re.compile(r"(?<![0-9A-Za-z])[A-Z]\d+-O\d+(?![0-9A-Za-z])")
@@ -2568,8 +2591,9 @@ def check_41(led: Ledger) -> Report:
         return r
     targets = led.pointer_scan_targets()
     hits = pointer_hits(targets, dist)
+    fields = sum(1 for rel, _ in targets if rel.startswith(ARCS_DOC + POINTER_ARCS_MARK))
     r.note(f"지목 범위 갈래의 유니버스는 영구 문면 {len(targets)} 개"
-           f" · 유니버스 밖: {list(POINTER_SKIP)} 과 원장 네 파일")
+           f" · 그 가운데 아크 값 정본의 산문 필드 {fields} · 유니버스 밖: 원장 네 파일")
     for key in POINTER_KEYS:
         got = len(hits[key])
         if got > want[key]:
@@ -2883,6 +2907,115 @@ def check_49(led: Ledger) -> Report:
     return r
 
 
+# 검사 50 이 읽는 뭉치 인벤토리와 `MIRROR` 블록. `docs/baseline.md` §5 가 유령의 계수를 들며 값을
+# 코드에 박지 않고 그 블록이 들게 한다. **그 값은 이 검사가 처음 설 때 이 검사 자신이 낸 것이다.**
+# 그 계수가 아래 구성원 행의 꼴에 달려 있으므로 블록과 탐지기를 같은 코드에서 나오게 둔다(SPEC §2.1).
+INVENTORY_DOC = "docs/bundle-inventory-v0.md"
+MIRROR_BLOCK = re.compile(r"<!-- MIRROR:BEGIN -->\n(.*?)<!-- MIRROR:END -->", re.S)
+MIRROR_GHOST_LINE = re.compile(r"^MIRROR_GHOST=(\d+)$")
+# 구성원 행이 드는 기록 번호의 꼴. 앞을 막는 자리가 규율 ID 의 꼴에 섞인 `E` 를 거르고 뒤를 막는
+# 자리가 더 긴 번호를 두 자리에서 자르지 않게 한다. 번호의 자릿수는 검사 48 의 지목 꼴과 같다.
+INVENTORY_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z-])E-(\d{1,2})(?![0-9A-Za-z])")
+# 나열 줄의 구성원 꼴. 보조 묶음의 절이 편을 표의 행이 아니라 「제목 (연도, 번호)」 로 들며, 괄호
+# 안의 첫 자리가 네 자리 연도이고 마지막 자리가 기록 번호다. 연도를 요구하는 까닭은 산문 줄이
+# 괄호 안에 기록 번호만 드는 꼴(「기록 하나(E-44)」)을 구성원으로 읽지 않는 것이다.
+INVENTORY_LIST_MEMBER = re.compile(r"\(\s*\d{4}[^()]*?,\s*E-(\d{1,2})\s*\)")
+
+
+def inventory_members(text: str) -> tuple[dict[int, list[int]], int, int]:
+    """구성원 행이 드는 기록 번호와 그 번호가 선 줄. (번호 → 줄 번호 목록, 표의 행 수, 나열 줄 수).
+
+    **구성원 행은 표의 행과 나열 줄 둘이다.** 표의 행은 머리와 구분 줄을 뺀 본문 행이며 그 칸
+    전량에서 번호를 모은다. 나열 줄은 표의 행이 아닌 줄 가운데 「제목 (연도, 번호)」 의 꼴을 든
+    줄이고 그 꼴 안의 번호만 모은다. 산문 줄은 그 꼴을 들지 않으므로 좌변에 들지 않는다.
+    """
+    out: dict[int, list[int]] = {}
+    lines = text.splitlines()
+    n_rows = n_lists = 0
+    i = 0
+    while i < len(lines):
+        head = md_cells(lines[i])
+        rule = md_cells(lines[i + 1]) if i + 1 < len(lines) else None
+        if head and rule and all(SPEC_TABLE_RULE.match(c) for c in rule if c):
+            j = i + 2
+            while j < len(lines):
+                body = md_cells(lines[j])
+                if body is None:
+                    break
+                n_rows += 1
+                for c in body:
+                    for m in INVENTORY_EXTRACTION_NO.finditer(c):
+                        out.setdefault(int(m.group(1)), []).append(j + 1)
+                j += 1
+            i = j
+            continue
+        found = INVENTORY_LIST_MEMBER.findall(lines[i])
+        if found:
+            n_lists += 1
+            for x in found:
+                out.setdefault(int(x), []).append(i + 1)
+        i += 1
+    return out, n_rows, n_lists
+
+
+def check_50(led: Ledger) -> Report:
+    r = Report("50", "wiki50-inventory-extraction-mirror",
+               "뭉치 인벤토리의 구성원 행이 든 추출 기록 번호가 실재하는 기록을 가리키고, 추출 기록마다 "
+               "그 번호를 드는 구성원 행이 인벤토리에 있는가", "fail")
+    # 블록을 읽지 못하면 통과가 아니라 실패다. 값이 없으면 유령의 계수를 맞댈 상대가 없고, 그때
+    # 통과시키면 새로 선 기록이 인벤토리의 행을 얻지 못한 채 조용히 들어온다(SPEC §2.1).
+    ghost_cap: int | None = None
+    for line in _baseline_block(led, MIRROR_BLOCK).splitlines():
+        m = MIRROR_GHOST_LINE.match(line)
+        if m:
+            ghost_cap = int(m.group(1))
+    if ghost_cap is None:
+        r.bad("docs/baseline.md 의 MIRROR 블록에 MIRROR_GHOST 가 없다")
+        return r
+    inv = led.root / INVENTORY_DOC
+    if not inv.is_file():
+        r.bad(f"{INVENTORY_DOC} 이 없다")
+        return r
+    left, n_rows, n_lists = inventory_members(inv.read_text(encoding="utf-8"))
+    d = led.root / "docs" / "extractions"
+    right: dict[int, str] = {}
+    for f in (sorted(d.glob("extraction-*.md")) if d.is_dir() else []):
+        m = EXTRACTION_FILE_NO.match(f.name)
+        if m:
+            right[int(m.group(1))] = f.name      # 이름의 꼴은 검사 35 가 받는다
+    # 좌변이나 우변이 비면 어느 방향의 어긋남이든 0 으로 난다. 검사 40 과 44 와 46 이 같은 요구를
+    # 둔다.
+    if not left:
+        r.bad(f"{INVENTORY_DOC} 의 구성원 행에서 추출 기록 번호를 하나도 읽지 못했다")
+        return r
+    if not right:
+        r.bad("docs/extractions/ 에서 추출 기록을 하나도 읽지 못했다")
+        return r
+    # 좌에서 우로 미포착. 영을 요구한다.
+    for n in sorted(set(left) - set(right)):
+        r.bad(f"{INVENTORY_DOC}:{left[n][0]} 의 구성원 행이 든 E-{n:02d} 의 기록 파일이 없다")
+    # 우에서 좌로 유령. 영을 요구하지 않고 블록의 값과 맞댄다. **늘면 실패시키고 줄면 통과시킨다.**
+    # 여러 출처를 한 기록에 묶은 자리가 있어 대응하는 단일 구성원이 서지 않으므로 유령이 구조적으로
+    # 영이 될 수 없고, 배정 문면을 면제의 축으로 쓰면 표 행을 가진 쪽이 재어지지 않으므로 면제를
+    # 두지 않고 계수로 가둔다.
+    ghosts = sorted(set(right) - set(left))
+    if len(ghosts) > ghost_cap:
+        r.bad(f"유령이 {len(ghosts)} 인데 값 정본의 블록이 {ghost_cap} 를 든다. "
+              f"{len(ghosts) - ghost_cap} 만큼 늘었다")
+    elif len(ghosts) < ghost_cap:
+        r.note(f"유령 {len(ghosts)} 가 블록의 {ghost_cap} 보다 {ghost_cap - len(ghosts)} 적다. "
+               f"그 기록이 구성원 행을 얻은 것이므로 통과시키며, 블록의 값을 같은 회차에 함께 "
+               f"내리는 것은 결정 세션의 조작이다")
+    else:
+        r.note(f"유령 {len(ghosts)} 가 블록의 값과 같다")
+    r.note(f"좌변은 구성원 행이 든 기록 번호 {len(left)} · 표의 본문 행 {n_rows} · "
+           f"나열 줄 {n_lists} · 우변은 추출 기록 {len(right)}")
+    r.note(f"좌에서 우로 미포착 {len(set(left) - set(right))} · 우에서 좌로 유령 {len(ghosts)}")
+    for n in ghosts:
+        r.note(f"유령 E-{n:02d} — {right[n]}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -2898,7 +3031,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
-        check_48(led), check_49(led),
+        check_48(led), check_49(led), check_50(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -2925,7 +3058,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 마흔아홉)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
