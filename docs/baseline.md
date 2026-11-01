@@ -34,11 +34,11 @@
 
 | 층 | 수 체계 | 기준선 | 측정 시점 |
 |---|---|---|---|
-| 회계층 | `ℤ` | `[propext, Quot.sound]` | `propagation-6` (2026-10-31, `b5f2bb1`) |
+| 회계층 | `ℤ` | `[propext, Quot.sound]` | `propagation-7` (2026-11-01, `3fd503d`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | 1차 세션 |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `propagation-6` (2026-10-31, `b5f2bb1`) |
-| 관측층 | 무차원 | `[]` | `propagation-6` (2026-10-31, `b5f2bb1`) |
-| 용어집 | 없음 | `[]` | `propagation-6` (2026-10-31, `b5f2bb1`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `propagation-7` (2026-11-01, `3fd503d`) |
+| 관측층 | 무차원 | `[]` | `propagation-7` (2026-11-01, `3fd503d`) |
+| 용어집 | 없음 | `[]` | `propagation-7` (2026-11-01, `3fd503d`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
