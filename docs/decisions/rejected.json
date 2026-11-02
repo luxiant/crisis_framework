@@ -2711,8 +2711,7 @@
    "statement": "자본의 세 뜻을 모두 새 개념으로 더하는 안을 기각하고 기존 자기자본을 중간 자리로 쓴다",
    "basis": "등록 목록의 기존 자기자본 개념이 대차대조표의 잔여 항목으로 서술되어 있고 그 개념에 규제 공시의 측정 대응이 이미 붙어 있는 것을 직접 열어 확인했다.",
    "for_decl": "CrisisFramework.Glossary.registry",
-   "related": [],
-   "minute": "낙착-propagation-6-9-(7)"
+   "related": []
   },
   {
    "id": "CF-1968",
@@ -2728,8 +2727,7 @@
    "statement": "레버리지가 움직이는 방식의 분할을 어느 축으로 세우는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Definition.BookLeverageAdjustmentMode",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1969",
@@ -2745,8 +2743,7 @@
    "statement": "자본의 측정 체제를 정의층이 무엇으로 받는가를 두고 검토한 안 3 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Definition.BookCapitalRegime",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1970",
@@ -2762,8 +2759,7 @@
    "statement": "주체와 노드 상태를 잇는 자리를 구조의 어디에 두는가를 두고 검토한 안 3 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Definition.NodeStateAssignment",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1971",
@@ -2779,8 +2775,7 @@
    "statement": "그 배정이 시점을 받는가와 족을 어느 선언 꼴로 두는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Definition.NodeStateAssignmentFamily",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1972",
@@ -2796,8 +2791,7 @@
    "statement": "보유 총계가 보유자를 받는 꼴을 새 선언으로 세우는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.heldShareTotalOfHolderOn",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1973",
@@ -2813,8 +2807,7 @@
    "statement": "제공 총계를 어느 색인으로 모으는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.pledgedShareTotalOfHolderOn",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1974",
@@ -2830,8 +2823,7 @@
    "statement": "담보 여력이 적격성을 어디서 받고 어느 단위로 서는가를 두고 검토한 안 3 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.collateralCapacityOf",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1975",
@@ -2847,8 +2839,7 @@
    "statement": "물림의 부등식이 어느 양변을 받는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.meetsHolderPledgeLimit",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1976",
@@ -2864,8 +2855,7 @@
    "statement": "부채 총계를 가르는 축을 무엇으로 색인하는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.liabilityTotalBelowOf",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1977",
@@ -2881,8 +2871,7 @@
    "statement": "그 여집합 쪽 총계를 어떤 꼴로 세우는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.liabilityTotalNotBelowOf",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1978",
@@ -2898,8 +2887,7 @@
    "statement": "모드 판정이 전제 밖의 배치를 어떻게 받는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.leverageAdjustmentModeOf",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-1979",
@@ -2915,8 +2903,7 @@
    "statement": "체제로 잰 자본 금액을 몇 개의 선언으로 두는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. D-2 가 기각한 대체 정의와 사유를 필수 항목으로 요구하므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Accounting.bookCapitalOf",
-   "related": [],
-   "minute": "낙착-propagation-6-14-(13)"
+   "related": []
   },
   {
    "id": "CF-2121",
@@ -2932,8 +2919,7 @@
    "statement": "용어집의 등록에서 검토한 안 3 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다. R-8 이 등재 범위를 docstring 의 기각 문단 전량으로 두므로 이 항목이 그 문단의 대응물이다.",
    "for_decl": "CrisisFramework.Glossary.registry",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2122",
@@ -2949,8 +2935,7 @@
    "statement": "자산 감소의 까닭을 몇으로 가르는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Definition.AssetReductionCause",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2123",
@@ -2966,8 +2951,7 @@
    "statement": "금액 단위의 물림 판정이 어느 두 양을 맞대는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Accounting.meetsLiabilityCapAmount",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2124",
@@ -2983,8 +2967,7 @@
    "statement": "부채수용력 여지를 어떤 꼴로 두는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Accounting.debtCapacityHeadroom",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2125",
@@ -3000,8 +2983,7 @@
    "statement": "담보 여력의 금액 판본을 어떤 꼴로 두는가를 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Accounting.collateralCapacityAmountOf",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2126",
@@ -3017,8 +2999,7 @@
    "statement": "두 상한을 하나의 한도로 묶는 꼴을 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Accounting.effectiveFundingLimit",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2127",
@@ -3034,8 +3015,7 @@
    "statement": "자산 감소의 까닭을 재는 판정의 꼴을 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Accounting.assetReductionCauseOf",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2128",
@@ -3051,8 +3031,7 @@
    "statement": "내리는 CQ 의 조립이 회계층의 판정을 받는 꼴을 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Observation.repaymentAndAdjustmentFrom",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   },
   {
    "id": "CF-2129",
@@ -3068,8 +3047,7 @@
    "statement": "자산의 기재값을 공시에서 읽는가를 받는 선언을 두고 검토한 안 2 건을 기각한다",
    "basis": "그 선언의 docstring 이 든 기각 문단을 사본의 실물에서 뽑아 안과 사유로 갈랐고, 검사 33 의 좌변을 구현에서 불러 그 문단이 유니버스에 드는 것을 확인했다.",
    "for_decl": "CrisisFramework.Observation.ShareChannel.answersCarryingAmount",
-   "related": [],
-   "minute": "낙착-propagation-7-15-(9)"
+   "related": []
   }
  ]
 }
