@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰을 돈다. 실패시키는 것 마흔과 보고만 하는 것 일곱과
+`docs/decisions/SPEC.md` §2 의 검사 쉰하나를 돈다. 실패시키는 것 마흔하나와 보고만 하는 것 일곱과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1088,7 +1088,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46", "47", "48", "49", "50",
+         "42", "43", "44", "45", "46", "47", "48", "49", "50", "51",
          "29", "30"]
 
 
@@ -3016,6 +3016,114 @@ def check_50(led: Ledger) -> Report:
     return r
 
 
+# 검사 51 이 읽는 유니버스. 명세 §3 의 공통 필드 절과 레지스터 넷의 절이 그 자리이며, 엔트리 카드
+# 절과 아크 값 정본 절은 원장 entry 의 키를 들지 않으므로 그 밖이다(SPEC §2.1).
+#
+# **절을 번호로 고르고 표는 머리의 첫 칸으로 고른다.** 그 절들에는 필드 표 말고도 `layer` 의 값과
+# 재개 트리거의 `kind` 를 드는 표가 함께 서는데, 그 표의 첫 칼럼은 키가 아니라 값이다. 그것을
+# 유니버스에 넣으면 값의 이름이 키로 들어와도 걸리지 않는다. 검사 칸을 요구하지 않는 까닭은
+# 기각 레지스터의 필드 표가 그 칸을 들지 않는다는 것이며, 요구하면 그 레지스터의 키가 전부
+# 유니버스 밖으로 읽힌다. 검사 47 이 같은 머리를 쓰되 그 칸을 요구하는 것과 여기서 갈린다.
+LEDGER_KEY_SECTIONS = ("3.1", "3.2", "3.3", "3.4", "3.5")
+LEDGER_KEY_SECTION_HEAD = re.compile(r"^(#+)\s+(\d+(?:\.\d+)*)\s")
+# 필드 표의 첫 칼럼이 드는 이름의 꼴. 백틱으로 감싼 소문자와 밑줄이다.
+LEDGER_KEY_NAME = re.compile(r"^`([a-z_]+)`$")
+
+
+def ledger_key_universe(text: str) -> tuple[dict[str, set[str]], set[str], list[str]]:
+    """명세 §3.1 부터 §3.5 까지의 필드 표에서 첫 칼럼의 이름을 절마다 뽑는다.
+
+    (절 번호 → 이름 집합, 실재한 절 번호, 첫 칸이 이름의 꼴이 아닌 행) 을 돌려준다. 울타리 안의
+    줄은 읽지 않는다. 공통 필드 절이 `origin` 의 내부를 울타리로 들므로 그 안을 표로 읽으면
+    내부 키가 entry 의 키로 섞인다. 셋째 수준보다 깊은 제목은 절을 바꾸지 않는다.
+    """
+    names: dict[str, set[str]] = {s: set() for s in LEDGER_KEY_SECTIONS}
+    seen: set[str] = set()
+    odd: list[str] = []
+    lines = text.splitlines()
+    sec: str | None = None
+    fenced = False
+    i = 0
+    while i < len(lines):
+        ln = lines[i]
+        if ln.startswith("```"):
+            fenced = not fenced
+            i += 1
+            continue
+        if fenced:
+            i += 1
+            continue
+        h = re.match(r"^(#+)\s", ln)
+        if h:
+            if len(h.group(1)) <= 3:
+                m = LEDGER_KEY_SECTION_HEAD.match(ln)
+                sec = m.group(2) if m and len(m.group(1)) == 3 and m.group(2) in names else None
+                if sec:
+                    seen.add(sec)
+            i += 1
+            continue
+        head = md_cells(ln) if sec else None
+        rule = md_cells(lines[i + 1]) if head and i + 1 < len(lines) else None
+        if head and rule and all(SPEC_TABLE_RULE.match(c) for c in rule if c) \
+                and head[:1] == [SPEC_FIELD_HEAD]:
+            j = i + 2
+            while j < len(lines):
+                body = md_cells(lines[j])
+                if body is None:
+                    break
+                m = LEDGER_KEY_NAME.match(body[0]) if body else None
+                if m:
+                    names[sec].add(m.group(1))
+                else:
+                    odd.append(f"§{sec} 의 {j + 1} 행 첫 칸 `{body[0] if body else ''}`")
+                j += 1
+            i = j
+            continue
+        i += 1
+    return names, seen, odd
+
+
+def check_51(led: Ledger) -> Report:
+    r = Report("51", "wiki51-ledger-key-universe",
+               "원장 네 레지스터의 entry 가 드는 키가 이 명세의 §3.1 부터 §3.5 까지가 든 필드 표의 "
+               "첫 칼럼에 전부 드는가", "fail")
+    spec = led.root / COUNT_SPEC
+    if not spec.is_file():
+        r.bad(f"{COUNT_SPEC} 이 없다")
+        return r
+    names, seen, odd = ledger_key_universe(spec.read_text(encoding="utf-8"))
+    # 유니버스를 읽지 못하면 통과가 아니라 실패다. 절 하나가 빠지면 그 레지스터의 키가 전부
+    # 밖으로 읽히거나, 이름이 바뀐 절을 놓쳐 유니버스가 조용히 줄어든다. 검사 40 과 44 와 46 이
+    # 같은 요구를 둔다.
+    for s in LEDGER_KEY_SECTIONS:
+        if s not in seen:
+            r.bad(f"{COUNT_SPEC} 에 §{s} 의 절 제목이 없다")
+        elif not names[s]:
+            r.bad(f"{COUNT_SPEC} 의 §{s} 에서 필드 표의 이름을 하나도 읽지 못했다")
+    universe: set[str] = set().union(*names.values())
+    if not universe:
+        return r
+    # 좌변이 비면 적발이 0 으로 난다. 검사 47 이 같은 요구를 둔다.
+    if not led.entries:
+        r.bad("원장 네 레지스터에서 entry 를 하나도 읽지 못했다")
+        return r
+    keys: set[str] = set()
+    hits = 0
+    for reg in REGISTERS:
+        for e in led.reg[reg]:
+            for k in e:
+                keys.add(k)
+                if k not in universe:
+                    hits += 1
+                    r.bad(f"{reg} 의 {e.get('id')} 가 유니버스 밖의 키 `{k}` 를 든다")
+    r.note("유니버스 " + " · ".join(f"§{s} {len(names[s])}" for s in LEDGER_KEY_SECTIONS)
+           + f" · 합집합 {len(universe)}")
+    r.note(f"원장 entry {len(led.entries)} · 그 entry 가 든 키 {len(keys)} · 유니버스 밖의 키 적발 {hits}")
+    for x in odd:
+        r.note(f"첫 칸이 이름의 꼴이 아니어서 유니버스에 넣지 않은 행 — {x}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3031,7 +3139,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
-        check_48(led), check_49(led), check_50(led),
+        check_48(led), check_49(led), check_50(led), check_51(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3058,7 +3166,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰하나)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

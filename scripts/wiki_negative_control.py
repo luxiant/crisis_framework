@@ -1675,6 +1675,29 @@ def inj_50_ghost(root):
     raise SystemExit("한 줄에서만 서고 그 줄이 다른 번호를 들지 않는 기록이 없어 주입이 서지 않는다")
 
 
+# ----------------------------------------------------- 검사 51 · 원장 entry 의 키 유니버스
+
+def inj_51_key(root):
+    """원장 entry 하나에 그 유니버스 밖의 키를 더한다.
+
+    유니버스는 검증기의 함수로 사본의 명세에서 뽑는다. 전사하면 그 검사가 유니버스를 고칠 때
+    고른 키가 유니버스 안으로 들어가 이 주입이 조용히 공허해진다. **값은 어느 검사도 읽지 않는
+    문면으로 둔다.** 산문 필드를 읽는 검사가 그 값에 걸리면 이 주입이 다른 검사까지 실패시켜
+    겨눈 자리가 흐려진다.
+    """
+    names, _seen, _odd = check_wiki.ledger_key_universe(
+        (root / check_wiki.COUNT_SPEC).read_text(encoding="utf-8"))
+    universe = set().union(*names.values())
+    if not universe:
+        raise SystemExit("사본의 명세에서 키 유니버스를 읽지 못했다")
+    key = "negative_control_probe"
+    if key in universe:
+        raise SystemExit(f"주입할 키 `{key}` 가 이미 유니버스 안에 있다")
+    e = pick(root, "decisions", lambda x: True)
+    edit(root, "decisions", e["id"], lambda x: x.__setitem__(key, "음성 대조가 주입한 키다."))
+    return f"{e['id']} 가 유니버스 밖의 키 `{key}`"
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1763,6 +1786,7 @@ CASES = [
     ("49",  "wiki49-extraction-unpointed",  "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
     ("50",  "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
     ("50",  "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),
+    ("51",  "wiki51-ledger-key-universe",  "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
 ]
 
 
