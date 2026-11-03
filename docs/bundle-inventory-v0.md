@@ -50,7 +50,7 @@
 | ★ | Institutional Cash Pools and the Triffin Dilemma | Pozsar 2011 (IMF) | E-09. 수요 측. 안전자산 수요 노드 |
 | ★ | The Nonbank-Bank Nexus and the Shadow Banking System | Pozsar·Singh 2011 (IMF) | E-08. **담보 재사용·연쇄.** K-5 직결 |
 | | The Rise and Fall of the Shadow Banking System | Pozsar 2008 | 초기 서술 |
-| | A Macro View of Shadow Banking | Pozsar 2015 | 레버드 베타·도매조달 |
+| | A Macro View of Shadow Banking | Pozsar 2015 | E-53. **보유자 위임 축의 원전.** 생태계를 네 부류로 가르고 부류마다 위임을 붙이며 그 위임이 제약의 꼴을 정한다. 은행의 도매조달 포트폴리오를 레버리지 채권 포트폴리오와 경제적 등가로 두고, 자금순환표가 순 레포만 잡아 딜러가 중개하는 총액이 빠진다는 것을 자기 자리에서 적는다. `holder-2` 가 S-7 로 지목해 읽었다 |
 | | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | E-10. 위계 + 딜러 중심 최종대부자. J-4 |
 | | Shadow Banking: Economics and Policy (파일명 `Shadow Banking.pdf`) | Claessens·Pozsar·Ratnovski·Singh 2012 (IMF SDN) | 개관 |
 | | The Federal Reserve's TALF | Ashcraft·Malz·Pozsar 2012 | E-11. 중앙은행 노드의 담보 대출. J-4 |
