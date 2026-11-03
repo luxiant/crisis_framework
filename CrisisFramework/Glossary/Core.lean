@@ -199,6 +199,11 @@ inductive Concept where
   | solvencyConstraintAxis
   /-- 유동성 제약 축. 조달의 접근이 걸리는 축이다. -/
   | liquidityConstraintAxis
+  /-- 결정 시계. 대차대조표 관리의 결정이 평가받는 시점까지의 기간이며 의사결정 단위에 붙는다. -/
+  | decisionHorizon
+  /-- 시계 불일치. 그 단위가 든 자산의 만기가 결정 시계를 넘는 상태이며 조달과 자산의 만기
+      불일치와 측정 소스가 다르다. -/
+  | horizonMismatch
   deriving DecidableEq, Repr
 
 /--
@@ -603,6 +608,13 @@ D-7 의 판별 시험이 그 선언의 docstring 이 대응 비형식 개념을 
 같은 자리를 등재하지 않은 것이 그 선례이며, 그 판정의 docstring 이 드는 대응 비형식 개념이 제약이 상시
 등식이 아니라 물렸을 때만 드러나는 부등식이라는 것이어서 이미 선 제약 개념의 성질을 드는 것이고 새
 개념이 아니다.
+
+**시계 불일치에 측정 대응을 붙이지 않는다.** 그 개념이 결정 시계와 자산 만기를 함께 재야 서는
+관계여서 한 소스로 서지 않으며, 결정 시계의 소스가 임원 보상 주기와 재임 기간이고 자산 만기의
+소스가 만기 구조의 보고여서 둘이 다른 공시에 산다. 기준 초과 위임에만 측정 대응을 붙이지 않은
+것이 같은 꼴이며, 그 자리와 달리 여기서는 두 소스가 각각 있고 그 둘을 한 주체에 대해 맞대는 공시가
+없다는 것이 사유다. 결정 시계에 규제 공시를 붙이는 사유는 그 측정 소스로 임원 보상 주기와 재임
+기간을 드는 기록이 있고 그 항목이 규제 공시에 선다는 것이다.
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -702,6 +714,7 @@ def registry : List ConceptRel :=
   , .measuredBy .regulatoryCapital .regulatoryFiling
   , .measuredBy .riskWeightedAsset .regulatoryFiling
   , .excludes .solvencyConstraintAxis .liquidityConstraintAxis
+  , .measuredBy .decisionHorizon .regulatoryFiling
   ]
 
 end CrisisFramework.Glossary
