@@ -180,6 +180,25 @@ inductive Concept where
   | repaymentExtinction
   /-- 매각. 자산이 줄었는데 부채가 함께 줄지 않았다. -/
   | assetSaleReduction
+  /-- 보유자 위임. 청구권의 보유자가 자기 대차대조표를 무엇을 위해 운용하는가이며 아래 셋의
+      상위 개념이다. -/
+  | holderMandate
+  /-- 부채 대응 위임. 자기 부채를 맞추려고 운용하며 자산과 부채의 구조적 불일치를 줄인다. -/
+  | liabilityMatchingMandate
+  /-- 기준 초과 위임. 비교 기준을 넘는 수익을 내려고 운용하며 차입으로 노출을 넓힌다. -/
+  | benchmarkBeatingMandate
+  /-- 손실 회피 위임. 원금을 지키려고 운용하며 신용과 만기와 유동성 위험을 피한다. -/
+  | lossAvoidanceMandate
+  /-- 경제적 자본. 그 주체가 자기 위험을 덮으려고 내부에서 배분하는 자본이다. -/
+  | economicCapital
+  /-- 규제자본. 감독 규범이 비율의 분자로 세는 자본이며 장부자본에서 공제와 가산을 거친다. -/
+  | regulatoryCapital
+  /-- 위험가중자산. 자산마다 가중을 곱해 더한 값이며 규제 비율의 분모다. -/
+  | riskWeightedAsset
+  /-- 지급능력 제약 축. 자기자본의 부호가 걸리는 축이다. -/
+  | solvencyConstraintAxis
+  /-- 유동성 제약 축. 조달의 접근이 걸리는 축이다. -/
+  | liquidityConstraintAxis
   deriving DecidableEq, Repr
 
 /--
@@ -272,6 +291,23 @@ inductive ConceptRel where
 **결제 방식에는 `measuredBy` 를 붙인다.** 관측 명세가 공시 경로로 색인되어 관측자 상대성의 걸림이
 풀렸기 때문이다. 방식마다 측정 대응의 집합이 서로 달라 V-5 를 통과한다. 신호에 붙이지 않는다는 앞
 문단은 그대로다.
+
+**보유자 위임 분할의 모든 쌍이 배타적이다.** 한 보유자가 두 위임을 함께 받는 배치를 원전이 들지
+않고 각 부류가 하나의 위임으로 정의되므로, 세 쌍 전부에 배타 관계를 등록한다.
+
+**보유자 위임 분할의 V-4 사례.** 2008년 가을에 기관 현금풀이 프라임 머니펀드에서 빠져나가
+정부전용 머니펀드와 국채로 옮겨 간 것과, 같은 시기에 레버리지 채권 포트폴리오가 딜러의 조달
+축소로 포지션을 줄인 것이 같은 충격 아래에서 서로 반대 방향의 조정이었다. 앞은 손실 회피 위임이
+자산 측 적격성을 좁힌 결과이고 뒤는 기준 초과 위임이 조달에 매달린 결과이므로, 한 위임으로는 두
+행태가 함께 설명되지 않는다(Pozsar 2015).
+
+**기준 초과 위임에만 `measuredBy` 를 붙이지 않는다.** 그 위임의 보유분이 공표 수치에서 읽히지
+않는다는 것이 지목 참조한 편의 산출이므로, 측정 대응을 등록하면 관측층이 받을 소스 없음이 용어집에서
+이미 해소된 것으로 읽힌다.
+
+**자본의 계열 가운데 규제자본에 정제 관계를 두지 않는다.** 그 자본이 장부자본에서 공제와 가산을
+거쳐 만들어져 포함 관계가 아니므로, 보통주 장부자본과 자기자본과 후순위 포함 장부자본이 이루는
+사슬에 그것을 놓을 자리가 없다. **그 자리가 구멍으로 서 있고 이 페이즈가 그것을 해소하지 않는다.**
 
 **담보물 분할은 정의만으로 완전하다.** 청구권이 아닌 담보물이 색인을 갖지 않는 것 전부를 받으므로
 여집합의 귀결이다(V-7). 외부 자산은 그 칸의 진부분집합이며 다른 노드의 대차대조표에 대응물이 없는
@@ -655,6 +691,17 @@ def registry : List ConceptRel :=
   , .measuredBy .subordinatedInclusiveBookCapital .regulatoryFiling
   , .partitions .assetReductionCause [.repaymentExtinction, .assetSaleReduction]
   , .excludes .repaymentExtinction .assetSaleReduction
+  , .partitions .holderMandate
+      [.liabilityMatchingMandate, .benchmarkBeatingMandate, .lossAvoidanceMandate]
+  , .excludes .liabilityMatchingMandate .benchmarkBeatingMandate
+  , .excludes .liabilityMatchingMandate .lossAvoidanceMandate
+  , .excludes .benchmarkBeatingMandate .lossAvoidanceMandate
+  , .measuredBy .liabilityMatchingMandate .regulatoryFiling
+  , .measuredBy .lossAvoidanceMandate .regulatoryFiling
+  , .refines .economicCapital .equity
+  , .measuredBy .regulatoryCapital .regulatoryFiling
+  , .measuredBy .riskWeightedAsset .regulatoryFiling
+  , .excludes .solvencyConstraintAxis .liquidityConstraintAxis
   ]
 
 end CrisisFramework.Glossary
