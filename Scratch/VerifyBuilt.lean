@@ -27,6 +27,18 @@ def baselineProbe (a b : Int) : Int := a * b
 def baselineProbeSum {ι : Type} (S : Finset ι) (f : ι → Int) : Int := ∑ i ∈ S, f i
 #print axioms baselineProbeSum
 
+/-! ### 회계층 기준선 실측 (ℚ)
+
+유리수를 쓰는 파일이 회계층 아래의 `Rat` 디렉터리로 분리되고 그 자리의 기준선이 따로 서므로,
+그 차분의 상대를 내는 프로브를 둘 둔다. `Finset` 을 쓰는 쪽이 실효 기준선이다.
+-/
+
+def ratProbe (a b : Rat) : Rat := a * b
+#print axioms ratProbe
+
+def ratProbeSum {ι : Type} (S : Finset ι) (f : ι → Rat) : Rat := ∑ i ∈ S, f i
+#print axioms ratProbeSum
+
 /-! ### 산출물 검사 -/
 
 -- DecidableEq 없이 적용되는지 (작업 A 가 산출물에 반영되었는가)

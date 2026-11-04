@@ -424,6 +424,7 @@ Lean docstring 의 문단 머리말 가운데 **예약 낱말**을 든 것은 �
 <!-- EXCL:BEGIN -->
 EXCL=moneyness
 EXCL=pledge
+EXCL=assetPartitionRegime
 <!-- EXCL:END -->
 
 블록에 분할을 더하면 그 분할의 배타성 문단을 함께 세운다. 문단만 쓰고 블록에 더하지 않으면 검사가

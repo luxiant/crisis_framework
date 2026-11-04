@@ -204,6 +204,16 @@ inductive Concept where
   /-- 시계 불일치. 그 단위가 든 자산의 만기가 결정 시계를 넘는 상태이며 조달과 자산의 만기
       불일치와 측정 소스가 다르다. -/
   | horizonMismatch
+  /-- 자산 분할 체제. 한 주체의 자산 총액을 범주로 가를 때 그 가름이 삼는 축이다. -/
+  | assetPartitionRegime
+  /-- 유동성 단의 체제. 자산을 환가의 확실성으로 가르고 단마다 가중이 붙는다. -/
+  | liquidityTierRegime
+  /-- 만기 구간의 체제. 자산을 잔존만기로 가르고 구간마다 하한이 걸린다. -/
+  | maturityBucketRegime
+  /-- 수단 유형의 체제. 자산을 발행자와 담보와 양도성으로 가르고 금액만 공시된다. -/
+  | instrumentClassRegime
+  /-- 부담 상태의 체제. 자산을 담보로 제공됐는가로 가른다. -/
+  | encumbranceStateRegime
   deriving DecidableEq, Repr
 
 /--
@@ -615,6 +625,21 @@ D-7 의 판별 시험이 그 선언의 docstring 이 대응 비형식 개념을 
 것이 같은 꼴이며, 그 자리와 달리 여기서는 두 소스가 각각 있고 그 둘을 한 주체에 대해 맞대는 공시가
 없다는 것이 사유다. 결정 시계에 규제 공시를 붙이는 사유는 그 측정 소스로 임원 보상 주기와 재임
 기간을 드는 기록이 있고 그 항목이 규제 공시에 선다는 것이다.
+
+**자산 분할 체제 분할의 모든 쌍이 배타적이다.** 네 체제가 자산을 가르는 서로 다른 축이고 한 축이 다른 축의
+정제가 아니므로 여섯 쌍 전부에 배타 관계를 등록한다. 한 자산이 네 축에서 각각 범주를 받는 것은
+한 체제가 두 체제를 겸하는 것이 아니라 축이 넷이라는 뜻이며, 그 넷을 좌표의 네 칸이 함께 든다.
+
+**자산 분할 체제 분할의 V-4 사례.** 2026년 11월에 하루 뒤 만기인 양도성예금증서가 유동성 규제의 축에서
+금융기관 발행 채무로 세 단 전부에서 배제되어 비적격이면서, 머니마켓펀드 규범의 축에서는 일간 만기
+자산이어서 하한을 채우는 칸에 들고 공개 투자 명세의 축에서는 자기 범주를 가진다(바젤 기준 2013년
+유동성 규제 · 유럽연합 2017년 규정 · 미국 증권거래위원회 규칙). 한 축에서 가장 낮은 칸에 있는
+것이 다른 축에서 가장 높은 칸에 있으므로 한 축을 잘게 쪼개어 다른 축을 유도할 수 없다.
+
+**네 체제에 `measuredBy` 를 붙이지 않는다.** 그 축들을 보는 공시 경로가 여섯이고 그 가운데 닫힌
+열거와 범주마다의 금액을 일반 관측자에게 내는 것이 하나뿐이므로, 측정 대응을 등록하면 관측층이 받을
+소스 없음이 용어집에서 이미 해소된 것으로 읽힌다. 기준 초과 위임에만 그것을 붙이지 않은 것과 같은
+꼴이다.
 -/
 -- DD:CF-58
 def registry : List ConceptRel :=
@@ -715,6 +740,15 @@ def registry : List ConceptRel :=
   , .measuredBy .riskWeightedAsset .regulatoryFiling
   , .excludes .solvencyConstraintAxis .liquidityConstraintAxis
   , .measuredBy .decisionHorizon .regulatoryFiling
+  , .partitions .assetPartitionRegime
+      [.liquidityTierRegime, .maturityBucketRegime, .instrumentClassRegime,
+       .encumbranceStateRegime]
+  , .excludes .liquidityTierRegime .maturityBucketRegime
+  , .excludes .liquidityTierRegime .instrumentClassRegime
+  , .excludes .liquidityTierRegime .encumbranceStateRegime
+  , .excludes .maturityBucketRegime .instrumentClassRegime
+  , .excludes .maturityBucketRegime .encumbranceStateRegime
+  , .excludes .instrumentClassRegime .encumbranceStateRegime
   ]
 
 end CrisisFramework.Glossary

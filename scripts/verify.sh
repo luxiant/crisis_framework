@@ -205,6 +205,13 @@ ANON = re.compile(r"^instance\b(?!\s+[^\s({\[:]+)")
 OPEN = re.compile(r"^(namespace|section)\b[ \t]*(\S*)")
 END = re.compile(r"^end\b")
 rows, anon = [], []
+# 경로의 둘째 칸이 층이다. 다만 회계층 아래의 `Rat` 디렉터리는 유리수를 쓰는 파일의 자리이고 그
+# 기준선이 정수 기준선과 따로 서므로, 그 디렉터리의 선언을 회계층과 다른 자리로 낸다. 회계층으로
+# 들이면 유리수가 끌어오는 공리가 정수 기준선 위의 초과로 전량 잡힌다.
+def layer_of(f):
+    if f.startswith("CrisisFramework/Accounting/Rat/"):
+        return "Accounting/Rat"
+    return f.split("/")[1]
 for f in files:
     stack = []
     code = open(os.path.join(audit, "code", f), encoding="utf-8").read()
@@ -218,7 +225,7 @@ for f in files:
         m = DECL.match(ln)
         if m:
             ns = ".".join(n for k, n in stack if k == "namespace" and n)
-            rows.append((f.split("/")[1], f"{ns}.{m.group(2)}" if ns else m.group(2)))
+            rows.append((layer_of(f), f"{ns}.{m.group(2)}" if ns else m.group(2)))
         elif ANON.match(ln):
             anon.append(f"{f}:{i}")
 with open(os.path.join(audit, "decls.tsv"), "w", encoding="utf-8") as out:
@@ -326,8 +333,10 @@ audit_layer() {
 
 # 디렉터리가 층을 결정한다. 층마다 docs/baseline.md 의 키와 실효 기준선을 내는 프로브가
 # 짝을 이룬다. 이 표에 없는 디렉터리에 선언이 서면 차분할 기준선이 없으므로 실패시킨다.
+# 회계층 아래의 `Rat` 디렉터리는 위의 생성부가 따로 내는 자리이며 유리수 기준선과 차분한다.
 LAYERS=(
   "Accounting|회계층|ACCOUNTING_INT|baselineProbeSum"
+  "Accounting/Rat|회계층(ℚ)|ACCOUNTING_RAT|ratProbeSum"
   "Glossary|용어집|GLOSSARY|glossaryProbeList"
   "Definition|정의층|DEFINITION|definitionProbeFamily"
   "Observation|관측층|OBSERVATION|observationProbeProd"
