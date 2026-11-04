@@ -75,11 +75,12 @@ docstring 만 바뀐 회차는 이 칸을 움직이지 않는다.** 그 문면�
 ### 2-1. 측정 프로브
 
 기준선은 프로브 정의의 `#print axioms` 출력으로 잰다. 프로브는 `Scratch/VerifyBuilt.lean`에
-있으며 층마다 둘씩이다. 뒤가 그 층이 실제로 쓰는 용기를 포함하는 실효 기준선을 낸다.
+있으며 차분의 자리마다 둘씩이다. 회계층이 수 체계 둘을 쓰므로 그 자리가 다섯이다. 뒤가 그 층이 실제로 쓰는 용기를 포함하는 실효 기준선을 낸다.
 
 | 층 | 최소 | 실효 |
 |---|---|---|
 | 회계층 | `baselineProbe` | `baselineProbeSum` (`Finset` 합) |
+| 회계층 (`ℚ`) | `ratProbe` | `ratProbeSum` (`Finset` 합) |
 | 용어집 | `glossaryProbe` | `glossaryProbeList` (`List`) |
 | 정의층 | `definitionProbe` | `definitionProbeFamily` (`ℕ → Finset`) |
 | 관측층 | `observationProbe` | `observationProbeProd` (`Prod`) |
