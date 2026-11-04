@@ -214,6 +214,12 @@ inductive Concept where
   | instrumentClassRegime
   /-- 부담 상태의 체제. 자산을 담보로 제공됐는가로 가른다. -/
   | encumbranceStateRegime
+  /-- 시장 조달 접근. 자기 부채를 시장에 발행해 유동성에 닿는 선택권이며, 그 여지가 같은 보유자
+      부문 안에서도 갈려 최종성을 가르는 축이 된다. -/
+  | marketFundingAccess
+  /-- 중앙은행 담보 적격성. 한 증권이 중앙은행의 대출 제도에서 담보로 받아들여지는 성질이며,
+      증권에만 붙지 않고 증권과 보유자의 쌍에 붙는다. -/
+  | centralBankCollateralEligibility
   deriving DecidableEq, Repr
 
 /--
@@ -749,6 +755,8 @@ def registry : List ConceptRel :=
   , .excludes .maturityBucketRegime .instrumentClassRegime
   , .excludes .maturityBucketRegime .encumbranceStateRegime
   , .excludes .instrumentClassRegime .encumbranceStateRegime
+  , .refines .marketFundingAccess .privateLiquidityPut
+  , .refines .centralBankCollateralEligibility .constraintAssetEligibility
   ]
 
 end CrisisFramework.Glossary

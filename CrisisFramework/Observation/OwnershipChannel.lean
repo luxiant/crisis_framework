@@ -10,7 +10,12 @@
 
 **두 경로가 교차로 비어 있다.** 거래소 경로는 자산을 특정하고 총량을 일별로 들되 보유자별 몫과
 담보로 내놓은 몫을 들지 않고, 재무제표 경로는 내놓은 몫을 금액으로 들되 보유자별 몫의 비율을
-들지 않고 자산을 특정하지 않는다. 그 교차가 이 페이즈의 산출이다.
+들지 않고 자산을 특정하지 않는다. 그 교차가 앞 아크의 산출이다.
+
+**적격성의 축이 그 위에 더해졌다.** 담보 여력의 금액 판본이 제약의 자산 측 적격성으로 자산을
+거르므로 기재값만으로는 그 총계가 재어지지 않는데, **적격성을 드는 경로가 하나도 없다.** 적격
+증권의 목록이 공개되는 체계에서도 그 목록을 내는 쪽이 자기 목록에 구속되지 않는다고 스스로 적으므로
+그 칸이 그 경로에서도 거짓이며, **공시가 적격성을 쥐고도 확정하지 않는 자리가 그 산출이다.**
 
 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
@@ -55,6 +60,10 @@ structure ShareChannel (Asset : Type) where
   /-- 그 자산의 기재값을 금액으로 드는가. 담보 여력의 금액 판본이 보유한 몫에 기재값을 걸어
       금액으로 서므로, 그 값이 공시에서 읽히지 않으면 그 총계가 재어지지 않는다. -/
   reportsCarryingAmount : Bool
+  /-- 그 자산이 제약의 자산 측 적격성을 통과하는가를 확정하는가. 담보 여력의 금액 판본이 그
+      적격성으로 자산을 거르므로, 그 가름이 공시에서 확정되지 않으면 그 총계가 재어지지 않는다.
+      목록을 내면서 그 목록에 구속되지 않는다고 적는 경로는 이 칸을 채우지 않는다. -/
+  reportsEligibility : Bool
 
 /-- witness (A-3). `ShareChannel` 이 비어 있지 않음을 보인다. 아무것도 들지 않는 경로. -/
 -- DD:CF-31
@@ -66,6 +75,7 @@ def ShareChannel.noSource {Asset : Type} : ShareChannel Asset where
   coversBonded := false
   resolvesAsset := fun _ => false
   reportsCarryingAmount := false
+  reportsEligibility := false
 
 /--
 그 경로가 그 자산의 보유 몫과 내놓은 몫을 함께 내는가.
@@ -110,8 +120,8 @@ Minko 2016 §2.5).
 보유자를 식별하지 않는 성질이 둘에 같이 걸리므로, 가르면 측정 대응이 다르지 않은 둘이 선다
 (V-5). 공표의 지연을 칸으로 받는 안도 기각했다. 어느 판정도 그 칸을 읽지 않는다.
 
-**총량을 들고 두 몫을 들지 않는다.** 그래서 이 경로만으로는 답이 서지 않으며, 그 사실이 이
-페이즈의 산출이다.
+**총량을 들고 두 몫을 들지 않는다.** 그래서 이 경로만으로는 답이 서지 않으며, 그 사실이 앞
+아크의 산출이다.
 -/
 -- DD:CF-978
 def exchangeWarehouseChannel {Asset : Type} (resolves : Asset → Bool) :
@@ -123,6 +133,7 @@ def exchangeWarehouseChannel {Asset : Type} (resolves : Asset → Bool) :
   coversBonded := false
   resolvesAsset := resolves
   reportsCarryingAmount := false
+  reportsEligibility := false
 
 /--
 재무제표 공시의 경로 값.
@@ -156,6 +167,7 @@ def financialStatementShareChannel {Asset : Type} : ShareChannel Asset where
   coversBonded := true
   resolvesAsset := fun _ => false
   reportsCarryingAmount := false
+  reportsEligibility := false
 
 /--
 거래소 창고 경로에 보유자별 몫과 내놓은 몫과 보세창고가 더해지면 답이 선다.
@@ -186,59 +198,115 @@ theorem exchangeWarehouseChannel_answersShare_when_resolved
   exact hres
 
 /--
-자산의 기재값을 금액으로 읽을 수 있는가.
+적격 증권 목록 공표의 경로 값.
 
-**대응 비형식 개념:** 그 경로가 특정 자산을 식별하고 보유자별 몫을 들고 그 자산의 기재값을 금액으로
-드는가. 셋이 함께 서야 담보 여력의 금액 판본이 재어지며, 하나라도 없으면 그 총계의 입력이 서지 않는다.
+**대응 비형식 개념:** 중앙은행이 자기 대출 제도의 담보로 받는 증권의 목록을 월별로 공표하는 체계.
+증권을 식별번호로 특정하되 그 목록에 구속되지 않는다고 스스로 적는다.
 
 **이 정의가 배제하는 사례:**
-재고자산의 분류별 장부금액 공시. 회계기준이 재고자산의 총 장부금액과 기업에 적합한 분류별 장부금액을
-요구하므로 재고자산 자체는 분류별로 갈리나, 담보 제공분을 드는 조항이 그 분류를 그 자리에 걸지 않는다.
-그래서 어느 자산이 담보로 제공됐는지가 그 공시에 서지 않으며 이 판정이 그 경로에서 거짓을 낸다.
-조달처: E-45 §2-2 「담보 제공분을 단일 금액으로 들고」
+같은 증권이 보유자에 따라 다른 등급을 받는 자리. 그 중앙은행의 담보 정책이 참가자가 조성한 자산을
+담은 커버드본드와 증권화를 그 등급에서 빼고 한 등급 아래에서 고려하므로(영란은행 2026년 6월 18일
+Level B 담보 목록), 적격성이 증권에만 붙지 않고 증권과 보유자의 쌍에 붙는다. 이 구조의 칸은 자산을
+받고 보유자를 받지 않으므로 그 쌍을 담지 못한다.
+조달처: E-49 §2-9 「참가자가 originate 한 자산을 담은 커버드본드와 증권화는 Level B 로 받지 않고」
 
 **기각한 대체 정의:**
-기존 몫 판정에 그 칸을 더해 받는 안. 그 판정의 진술을 바꾸는 일이고 그 선언을 낳은 결정이 몫의 공시를
-재는 자리로 세웠으므로, 기재값을 그 곱에 더하면 그 판정이 답하는 물음이 둘로 갈린다. 칸만 더하고 판정을
-세우지 않는 안도 기각했다. 그 칸을 읽는 자리가 없어 경로가 그것을 가르는지가 어느 선언에서도 재어지지
-않으며, L-14 가 관측층에 등재되는 소스 없음을 주요 산출물로 드는 자리가 그 칸을 읽는 판정 없이는
-서지 않는다.
+적격성 칸을 참으로 두는 안. 그 목록이 적격 증권을 월별로 열거하므로 적격성의 재료가 있는 것으로
+보이나, 같은 문서의 말미가 어떤 담보든 어떤 사유로든 언제든 거절할 권리를 유보하고 그 결과로 공표된
+목록에 구속되지 않는다고 적는다. **그 유보가 목록을 참고 자료로 만들고 확정으로 만들지 않는다.**
+이 경로를 세우지 않고 재무제표 경로의 칸으로 갈음하는 안도 기각했다. 적격성을 아예 쥐지 않는 공시와
+쥐고도 확정하지 않는 공시가 다른 사실인데, 갈음하면 그 둘이 한 경로의 거짓 칸으로 접혀 구별되지
+않는다.
 
-**값을 담지 않는다.** 세 칸의 논리곱이며 수 타입을 언급하지 않는다.
+**기재값을 들지 않는다.** 그 목록이 증권의 식별번호와 범주를 들고 금액을 들지 않으므로, 적격성이
+확정되더라도 금액 판본의 입력이 서지 않는다.
+
+**값을 담지 않는다.**
 -/
--- DD:CF-2016
+-- DD:CF-2521
+def eligibleSecuritiesListChannel {Asset : Type} (resolves : Asset → Bool) :
+    ShareChannel Asset where
+  reportsTotal := false
+  reportsHolderShare := false
+  reportsPledgedShare := false
+  coversUnregistered := false
+  coversBonded := false
+  resolvesAsset := resolves
+  reportsCarryingAmount := false
+  reportsEligibility := false
+
+/--
+자산의 기재값을 적격성으로 가려 금액으로 읽을 수 있는가.
+
+**대응 비형식 개념:** 그 경로가 특정 자산을 식별하고 보유자별 몫을 들고 그 자산의 기재값을 금액으로
+들고 그 자산이 제약의 적격성을 통과하는가를 확정하는가. 넷이 함께 서야 담보 여력의 금액 판본이
+재어지며, 하나라도 없으면 그 총계의 입력이 서지 않는다.
+
+**이 정의가 배제하는 사례:**
+적격성의 판정이 신청과 심사의 산물인 자리. 그 중앙은행이 적격성 요청을 정해진 서식으로 받고 어느
+자산이 적격인지를 판정하려고 실사를 해야 했던 경우에 그 비용을 참가자에게 청구할 수 있다고 적으므로
+(영란은행 2026년 6월 18일 Level B 담보 목록), 적격성이 사전에 공시된 성질이 아니라 절차의 결과다.
+이 판정은 그 절차의 존재를 담지 않고 공시가 그 값을 확정하는가만 묻는다.
+조달처: E-49 §11-3 「적격성 요청을 정해진 서식으로 받고 실사 비용을 청구할 수 있다」
+
+**기각한 대체 정의:**
+적격성 칸을 빼고 셋만 요구하는 안. 담보 여력의 금액 판본이 제약의 자산 측 적격성으로 자산을 거른
+뒤에 기재값을 걸므로, 셋만 요구하면 그 판본이 재어진다는 결론이 그 적격성을 건너뛴 것이 된다. 그
+어긋남이 앞 판의 반증 조건에 실제로 서 있었다. 적격성 판정을 별도 함수로 가르는 안도 기각했다. 그
+금액 판본이 넷을 한 자리에서 요구하므로 가르면 어느 조합이 답을 세우는지가 호출하는 쪽의 몫이 된다.
+
+**값을 담지 않는다.** 네 칸의 논리곱이며 수 타입을 언급하지 않는다.
+-/
+-- DD:CF-2522
 def ShareChannel.answersCarryingAmount {Asset : Type}
     (ch : ShareChannel Asset) (a : Asset) : Bool :=
   ch.resolvesAsset a && ch.reportsHolderShare && ch.reportsCarryingAmount
+    && ch.reportsEligibility
 
 /--
-서 있는 세 경로가 전부 기재값을 읽지 못한다.
+서 있는 네 경로가 전부 기재값을 적격성으로 가려 읽지 못하며 적격성을 확정하는 경로가 하나도 없다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 소스가 전무한 경로나 거래소 창고 경로나 재무제표
-몫 경로 가운데 하나가 어느 자산에 대해 이 판정에서 참을 내는 것이 관측되어야 한다. 그러면 그 경로가
-자산을 식별하고 보유자별 몫과 기재값을 함께 드는 것이므로 담보 여력의 금액 판본이 그 경로에서 재어진다.
+몫 경로나 적격 증권 목록 경로 가운데 하나가 어느 자산에 대해 이 판정에서 참을 내거나 적격성 칸을
+참으로 들어야 한다. 그러면 그 경로가 자산을 식별하고 보유자별 몫과 기재값과 적격성을 함께 드는 것이
+므로 담보 여력의 금액 판본이 그 경로에서 재어진다.
 
-**가정을 두지 않는다.** 세 경로의 칸이 전부 고정값이고 거래소 창고 경로의 자산 식별만 인자로 받는데,
-그 경로의 보유자별 몫 칸이 거짓이므로 논리곱이 그 인자와 무관하게 거짓이다.
+**가정을 두지 않는다.** 네 경로의 칸이 전부 고정값이고 거래소 창고 경로와 적격 증권 목록 경로의 자산
+식별만 인자로 받는데, 그 두 경로의 보유자별 몫 칸과 적격성 칸이 거짓이므로 논리곱이 그 인자와 무관
+하게 거짓이다.
+
+**T-3 분류:** 보조 보정이 아니다. 앞의 네 항을 각각 펼치면 정의의 전개로 닫히나 이 진술이 드는 것은
+**적격성을 확정하는 경로가 하나도 없다**는 뒤의 네 항과 함께 선 전량 판정이며, 그 전량이 금액 판본의
+입력 가운데 어느 것이 비었는지를 가른다. 적격 증권 목록이 적격성을 열거하면서도 그 칸을 채우지 않는
+것이 이 페이즈의 산출이므로 기여 목록에 든다.
 
 **이 정리가 L-14 의 소스 없음을 형식층에 드는 자리다.** 자산의 기재값을 적격성으로 가르는 공시가
-없다는 것이 이 아크의 산출이며, 그 결손이 데이터 공백이 아니라 관측 명세의 결손이어서 구멍으로
-등재된다.
+없다는 것이 이 아크의 산출이며, 그 결손이 데이터 공백이 아니라 관측 명세의 결손이다. **적격 증권
+목록이 그 결손의 성질을 바꾼다.** 적격성을 아예 쥐지 않는 공시와 쥐고도 확정하지 않는 공시가 다르고,
+뒤의 자리에서 결손의 사유가 공시의 유보 자체다.
 -/
--- DD:CF-2016
+-- DD:CF-2522
 theorem answersCarryingAmount_eq_false_on_all_channels
     {Asset : Type} (resolves : Asset → Bool) (a : Asset) :
     (ShareChannel.noSource : ShareChannel Asset).answersCarryingAmount a = false ∧
       (exchangeWarehouseChannel resolves).answersCarryingAmount a = false ∧
-      (financialStatementShareChannel : ShareChannel Asset).answersCarryingAmount a = false := by
-  -- 세 경로의 칸을 `simp only` 로 펼치면 논리곱이 거짓 항을 품으므로 각 항이 거짓으로 접힌다.
-  -- 전면 `simp` 를 부르지 않으며 세 자리를 `refine` 으로 갈라 각각 닫는다.
-  refine ⟨?_, ?_, ?_⟩
+      (financialStatementShareChannel : ShareChannel Asset).answersCarryingAmount a = false ∧
+      (eligibleSecuritiesListChannel resolves).answersCarryingAmount a = false ∧
+      (ShareChannel.noSource : ShareChannel Asset).reportsEligibility = false ∧
+      (exchangeWarehouseChannel resolves).reportsEligibility = false ∧
+      (financialStatementShareChannel : ShareChannel Asset).reportsEligibility = false ∧
+      (eligibleSecuritiesListChannel resolves).reportsEligibility = false := by
+  -- 네 경로의 칸을 `simp only` 로 펼치면 논리곱이 거짓 항을 품으므로 각 항이 거짓으로 접히고,
+  -- 뒤의 네 항은 고정값 칸이므로 정의적 동등으로 닫는다. 전면 `simp` 를 부르지 않으며 여덟
+  -- 자리를 `refine` 으로 갈라 각각 닫는다.
+  refine ⟨?_, ?_, ?_, ?_, rfl, rfl, rfl, rfl⟩
   · simp only [ShareChannel.answersCarryingAmount, ShareChannel.noSource]
     rfl
   · simp only [ShareChannel.answersCarryingAmount, exchangeWarehouseChannel]
     rw [Bool.and_false]
   · simp only [ShareChannel.answersCarryingAmount, financialStatementShareChannel]
     rfl
+  · simp only [ShareChannel.answersCarryingAmount, eligibleSecuritiesListChannel]
+    rw [Bool.and_false]
 
 end CrisisFramework.Observation

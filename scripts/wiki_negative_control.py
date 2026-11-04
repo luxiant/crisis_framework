@@ -1697,6 +1697,43 @@ def inj_51_key(root):
     edit(root, "decisions", e["id"], lambda x: x.__setitem__(key, "음성 대조가 주입한 키다."))
     return f"{e['id']} 가 유니버스 밖의 키 `{key}`"
 
+# ----------------------------------------------------- 검사 52 · 열려 있는 아크의 구멍 배정
+
+def _hole_52(root):
+    """열려 있는 아크를 `ref` 로 드는 살아 있는 차단 구멍 가운데 아크와 페이즈에 함께 든 것 하나.
+
+    둘에 함께 든 것을 고르는 까닭은 주입이 한쪽만 지워 그쪽의 미포착을 세워야 하기 때문이다. 이미
+    한쪽이 빠진 항을 고르면 그 주입이 만든 줄과 기준선의 줄이 갈리지 않는다."""
+    doc, a = _open_arc(root)
+    dead = {e.get("target") for e in load(root, "retirements")["retirements"]}
+    phase = {str(h) for ph in a["phases"] if isinstance(ph, dict) for h in (ph.get("holes") or [])}
+    arc_holes = {str(h) for h in (a.get("holes") or [])}
+    for e in load(root, "deferred")["deferred"]:
+        rw = e.get("reopen_when") or {}
+        if (rw.get("kind") == "blocking" and rw.get("ref") == a["name"]
+                and e["id"] not in dead and e["id"] in arc_holes and e["id"] in phase):
+            return doc, a, e["id"]
+    raise SystemExit("열려 있는 아크를 가리키는 살아 있는 차단 구멍이 아크와 페이즈에 함께 들지 않아 "
+                     "주입 대상이 없다")
+
+
+def inj_52_arc(root):
+    """열려 있는 아크를 `ref` 로 드는 차단 구멍 하나를 그 아크의 `holes` 에서 지운다."""
+    doc, a, hid = _hole_52(root)
+    a["holes"] = [h for h in a["holes"] if str(h) != hid]
+    save_arcs(root, doc)
+    return hid
+
+
+def inj_52_phase(root):
+    """그 구멍을 아크의 `holes` 에는 두고 모든 페이즈의 `holes` 에서 지운다."""
+    doc, a, hid = _hole_52(root)
+    for ph in a["phases"]:
+        if isinstance(ph, dict) and isinstance(ph.get("holes"), list):
+            ph["holes"] = [h for h in ph["holes"] if str(h) != hid]
+    save_arcs(root, doc)
+    return hid
+
 
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
@@ -1787,6 +1824,8 @@ CASES = [
     ("50",  "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
     ("50",  "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),
     ("51",  "wiki51-ledger-key-universe",  "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
+    ("52",  "wiki52-open-arc-deferred-assignment", "열려 있는 아크를 ref 로 드는 차단 구멍 하나를 그 아크의 holes 에서 지운다", inj_52_arc, None),
+    ("52",  "wiki52-open-arc-deferred-assignment", "그 구멍을 아크의 holes 에는 두고 모든 페이즈의 holes 에서 지운다", inj_52_phase, None),
 ]
 
 

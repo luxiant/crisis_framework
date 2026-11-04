@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰하나를 돈다. 실패시키는 것 마흔하나와 보고만 하는 것 일곱과
+`docs/decisions/SPEC.md` §2 의 검사 쉰둘을 돈다. 실패시키는 것 마흔둘과 보고만 하는 것 일곱과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1088,7 +1088,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46", "47", "48", "49", "50", "51",
+         "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52",
          "29", "30"]
 
 
@@ -3124,6 +3124,70 @@ def check_51(led: Ledger) -> Report:
     return r
 
 
+# 검사 52 의 유니버스는 재개 트리거의 `ref` 가 열려 있는 아크의 이름인 살아 있는 이연 항목이다.
+# **트리거의 종류로 거르지 않는다.** 명세가 그 유니버스를 `ref` 가 가리키는 아크의 상태로만 닫으므로,
+# 종류로 좁히면 아크의 이름을 `ref` 로 드는 다른 종류의 항이 조용히 빠진다. 닫힌 아크와 예약 아크와
+# 범위 밖 아크를 가리키는 항은 그 밖이며, 그 셋을 넣으면 페이즈 배열이 빈 예약 아크의 정상이 실패로
+# 선다(SPEC §2.1).
+#
+# **방향은 하나다.** 유니버스의 항이 아크와 페이즈의 `holes` 에 드는가만 보고, `holes` 가 든 ID 가
+# 살아 있는가는 보지 않는다. 폐기된 구멍이 아크의 배열에 남는 것은 처분의 기록이며, 아크의 배열과
+# 페이즈 배열의 합집합이 맞는가는 검사 45 가 본다.
+def check_52(led: Ledger) -> Report:
+    r = Report("52", "wiki52-open-arc-deferred-assignment",
+               "재개 트리거의 `ref` 가 열려 있는 아크를 가리키는 살아 있는 이연 항목마다 그 아크의 "
+               "`holes` 와 그 아크의 어느 페이즈의 `holes` 에 그 ID 가 함께 드는가", "fail")
+    open_arcs = {n: a for n, a in led.arcs.items() if a.get("status") == "open"}
+    universe: dict[str, list[str]] = {}
+    dropped: list[str] = []
+    for e in led.reg["deferred"]:
+        rw = e.get("reopen_when")
+        if not isinstance(rw, dict) or not rw:
+            continue
+        ref = rw.get("ref")
+        if not isinstance(ref, str) or ref not in open_arcs:
+            continue
+        # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 뺀 건수와 그 ID 는 보고 줄에 남긴다(CF-684).
+        if e.get("id") in led.dead:
+            dropped.append(str(e.get("id")))
+            continue
+        universe.setdefault(ref, []).append(str(e.get("id")))
+
+    def by_number(i: str) -> tuple[int, str]:
+        m = ID_FORM.match(i)
+        return (int(m.group(1)) if m else 1 << 30, i)
+
+    total = hits_total = 0
+    for name in sorted(open_arcs):
+        a = open_arcs[name]
+        arc_holes = {str(x) for x in (a.get("holes") or [])}
+        phase_holes: set[str] = set()
+        for ph in a.get("phases") or []:
+            if isinstance(ph, dict):
+                phase_holes |= {str(x) for x in (ph.get("holes") or [])}
+        ids = sorted(universe.get(name, []), key=by_number)
+        hits = 0
+        for i in ids:
+            # 어느 쪽이 빠졌는지를 줄에 적는다. 둘을 한 문면으로 접으면 패치가 아크 쪽만 세웠는지
+            # 페이즈 쪽만 세웠는지가 그 줄에서 갈리지 않는다.
+            miss = [side for side, held in (("아크의 `holes`", arc_holes),
+                                            ("어느 페이즈의 `holes`", phase_holes))
+                    if i not in held]
+            if miss:
+                hits += 1
+                r.bad(f"{i}: 아크 `{name}` 를 가리키는 살아 있는 이연 항목인데 "
+                      + " 와 ".join(miss) + " 에 들지 않는다")
+        total += len(ids)
+        hits_total += hits
+        r.note(f"아크 `{name}` — 유니버스 {len(ids)}건 · 적발 {hits}건"
+               + (f" ({', '.join(ids)})" if ids else ""))
+    r.note(f"유니버스는 열려 있는 아크 {len(open_arcs)}개를 가리키는 살아 있는 이연 항목 {total}건"
+           + f" · 적발 {hits_total}건"
+           + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
+              if dropped else " · 뺀 폐기분 0건"))
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3139,7 +3203,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_36(led), check_37(led), check_38(led), check_39(led), check_40(led),
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
-        check_48(led), check_49(led), check_50(led), check_51(led),
+        check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3166,7 +3230,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰하나)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰둘)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")
