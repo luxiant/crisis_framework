@@ -208,7 +208,7 @@
 
 ---
 
-## 보조 (Tier B) — 필요 시 참조 (26편)
+## 보조 (Tier B) — 필요 시 참조 (27편)
 
 **전략적 보완성·다중균형 (Morris·Shin 계열, 9편)** — 대차대조표 primitive가 아니라 신념·조정 primitive. 동학층 진입 또는 실패 양태 분할 시 참조.
 Unique equilibrium in self-fulfilling currency attacks (1998), Global games (2001), Coordination risk and the price of debt (2002), Liquidity black holes (2003), Catalytic finance (2003), Beauty contests (Allen·Morris·Shin), Rethinking multiple equilibria, Communication and monetary policy (2003), Does one Soros make a difference? (Corsetti·Dasgupta·Morris·Shin, Cowles DP 1273)
@@ -224,7 +224,7 @@ Theory of supply chains: a working capital approach (2023, E-20), Elasticity of 
 **발행자 공시의 실물 (1편)** — 상환 경로의 칸을 재는 실물. 재무제표가 지급 의무액과 지급액을 따로
 드는지를 가릴 때 참조한다. 이 페이즈는 읽지 않으며, 그 칸을 거짓으로 둔 판정이 「조달은 그 반증
 조건이 관측되는지를 뒤에 가린다」로 끝나므로 그 가림이 설 때 연다.
-Circle Annual Report 2025 (2026년 묶음 조달분)
+Circle Annual Report 2025 (2026년 묶음 조달분, E-57)
 
 ## 전파 아크의 재료 — 현 아크의 판별선 밖, 보관 (1편)
 
