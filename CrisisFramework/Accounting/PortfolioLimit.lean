@@ -59,6 +59,18 @@ structure PortfolioLimitThreshold where
   deriving DecidableEq, Repr
 
 /--
+witness 인스턴스 (A-3).
+
+**무엇을 증거하는가.** `PortfolioLimitThreshold` 가 인스턴스를 갖는다. 분자와 분모가 같은
+문턱이며 그 몫이 전액을 가리키므로, 하한에서는 그 대상의 금액이 총액과 같아야 하고 상한에서는
+총액을 넘지 않으면 되어 어느 방향에서도 교차곱이 서는 자리다.
+-/
+-- DD:CF-2574
+def PortfolioLimitThreshold.whole : PortfolioLimitThreshold where
+  num := 1
+  den := 1
+
+/--
 한 걸림의 문턱이 충족됐는가.
 
 **대응 비형식 개념:** 그 대상의 금액이 총액에서 차지하는 몫이 문턱을 넘는가 넘지 않는가. 방향이
