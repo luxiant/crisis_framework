@@ -223,6 +223,21 @@ inductive Concept where
   /-- 중앙은행 담보 적격성. 한 증권이 중앙은행의 대출 제도에서 담보로 받아들여지는 성질이며,
       증권에만 붙지 않고 증권과 보유자의 쌍에 붙는다. -/
   | centralBankCollateralEligibility
+  /-- 통화. 대차대조표를 색인하는 축이며 발행되는 영역과 쓰이는 영역이 갈릴 수 있다. -/
+  | currency
+  /-- 자금조달 통화. 부채 계약을 표시하는 역할을 맡는 통화이며, 원 문헌이 그 역할을 셋째로 들고
+      자주 간과된다고 적는다. -/
+  | fundingCurrency
+  /-- 공적 준비통화. 공적 부문이 대외 지급 준비로 보유하는 역할을 맡는 통화. -/
+  | officialReserveCurrency
+  /-- 교역 표시통화. 재화와 서비스의 국제 교역을 표시하는 역할을 맡는 통화. -/
+  | tradeInvoicingCurrency
+  /-- 국제통화. 자국 관할권보다 넓은 영역을 갖는 통화이며, 역외에서 비거주자 사이의 거래를
+      표시한다. -/
+  | internationalCurrency
+  /-- 자국통화. 한 노드에게 그 통화가 자기 영역의 통화인 관계이며, 노드의 나라가 아니라 통화가
+      쓰이는 영역이 그 여부를 정한다. -/
+  | domesticCurrency
   deriving DecidableEq, Repr
 
 /--
@@ -772,6 +787,11 @@ def registry : List ConceptRel :=
   , .excludes .instrumentClassRegime .encumbranceStateRegime
   , .refines .marketFundingAccess .privateLiquidityPut
   , .refines .centralBankCollateralEligibility .constraintAssetEligibility
+  , .refines .fundingCurrency .currency
+  , .refines .officialReserveCurrency .currency
+  , .refines .tradeInvoicingCurrency .currency
+  , .refines .internationalCurrency .currency
+  , .refines .domesticCurrency .currency
   ]
 
 end CrisisFramework.Glossary
