@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰넷을 돈다. 실패시키는 것 마흔셋과 보고만 하는 것 여덟과
+`docs/decisions/SPEC.md` §2 의 검사 쉰일곱을 돈다. 실패시키는 것 마흔다섯과 보고만 하는 것 아홉과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1089,7 +1089,7 @@ ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
          "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
-         "29", "30"]
+         "55", "56", "57", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -3352,6 +3352,156 @@ def check_54(led: Ledger) -> Report:
     return r
 
 
+# 검사 55 · 56 이 읽는 페이즈 레코드의 칸. 아크 수준의 같은 이름의 칸은 검사 28 · 29 · 30 이 읽는다.
+PHASE_CQ = "cq"
+
+
+def phase_cq_records(led: Ledger) -> list[tuple[str, str, object]]:
+    """`cq` 칸을 든 페이즈 레코드마다 (아크 이름, 페이즈 이름, 그 칸의 값).
+
+    **검사 55 와 56 이 이 하나를 나누어 쓴다.** 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 두
+    방향이 서로 다른 유니버스를 보는 것을 어느 검사도 잡지 않는다. 객체가 아닌 페이즈 원소는 검사
+    45 가 그 문면으로 내므로 여기서는 건너뛴다.
+    """
+    out: list[tuple[str, str, object]] = []
+    for name in sorted(led.arcs):
+        for ph in led.arcs[name].get("phases") or []:
+            if isinstance(ph, dict) and PHASE_CQ in ph:
+                out.append((name, str(ph.get("name")), ph[PHASE_CQ]))
+    return out
+
+
+def check_55(led: Ledger) -> Report:
+    r = Report("55", "wiki55-phase-cq-in-arc",
+               "아크 값 정본의 페이즈 레코드가 든 cq 가 그 아크의 cq 에 전부 드는가", "fail")
+    recs = phase_cq_records(led)
+    n_items = 0
+    for arc, phase, val in recs:
+        # 배열이 아니면 원소를 읽을 수 없다. 건너뛰면 그 칸이 빈 것과 같아 보여, 아크가 내리지 않는
+        # 항을 든 꼴이 그 자리에서 가려진다.
+        if not isinstance(val, list):
+            r.bad(f"아크 `{arc}` 의 페이즈 `{phase}` 의 cq 가 배열이 아니다: `{val}`")
+            continue
+        arc_cq = {str(x) for x in (led.arcs[arc].get("cq") or [])}
+        for ref in val:
+            n_items += 1
+            if str(ref) not in arc_cq:
+                r.bad(f"아크 `{arc}` 의 페이즈 `{phase}` 가 그 아크의 cq 에 없는 `{ref}` 를 든다")
+    # 유니버스가 비어도 실패가 아니다. 그 칸은 선택이며 보충의 몫이어서, 아직 적지 않은 아크가 있는
+    # 것이 정상이다(SPEC §2.1). 비었는지는 이 줄의 계수가 든다.
+    r.note(f"cq 칸을 든 페이즈 레코드 {len(recs)} · 그 칸이 든 항 {n_items}")
+    return r
+
+
+def check_56(led: Ledger) -> Report:
+    r = Report("56", "wiki56-arc-cq-phase-assignment",
+               "그 아크의 cq 마다 그것을 드는 페이즈 레코드가 있는가", "report")
+    held: dict[str, set[str]] = {}
+    for arc, _phase, val in phase_cq_records(led):
+        if isinstance(val, list):
+            held.setdefault(arc, set()).update(str(x) for x in val)
+    # **열려 있는 아크만 본다.** 페이즈 레코드에 이 칸이 서기 전에 닫힌 아크는 그 배정을 적을 자리가
+    # 없었고, 소급해 채우면 그 페이즈가 섰던 시점의 전제가 왜곡된다. 검사 45 가 페이즈의 구멍 배정을
+    # 열려 있는 아크에만 요구하는 것과 같은 가름이며, 보지 않은 아크의 수를 아래 줄이 함께 든다.
+    missing: list[tuple[str, str]] = []
+    n_open = n_cq = n_skip = 0
+    for name in sorted(led.arcs):
+        a = led.arcs[name]
+        if a.get("status") != "open":
+            n_skip += 1 if a.get("cq") else 0
+            continue
+        n_open += 1
+        for ref in a.get("cq") or []:
+            n_cq += 1
+            if str(ref) not in held.get(name, set()):
+                missing.append((name, str(ref)))
+    r.note(f"열려 있는 아크 {n_open} · 그 아크의 cq {n_cq} · 그것을 드는 페이즈 레코드가 없는 항 "
+           f"{len(missing)} · 열려 있지 않아 보지 않은 아크 가운데 cq 를 든 것 {n_skip}")
+    # 항마다 한 줄을 낸다. 음성 대조가 지운 번호를 그 줄로 찾으며, 계수만 내면 그 주입이 어느 항을
+    # 겨눴는지가 보고에 남지 않는다. 검사 54 가 같은 형이다.
+    for name, ref in missing:
+        r.note(f"아크 `{name}` — {ref}")
+    return r
+
+
+# 검사 57 의 유니버스. CQ 고정 파일의 머리 블록과 값 정본의 CQ 고정 절 둘로 닫는다. 영구 문면 전량으로
+# 열면 다른 것을 세는 수사가 거짓 양성으로 서고 그 가운데 참인 것이 묻힌다(SPEC §2.1).
+CQ_FIXED_FILE = "CrisisFramework/Observation/CompetencyQuestion.lean"
+CQ_FIXED_SECTION_DOC = "docs/baseline.md"
+# 머리 블록은 파일 맨 앞의 `/- -/` 다. docstring 의 `/--` 는 머리가 아니므로 받지 않는다.
+CQ_HEAD_BLOCK = re.compile(r"\A\s*/-(?!-)(.*?)-/", re.S)
+CQ_FIXED_SECTION_HEAD = re.compile(r"^## \d+\. CQ 고정 절")
+CQ_NEXT_SECTION = re.compile(r"^## ", re.M)
+# 걷어내는 것 둘. 기계 판독 블록은 값을 줄로 들어 번호가 수사처럼 읽히고, 식별자는 `CQ-fin-12`
+# 처럼 번호를 품어 `CQ-fin` 뒤에 수가 오는 꼴로 읽힌다. 블록 이름을 대문자 꼴로만 받아 이 꼴이
+# 검사 46 의 유니버스에 들지 않게 한다.
+MACHINE_BLOCK = re.compile(r"<!--\s*[A-Z][A-Z0-9]*:BEGIN\s*-->.*?<!--\s*[A-Z][A-Z0-9]*:END\s*-->", re.S)
+IDENTIFIER_WITH_NO = re.compile(r"(?<![0-9A-Za-z-])[A-Za-z]+(?:-[A-Za-z]+)*-[0-9]+(?![0-9A-Za-z-])")
+# 수사의 꼴. 검사 40 의 두 표에서 지어 쓰고, 관형형을 더한다. 관형형이 없으면 「열한 물음」 처럼
+# 명사를 꾸미는 자리가 그물 밖에 남으며 이 검사가 찾는 것이 바로 그 자리다. 아라비아 숫자도 받는다.
+CQ_KO_ATTRIBUTIVE = {"하나": "한", "둘": "두", "셋": "세", "넷": "네", "스물": "스무"}
+_CQ_UNITS = [w for u in COUNT_KO_UNIT for w in {u, CQ_KO_ATTRIBUTIVE.get(u, u)}]
+_CQ_TENS = [w for t in COUNT_KO_TENS for w in {t, CQ_KO_ATTRIBUTIVE.get(t, t)}]
+CQ_NUMERAL = "(?:" + "|".join(sorted(
+    set(_CQ_UNITS + _CQ_TENS + [t + u for t in COUNT_KO_TENS for u in _CQ_UNITS]),
+    key=len, reverse=True)) + r"|[0-9]+)"
+# 꼴 둘. ㉠ 수사가 「물음」·「항」·「선언」을 바로 꾸미는 자리이며 수량 단위 「개」와 조사 「의」가
+# 사이에 끼는 것을 받는다. 「항목」 은 다른 낱말이라 뺀다. 서수 「째」 는 수사 뒤에 붙어 명사와
+# 떨어지므로 이 꼴에 들지 않는다. ㉡ `CQ-fin` 뒤에 수사가 바로 오는 자리이며, 수사 뒤에는 조사
+# 하나까지만 받아 「세운다」 같은 낱말의 머리가 수사로 읽히지 않게 한다.
+CQ_COUNT_MODIFIER = re.compile(
+    r"(?<![0-9A-Za-z가-힣])(" + CQ_NUMERAL + r")\s*(?:개\s*)?(?:의\s*)?(물음|항(?!목)|선언)")
+CQ_COUNT_AFTER_ID = re.compile(
+    r"`?CQ-fin`?\s*(" + CQ_NUMERAL + r")(?!째)"
+    r"(?=[^가-힣]|$|(?:의|이|가|은|는|을|를|과|와|에|도|만|이다|이며|이고|으로|로)(?![가-힣]))")
+
+
+def cq_count_universe(led: Ledger, r: Report) -> list[tuple[str, str]]:
+    """검사 57 의 (표시 이름, 걷어낸 뒤의 문면). 자리를 찾지 못하면 그 사실을 실패로 낸다."""
+    out: list[tuple[str, str]] = []
+    f = led.root / CQ_FIXED_FILE
+    if not f.is_file():
+        r.bad(f"{CQ_FIXED_FILE} 이 없다")
+    else:
+        m = CQ_HEAD_BLOCK.match(f.read_text(encoding="utf-8"))
+        if m is None:
+            r.bad(f"{CQ_FIXED_FILE} 의 머리 블록을 찾지 못했다")
+        else:
+            out.append((f"{CQ_FIXED_FILE} 의 머리 블록", m.group(1)))
+    g = led.root / CQ_FIXED_SECTION_DOC
+    if not g.is_file():
+        r.bad(f"{CQ_FIXED_SECTION_DOC} 이 없다")
+    else:
+        lines = g.read_text(encoding="utf-8").splitlines(keepends=True)
+        at = next((i for i, ln in enumerate(lines) if CQ_FIXED_SECTION_HEAD.match(ln)), None)
+        if at is None:
+            r.bad(f"{CQ_FIXED_SECTION_DOC} 에서 CQ 고정 절의 제목을 찾지 못했다")
+        else:
+            body = "".join(lines[at:])
+            nxt = CQ_NEXT_SECTION.search(body, len(lines[at]))
+            out.append((f"{CQ_FIXED_SECTION_DOC} 의 CQ 고정 절",
+                        body[:nxt.start()] if nxt else body))
+    return [(name, IDENTIFIER_WITH_NO.sub(" ", MACHINE_BLOCK.sub(" ", text)))
+            for name, text in out]
+
+
+def check_57(led: Ledger) -> Report:
+    r = Report("57", "wiki57-cq-count-numeral",
+               "CQ 고정 파일의 머리 블록과 값 정본의 고정 절이 그 항의 계수를 수사로 들지 않는가",
+               "fail")
+    places = cq_count_universe(led, r)
+    hits = 0
+    for name, text in places:
+        found = ([m.group(0) for m in CQ_COUNT_MODIFIER.finditer(text)]
+                 + [m.group(0) for m in CQ_COUNT_AFTER_ID.finditer(text)])
+        hits += len(found)
+        for h in found:
+            r.bad(f"{name} 에 CQ 항의 계수를 드는 수사가 선다: 「{h}」")
+        r.note(f"{name} — 걷어낸 뒤 {len(text)} 글자")
+    r.note(f"유니버스 {len(places)} 자리 · 적발 {hits}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3368,7 +3518,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
         check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
-        check_53(led), check_54(led),
+        check_53(led), check_54(led), check_55(led), check_56(led), check_57(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3395,7 +3545,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰넷)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰일곱)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

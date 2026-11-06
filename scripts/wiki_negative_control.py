@@ -31,6 +31,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import types
 from datetime import date as _date, timedelta
 from pathlib import Path
 
@@ -1786,6 +1787,75 @@ def inj_54_add(root):
     raise SystemExit("미추출 표지를 들지 않은 구성원 행이 없어 주입할 자리가 없다")
 
 
+
+# ----------------------------------------------------- 검사 55 · 56 · 57 · 페이즈의 답할 항과 그 계수
+
+def _fixed_cq(root: Path) -> list[int]:
+    """고정 절 블록이 드는 CQ 번호. 검증기의 수집기를 그대로 써서 주입과 판정이 같은 목록을 본다."""
+    return check_wiki.cq_fixed(types.SimpleNamespace(root=root))
+
+
+def inj_55_foreign(root):
+    """페이즈 레코드에 그 아크의 `cq` 에 없는 번호를 넣는다.
+
+    **고정 절에 실재하는 번호를 고른다.** 고정 절에 없는 번호를 넣으면 형식의 결손과 배정의 결손이
+    한 주입에 겹쳐, 이 검사가 잡았는지 다른 검사가 함께 걸렸는지가 그 줄에서 갈리지 않는다.
+    """
+    doc, a = _open_arc(root)
+    ph = next((x for x in a.get("phases") or [] if isinstance(x, dict)), None)
+    if ph is None:
+        raise SystemExit("열려 있는 아크에 페이즈 객체가 없어 주입할 자리가 없다")
+    own = {str(x) for x in a.get("cq") or []}
+    ref = next((f"CQ-fin-{n}" for n in _fixed_cq(root) if f"CQ-fin-{n}" not in own), None)
+    if ref is None:
+        raise SystemExit("그 아크의 cq 밖에 있는 고정 절의 번호가 없어 주입할 자리가 없다")
+    ph.setdefault("cq", []).append(ref)
+    save_arcs(root, doc)
+    return f"{a['name']}/{ph.get('name')}: {ref}"
+
+
+def inj_56_drop(root):
+    """페이즈 레코드에서 그 번호를 지운다.
+
+    그 번호를 드는 페이즈가 하나뿐인 항을 고른다. 둘이 들면 하나를 지워도 배정이 남아 보고 줄이
+    서지 않으므로, 그 주입은 검사가 아니라 고른 자리를 재게 된다.
+    """
+    doc, a = _open_arc(root)
+    holders: dict[str, list[dict]] = {}
+    for ph in a.get("phases") or []:
+        if isinstance(ph, dict) and isinstance(ph.get("cq"), list):
+            for ref in ph["cq"]:
+                holders.setdefault(str(ref), []).append(ph)
+    ref = next((x for x in sorted(holders) if len(holders[x]) == 1), None)
+    if ref is None:
+        raise SystemExit("한 페이즈만 드는 답할 항이 없어 지울 자리가 없다")
+    ph = holders[ref][0]
+    ph["cq"] = [x for x in ph["cq"] if str(x) != ref]
+    save_arcs(root, doc)
+    return ref
+
+
+def inj_57_numeral(root):
+    """그 머리 블록에 항의 수를 수사로 적는다.
+
+    수는 고정 절의 줄 수에서 얻고 관형형으로 적는다. 관형형을 받는 꼴이 이 검사의 고유한 자리이므로,
+    기수형으로만 주입하면 그 꼴이 빠져도 이 주입이 통과한다. 수사의 두 표는 검증기에서 가져온다.
+    """
+    f = root / check_wiki.CQ_FIXED_FILE
+    text = f.read_text(encoding="utf-8")
+    m = check_wiki.CQ_HEAD_BLOCK.match(text)
+    if m is None:
+        raise SystemExit(f"{check_wiki.CQ_FIXED_FILE} 의 머리 블록을 찾지 못해 주입할 자리가 없다")
+    word = ko_word(len(_fixed_cq(root)))
+    for card, attr in check_wiki.CQ_KO_ATTRIBUTIVE.items():
+        if word.endswith(card):
+            word = word[:-len(card)] + attr
+            break
+    sentence = f"이 파일은 {word} 물음을 든다."
+    f.write_text(text[:m.end(1)] + sentence + "\n" + text[m.end(1):], encoding="utf-8")
+    return sentence
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1879,6 +1949,9 @@ CASES = [
     ("52",  "wiki52-open-arc-deferred-assignment", "그 구멍을 아크의 holes 에는 두고 모든 페이즈의 holes 에서 지운다", inj_52_phase, None),
     ("53",  "wiki53-inventory-member-marker", "구성원 행 하나에서 표지를 지운다", inj_53_drop, None),
     ("54",  "wiki54-inventory-unread-count", "미추출 표지를 든 행을 하나 늘린다", inj_54_add, None),
+    ("55",  "wiki55-phase-cq-in-arc",        "페이즈 레코드에 그 아크의 cq 에 없는 번호를 넣는다", inj_55_foreign, None),
+    ("56",  "wiki56-arc-cq-phase-assignment", "페이즈 레코드에서 그 번호를 지운다", inj_56_drop, None),
+    ("57",  "wiki57-cq-count-numeral",       "그 머리 블록에 항의 수를 수사로 적는다", inj_57_numeral, None),
 ]
 
 
