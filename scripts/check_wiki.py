@@ -1089,7 +1089,7 @@ ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
          "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
-         "55", "56", "57", "29", "30"]
+         "55", "56", "57", "58", "59", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -3502,6 +3502,141 @@ def check_57(led: Ledger) -> Report:
     return r
 
 
+# 검사 58 이 읽는 `QUEUEMARK` 블록. `docs/baseline.md` 가 읽기 대기열의 지목 참조 대기 표의 절 제목과
+# 그 표의 표지 낱말 둘을 든다. **블록이 비거나 키 하나가 빠지면 통과시키지 않는다.** 제목과 낱말을
+# 코드에 박으면 그것을 바꾸는 회차가 대기열과 블록만 고쳤을 때 이 검사가 옛 값을 찾아 조용히 낡는다.
+# 검사 53 의 `INVENTORYMARK` 와 같은 형이다.
+QUEUEMARK_BLOCK = re.compile(r"<!-- QUEUEMARK:BEGIN -->\n(.*?)<!-- QUEUEMARK:END -->", re.S)
+QUEUEMARK_LINE = re.compile(r"^(QUEUEMARK_[A-Z]+)=(.*)$")
+QUEUEMARK_SECTION = "QUEUEMARK_SECTION"
+QUEUEMARK_WAITING = "QUEUEMARK_WAITING"
+QUEUEMARK_SPENT = "QUEUEMARK_SPENT"
+QUEUEMARK_KEYS = (QUEUEMARK_SECTION, QUEUEMARK_WAITING, QUEUEMARK_SPENT)
+# 표지가 서는 칸의 자리. 첫 칸이 편의 이름이고 표지는 그 다음 칸 곧 대상 구멍의 칸에 선다. 그 표에
+# 칸을 둘만 드는 행이 있고 그 행도 이 자리에 표지를 들므로 마지막 칸으로 두지 않는다. 마지막 칸으로
+# 두면 칸을 셋 드는 행에서 기대 재료의 산문을 읽게 되어 표지를 든 행이 표지 없는 행으로 걸린다.
+QUEUEMARK_CELL = 1
+
+
+def queuemark_block(led: Ledger) -> dict[str, str]:
+    """`QUEUEMARK` 블록의 키와 값. 값이 빈 키는 들지 않는다."""
+    out: dict[str, str] = {}
+    for line in _baseline_block(led, QUEUEMARK_BLOCK).splitlines():
+        m = QUEUEMARK_LINE.match(line)
+        if m and m.group(2).strip():
+            out[m.group(1)] = m.group(2).strip()
+    return out
+
+
+def queue_section_rows(text: str, heading: str) -> tuple[int | None, list[tuple[int, list[str]]]]:
+    """그 제목의 절이 선 줄 번호와 그 절 안의 표의 본문 행 (줄 번호, 칸).
+
+    절은 그 제목으로 시작하는 줄부터 다음 `## ` 절 앞까지다. 제목 뒤에 공백과 부제가 붙는 꼴을 받으며,
+    제목이 다른 제목의 앞부분으로만 맞는 꼴(`## 1. 지목` 이 `## 1. 지목 참조` 에 맞는 꼴)은 받지 않는다.
+    표의 행을 가르는 꼴은 검사 53 의 `inventory_member_rows` 와 같다.
+    """
+    lines = text.splitlines()
+    start = next((i for i, ln in enumerate(lines)
+                  if ln == heading or ln.startswith(heading + " ")), None)
+    if start is None:
+        return None, []
+    rows: list[tuple[int, list[str]]] = []
+    i = start + 1
+    while i < len(lines) and not lines[i].startswith("## "):
+        head = md_cells(lines[i])
+        rule = md_cells(lines[i + 1]) if i + 1 < len(lines) else None
+        if head and rule and all(SPEC_TABLE_RULE.match(c) for c in rule if c):
+            j = i + 2
+            while j < len(lines):
+                body = md_cells(lines[j])
+                if body is None:
+                    break
+                rows.append((j + 1, body))
+                j += 1
+            i = j
+            continue
+        i += 1
+    return start + 1, rows
+
+
+def check_58(led: Ledger) -> Report:
+    r = Report("58", "wiki58-queue-marker",
+               "읽기 대기열의 지목 참조 대기 표의 행마다 대기 표지와 소진 표지 가운데 하나를 드는가",
+               "fail")
+    marks = queuemark_block(led)
+    missing = [k for k in QUEUEMARK_KEYS if k not in marks]
+    if missing:
+        r.bad("docs/baseline.md 의 QUEUEMARK 블록에 " + " · ".join(missing) + " 가 없다")
+        return r
+    q = led.root / READING_QUEUE_DOC
+    if not q.is_file():
+        r.bad(f"{READING_QUEUE_DOC} 이 없다")
+        return r
+    heading = marks[QUEUEMARK_SECTION]
+    at, rows = queue_section_rows(q.read_text(encoding="utf-8"), heading)
+    if at is None:
+        r.bad(f"{READING_QUEUE_DOC} 에서 절 제목 `{heading}` 을 찾지 못했다")
+        return r
+    # 유니버스가 비면 어느 행도 걸리지 않아 0 으로 난다. 검사 50 과 53 이 같은 요구를 둔다.
+    if not rows:
+        r.bad(f"{READING_QUEUE_DOC}:{at} 의 절에서 표의 행을 하나도 읽지 못했다")
+        return r
+    waiting, spent = marks[QUEUEMARK_WAITING], marks[QUEUEMARK_SPENT]
+    n_wait = n_spent = 0
+    for line, cells in rows:
+        cell = cells[QUEUEMARK_CELL] if len(cells) > QUEUEMARK_CELL else ""
+        w, s = waiting in cell, spent in cell
+        # 둘을 함께 든 행도 걸린다. 이 검사가 잡으려는 것이 소진된 행이 대기 표지를 든 채 남는 것이므로
+        # 둘 가운데 하나를 요구하는 문면을 둘 다 드는 것으로 채우면 그 탐지가 빈다.
+        if w and s:
+            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 대기 표지와 소진 표지를 함께 든다: {cells[0]}")
+        elif not (w or s):
+            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 대기 표지도 소진 표지도 들지 않는다: {cells[0]}")
+        else:
+            n_wait += w
+            n_spent += s
+    r.note(f"절 `{heading}` ({READING_QUEUE_DOC}:{at}) 의 표의 행 {len(rows)} · "
+           f"대기 표지를 든 행 {n_wait} · 소진 표지를 든 행 {n_spent}")
+    r.note(f"표지의 낱말 `{waiting}` · `{spent}` · 표지를 찾는 칸은 {QUEUEMARK_CELL + 1} 번째 칸")
+    return r
+
+
+def check_59(led: Ledger) -> Report:
+    r = Report("59", "wiki59-extraction-stem-unique",
+               "추출 기록 디렉터리의 파일 이름에서 번호를 뗀 줄기가 전량 유일한가", "fail")
+    d = led.root / "docs" / "extractions"
+    if not d.is_dir():
+        r.bad("docs/extractions/ 가 없다")
+        return r
+    stems: dict[str, list[str]] = {}
+    skipped = 0
+    for f in sorted(d.iterdir()):
+        if not f.is_file():
+            continue
+        # 번호의 꼴은 검사 49 와 50 이 쓰는 `EXTRACTION_FILE_NO` 와 같다. 그 꼴 밖의 이름은 검사 35 가
+        # 받으므로 여기서는 세기만 하고 건너뛴다.
+        m = EXTRACTION_FILE_NO.match(f.name)
+        if m is None:
+            skipped += 1
+            continue
+        stem = f.name[m.end():]
+        if stem.endswith(".md"):
+            stem = stem[:-len(".md")]
+        stems.setdefault(stem, []).append(f.name)
+    # 유니버스가 비면 어느 줄기도 겹치지 않아 0 으로 난다. 검사 58 과 같은 요구를 둔다.
+    if not stems:
+        r.bad("docs/extractions/ 에서 번호를 든 파일을 하나도 읽지 못했다")
+        return r
+    dup = 0
+    for stem, names in sorted(stems.items()):
+        if len(names) > 1:
+            dup += 1
+            r.bad(f"줄기 `{stem}` 을 파일 {len(names)} 개가 함께 든다: " + " · ".join(names))
+    r.note(f"번호를 든 파일 {sum(len(v) for v in stems.values())} · 서로 다른 줄기 {len(stems)} · "
+           f"겹친 줄기 {dup} · 번호의 꼴 밖이라 건너뛴 파일 {skipped}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3519,6 +3654,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_44(led), check_45(led), check_46(led), check_47(led),
         check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
         check_53(led), check_54(led), check_55(led), check_56(led), check_57(led),
+        check_58(led), check_59(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
