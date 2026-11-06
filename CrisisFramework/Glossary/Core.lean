@@ -247,6 +247,10 @@ inductive Concept where
   /-- 조달 연결 통화 불일치. 어느 통화로 진 부채가 다른 통화의 자산을 조달한 상태이며, 부채 통화와
       자산 통화의 쌍으로 색인된다. 그 값을 내는 공시 경로가 없다. -/
   | currencyFundingLinkMismatch
+  /-- 통화 불일치 전달. 한 주체의 통화 불일치가 그 주체의 상환 실패 가능성을 높이는
+      관계이며, 그 가능성이 그 주체의 청구권을 보유한 주체의 제약 인자로 옮겨 가는 뒤 고리는
+      조달처가 없어 이 회차가 등재하지 않았다. -/
+  | currencyMismatchTransmission
   deriving DecidableEq, Repr
 
 /--

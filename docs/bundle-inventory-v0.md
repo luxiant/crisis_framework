@@ -202,7 +202,7 @@
 | Geopolitical Risk and Global Banking | Niepmann·Shen 2025 | 국경 간 대출과 현지 법인 대출이 갈리는 반응. CQ-fin-3 · CQ-fin-7 미추출 |
 | International Banking and Cross-Border Effects of Regulation | Berrospide·Correa·Goldberg·Niepmann 2016 (NBER WP 22645) | 규제의 국경 간 파급. 제약의 규제적 원천 미추출 |
 | Bank Bailouts, International Linkages, and Cooperation | Niepmann·Schmidt-Eisenlohr 2013 (AEJ: Economic Policy) | 구제금융과 국제 전염. J-4 의 납세자 경로 미추출 |
-| Foreign Currency Loans and Credit Risk: Evidence from U.S. Banks | Niepmann·Schmidt-Eisenlohr 2019 (CEPR DP14212) | 외화 대출의 환위험이 신용위험으로 옮겨 간다. CQ-fin-11 미추출 |
+| Foreign Currency Loans and Credit Risk: Evidence from U.S. Banks | Niepmann·Schmidt-Eisenlohr 2019 (CEPR DP14212) | E-65. 외화 대출의 환위험이 그 대출을 보유한 은행의 신용위험으로 옮겨 가는 앞 고리와 전달의 축 여섯. CQ-fin-11 의 재료 |
 | Institutional Investors, the Dollar, and U.S. Credit Conditions | Niepmann·Schmidt-Eisenlohr 2019 | 달러 강세와 기관투자자의 대출 수요. CQ-fin-5 미추출 |
 | The Dollar and Corporate Borrowing Costs | Meisenzahl·Niepmann·Schmidt-Eisenlohr 2021 (IFDP 1312) | 달러와 신디케이트 대출의 조건. CQ-fin-2 · CQ-fin-5 미추출 |
 
