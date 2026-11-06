@@ -25,21 +25,21 @@
 | ★ | Financial intermediaries and monetary economics | Adrian·Shin 2010 (SR 398) | E-03. 핸드북 판본. 루프의 통화정책 연결 |
 | ★ | Margins, debt capacity, and systemic risk | Aramonte·Schrimpf·Shin 2023 | E-04. 헤어컷·마진 제약. 비은행 확장 |
 | ★ | Non-core bank liabilities and financial vulnerability | Hahm·Shin·Shin 2012 | E-05. 핵심/비핵심 부채 분할. 용어 분할 재료 |
-| | Financial intermediaries, financial stability, and monetary policy | Adrian·Shin 2008 (SR 346) | SR 328과 중복 큼 |
-| | Money, liquidity, and monetary policy | Adrian·Shin 2009 (SR 360) | 14쪽 요약판 |
-| | Liquidity and financial contagion (FSR 특집 내 챕터) | Adrian·Shin 2008 | 190쪽 편집본. 해당 챕터만 |
-| | The changing nature of financial intermediation and the crisis | Adrian·Shin 2010 (SR 439) | 시장성 조달의 부상 |
-| | Which financial frictions? | Adrian·Colla·Shin 2012 | 마찰 유형 판별. 은행 vs 시장 |
-| | Procyclical leverage and endogenous risk | Danielsson·Shin·Zigrand 2012 | 측정 위험 ↔ 실제 위험 되먹임 |
-| | The impact of risk regulation on price dynamics | Danielsson·Shin·Zigrand 2004 | 규제 제약이 가격 동학에 미치는 영향 |
-| | Intermediary leverage cycles and financial stability | Adrian·Boyarchenko 2012 | DSGE 판본. 대표주체라 노드 없음 — B-3 주의 |
-| | Financial intermediaries and the cross-section of asset returns | Adrian·Etula·Muir | 레버리지 = 가격 인자. 실증. 구조만 추출 |
-| | Non-bank financial intermediaries and financial stability | Aramonte·Schrimpf·Shin 2021 | 비은행 노드 유형 목록 |
-| | Securitisation and financial stability | Shin 2009 (EJ) | 총 부채 확장 메커니즘 |
+| | Financial intermediaries, financial stability, and monetary policy | Adrian·Shin 2008 (SR 346) | SR 328과 중복 큼 미추출 |
+| | Money, liquidity, and monetary policy | Adrian·Shin 2009 (SR 360) | 14쪽 요약판 미추출 |
+| | Liquidity and financial contagion (FSR 특집 내 챕터) | Adrian·Shin 2008 | 190쪽 편집본. 해당 챕터만 미추출 |
+| | The changing nature of financial intermediation and the crisis | Adrian·Shin 2010 (SR 439) | 시장성 조달의 부상 미추출 |
+| | Which financial frictions? | Adrian·Colla·Shin 2012 | 마찰 유형 판별. 은행 vs 시장 미추출 |
+| | Procyclical leverage and endogenous risk | Danielsson·Shin·Zigrand 2012 | 측정 위험 ↔ 실제 위험 되먹임 미추출 |
+| | The impact of risk regulation on price dynamics | Danielsson·Shin·Zigrand 2004 | 규제 제약이 가격 동학에 미치는 영향 미추출 |
+| | Intermediary leverage cycles and financial stability | Adrian·Boyarchenko 2012 | DSGE 판본. 대표주체라 노드 없음 — B-3 주의 미추출 |
+| | Financial intermediaries and the cross-section of asset returns | Adrian·Etula·Muir | 레버리지 = 가격 인자. 실증. 구조만 추출 미추출 |
+| | Non-bank financial intermediaries and financial stability | Aramonte·Schrimpf·Shin 2021 | 비은행 노드 유형 목록 미추출 |
+| | Securitisation and financial stability | Shin 2009 (EJ) | 총 부채 확장 메커니즘 미추출 |
 | | Marking-to-market: panacea or Pandora's box | Plantin·Sapra·Shin 2007 | E-16. 가격 → 제약 경로의 회계적 근거 |
 | | Illiquidity component of credit risk | Morris·Shin 2016 | E-17. 지급불능/유동성 분해. 실패 양태 분할 재료 |
 | | Reflections on Northern Rock | Shin 2009 (JEP) | E-50. **D-3 역사 사례 공급원.** 도매조달 은행의 런. `propagation-5` 가 S-7 로 지목해 읽었다 |
-| | Leveraged losses | Greenlaw·Hatzius·Kashyap·Shin 2008 | **D-3 역사 사례 공급원** |
+| | Leveraged losses | Greenlaw·Hatzius·Kashyap·Shin 2008 | **D-3 역사 사례 공급원** 미추출 |
 
 ## O-2 배관 — 신용중개 연쇄·화폐성 위계·담보 (11편 · 보조 1편)
 
@@ -49,14 +49,14 @@
 | ★ | Shadow Banking: The Money View | Pozsar 2014 (OFR) | E-07. 화폐성 위계. PH-R3 중심 구조물 |
 | ★ | Institutional Cash Pools and the Triffin Dilemma | Pozsar 2011 (IMF) | E-09. 수요 측. 안전자산 수요 노드 |
 | ★ | The Nonbank-Bank Nexus and the Shadow Banking System | Pozsar·Singh 2011 (IMF) | E-08. **담보 재사용·연쇄.** K-5 직결 |
-| | The Rise and Fall of the Shadow Banking System | Pozsar 2008 | 초기 서술 |
+| | The Rise and Fall of the Shadow Banking System | Pozsar 2008 | 초기 서술 미추출 |
 | | A Macro View of Shadow Banking | Pozsar 2015 | E-53. **보유자 위임 축의 원전.** 생태계를 네 부류로 가르고 부류마다 위임을 붙이며 그 위임이 제약의 꼴을 정한다. 은행의 도매조달 포트폴리오를 레버리지 채권 포트폴리오와 경제적 등가로 두고, 자금순환표가 순 레포만 잡아 딜러가 중개하는 총액이 빠진다는 것을 자기 자리에서 적는다. `holder-2` 가 S-7 로 지목해 읽었다 |
 | | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | E-10. 위계 + 딜러 중심 최종대부자. J-4 |
-| | Shadow Banking: Economics and Policy (파일명 `Shadow Banking.pdf`) | Claessens·Pozsar·Ratnovski·Singh 2012 (IMF SDN) | 개관 |
+| | Shadow Banking: Economics and Policy (파일명 `Shadow Banking.pdf`) | Claessens·Pozsar·Ratnovski·Singh 2012 (IMF SDN) | 개관 미추출 |
 | | The Federal Reserve's TALF | Ashcraft·Malz·Pozsar 2012 | E-11. 중앙은행 노드의 담보 대출. J-4 |
-| | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | 형식 모형. Holmström-Tirole 계열 |
+| | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | 형식 모형. Holmström-Tirole 계열 미추출 |
 | | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | E-48. 위와 동일 모형의 다른 판본으로 추정 |
-| | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 |
+| | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 미추출 |
 
 ## O-3 통화 확장 — 달러·국경 간 청구권·CIP (20편)
 
@@ -66,18 +66,18 @@
 | ★ | Capital Flows and the Risk-Taking Channel of Monetary Policy | Bruno·Shin 2013 | E-13. 달러 조달 ↔ 레버리지 ↔ 자본 흐름 |
 | ★ | Cross-Border Banking and Global Liquidity | Bruno·Shin 2014 | E-14. 위 논문의 실증 |
 | ★ | The dollar, bank leverage and the deviation from CIP | Avdjiev·Du·Koch·Shin 2017 | E-15. **FX 스왑·CIP 이탈.** J-3 관측 과제 직결 |
-| | The dollar, bank leverage, and real economic activity | Erik·Lombardi·Mihaljek·Shin 2020 | 달러-레버리지 관계 변화 |
-| | Global dollar credit and carry trades | Bruno·Shin 2016 | 기업 달러 차입 |
-| | Currency depreciation and EM corporate distress | Bruno·Shin 2018 | 통화 불일치 실증. J-2 정의 검증 |
-| | Dollar and exports | Bruno·Shin 2022 | 달러 = 신용여건 지표 |
-| | Dollar beta and stock returns | Bruno·Shim·Shin 2022 | 11쪽 |
-| | Bond risk premia and the exchange rate | Hofmann·Shim·Shin | EM 현지통화채 |
-| | Which exchange rate matters to global investors | 2024 | 포트폴리오 채널 |
-| | Original sin redux: role of duration risk | Bertaut·Bruno·Shin 2025 | 현지통화채 + 외국인 보유 |
-| | Overcoming original sin | Onen·Shin·von Peter 2023 | 데이터셋 |
-| | International portfolio frictions | Du·Fontana·Jakubik·Koijen·Shin 2023 | 보험사·은행 포트폴리오 |
-| | Second Phase of Global Liquidity (편집본 내 Shin 챕터) | Shin 2013 | 408쪽 편집본. 은행 → 채권 조달 전환 |
-| | Central bank balance sheets and financial stability (편집본 내 Shin 챕터) | Shin | 302쪽 편집본. J-4 관련 |
+| | The dollar, bank leverage, and real economic activity | Erik·Lombardi·Mihaljek·Shin 2020 | 달러-레버리지 관계 변화 미추출 |
+| | Global dollar credit and carry trades | Bruno·Shin 2016 | 기업 달러 차입 미추출 |
+| | Currency depreciation and EM corporate distress | Bruno·Shin 2018 | 통화 불일치 실증. J-2 정의 검증 미추출 |
+| | Dollar and exports | Bruno·Shin 2022 | 달러 = 신용여건 지표 미추출 |
+| | Dollar beta and stock returns | Bruno·Shim·Shin 2022 | 11쪽 미추출 |
+| | Bond risk premia and the exchange rate | Hofmann·Shim·Shin | EM 현지통화채 미추출 |
+| | Which exchange rate matters to global investors | 2024 | 포트폴리오 채널 미추출 |
+| | Original sin redux: role of duration risk | Bertaut·Bruno·Shin 2025 | 현지통화채 + 외국인 보유 미추출 |
+| | Overcoming original sin | Onen·Shin·von Peter 2023 | 데이터셋 미추출 |
+| | International portfolio frictions | Du·Fontana·Jakubik·Koijen·Shin 2023 | 보험사·은행 포트폴리오 미추출 |
+| | Second Phase of Global Liquidity (편집본 내 Shin 챕터) | Shin 2013 | 408쪽 편집본. 은행 → 채권 조달 전환 미추출 |
+| | Central bank balance sheets and financial stability (편집본 내 Shin 챕터) | Shin | 302쪽 편집본. J-4 관련 미추출 |
 | | Breaking free of the triple coincidence in international finance | Avdjiev·McCauley·Shin 2016 (BIS WP 524) | 국제금융 통계의 삼중 일치 해체. J-1 의 근거 원전. `claim-4` 가 S-7 로 지목해 읽었다 (E-18). zip 의 Shin 폴더에 있다 |
 | | Exchange rates and the working capital channel of trade fluctuations | Bruno·Kim·Shin 2018 (BIS WP 694) | 교역의 운전자본 경로와 표시 통화·자금조달 통화의 분리. `claim-4` 가 S-7 로 지목해 읽었다 (E-19). zip 의 Shin 폴더에 있다 |
 | | Procyclicality and Monetary Aggregates | Shin·Shin 2011 (NBER WP 16836) | E-51. 핵심/비핵심 분할의 원전이며 보유자 축의 정본. 2원 분류표와 조작적 정의 다섯을 든다. `propagation-5` 가 S-7 로 지목해 읽었다. 사용자가 묶음에 담아 다시 건넸으므로 **zip 안이다** |
@@ -102,7 +102,7 @@
 | Exports and Financial Shocks | Amiti·Weinstein 2011 (QJE) | E-32. 신용장 거래를 청구권의 사슬로 서술한다. 결제 위에 금융이 얹히는 구조 |
 | The Financial Channel of the Exchange Rate and Global Trade | Ma·Schmidt-Eisenlohr 2023 | E-31(부분 추출). 결제 정보를 가진 세관 자료의 나라(터키 · 칠레 · 콜롬비아). 달러의 금융 경로는 `claim-6` 쪽 재료다 |
 | UCP600: An Exercise in International Private Sector Self Regulation | Byrne 2007 (International Commerce & Law Review 36) | E-34. OCR 층을 얹은 판이다. 개설의뢰인의 정의, 서류 아닌 조건과 보증채무, 사기 예외 |
-| Exporter Guide to Documentary Credits under UCP 600 | Collyer Consulting 2009 | 실무 안내이며 새 구조가 없어 추출 기록을 세우지 않았다 |
+| Exporter Guide to Documentary Credits under UCP 600 | Collyer Consulting 2009 | 실무 안내이며 새 구조가 없어 추출 기록을 세우지 않았다 미추출 |
 
 **zip 밖 구성원.**
 
@@ -130,17 +130,17 @@
 | Composing Contracts: An Adventure in Financial Engineering | Peyton Jones·Eber·Seward 2000 (ICFP) | E-23. 지급을 축으로 삼는 조합자 |
 | Contract as Automaton | Flood·Goodenough 2022 (Artificial Intelligence and Law) | E-22. 계약을 결정적 유한 오토마톤으로 옮긴다. zip 의 판은 학술지 판이고, 원장의 기각 항목은 2015년 OFR 워킹페이퍼 판을 든다 |
 | Smart Derivatives Contracts: the ISDA Master Agreement and the Automation of Payments and Deliveries | Clack·McGonagle 2019 (arXiv 1904.01461) | E-35. 사건이 일어나는 층위 넷과 관측의 어려움, 선행조건 제2조 (a)(iii) |
-| Design Discussion on the ISDA Common Domain Model | Clack 2017 (2018 개정, arXiv 1711.10964) | 사건 · 상태 · 전이. 사건이 쌍방 이전만 지정한다 |
-| Smart Contract Templates: Foundations, Design Landscape and Research Directions | Clack·Bakshi·Braine 2016 | 운영적 측면과 비운영적 측면의 구분, 매개변수로 법률 문면과 코드를 잇는다 |
-| Smart Contract Templates: Essential Requirements and Design Options | Clack·Bakshi·Braine 2016 (arXiv 1612.04496) | 계약 템플릿의 형식 요건 |
-| Smart Contract Templates: Legal Semantics and Code Validation | Clack 2017 무렵 | 법률 문면의 의미와 코드의 검증 |
-| Smart Confirmation Contracts: An Architecture for ISDA Smart Contracts | Fierro 2023 (UCL 석사 논문. Clack · McGonagle 지도) | ISDA 확인서의 모듈 설계 |
-| Simulating an Object-Oriented Financial System in a Functional Language | Braine·Haviland·Smith-Jaynes·Vautier·Clack (연도 미상) | 함수형 언어로 금융 시스템을 흉내 낸 사례 |
+| Design Discussion on the ISDA Common Domain Model | Clack 2017 (2018 개정, arXiv 1711.10964) | 사건 · 상태 · 전이. 사건이 쌍방 이전만 지정한다 미추출 |
+| Smart Contract Templates: Foundations, Design Landscape and Research Directions | Clack·Bakshi·Braine 2016 | 운영적 측면과 비운영적 측면의 구분, 매개변수로 법률 문면과 코드를 잇는다 미추출 |
+| Smart Contract Templates: Essential Requirements and Design Options | Clack·Bakshi·Braine 2016 (arXiv 1612.04496) | 계약 템플릿의 형식 요건 미추출 |
+| Smart Contract Templates: Legal Semantics and Code Validation | Clack 2017 무렵 | 법률 문면의 의미와 코드의 검증 미추출 |
+| Smart Confirmation Contracts: An Architecture for ISDA Smart Contracts | Fierro 2023 (UCL 석사 논문. Clack · McGonagle 지도) | ISDA 확인서의 모듈 설계 미추출 |
+| Simulating an Object-Oriented Financial System in a Functional Language | Braine·Haviland·Smith-Jaynes·Vautier·Clack (연도 미상) | 함수형 언어로 금융 시스템을 흉내 낸 사례 미추출 |
 | Smart Financial Contracts Revisited (파일명 `Smart Contracts, Distributed Ledgers, and the Need for an Algorithmic Financial Contract Standard.pdf`) | Brammertz 2018 무렵 (토론 원고) | E-36. Szabo 의 관측 가능성 · 검증 가능성 · 비밀성 · 집행 가능성 |
-| From Digital Currencies to Digital Finance: the Case for a Smart Financial Contract Standard | Brammertz·Mendelowitz 2018 (Journal of Risk Finance) | 금융계약을 현금 흐름의 유형으로 표준화한다 |
-| Improving Systemic Risk Monitoring and Financial Market Transparency | Mendelowitz·Brammertz·Khashanah 2013 | ACTUS. 금융계약 대부분이 서른 개 안팎의 현금 흐름 유형으로 표현된다 |
-| Limits and Opportunities of Big Data for Macro-Prudential Modeling of Financial Systemic Risk | Brammertz·Mendelowitz 2014 무렵 | 구조화된 계약 자료의 필요 |
-| Smart Contracts Were Around Long Before Cryptocurrency | Mendelowitz·Brammertz 2016 (기고문) | 위 계통의 짧은 요약 |
+| From Digital Currencies to Digital Finance: the Case for a Smart Financial Contract Standard | Brammertz·Mendelowitz 2018 (Journal of Risk Finance) | 금융계약을 현금 흐름의 유형으로 표준화한다 미추출 |
+| Improving Systemic Risk Monitoring and Financial Market Transparency | Mendelowitz·Brammertz·Khashanah 2013 | ACTUS. 금융계약 대부분이 서른 개 안팎의 현금 흐름 유형으로 표현된다 미추출 |
+| Limits and Opportunities of Big Data for Macro-Prudential Modeling of Financial Systemic Risk | Brammertz·Mendelowitz 2014 무렵 | 구조화된 계약 자료의 필요 미추출 |
+| Smart Contracts Were Around Long Before Cryptocurrency | Mendelowitz·Brammertz 2016 (기고문) | 위 계통의 짧은 요약 미추출 |
 
 ---
 
@@ -198,13 +198,13 @@
 
 | 파일 | 저자·연도 | 예상 연결 |
 |---|---|---|
-| Banking across Borders | Niepmann 2011 (DNB WP 325) | 국경 간 은행업의 구조. 망 아크 |
-| Geopolitical Risk and Global Banking | Niepmann·Shen 2025 | 국경 간 대출과 현지 법인 대출이 갈리는 반응. CQ-fin-3 · CQ-fin-7 |
-| International Banking and Cross-Border Effects of Regulation | Berrospide·Correa·Goldberg·Niepmann 2016 (NBER WP 22645) | 규제의 국경 간 파급. 제약의 규제적 원천 |
-| Bank Bailouts, International Linkages, and Cooperation | Niepmann·Schmidt-Eisenlohr 2013 (AEJ: Economic Policy) | 구제금융과 국제 전염. J-4 의 납세자 경로 |
-| Foreign Currency Loans and Credit Risk: Evidence from U.S. Banks | Niepmann·Schmidt-Eisenlohr 2019 (CEPR DP14212) | 외화 대출의 환위험이 신용위험으로 옮겨 간다. CQ-fin-11 |
-| Institutional Investors, the Dollar, and U.S. Credit Conditions | Niepmann·Schmidt-Eisenlohr 2019 | 달러 강세와 기관투자자의 대출 수요. CQ-fin-5 |
-| The Dollar and Corporate Borrowing Costs | Meisenzahl·Niepmann·Schmidt-Eisenlohr 2021 (IFDP 1312) | 달러와 신디케이트 대출의 조건. CQ-fin-2 · CQ-fin-5 |
+| Banking across Borders | Niepmann 2011 (DNB WP 325) | 국경 간 은행업의 구조. 망 아크 미추출 |
+| Geopolitical Risk and Global Banking | Niepmann·Shen 2025 | 국경 간 대출과 현지 법인 대출이 갈리는 반응. CQ-fin-3 · CQ-fin-7 미추출 |
+| International Banking and Cross-Border Effects of Regulation | Berrospide·Correa·Goldberg·Niepmann 2016 (NBER WP 22645) | 규제의 국경 간 파급. 제약의 규제적 원천 미추출 |
+| Bank Bailouts, International Linkages, and Cooperation | Niepmann·Schmidt-Eisenlohr 2013 (AEJ: Economic Policy) | 구제금융과 국제 전염. J-4 의 납세자 경로 미추출 |
+| Foreign Currency Loans and Credit Risk: Evidence from U.S. Banks | Niepmann·Schmidt-Eisenlohr 2019 (CEPR DP14212) | 외화 대출의 환위험이 신용위험으로 옮겨 간다. CQ-fin-11 미추출 |
+| Institutional Investors, the Dollar, and U.S. Credit Conditions | Niepmann·Schmidt-Eisenlohr 2019 | 달러 강세와 기관투자자의 대출 수요. CQ-fin-5 미추출 |
+| The Dollar and Corporate Borrowing Costs | Meisenzahl·Niepmann·Schmidt-Eisenlohr 2021 (IFDP 1312) | 달러와 신디케이트 대출의 조건. CQ-fin-2 · CQ-fin-5 미추출 |
 
 ---
 
@@ -242,9 +242,9 @@ Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of
 
 | 파일 | 저자·연도 | 쓰임 |
 |---|---|---|
-| Golden Fetters | Eichengreen (781쪽) | **D-3 사례 공급원.** 금본위제는 중앙은행의 외화(금) 축 제약(J-4 · K-3)의 정본 사례 |
-| Global FX markets when hedging takes centre stage | Huang·Krohn·Sushko 2025 (BIS QR) | **J-3 관측 과제 보조.** FX 스왑 총액 데이터 원천 |
-| Uncovering FX settlement risk | Conway 외 2025 (BIS QR) | 위와 같다 |
+| Golden Fetters | Eichengreen (781쪽) | **D-3 사례 공급원.** 금본위제는 중앙은행의 외화(금) 축 제약(J-4 · K-3)의 정본 사례 미추출 |
+| Global FX markets when hedging takes centre stage | Huang·Krohn·Sushko 2025 (BIS QR) | **J-3 관측 과제 보조.** FX 스왑 총액 데이터 원천 미추출 |
+| Uncovering FX settlement risk | Conway 외 2025 (BIS QR) | 위와 같다 미추출 |
 
 ---
 
@@ -263,8 +263,8 @@ Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of
 |---|---|---|
 | Basel III The Liquidity Coverage Ratio and liquidity risk monitoring tools | BCBS 2013년 1월판 | 고유동성자산 3단 분류와 범주별 가중, 30일 구간과 범주별 유출률. 머리말의 앞 두 물음을 결판냈고 E-49 §4-1 과 §4-2 가 그 해소를 든다 |
 | Bank of England Level B Collateral Set | 영란은행 2026년 6월 18일판 | 적격 집합과 판별 조건 둘. 머리말의 셋째 물음을 결판냈고 E-49 §4-3 이 그 해소를 든다 |
-| Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations | 영란은행 2026년 6월 18일판 | 범주와 잔존만기의 할인율 격자. 액면가 약속 강도의 자산 쪽 측정값 후보 |
-| Changes to collateral eligibility in the Sterling Monetary Framework | 영란은행 2026년 6월 11일 시장 공고 | 적격성이 시점 함수라는 것과 등급 분할의 폐지 예정 |
+| Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations | 영란은행 2026년 6월 18일판 | 범주와 잔존만기의 할인율 격자. 액면가 약속 강도의 자산 쪽 측정값 후보 미추출 |
+| Changes to collateral eligibility in the Sterling Monetary Framework | 영란은행 2026년 6월 11일 시장 공고 | 적격성이 시점 함수라는 것과 등급 분할의 폐지 예정 미추출 |
 
 ---
 
@@ -286,6 +286,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 
 **구성원.** 무리별로 세며, **zip 밖 구성원도 그 무리의 편수에 든다.**
 
+<!-- INVENTORY-AGGREGATE -->
 | 무리 | 편수 | 그중 zip 밖 |
 |---|---|---|
 | O-1 | 20 | — |

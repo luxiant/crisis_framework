@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰둘을 돈다. 실패시키는 것 마흔둘과 보고만 하는 것 일곱과
+`docs/decisions/SPEC.md` §2 의 검사 쉰넷을 돈다. 실패시키는 것 마흔셋과 보고만 하는 것 여덟과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1088,7 +1088,7 @@ def check_21(led: Ledger, arc: str | None) -> Report:
 ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
-         "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52",
+         "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
          "29", "30"]
 
 
@@ -3188,6 +3188,170 @@ def check_52(led: Ledger) -> Report:
     return r
 
 
+# 검사 53 과 54 가 읽는 `INVENTORYMARK` 블록. `docs/baseline.md` 가 집계 표의 마커와 비고 칸의 표지
+# 낱말 둘을 든다. **블록이 비거나 키 하나가 빠지면 통과시키지 않는다.** 표지의 낱말을 코드에 박으면
+# 그 낱말을 바꾸는 회차가 인벤토리와 블록만 고쳤을 때 이 검사가 옛 낱말을 찾아 조용히 낡는다.
+INVENTORYMARK_BLOCK = re.compile(r"<!-- INVENTORYMARK:BEGIN -->\n(.*?)<!-- INVENTORYMARK:END -->", re.S)
+INVENTORYMARK_LINE = re.compile(r"^(INVENTORYMARK_[A-Z]+)=(.*)$")
+INVENTORYMARK_AGGREGATE = "INVENTORYMARK_AGGREGATE"
+INVENTORYMARK_CITED = "INVENTORYMARK_CITED"
+INVENTORYMARK_UNREAD = "INVENTORYMARK_UNREAD"
+INVENTORYMARK_KEYS = (INVENTORYMARK_AGGREGATE, INVENTORYMARK_CITED, INVENTORYMARK_UNREAD)
+# 검사 54 가 분포를 가르는 구간 이름. 읽기 대기열이 드는 `O-<n>` 꼴에서 유도하고 열거하지 않는다.
+# 열거하면 대기열에 구간이 하나 서는 회차가 이 목록을 잊어 그 구간의 행이 구간 밖으로 세어진다.
+READING_QUEUE_DOC = "docs/reading-queue-v0.md"
+QUEUE_SEGMENT = re.compile(r"(?<![0-9A-Za-z-])O-\d+(?![0-9A-Za-z-])")
+# 인벤토리의 무리는 `##` 절이며, 그 제목이 구간 이름과 공백으로 시작하면 그 구간의 무리다.
+INVENTORY_SECTION = re.compile(r"^##\s+(.+?)\s*$")
+INVENTORY_REQUIRED_MARK = "★"
+INVENTORY_OUT_OF_SEGMENT = "구간 밖"
+
+
+def inventorymark_block(led: Ledger) -> dict[str, str]:
+    """`INVENTORYMARK` 블록의 키와 값. 값이 빈 키는 들지 않는다."""
+    out: dict[str, str] = {}
+    for line in _baseline_block(led, INVENTORYMARK_BLOCK).splitlines():
+        m = INVENTORYMARK_LINE.match(line)
+        if m and m.group(2).strip():
+            out[m.group(1)] = m.group(2).strip()
+    return out
+
+
+def inventory_member_rows(text: str, aggregate: str
+                          ) -> tuple[list[tuple[int, list[str], str]], int, int]:
+    """구성원 행 (줄 번호, 칸, 그 행이 선 `##` 절의 제목) 과 마커로 뺀 표의 수와 그 표의 행 수.
+
+    **표를 마커로 가른다.** 표의 머리 줄 바로 앞 줄이 마커이면 그 표의 본문 행 전량을 유니버스에서
+    뺀다. 머리 칼럼의 이름으로 가르지 않는 까닭은 표가 늘 때 그 열거가 낡고 그 낡음을 어느 검사도
+    보지 않는다는 데 있다. 표의 행을 가르는 꼴은 검사 50 의 `inventory_members` 와 같다.
+    """
+    rows: list[tuple[int, list[str], str]] = []
+    lines = text.splitlines()
+    section = ""
+    n_tables = n_rows = 0
+    i = 0
+    while i < len(lines):
+        s = INVENTORY_SECTION.match(lines[i])
+        if s:
+            section = s.group(1)
+        head = md_cells(lines[i])
+        rule = md_cells(lines[i + 1]) if i + 1 < len(lines) else None
+        if head and rule and all(SPEC_TABLE_RULE.match(c) for c in rule if c):
+            marked = i > 0 and lines[i - 1].strip() == aggregate
+            if marked:
+                n_tables += 1
+            j = i + 2
+            while j < len(lines):
+                body = md_cells(lines[j])
+                if body is None:
+                    break
+                if marked:
+                    n_rows += 1
+                else:
+                    rows.append((j + 1, body, section))
+                j += 1
+            i = j
+            continue
+        i += 1
+    return rows, n_tables, n_rows
+
+
+def _inventory_rows(led: Ledger, r: Report
+                    ) -> tuple[list[tuple[int, list[str], str]], dict[str, str], int, int] | None:
+    """검사 53 과 54 가 함께 쓰는 유니버스. 블록이나 인벤토리를 읽지 못하면 그 사실을 위반으로 남긴다."""
+    marks = inventorymark_block(led)
+    missing = [k for k in INVENTORYMARK_KEYS if k not in marks]
+    if missing:
+        r.bad("docs/baseline.md 의 INVENTORYMARK 블록에 " + " · ".join(missing) + " 가 없다")
+        return None
+    inv = led.root / INVENTORY_DOC
+    if not inv.is_file():
+        r.bad(f"{INVENTORY_DOC} 이 없다")
+        return None
+    rows, n_tables, n_rows = inventory_member_rows(inv.read_text(encoding="utf-8"),
+                                                   marks[INVENTORYMARK_AGGREGATE])
+    # 유니버스가 비면 어느 행도 걸리지 않아 0 으로 난다. 검사 50 이 같은 요구를 둔다.
+    if not rows:
+        r.bad(f"{INVENTORY_DOC} 에서 구성원 행을 하나도 읽지 못했다")
+        return None
+    return rows, marks, n_tables, n_rows
+
+
+def check_53(led: Ledger) -> Report:
+    r = Report("53", "wiki53-inventory-member-marker",
+               "뭉치 인벤토리의 구성원 행마다 추출 기록 번호나 지목 참조 표지나 미추출 표지 가운데 "
+               "하나를 드는가", "fail")
+    got = _inventory_rows(led, r)
+    if got is None:
+        return r
+    rows, marks, n_tables, n_rows = got
+    cited, unread = marks[INVENTORYMARK_CITED], marks[INVENTORYMARK_UNREAD]
+    n_num = n_cited = n_unread = 0
+    for line, cells, _section in rows:
+        # 번호는 칸 전량에서 찾고 그 꼴은 검사 50 과 같다. 표지는 비고 칸 곧 마지막 칸에서만 찾는다.
+        has_num = any(INVENTORY_EXTRACTION_NO.search(c) for c in cells)
+        has_cited = cited in cells[-1]
+        has_unread = unread in cells[-1]
+        n_num += has_num
+        n_cited += has_cited
+        n_unread += has_unread
+        if not (has_num or has_cited or has_unread):
+            r.bad(f"{INVENTORY_DOC}:{line} 의 구성원 행이 번호도 표지도 들지 않는다: "
+                  f"| {' | '.join(cells)} |")
+    r.note(f"구성원 행 {len(rows)} · 번호를 든 행 {n_num} · 지목 참조 표지를 든 행 {n_cited} · "
+           f"미추출 표지를 든 행 {n_unread}")
+    r.note(f"마커로 뺀 표 {n_tables} · 그 표의 행 {n_rows}")
+    if n_tables == 0:
+        r.note("마커가 선 표가 없다. 집계 표가 있으면 그 행이 구성원 행으로 세어진다")
+    return r
+
+
+def check_54(led: Ledger) -> Report:
+    r = Report("54", "wiki54-inventory-unread-count",
+               "미추출 표지를 든 구성원 행의 계수와 그 구간별 분포", "report")
+    got = _inventory_rows(led, r)
+    if got is None:
+        return r
+    rows, marks, _n_tables, _n_rows = got
+    q = led.root / READING_QUEUE_DOC
+    if not q.is_file():
+        r.bad(f"{READING_QUEUE_DOC} 이 없다")
+        return r
+    segments = sorted(set(QUEUE_SEGMENT.findall(q.read_text(encoding="utf-8"))),
+                      key=lambda s: int(s[2:]))
+    if not segments:
+        r.bad(f"{READING_QUEUE_DOC} 에서 구간 이름을 하나도 읽지 못했다")
+        return r
+    unread = marks[INVENTORYMARK_UNREAD]
+    hits: list[tuple[int, str, str]] = []
+    for line, cells, section in rows:
+        if unread not in cells[-1]:
+            continue
+        seg = next((s for s in segments if section.startswith(s + " ")), None)
+        if seg is None:
+            label = INVENTORY_OUT_OF_SEGMENT
+        else:
+            star = (INVENTORY_REQUIRED_MARK if INVENTORY_REQUIRED_MARK in cells[0]
+                    else "비" + INVENTORY_REQUIRED_MARK)
+            label = f"{seg} {star}"
+        hits.append((line, label, cells[1] if len(cells) > 1 else ""))
+    dist: dict[str, int] = {}
+    for _line, label, _title in hits:
+        dist[label] = dist.get(label, 0) + 1
+    keys = sorted((k for k in dist if k != INVENTORY_OUT_OF_SEGMENT),
+                  key=lambda k: (int(k.split()[0][2:]), k))
+    if INVENTORY_OUT_OF_SEGMENT in dist:
+        keys.append(INVENTORY_OUT_OF_SEGMENT)
+    r.note(f"미추출 표지를 든 구성원 행 {len(hits)} · 구성원 행 {len(rows)}")
+    r.note("구간별 분포 " + (" · ".join(f"{k} {dist[k]}" for k in keys) if keys else "없음")
+           + f" (구간 이름은 {READING_QUEUE_DOC} 의 " + " · ".join(segments) + ")")
+    # 행마다 한 줄을 낸다. 음성 대조가 늘린 행을 그 줄로 찾으며, 계수만 내면 그 주입이 어느 행을
+    # 겨눴는지가 보고에 남지 않는다.
+    for line, label, title in hits:
+        r.note(f"{INVENTORY_DOC}:{line} — {label} — {title}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3204,6 +3368,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_41(led), check_42(led), check_43(led),
         check_44(led), check_45(led), check_46(led), check_47(led),
         check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
+        check_53(led), check_54(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3230,7 +3395,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰둘)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰넷)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

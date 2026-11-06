@@ -1735,6 +1735,57 @@ def inj_52_phase(root):
     return hid
 
 
+# ----------------------------------------------------- 검사 53 · 54 · 뭉치 인벤토리의 구성원 행 표지
+
+def _nc53_rows(root):
+    """사본의 인벤토리 경로와 줄과 구성원 행과 표지 낱말. 구성원 행을 고르는 쪽은 검증기의 함수를
+    그대로 부른다. 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히 공허해진다."""
+    led = check_wiki.Ledger(root)
+    marks = check_wiki.inventorymark_block(led)
+    f = root / check_wiki.INVENTORY_DOC
+    text = f.read_text(encoding="utf-8")
+    rows, _t, _r = check_wiki.inventory_member_rows(
+        text, marks[check_wiki.INVENTORYMARK_AGGREGATE])
+    if not rows:
+        raise SystemExit("사본의 인벤토리에서 구성원 행을 하나도 읽지 못했다")
+    return f, text.split("\n"), rows, marks[check_wiki.INVENTORYMARK_UNREAD]
+
+
+def inj_53_drop(root):
+    """구성원 행 하나에서 표지를 지운다.
+
+    **번호를 들지 않고 미추출 표지 하나만 든 행을 고른다.** 번호를 든 행에서 표지를 지우면 그 행이
+    번호로 통과해 이 주입이 겨눈 자리가 서지 않는다.
+    """
+    f, lines, rows, unread = _nc53_rows(root)
+    for line, cells, _sec in rows:
+        if unread in cells[-1] and not any(
+                check_wiki.INVENTORY_EXTRACTION_NO.search(c) for c in cells):
+            at = line - 1
+            k = lines[at].rfind(" " + unread)
+            if k < 0:
+                raise SystemExit("고른 구성원 행에서 표지를 다시 찾지 못했다")
+            lines[at] = lines[at][:k] + lines[at][k + len(unread) + 1:]
+            f.write_text("\n".join(lines), encoding="utf-8")
+            return f"{check_wiki.INVENTORY_DOC}:{line}"
+    raise SystemExit("번호 없이 미추출 표지만 든 구성원 행이 없어 주입할 자리가 없다")
+
+
+def inj_54_add(root):
+    """미추출 표지를 든 행을 하나 늘린다. 표지를 들지 않은 구성원 행 하나의 비고 칸 말미에 더한다."""
+    f, lines, rows, unread = _nc53_rows(root)
+    for line, cells, _sec in rows:
+        if unread not in cells[-1]:
+            at = line - 1
+            k = lines[at].rstrip().rfind("|")
+            if k <= 0:
+                raise SystemExit("고른 구성원 행의 마지막 칸을 찾지 못했다")
+            lines[at] = lines[at][:k].rstrip() + " " + unread + " " + lines[at][k:]
+            f.write_text("\n".join(lines), encoding="utf-8")
+            return f"{check_wiki.INVENTORY_DOC}:{line}"
+    raise SystemExit("미추출 표지를 들지 않은 구성원 행이 없어 주입할 자리가 없다")
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1826,6 +1877,8 @@ CASES = [
     ("51",  "wiki51-ledger-key-universe",  "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
     ("52",  "wiki52-open-arc-deferred-assignment", "열려 있는 아크를 ref 로 드는 차단 구멍 하나를 그 아크의 holes 에서 지운다", inj_52_arc, None),
     ("52",  "wiki52-open-arc-deferred-assignment", "그 구멍을 아크의 holes 에는 두고 모든 페이즈의 holes 에서 지운다", inj_52_phase, None),
+    ("53",  "wiki53-inventory-member-marker", "구성원 행 하나에서 표지를 지운다", inj_53_drop, None),
+    ("54",  "wiki54-inventory-unread-count", "미추출 표지를 든 행을 하나 늘린다", inj_54_add, None),
 ]
 
 
