@@ -68,7 +68,7 @@
 | ★ | The dollar, bank leverage and the deviation from CIP | Avdjiev·Du·Koch·Shin 2017 | E-15. **FX 스왑·CIP 이탈.** J-3 관측 과제 직결 |
 | | The dollar, bank leverage, and real economic activity | Erik·Lombardi·Mihaljek·Shin 2020 | 달러-레버리지 관계 변화 미추출 |
 | | Global dollar credit and carry trades | Bruno·Shin 2016 | 기업 달러 차입 미추출 |
-| | Currency depreciation and EM corporate distress | Bruno·Shin 2018 | 통화 불일치 실증. J-2 정의 검증 미추출 |
+| | Currency depreciation and EM corporate distress | Bruno·Shin 2018 | E-64. 통화 불일치가 순노출형과 조달형으로 갈리는 자리와 표시 통화의 공개 소스가 없다는 것 |
 | | Dollar and exports | Bruno·Shin 2022 | 달러 = 신용여건 지표 미추출 |
 | | Dollar beta and stock returns | Bruno·Shim·Shin 2022 | 11쪽 미추출 |
 | | Bond risk premia and the exchange rate | Hofmann·Shim·Shin | EM 현지통화채 미추출 |
