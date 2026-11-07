@@ -881,4 +881,4 @@ entry 배열이 그 값으로 선다. 최상위에 둘째 키를 더하면 병�
 - **필드를 늘리면 그것을 읽는 검사를 함께 세운다.** 아무도 안 읽는 필드는 뒤에 아무거나 담긴다
 - 스키마를 바꾸면 기존 항목이 깨진다. 원장은 수정 불가이므로 **필드 추가는 선택 필드로만 하고,
   기존 항목에 소급해 채우지 않는다**
-- **검사가 `docs/baseline.md` 의 기계 판독 블록을 읽으면 그 블록의 이름을 이 목록에 적는다.** 블록이 비어 있을 때 통과시키지 않는 것은 그 검사의 행이 든다. 지금 그런 블록은 `BASELINE` 과 `CQFIN` 과 `HEADING` 과 `DOCFORM` 과 `R11` 과 `FIRED` 과 `EXCL` 과 `SESSIONCLAUSE` 과 `POINTER` 와 `SOURCING` 과 `MIRROR` 와 `INVENTORYMARK` 와 `QUEUEMARK` 열셋이다. **읽는 검사가 없는 블록은 이 목록에 들지 않으며** 오염 어간 목록이 그 부류다. 그 조항의 탐지가 아직 서지 않아 그 블록을 읽는 검사가 없다
+- **검사가 `docs/baseline.md` 의 기계 판독 블록을 읽으면 그 블록의 이름을 이 목록에 적는다.** 블록이 비어 있을 때 통과시키지 않는 것은 그 검사의 행이 든다. 지금 그런 블록은 `BASELINE` 과 `CQFIN` 과 `HEADING` 과 `DOCFORM` 과 `R11` 과 `FIRED` 과 `EXCL` 과 `SESSIONCLAUSE` 과 `POINTER` 와 `SOURCING` 과 `MIRROR` 와 `INVENTORYMARK` 와 `QUEUEMARK` 와 `CLAUSEMUT` 열넷이다. **읽는 검사가 없는 블록은 이 목록에 들지 않으며** 오염 어간 목록이 그 부류다. 그 조항의 탐지가 아직 서지 않아 그 블록을 읽는 검사가 없다

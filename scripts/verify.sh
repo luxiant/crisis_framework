@@ -11,6 +11,8 @@
 #   step9-propfree   정의층 structure 필드와 inductive 생성자의 Prop 금지
 #   step5-mutation   변이 검사 — 최상위 theorem 과 example 의 결론 전체를 ¬ ( ) 로 감싸 반드시 실패함을 확인
 #                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
+#   step10-clausemut 논리 결합 변이 — 정의층과 관측층의 판정 반환 함수 본문에서 결합 하나를 뒤집은
+#                    사본이 통과하는 자리를 세어 docs/baseline.md 의 블록과 맞댄다 (늘면 실패)
 #   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 쉰아홉)
 #                    아크 종료 검사 셋은 첫 인자로 아크 이름을 주면 함께 돌고
 #                    주지 않으면 돌지 않는다 (`bash scripts/verify.sh <아크>`)
@@ -655,6 +657,152 @@ else
   done
 fi
 rm -rf "$mut_dir"
+
+step step10-clausemut "논리 결합 변이 — 판정 반환 함수의 증거가 덮는 범위"
+# 결론을 부정한 사본이 컴파일에 실패하는 것만으로는 그 사본이 어느 증거 위에서 재어졌는지가 서지
+# 않는다. 두 인자가 함께 참인 증거와 함께 거짓인 증거만 두면 곱과 합의 값이 그 둘에서 같으므로
+# 그 결합을 뒤집은 변이가 통과한다(A-8). 그래서 정의층과 관측층의 판정 반환 함수 본문에서 논리
+# 결합을 하나씩 뒤집은 사본을 만들어 그 사본이 elaborate 에 성공하는 자리를 센다.
+#
+# 판정 반환 함수는 결과 타입이 `Bool` 인 최상위 def 다. 판정을 `Bool` 반환 계산 함수로 준다는
+# 규율(C-10)이 그 부류를 정하므로, 구조체나 답할 항을 내는 def 는 그 안에 결합이 있어도 대상이
+# 아니다. 뒤집는 것은 본문의 `&&` 와 `||` 를 서로 바꾸는 것과 `decide` 안의 `∧` 와 `∨` 를 서로
+# 바꾸는 것이며, 한 사본에 한 자리만 바꾼다. 바꾼 문면은 그대로 다시 읽히므로 결합의 우선순위가
+# 그 사본의 뜻을 정한다. 대상은 그 두 층의 파일 전량에서 훑어 잡고 계수를 박지 않는다.
+#
+# 사본은 그 파일 하나만 elaborate 하고 전량 빌드하지 않는다. 그 함수를 다른 파일의 정리가 쓰더라도
+# 그 파일은 원본의 olean 을 읽으므로 그 정리는 이 단계의 증거가 아니다. 사본이 통과한 자리는
+# 실패시키지 않고 보고하며, 그 계수를 docs/baseline.md 의 블록과 맞대어 늘었을 때만 실패시킨다.
+# 뒤집은 함수 자신의 범위에서 오류가 나거나 구문 오류로 깨지면 그 사본은 결합을 재지 못한 것이므로
+# 거부로 세지 않고 실패로 센다. 사본은 임시 디렉터리에 만들고 돈 뒤에 지운다.
+cm_dir=$(mktemp -d)
+cm_list="$cm_dir/targets.tsv"
+mapfile -t CM_FILES < <(printf '%s\n' "${TARGETS[@]}" | grep -E '^CrisisFramework/(Definition|Observation)/')
+python3 - "$cm_dir" "${CM_FILES[@]}" > "$cm_list" <<'CMEOF'
+import pathlib, re, sys
+
+tmp, files = pathlib.Path(sys.argv[1]), sys.argv[2:]
+
+# 판정 반환 함수의 머리. 주석을 덮은 뒤 줄머리에 선 def 이며 속성과 가시성 수식을 앞에 둘 수 있다.
+DEF = re.compile(r'^(?:@\[[^\]\n]*\]\s*)?(?:private\s+|protected\s+)?def\s+([^\s(){}\[\]⟨⟩⦃⦄:]+)', re.M)
+# 선언의 끝. 본문과 match 갈래는 들여 쓰므로 줄머리에 글자가 선 다음 줄이 다음 항목이다.
+NEXT = re.compile(r'^\S', re.M)
+# 머리와 본문의 경계. `:=` 이거나 줄머리를 들여 쓴 match 갈래의 `|` 다.
+SPLIT = re.compile(r':=|\n[ \t]*\|')
+OPS = re.compile(r'&&|\|\||∧|∨')
+SWAP = {'&&': '||', '||': '&&', '∧': '∨', '∨': '∧'}
+
+
+def mask(src: str) -> str:
+    """주석과 문자열 리터럴을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다."""
+    out, i, n, depth = list(src), 0, len(src), 0
+    while i < n:
+        if depth == 0 and src[i] == '"':
+            j = i + 1
+            while j < n and src[j] != '"':
+                if src[j] == '\\' and j + 1 < n:
+                    out[j] = ' '
+                    j += 1
+                if src[j] != '\n':
+                    out[j] = ' '
+                j += 1
+            i = j + 1 if j < n else n
+            continue
+        if depth == 0 and src.startswith('--', i):
+            j = src.find('\n', i)
+            j = n if j < 0 else j
+            for k in range(i, j):
+                out[k] = ' '
+            i = j
+            continue
+        if src.startswith('/-', i):
+            depth += 1
+            out[i] = out[i + 1] = ' '
+            i += 2
+            continue
+        if depth > 0 and src.startswith('-/', i):
+            depth -= 1
+            out[i] = out[i + 1] = ' '
+            i += 2
+            continue
+        if depth > 0 and src[i] != '\n':
+            out[i] = ' '
+        i += 1
+    return ''.join(out)
+
+
+def line_of(src: str, k: int) -> int:
+    """offset 의 줄 번호. 칸 번호는 그 줄 머리에서 센 글자 수이며 바이트가 아니다."""
+    return src.count('\n', 0, k) + 1
+
+
+rows, serial = [], 0
+for f in files:
+    src = pathlib.Path(f).read_text(encoding='utf-8')
+    m = mask(src)
+    for d in DEF.finditer(m):
+        nl = m.find('\n', d.end())
+        nx = NEXT.search(m, nl + 1) if nl >= 0 else None
+        end = nx.start() if nx else len(m)
+        cut = SPLIT.search(m, d.end(), end)
+        if cut is None:
+            continue
+        if not m[d.end():cut.start()].rstrip().endswith('Bool'):
+            continue
+        first, last = line_of(src, d.start()), line_of(src, end - 1)
+        for o in OPS.finditer(m, cut.start(), end):
+            serial += 1
+            box = tmp / ('c%03d' % serial)
+            box.mkdir()
+            copy = box / 'Mutant.lean'
+            a, b = o.span()
+            copy.write_text(src[:a] + SWAP[o.group(0)] + src[b:], encoding='utf-8')
+            col = a - (src.rfind('\n', 0, a) + 1) + 1
+            rows.append('\t'.join([f, '%d:%d' % (line_of(src, a), col), d.group(1), o.group(0),
+                                   SWAP[o.group(0)], str(first), str(last), str(copy)]))
+
+sys.stdout.write(''.join(r + '\n' for r in rows))
+CMEOF
+mapfile -t cm_rows < "$cm_list"
+cm_cap=$(sed -n '/<!-- CLAUSEMUT:BEGIN -->/,/<!-- CLAUSEMUT:END -->/p' "$BASELINE_DOC" \
+  | grep -oE '^CLAUSEMUT_UNCOVERED=[0-9]+$' | cut -d= -f2)
+if [ -z "$cm_cap" ]; then
+  bad "$BASELINE_DOC 의 CLAUSEMUT 블록에서 CLAUSEMUT_UNCOVERED 를 읽지 못했다"
+fi
+if [ "${#cm_rows[@]}" -eq 0 ]; then
+  bad "변이 대상 0 — 정의층과 관측층에서 판정 반환 함수의 논리 결합을 하나도 잡지 못했다"
+else
+  per_file=$(cut -f1 "$cm_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
+  ok "변이 대상 ${#cm_rows[@]} ($per_file)"
+  # 사본마다 elaborate 를 따로 돌린다. 판정은 아래에서 원래 순서대로 하므로 병렬이 출력을 바꾸지 않는다.
+  cut -f8 "$cm_list" | xargs -P 4 -I{} sh -c 'lake env lean "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
+  cm_uncovered=0
+  for row in "${cm_rows[@]}"; do
+    IFS=$'\t' read -r c_file c_line c_name c_from c_to c_first c_last c_copy <<< "$row"
+    c_where="$c_file:$c_line $c_name 의 \`$c_from\` → \`$c_to\`"
+    if [ "$(cat "$c_copy.rc")" = 0 ] && ! grep -q 'error' "$c_copy.out"; then
+      cm_uncovered=$((cm_uncovered + 1))
+      rep "$c_where 변이가 통과함 — 그 결합을 가리는 증거가 그 파일에 없다"
+    elif grep -qE "$mut_syntax_re" "$c_copy.out"; then
+      bad "$c_where 사본이 구문 오류로 깨져 그 결합이 재어지지 않았다 ($(grep -oE "$mut_syntax_re" "$c_copy.out" | head -1))"
+    elif grep -oE 'Mutant\.lean:[0-9]+:[0-9]+: error' "$c_copy.out" | cut -d: -f2 \
+         | awk -v a="$c_first" -v b="$c_last" '$1 >= a && $1 <= b {f=1} END {exit !f}'; then
+      bad "$c_where 사본이 그 함수 자신에서 깨져 그 결합이 재어지지 않았다"
+    else
+      ok "$c_where 변이 거부됨 ($(grep -cE 'error' "$c_copy.out") error) — 증거가 그 결합을 가린다"
+    fi
+  done
+  if [ -n "$cm_cap" ]; then
+    if [ "$cm_uncovered" -gt "$cm_cap" ]; then
+      bad "통과한 변이 $cm_uncovered 가 CLAUSEMUT_UNCOVERED=$cm_cap 보다 많다 — 증거 없이 결합이 새로 섰다"
+    elif [ "$cm_uncovered" -lt "$cm_cap" ]; then
+      rep "통과한 변이 $cm_uncovered 가 CLAUSEMUT_UNCOVERED=$cm_cap 보다 $((cm_cap - cm_uncovered)) 적다 — 그 결합을 가리는 증거가 섰다"
+    else
+      ok "통과한 변이 $cm_uncovered / ${#cm_rows[@]} — CLAUSEMUT_UNCOVERED=$cm_cap 과 같다"
+    fi
+  fi
+fi
+rm -rf "$cm_dir"
 
 # 첫 인자를 아크 이름으로 읽어 원장 검증기에 `--arc-close` 로 넘긴다. 주지 않으면 그 인자
 # 없이 부르므로 호출이 글자대로 그대로다. 아크를 닫는 커밋이 한 아크에서 가장 무거운 커밋인데,
