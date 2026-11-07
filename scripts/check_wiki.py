@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰일곱을 돈다. 실패시키는 것 마흔다섯과 보고만 하는 것 아홉과
+`docs/decisions/SPEC.md` §2 의 검사 쉰아홉을 돈다. 실패시키는 것 마흔일곱과 보고만 하는 것 아홉과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -3503,15 +3503,16 @@ def check_57(led: Ledger) -> Report:
 
 
 # 검사 58 이 읽는 `QUEUEMARK` 블록. `docs/baseline.md` 가 읽기 대기열의 지목 참조 대기 표의 절 제목과
-# 그 표의 표지 낱말 둘을 든다. **블록이 비거나 키 하나가 빠지면 통과시키지 않는다.** 제목과 낱말을
-# 코드에 박으면 그것을 바꾸는 회차가 대기열과 블록만 고쳤을 때 이 검사가 옛 값을 찾아 조용히 낡는다.
-# 검사 53 의 `INVENTORYMARK` 와 같은 형이다.
+# 그 표의 표지 낱말을 든다. **블록이 비거나 절 제목이나 낱말이 하나도 없으면 통과시키지 않는다.** 제목과
+# 낱말을 코드에 박으면 그것을 바꾸는 회차가 대기열과 블록만 고쳤을 때 이 검사가 옛 값을 찾아 조용히
+# 낡는다. 검사 53 의 `INVENTORYMARK` 와 같은 형이다.
+#
+# **낱말의 수를 코드에 박지 않는다.** 절 제목의 키를 뺀 나머지 키 전량이 표지의 낱말이며, 블록이 드는
+# 것을 그대로 센다. 박아 두면 표지를 더하는 회차가 블록과 대기열만 고쳤을 때 새 낱말을 든 행이 표지 없는
+# 행으로 걸리고, 낱말을 빼는 회차에서는 옛 낱말을 든 행이 표지를 든 것으로 조용히 통과한다.
 QUEUEMARK_BLOCK = re.compile(r"<!-- QUEUEMARK:BEGIN -->\n(.*?)<!-- QUEUEMARK:END -->", re.S)
 QUEUEMARK_LINE = re.compile(r"^(QUEUEMARK_[A-Z]+)=(.*)$")
 QUEUEMARK_SECTION = "QUEUEMARK_SECTION"
-QUEUEMARK_WAITING = "QUEUEMARK_WAITING"
-QUEUEMARK_SPENT = "QUEUEMARK_SPENT"
-QUEUEMARK_KEYS = (QUEUEMARK_SECTION, QUEUEMARK_WAITING, QUEUEMARK_SPENT)
 # 표지가 서는 칸의 자리. 첫 칸이 편의 이름이고 표지는 그 다음 칸 곧 대상 구멍의 칸에 선다. 그 표에
 # 칸을 둘만 드는 행이 있고 그 행도 이 자리에 표지를 들므로 마지막 칸으로 두지 않는다. 마지막 칸으로
 # 두면 칸을 셋 드는 행에서 기대 재료의 산문을 읽게 되어 표지를 든 행이 표지 없는 행으로 걸린다.
@@ -3519,13 +3520,18 @@ QUEUEMARK_CELL = 1
 
 
 def queuemark_block(led: Ledger) -> dict[str, str]:
-    """`QUEUEMARK` 블록의 키와 값. 값이 빈 키는 들지 않는다."""
+    """`QUEUEMARK` 블록의 키와 값. 값이 빈 키는 들지 않으며 블록의 줄 순서를 지킨다."""
     out: dict[str, str] = {}
     for line in _baseline_block(led, QUEUEMARK_BLOCK).splitlines():
         m = QUEUEMARK_LINE.match(line)
         if m and m.group(2).strip():
             out[m.group(1)] = m.group(2).strip()
     return out
+
+
+def queuemark_words(marks: dict[str, str]) -> list[tuple[str, str]]:
+    """블록이 드는 표지의 (키, 낱말). 절 제목의 키를 뺀 나머지 전량이며 블록의 줄 순서를 지킨다."""
+    return [(k, v) for k, v in marks.items() if k != QUEUEMARK_SECTION]
 
 
 def queue_section_rows(text: str, heading: str) -> tuple[int | None, list[tuple[int, list[str]]]]:
@@ -3561,12 +3567,15 @@ def queue_section_rows(text: str, heading: str) -> tuple[int | None, list[tuple[
 
 def check_58(led: Ledger) -> Report:
     r = Report("58", "wiki58-queue-marker",
-               "읽기 대기열의 지목 참조 대기 표의 행마다 대기 표지와 소진 표지 가운데 하나를 드는가",
+               "읽기 대기열의 지목 참조 대기 표의 행마다 대기 표지와 조달 표지와 소진 표지 가운데 하나를 드는가",
                "fail")
     marks = queuemark_block(led)
-    missing = [k for k in QUEUEMARK_KEYS if k not in marks]
-    if missing:
-        r.bad("docs/baseline.md 의 QUEUEMARK 블록에 " + " · ".join(missing) + " 가 없다")
+    words = queuemark_words(marks)
+    if QUEUEMARK_SECTION not in marks:
+        r.bad(f"docs/baseline.md 의 QUEUEMARK 블록에 {QUEUEMARK_SECTION} 가 없다")
+        return r
+    if not words:
+        r.bad("docs/baseline.md 의 QUEUEMARK 블록이 표지의 낱말을 하나도 들지 않는다")
         return r
     q = led.root / READING_QUEUE_DOC
     if not q.is_file():
@@ -3581,23 +3590,23 @@ def check_58(led: Ledger) -> Report:
     if not rows:
         r.bad(f"{READING_QUEUE_DOC}:{at} 의 절에서 표의 행을 하나도 읽지 못했다")
         return r
-    waiting, spent = marks[QUEUEMARK_WAITING], marks[QUEUEMARK_SPENT]
-    n_wait = n_spent = 0
+    count = {v: 0 for _k, v in words}
     for line, cells in rows:
         cell = cells[QUEUEMARK_CELL] if len(cells) > QUEUEMARK_CELL else ""
-        w, s = waiting in cell, spent in cell
-        # 둘을 함께 든 행도 걸린다. 이 검사가 잡으려는 것이 소진된 행이 대기 표지를 든 채 남는 것이므로
-        # 둘 가운데 하나를 요구하는 문면을 둘 다 드는 것으로 채우면 그 탐지가 빈다.
-        if w and s:
-            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 대기 표지와 소진 표지를 함께 든다: {cells[0]}")
-        elif not (w or s):
-            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 대기 표지도 소진 표지도 들지 않는다: {cells[0]}")
+        hit = [v for _k, v in words if v in cell]
+        # 둘 이상을 든 행도 걸린다. 이 검사가 잡으려는 것이 소진된 행이 대기 표지를 든 채 남는 것이므로
+        # 하나를 요구하는 문면을 여럿을 드는 것으로 채우면 그 탐지가 빈다.
+        if len(hit) > 1:
+            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 표지 {len(hit)} 개를 함께 든다 "
+                  f"({' · '.join(hit)}): {cells[0]}")
+        elif not hit:
+            r.bad(f"{READING_QUEUE_DOC}:{line} 의 행이 어느 표지도 들지 않는다: {cells[0]}")
         else:
-            n_wait += w
-            n_spent += s
+            count[hit[0]] += 1
     r.note(f"절 `{heading}` ({READING_QUEUE_DOC}:{at}) 의 표의 행 {len(rows)} · "
-           f"대기 표지를 든 행 {n_wait} · 소진 표지를 든 행 {n_spent}")
-    r.note(f"표지의 낱말 `{waiting}` · `{spent}` · 표지를 찾는 칸은 {QUEUEMARK_CELL + 1} 번째 칸")
+           + " · ".join(f"`{v}` 표지를 든 행 {n}" for v, n in count.items()))
+    r.note(f"표지의 낱말 {len(words)} (" + " · ".join(f"{k}={v}" for k, v in words) + ") · "
+           f"표지를 찾는 칸은 {QUEUEMARK_CELL + 1} 번째 칸")
     return r
 
 
@@ -3681,7 +3690,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰일곱)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰아홉)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

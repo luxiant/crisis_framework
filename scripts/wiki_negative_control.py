@@ -1856,6 +1856,45 @@ def inj_57_numeral(root):
     return sentence
 
 
+def inj_58_unmarked(root):
+    """표지를 들지 않는 행을 넣는다.
+
+    지목 참조 대기 표의 마지막 행 뒤에 칸 셋의 행을 하나 더한다. 그 행의 칸이 블록의 어느 낱말도 품지
+    않음을 넣기 전에 단언한다. 품으면 그 행이 표지를 든 행으로 읽혀 이 주입이 겨눈 자리가 서지 않는다.
+    """
+    led = check_wiki.Ledger(root)
+    marks = check_wiki.queuemark_block(led)
+    words = [v for _k, v in check_wiki.queuemark_words(marks)]
+    f = root / check_wiki.READING_QUEUE_DOC
+    lines = f.read_text(encoding="utf-8").split("\n")
+    _at, rows = check_wiki.queue_section_rows("\n".join(lines),
+                                              marks[check_wiki.QUEUEMARK_SECTION])
+    if not rows:
+        raise SystemExit("지목 참조 대기 표의 행이 없어 주입할 자리가 없다")
+    row = "| 주입한 편 | 주입한 구멍 | 주입한 재료 |"
+    if any(w in row for w in words):
+        raise SystemExit("주입할 행이 표지의 낱말을 품는다")
+    last = rows[-1][0]
+    lines.insert(last, row)
+    f.write_text("\n".join(lines), encoding="utf-8")
+    return f"{check_wiki.READING_QUEUE_DOC}:{last + 1}"
+
+
+def inj_59_dup(root):
+    """같은 줄기의 파일을 하나 더 둔다. 번호는 실재하는 기록과 겹치지 않는 두 자리로 고른다."""
+    d = root / "docs" / "extractions"
+    files = [f for f in sorted(d.glob("extraction-*.md")) if check_wiki.EXTRACTION_FILE_NO.match(f.name)]
+    if not files:
+        raise SystemExit("번호를 든 추출 기록이 없어 주입할 자리가 없다")
+    used = {int(check_wiki.EXTRACTION_FILE_NO.match(f.name).group(1)) for f in files}
+    n = next(k for k in range(99, 9, -1) if k not in used)
+    src = files[-1]
+    stem = src.name[check_wiki.EXTRACTION_FILE_NO.match(src.name).end():]
+    dst = d / f"extraction-{n:02d}-{stem}"
+    dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    return dst.name
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -1952,6 +1991,8 @@ CASES = [
     ("55",  "wiki55-phase-cq-in-arc",        "페이즈 레코드에 그 아크의 cq 에 없는 번호를 넣는다", inj_55_foreign, None),
     ("56",  "wiki56-arc-cq-phase-assignment", "페이즈 레코드에서 그 번호를 지운다", inj_56_drop, None),
     ("57",  "wiki57-cq-count-numeral",       "그 머리 블록에 항의 수를 수사로 적는다", inj_57_numeral, None),
+    ("58",  "wiki58-queue-marker",           "표지를 들지 않는 행을 넣는다", inj_58_unmarked, None),
+    ("59",  "wiki59-extraction-stem-unique", "같은 줄기의 파일을 하나 더 둔다", inj_59_dup, None),
 ]
 
 

@@ -36,9 +36,9 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `holder-6` (2026-11-05, `b78f94f`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `currency-3` (2026-11-06, `5c8e039`) |
-| 관측층 | 무차원 | `[]` | `currency-3` (2026-11-06, `5c8e039`) |
-| 용어집 | 없음 | `[]` | `currency-3` (2026-11-06, `5c8e039`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `currency-4` (2026-11-06, `bf1ae49`) |
+| 관측층 | 무차원 | `[]` | `currency-4` (2026-11-06, `bf1ae49`) |
+| 용어집 | 없음 | `[]` | `currency-4` (2026-11-06, `bf1ae49`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -603,6 +603,7 @@ INVENTORYMARK_UNREAD=미추출
 <!-- QUEUEMARK:BEGIN -->
 QUEUEMARK_SECTION=## 1. 지목 참조 대기 (S-7)
 QUEUEMARK_WAITING=대기
+QUEUEMARK_SOURCED=조달
 QUEUEMARK_SPENT=소진
 <!-- QUEUEMARK:END -->
 
