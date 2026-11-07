@@ -5373,6 +5373,420 @@
    "basis": "그 선언의 문서화 문면이 든 기각 문단을 별지의 실물에서 뽑았고, 그 문단이 서는 선언마다 기각 레지스터에 대응 항목이 선다는 요구가 그 자리에 걸린다. 경계 안 선언의 기각 문단마다 그 선언을 `for_decl` 로 드는 항목이 있어야 한다는 집행 문면의 요구를 검사가 양방향으로 보므로, 이 항목이 그 대조의 우변으로 선다.",
    "for_decl": "CrisisFramework.Observation.transmissionChannels",
    "related": []
+  },
+  {
+   "id": "CF-2980",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "성립 조건을 수취자 하나에 붙는 술어로 두고 자리의 열거를 세우지 않는 안",
+   "reason": "한 발행자의 공시가 결정 기준 넷을 열거하고 그 가운데 하나가 발행자가 상대의 통화를 받을 필요를 드는 것이어서 수취자의 성질이 아니라 두 주체 사이의 관계다. 술어를 수취자 하나에 붙이면 그 넷째가 담길 자리가 없다.",
+   "for": "성립 조건이 붙는 자리의 열거",
+   "statement": "AdmissionLocus 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.AdmissionLocus",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2981",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "성립 조건의 기준을 발행자별 술어로 담아 그 내용을 구조가 들게 하는 안",
+   "reason": "아크의 첫 페이즈가 그 기준이 발행자마다 다르고 부호까지 뒤집힌다고 판정했으므로 내용을 담으면 어느 발행자의 넷을 담을지가 그 자리에서 다시 판단된다. 공공 기관 문면이 그 기준이 공시에서 유도되지 않고 추정으로 복원된다고 적어 담는 값의 원천이 공시가 아니라 추정이다.",
+   "for": "성립 조건의 거처를 담는 구조체",
+   "statement": "AdmissionCriteria 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.AdmissionCriteria",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2982",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "기본 약정과 개별 거래를 한 타입으로 두고 활성화 여부를 필드로 받는 안",
+   "reason": "발동되지 않은 잔량이 금융자산과 부채의 경계 밖이라 활성화 전에는 청구권이 서지 않으므로 그 둘이 같은 타입에 들면 색인이 비는 자리가 생긴다. 국제 기구의 지침이 약정의 기간과 개별 거래의 만기를 서로 다른 축으로 두고 뒤의 것이 앞의 것을 넘을 수 있다고 적어 그 둘을 자기 문면으로 가른다.",
+   "for": "기본 약정 하나를 담는 구조체",
+   "statement": "CentralBankSwapLine 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CentralBankSwapLine",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2983",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "상시 지위를 열거 필드로 저장하고 예정 종료일과 따로 두는 안",
+   "reason": "한 발행자의 보도자료가 상시의 뜻을 추가 통지가 있을 때까지 유지되는 약정으로 풀어 그 지위가 상태가 아니라 사건의 부재로 정의되며, 같은 공시가 그 기간 축의 두 값이 표의 만료일 칸으로 나타난다고 적으므로 축을 따로 저장하면 그 둘이 갈릴 수 있다.",
+   "for": "상시 지위를 유도하는 판정 함수",
+   "statement": "CentralBankSwapLine.isStanding 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CentralBankSwapLine.isStanding",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2984",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "한도의 부재를 금액 영으로 담고 선택 타입을 쓰지 않는 안",
+   "reason": "금액 항이 상수와 신호와 곱과 합의 넷뿐이고 그 넷 가운데 어느 것도 한도의 부재를 뜻하지 않음을 이 페이즈가 정리로 세웠으므로, 영으로 담으면 한도가 영인 약정과 무제한인 약정이 같은 값으로 선다.",
+   "for": "무제한 지위를 유도하는 판정 함수",
+   "statement": "CentralBankSwapLine.isUncapped 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CentralBankSwapLine.isUncapped",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2985",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "재대출 적격성을 약정의 필드로 두고 별도 구조체를 세우지 않는 안",
+   "reason": "공급하는 쪽의 질의응답이 받은 외화를 다시 대출하는 조건을 수취자가 스스로 정하고 공표한다고 적으므로 그 조건의 주체가 수취자이고 약정이 아니다. 한 수취자가 여러 발행자와 약정을 가지면 그 적격성이 약정마다 중복으로 서고 그 중복이 서로 다른 값을 가질 수 있다.",
+   "for": "재대출 적격성을 담는 구조체",
+   "statement": "OnlendingEligibility 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.OnlendingEligibility",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2986",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "도달 범위를 단계 수를 받는 재귀로 두고 담보 사슬의 선례를 그대로 옮기는 안",
+   "reason": "그 고리 둘이 서로 다른 자리에서 나와 첫째가 약정 자신의 수취자 필드에서 나오고 둘째가 재대출 적격성 구조체에서 나오므로 재귀로 접으면 그 가름이 사라진다. 담보 사슬은 같은 종류의 엣지가 몇 번이고 이어지므로 단계 수가 인자로 서야 하는데 여기서는 고리의 수가 둘로 고정되고, 단계 수를 받으면 구조적 도달 범위가 그 수에 달려 있게 되어 답할 항의 기각 문단이 그 범위를 유한 그래프의 도달 가능성으로 둔 것과 어긋난다.",
+   "for": "도달 범위를 내는 판정 함수",
+   "statement": "CentralBankSwapLine.reaches 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CentralBankSwapLine.reaches",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2987",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "약정 하나에 족 축약을 붙이고 집합의 구조체를 세우지 않는 안",
+   "reason": "관측층의 답할 항이 받는 타입이 약정 하나이므로 개체에 족을 붙이면 그 서명이 받을 것이 약정 하나가 아니라 약정의 시점열이 된다. 청구권을 개체로 두고 그 집합을 색인과 배정의 구조체로 두고 족 축약을 그 집합에 붙인 선례가 정의층에 서 있다.",
+   "for": "약정의 집합을 담는 구조체",
+   "statement": "SwapLineNetwork 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.SwapLineNetwork",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2988",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "시점 인덱스를 약정의 필드로 두고 족 축약을 세우지 않는 안",
+   "reason": "L-13 이 정의층 대상에 시점 인덱스를 요구하는 것이 타입에 걸리고 그 위의 술어에는 걸리지 않으며, 앞 페이즈들이 통화 등급과 불일치와 전달을 전부 족 축약의 꼴로 세운 선례가 있다. 필드로 두면 한 약정이 자기 시점을 들어 집합이 시점마다 변하는 것을 담지 못한다.",
+   "for": "시점마다의 약정 집합을 드는 족 축약",
+   "statement": "SwapLineNetworkFamily 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.SwapLineNetworkFamily",
+   "related": [
+    "CF-2975"
+   ]
+  },
+  {
+   "id": "CF-2989",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "앞 아크의 통화 불일치 입도 열거를 재사용하고 새 열거를 세우지 않는 안",
+   "reason": "그 열거가 주체 단위와 관할권 단위 둘을 들고 쌍 단위를 들지 않으며, 그 문면이 청구권이 표시 통화를 필드 하나로 받아 거래 입도에서는 불일치가 구조적으로 서지 않으므로 그 입도를 담지 않는다고 적어 자기가 통화 불일치에 전용임을 밝힌다. 생성자를 더하면 그 문면이 거짓이 된다.",
+   "for": "스왑 라인의 값을 내는 입도 열거",
+   "statement": "SwapLineGranularity 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.SwapLineGranularity",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2990",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "값의 성질을 가르는 칸을 두지 않고 경로의 축만 받는 안",
+   "reason": "국제 기구의 지침이 공표 자료를 쓴 읽는 쪽의 계산에서 유도된 정보라면 그것이 추정이고 당국이 제공한 공식 자료가 아님을 투명하게 밝혀야 한다고 적고 그 사상이 공식 보고인지 추정인지가 명세의 칸으로 서야 한다고 자기 문면으로 적으므로, 그 칸을 두지 않으면 추정이 관측으로 읽힌다.",
+   "for": "값의 성질을 가르는 열거",
+   "statement": "MeasurementProvenance 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.MeasurementProvenance",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2991",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "축을 한 칸으로 접어 그 경로가 약정을 읽는가만 받는 안",
+   "reason": "한 발행자의 정책 수단 면이 상시 상대방을 열거하면서 한도 칸을 두지 않고 그 결손이 같은 발행자의 다른 문면에서도 메워지지 않으므로, 한 칸으로 접으면 상대방을 내는 참인 축이 한도를 내지 못하는 거짓인 축을 덮는다. 앞 아크의 전달 경로 선언이 같은 사유로 축마다 칸을 두었다.",
+   "for": "축마다 칸을 두는 경로 구조체",
+   "statement": "SwapLineChannel 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.SwapLineChannel",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2992",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "어느 축도 내지 않는 경로를 인스턴스로 두고 전량 판정을 세우지 않는 안",
+   "reason": "국제 기구의 지침이 측정 경로 다섯을 들고 그 가운데 넷이 기밀이거나 추론을 요구한다고 적되 어느 축도 내지 않는 경로를 들지 않으므로, 그 인스턴스를 두면 문면에 없는 자리를 구조가 세운다. 소스 없음이 경로의 부재가 아니라 축의 거짓으로 서는 것을 전량 판정이 받친다.",
+   "for": "경로가 축을 하나라도 내는지를 내는 판정 함수",
+   "statement": "SwapLineChannel.readsAnyFact 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.SwapLineChannel.readsAnyFact",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2993",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "그 경로가 재대출 적격성도 낸다고 보는 안",
+   "reason": "그 표가 이 발행자의 상대방만 들고 그 상대방들이 서로 또는 제삼자와 맺은 약정을 들지 않으며, 재대출의 조건은 수취 중앙은행이 자기 공시로 내므로 그 표에 서지 않는다.",
+   "for": "공급 중앙은행의 상대방 표를 드는 경로",
+   "statement": "supplierCounterpartyTable 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.supplierCounterpartyTable",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2994",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "그 경로가 공급자 쪽도 덮는다고 보는 안",
+   "reason": "그 조건의 공시 주체가 수취 중앙은행이고 그 문면이 자기 관할의 기관을 대상으로 두므로 공급자 쪽의 약정 지위가 그 자리에 서지 않는다. 발행자의 공시를 읽어도 재대출의 조건이 서지 않는 것과 대칭이다.",
+   "for": "수취 중앙은행의 재대출 조건 공표를 드는 경로",
+   "statement": "recipientOnlendingTerms 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.recipientOnlendingTerms",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2995",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "그 경로가 약정의 한도도 낸다고 보는 안",
+   "reason": "국제 기구의 지침이 요청 중앙은행에 활성화된 자금만 거시 통계에 기재하고 기본 약정의 최대 금액은 기재하지 않는다고 적고 미활성 자원을 금융자산과 부채의 경계 밖으로 두므로, 그 경로가 한도를 내지 않는다.",
+   "for": "거시 통계의 활성화된 자금 기재를 드는 경로",
+   "statement": "macroStatisticsActivated 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.macroStatisticsActivated",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2996",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "그 경로를 공식 보고로 두고 추정으로 두지 않는 안",
+   "reason": "국제 기구의 지침이 그 템플릿의 특정 구획에서 관련 부채의 값으로 인출 규모를 유도할 수 있다고 추측형으로 적고 그 셋이 전부 추측형으로 서술되므로 그 값의 실재가 보고국마다 다르다고 적으므로, 그 값이 당국이 제공한 공식 자료가 아니라 읽는 쪽의 유도다.",
+   "for": "준비자산 템플릿에서 인출 규모를 유도하는 경로",
+   "statement": "reserveTemplateDerived 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.reserveTemplateDerived",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2997",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "그 경로가 접근의 셋째 층인 가용을 내지 않는다고 보는 안",
+   "reason": "국제 기구의 지침이 연차 재무제표가 이자율과 부채의 만기와 활성화 조건과 사용 제한에 대한 통찰을 줄 수 있다고 적고 사용 제한의 예로 교역 결제에만 쓰고 채무 상환에는 쓰지 않는 것을 들므로, 사용 조건이 실재하는 범주이고 그 값의 거처가 수취자의 재무제표다.",
+   "for": "수취 중앙은행의 감사된 연차 재무제표를 드는 경로",
+   "statement": "recipientAnnualAccounts 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.recipientAnnualAccounts",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2998",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "공표 경로가 아닌 자리를 경로로 두지 않고 공개 경로만 세우는 안",
+   "reason": "국제 기구의 지침이 측정 경로 다섯 가운데 첫째를 당국이 양자로 제공하는 것이므로 공표 경로가 아니라고 적으므로 그 자리가 실재한다. 두지 않으면 소스 없음이 축의 거짓으로만 보이고 자료가 어디엔가 있으면서 밖에서 읽히지 않는다는 사실이 사라진다.",
+   "for": "당국이 양자로만 제공하는 기밀 정보를 드는 경로",
+   "statement": "confidentialBilateral 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.confidentialBilateral",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-2999",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "기밀 경로를 공개 경로 목록에 함께 넣는 안",
+   "reason": "그 경로의 수신자가 공개 관측자가 아니므로 목록에 넣으면 밖에서 읽히지 않는 자료가 읽히는 것으로 세어지고, 경로 전량에서 거짓으로 서는 축을 재는 정리가 그 자리에서 거짓이 된다.",
+   "for": "공개 경로 전량을 드는 목록",
+   "statement": "publicChannels 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.publicChannels",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-3000",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "쌍의 덮임을 경로 하나로 재고 목록을 받지 않는 안",
+   "reason": "한 경로가 두 고리를 다 내지 않아서 발행자의 상대방 표는 적격성을 내지 않고 수취자의 재대출 조건 공표는 공급자 쪽을 덮지 않으므로, 경로 하나를 받으면 어느 쪽 고리가 서지 않는지가 그 자리에서 갈리지 않는다. 도달 범위의 쌍별 값이 한 문면에서 유도되지 않는 것이 그 사유다.",
+   "for": "경로 목록이 그 약정의 쌍을 덮는지를 내는 판정 함수",
+   "statement": "coversPair 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.coversPair",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-3001",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "적격성의 소스를 쌍의 덮임과 한 칸으로 접는 안",
+   "reason": "그 적격성의 거처가 수취자의 공시이고 그 거처가 수취자마다 다르므로 쌍을 덮는 경로와 적격성을 내는 경로가 서로 다른 입도에 선다. 접으면 쌍을 덮는 경로가 적격성도 내는 것으로 세어진다.",
+   "for": "경로 목록이 그 수취자의 적격성을 내는지를 내는 판정 함수",
+   "statement": "readsOnlending 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.readsOnlending",
+   "related": [
+    "CF-2976"
+   ]
+  },
+  {
+   "id": "CF-3002",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-5",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "두 고리의 소스를 합으로 묶어 어느 하나라도 서면 판정을 내는 안",
+   "reason": "한 고리만 서는 자리에서 도달 범위가 판정된 것으로 서는데 그 자리의 값이 관측되지 않는다. 국제 기구의 지침이 투명성이 공급자마다 크게 다르고 어느 쪽은 총계 자료만 제공한다고 적어 같은 변수의 측정 가능성이 발행자에 걸리므로, 합으로 묶으면 그 갈림이 사라진다. 결정 세션의 컨테이너에서 그 변이를 돌려 증거를 늘린 뒤에야 거부되는 것을 확인했다.",
+   "for": "답할 항을 경로 목록과 적격성의 족에 걸어 조립하는 함수",
+   "statement": "swapLineReachVia 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.swapLineReachVia",
+   "related": [
+    "CF-2976"
+   ]
   }
  ]
 }

@@ -251,6 +251,15 @@ inductive Concept where
       관계이며, 그 가능성이 그 주체의 청구권을 보유한 주체의 제약 인자로 옮겨 가는 뒤 고리는
       조달처가 없어 이 회차가 등재하지 않았다. -/
   | currencyMismatchTransmission
+  /-- 중앙은행 유동성 라인. 한 중앙은행이 다른 중앙은행에 자기 통화를 공급하는 기본 약정이며,
+      공급의 대가로 무엇을 받는가가 그 아래의 갈래를 가른다. -/
+  | centralBankLiquidityLine
+  /-- 중앙은행 스왑 라인. 상대 중앙은행의 통화를 대가로 받는 유동성 라인이며, 그 대가가 만기에
+      같은 환율로 되돌아가므로 공급자가 환위험을 지지 않는다. -/
+  | centralBankSwapLine
+  /-- 중앙은행 레포 라인. 적격 담보를 대가로 받는 유동성 라인이며, 그 담보가 공급자의 자국 통화
+      표시 국채로 제한되므로 상대 통화의 잔고가 공급자에게 서지 않는다. -/
+  | centralBankRepoLine
   deriving DecidableEq, Repr
 
 /--
@@ -824,6 +833,9 @@ def registry : List ConceptRel :=
   , .refines .domesticCurrency .currency
   , .refines .currencyPositionMismatch .currencyMismatch
   , .refines .currencyFundingLinkMismatch .currencyMismatch
+  , .refines .centralBankSwapLine .centralBankLiquidityLine
+  , .refines .centralBankRepoLine .centralBankLiquidityLine
+  , .excludes .centralBankSwapLine .centralBankRepoLine
   ]
 
 end CrisisFramework.Glossary
