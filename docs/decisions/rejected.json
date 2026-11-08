@@ -5787,6 +5787,294 @@
    "related": [
     "CF-2976"
    ]
+  },
+  {
+   "id": "CF-3081",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "풋 넷의 집합을 포함 관계로 비교해 그 순서에서 공적 풋 도달을 유도하는 안",
+   "reason": "단계의 비교를 선언한 자리가 같은 포함으로 순서를 유도하는 안을 이미 기각했고 그 사유가 주권의 풋 집합이 은행의 풋 집합을 포함하지 않는다는 것이다. 이 자리에서도 그 포함이 단계의 순서와 어긋나며, 이 회차의 사전 검사가 그 꼴로 비교하는 보존이 거짓임을 열거 전수로 확인했다.",
+   "for": "그 단계가 공적 유동성 풋에 닿는가",
+   "statement": "reachesPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.reachesPublicPut",
+   "related": [
+    "CF-3077"
+   ]
+  },
+  {
+   "id": "CF-3082",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "공적 풋 둘을 따로 두어 술어를 둘로 가르는 안",
+   "reason": "두 풋이 같은 중앙은행에 달려 있어 그 측정 소스가 하나다. 가르면 한 풋에 닿는 것이 다른 풋의 결손을 덮으면서 그 가름의 근거가 아무 데서도 오지 않으며, 관측층의 긴급 조달 공시 경로가 공적 풋 둘을 한 칸으로 묶은 사유가 그 자리에 그대로 걸린다.",
+   "for": "그 단계가 공적 유동성 풋에 닿는가",
+   "statement": "reachesPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingTier.reachesPublicPut",
+   "related": [
+    "CF-3077"
+   ]
+  },
+  {
+   "id": "CF-3083",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "단계 배정의 값이 없는 자리를 참으로 접는 안",
+   "reason": "최상단이 무엇에든 닿는다는 읽기가 그럴듯해 보이나 원문이 그 주체를 위계를 집행하는 쪽으로 들고 접근하는 쪽으로 들지 않는다. 참으로 접으면 집행자가 접근자의 위계에 서며, 단계 배정 구조체가 값을 갖지 않는 자리를 둔 사유가 그 자리에서 뒤집힌다.",
+   "for": "그 주체가 공적 유동성 풋에 닿는가",
+   "statement": "reachesPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingAccess.reachesPublicPut",
+   "related": [
+    "CF-3077"
+   ]
+  },
+  {
+   "id": "CF-3084",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "값이 없는 자리를 선택 타입으로 그대로 내보내는 안",
+   "reason": "이 술어를 받는 자리가 제약을 넓히는 분기이고 그 분기가 Bool 을 요구한다. 선택 타입을 내보내면 그 접기가 쓰는 자리마다 따로 서고 그 자리마다 접는 방향이 갈릴 수 있으므로, 접기를 한 자리에 두는 것이 그 갈림을 막는다.",
+   "for": "그 주체가 공적 유동성 풋에 닿는가",
+   "statement": "reachesPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.EmergencyFundingAccess.reachesPublicPut",
+   "related": [
+    "CF-3077"
+   ]
+  },
+  {
+   "id": "CF-3085",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "도달을 주체 하나에만 붙이고 통화를 받지 않는 안",
+   "reason": "단계가 통화를 받지 않으므로 그 꼴이 짧아지나 제약의 부채 측 한도가 통화로 색인되어 있다. 통화를 받지 않으면 그 한도를 넓히는 분기가 통화 축을 잃고, 이 아크의 판별선이 묻는 제약의 통화별 갈림이 그 자리에서 사라진다.",
+   "for": "주체의 통화 축별 공적 유동성 풋 도달",
+   "statement": "PublicPutAccess 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3086",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "도달을 통화 하나에만 붙이고 주체를 받지 않는 안",
+   "reason": "같은 통화에서 어느 주체는 닿고 어느 주체는 닿지 않는 것이 단계 배정에서 오므로, 주체를 받지 않으면 그 가름이 사라진다. 단계 배정이 주체에서 단계로 가는 사상인 사유가 그 자리에 그대로 걸린다.",
+   "for": "주체의 통화 축별 공적 유동성 풋 도달",
+   "statement": "PublicPutAccess 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3087",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "자국통화 배정의 관할권 기준을 이 조립이 고정하는 안",
+   "reason": "기준이 소재지인가 설립지인가에 따라 같은 주체의 자국통화가 달라지므로 그 선택이 도달을 바꾸나, 그 기준은 자국통화 배정이 자기 필드로 이미 든다. 이 조립이 그것을 고정하면 같은 축이 두 자리에 서고 그 둘이 갈릴 수 있다.",
+   "for": "자국통화 축의 도달만으로 조립한 배정",
+   "statement": "ofDomestic 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess.ofDomestic",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3088",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "단계를 받지 않고 자국통화 배정만으로 조립하는 안",
+   "reason": "그러면 어느 단계의 주체든 자기 자국통화에서 공적 풋에 닿게 된다. 원문이 머니펀드와 딜러에게 어느 공적 풋도 주지 않으므로 그 묶음이 구조에서 사라지며, 공적 풋 도달의 보존이 단계의 순서에 걸린다는 설계가 그 자리에서 무너진다.",
+   "for": "자국통화 축의 도달만으로 조립한 배정",
+   "statement": "ofDomestic 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess.ofDomestic",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3089",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "약정의 집합을 색인을 가진 구조로 받는 안",
+   "reason": "그 꼴이 한 시점의 약정 전량을 드는 구조와 맞으나 그 색인이 유한 집합이어서 그 위의 존재를 Bool 로 접으려면 판정 인스턴스가 따로 서야 한다. 관측층의 공시 경로가 같은 자리를 목록으로 접은 선례가 있으므로 그 꼴을 옮긴다.",
+   "for": "자국통화 축과 중앙은행 사이 교환의 도달을 함께 받아 조립한 배정",
+   "statement": "ofDomesticAndSwap 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess.ofDomesticAndSwap",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3090",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "공급되는 통화가 묻는 통화와 같은지를 보지 않고 약정의 도달 술어만 쓰는 안",
+   "reason": "그 술어가 수취자와 전대 적격만 보고 공급 통화를 보지 않는다. 같은지를 보지 않으면 다른 통화를 공급하는 약정이 그 통화의 도달을 내게 되며, 대차대조표가 통화로 색인된 족이라는 결정이 그 자리에서 뒤집힌다.",
+   "for": "자국통화 축과 중앙은행 사이 교환의 도달을 함께 받아 조립한 배정",
+   "statement": "ofDomesticAndSwap 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.PublicPutAccess.ofDomesticAndSwap",
+   "related": [
+    "CF-3078"
+   ]
+  },
+  {
+   "id": "CF-3091",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "비교하는 주체마다 기저 제약을 따로 받는 안",
+   "reason": "그 꼴이 일반적으로 보이나 두 주체의 제약을 맞댈 때 그 비교가 기저의 단조에 걸린다. 위계 위치가 무엇을 가르는지가 기저에 가려 보이지 않으며, 그 구멍이 묻는 고리가 바로 그 가름이므로 기저를 공유시키는 것이 그 몫을 분리하는 길이다.",
+   "for": "공적 유동성 풋 접근으로 기저 제약을 넓히는 사상",
+   "statement": "constraintWithPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.constraintWithPublicPut",
+   "related": [
+    "CF-3079"
+   ]
+  },
+  {
+   "id": "CF-3092",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "넓힘을 기저에 더하는 꼴로 두는 안",
+   "reason": "더하기로 두면 그 값이 음이 아님을 가정으로 받아야 하고 그 가정이 자기자본의 부호를 가정으로 받는 자리와 같은 결손을 새로 세운다. 최댓값과 논리합으로 두면 기저가 그 결합보다 크지 않은 것이 두 연산의 성질에서 나와 어떤 값에도 조건이 걸리지 않는다.",
+   "for": "공적 유동성 풋 접근으로 기저 제약을 넓히는 사상",
+   "statement": "constraintWithPublicPut 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.constraintWithPublicPut",
+   "related": [
+    "CF-3079"
+   ]
+  },
+  {
+   "id": "CF-3093",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "긴급 조달 접근의 공시 경로를 그대로 쓰고 이 경로를 세우지 않는 안",
+   "reason": "그 경로가 주체의 단계와 그 단계가 닿는 풋을 이미 칸으로 들어 겹쳐 보이나, 그것이 보는 것은 접근이고 이 경로가 보는 것은 그 접근이 제약을 움직이는가여서 색인이 다르다. 갈음하면 그 고리의 측정 결손이 어디에도 서지 않는다.",
+   "for": "공적 유동성 풋 접근이 제약을 넓히는지를 보는 공시 경로",
+   "statement": "PublicPutConstraintChannel 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.PublicPutConstraintChannel",
+   "related": [
+    "CF-3080"
+   ]
+  },
+  {
+   "id": "CF-3094",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "넓힘의 두 축을 한 칸으로 접는 안",
+   "reason": "부채 측 넓힘이 중앙은행의 대출 조건에서 오고 자산 측 넓힘이 적격 담보의 판정에서 오므로 소스가 둘이다. 한 칸으로 접으면 한쪽에 소스가 있는 것이 다른 쪽의 결손을 덮으며, 긴급 조달 경로가 풋을 두 칸으로 가른 사유가 그 자리에 그대로 걸린다.",
+   "for": "공적 유동성 풋 접근이 제약을 넓히는지를 보는 공시 경로",
+   "statement": "PublicPutConstraintChannel 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.PublicPutConstraintChannel",
+   "related": [
+    "CF-3080"
+   ]
+  },
+  {
+   "id": "CF-3095",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "자산 측 넓힘 칸을 참으로 두는 안",
+   "reason": "적격 담보의 범주가 공표되어 있어 넓힘이 읽히는 것처럼 보이나 그 공시가 자기 목록에 구속되지 않는다고 적는다. 참으로 두면 확정되지 않은 것을 확정된 것으로 주장하게 되며, 그 유보가 적격성 자체를 열어 둔다는 판정이 그 자리에 그대로 걸린다.",
+   "for": "적격담보 공시를 그 고리의 경로로 읽은 것",
+   "statement": "eligibleCollateralDisclosurePutChannel 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.eligibleCollateralDisclosurePutChannel",
+   "related": [
+    "CF-3080"
+   ]
+  },
+  {
+   "id": "CF-3096",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-6",
+    "kind": "decision_session",
+    "date": "2026-11-07"
+   },
+   "candidate": "이 경로를 세우지 않고 아무 주체도 보지 않는 경로 하나로 갈음하는 안",
+   "reason": "그 경로는 구조가 비어 있지 않음을 보이는 자리여서 실재하는 공시를 들지 않는다. 갈음하면 실재하는 공시가 그 칸을 내지 못한다는 사실이 어디에도 남지 않으며, 소스 없음을 경로마다 등재하고 전칭으로 등재하지 않는 요구가 그 자리를 막는다.",
+   "for": "적격담보 공시를 그 고리의 경로로 읽은 것",
+   "statement": "eligibleCollateralDisclosurePutChannel 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.eligibleCollateralDisclosurePutChannel",
+   "related": [
+    "CF-3080"
+   ]
   }
  ]
 }

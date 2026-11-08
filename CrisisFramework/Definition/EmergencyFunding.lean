@@ -388,4 +388,223 @@ theorem tier_separates_aboveOrEqual_tie :
   exact ⟨.governmentDesk, .governmentOnlyFund, by decide, by decide, by decide,
     .dealer, .moneyFund, by rfl, by rfl, by decide, by decide⟩
 
+/--
+그 단계가 공적 유동성 풋에 닿는가.
+
+**대응 비형식 개념:** 그 단계의 주체가 공황에서 중앙은행이 집행하는 유동성 수단에 닿는가.
+용어집이 유동성 풋을 집행하는 쪽으로 사적 시장 참가자와 중앙은행을 가르고 뒤의 것을 공적 유동성
+풋으로 등재하므로, 그 둘에 닿는 것을 하나로 접는다.
+
+**이 정의가 배제하는 사례:**
+감독 규범이 발행자와 보유자가 같은 위계 안에 있는 것을 고유동성자산의 배제 사유로 쓰는데 중앙은행은
+실현 가능성과 예측 가능성만 쓰는 것. 그 갈림이 자기 위에 아무도 없는 주체만 배제 축을 뺄 수 있다는
+것이어서 이 술어가 참인 자리와 거짓인 자리를 가르는 근거가 되나, 이 술어는 그 축의 수를 담지 않고
+닿는지만 담으므로 어느 축이 빠졌는지는 담지 않는다.
+조달처: E-49 §3-6 「자기 위에 아무도 없는 주체만 그 축을 뺄 수 있다」
+
+**기각한 대체 정의:**
+풋 넷의 집합을 포함 관계로 비교해 그 순서에서 이 술어를 유도하는 안. 단계의 비교를 선언한 자리가
+그 포함으로 순서를 유도하는 안을 이미 기각했고 그 사유가 주권의 집합이 은행의 집합을 포함하지 않는
+다는 것인데, 이 자리에서도 그 포함이 단계의 순서와 어긋나므로 유도되지 않는다. 공적 풋 둘을 따로
+두어 술어를 둘로 가르는 안도 기각했다. 두 풋이 같은 중앙은행에 달려 있어 그 소스가 하나이고, 가르면
+한 풋에 닿는 것이 다른 풋의 결손을 덮으면서 그 가름의 근거가 아무 데서도 오지 않는다.
+
+**수 체계를 받지 않는다.**
+-/
+-- DD:CF-3077
+def EmergencyFundingTier.reachesPublicPut (t : EmergencyFundingTier) : Bool :=
+  t.reaches .lastResortLendingAccess || t.reaches .currencyBackstopAccess
+
+/--
+단계가 높으면 공적 유동성 풋 도달이 보존된다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+어느 단계가 공적 풋에 닿는데 그보다 높은 단계가 닿지 않아야 한다. 원문이 은행에 최후대출자 접근을
+주고 주권에 통화 백스톱을 주며 그 아래 두 단계에 어느 공적 풋도 주지 않으므로, 이 명제가 거짓이면
+그 넷 가운데 하나의 풋 묶음을 잘못 옮긴 것이거나 단계의 차례를 잘못 옮긴 것이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 이 보존이 위계 위치에서 제약으로 가는 고리의 좌변을 정하며, 같은 꼴로 세운
+사적 풋 쪽과 풋 전량의 포함이 보존되지 않는다는 것이 함께 서야 이 축이 유일함이 보인다.
+-/
+-- DD:CF-3077
+theorem EmergencyFundingTier.reachesPublicPut_of_atLeastAsHigh
+    (s t : EmergencyFundingTier) (hOrder : s.atLeastAsHigh t = true)
+    (hPut : t.reachesPublicPut = true) : s.reachesPublicPut = true := by
+  revert hOrder hPut
+  cases s <;> cases t <;> decide
+
+/--
+사적 유동성 풋 도달은 단계의 순서에서 보존되지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+원문이 주권에 자금조달 유동성이나 시장 유동성을 주어야 한다. 주권의 풋 묶음이 통화 백스톱 하나이고
+은행이 자금조달 유동성에 닿으므로, 이 명제가 거짓이면 주권의 묶음을 잘못 옮긴 것이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+보존되지 않음은 그 반례가 실제로 서는 단계 쌍을 들어야 보이고, 임의의 쌍에 대한 전칭으로는 그
+부재가 진술되지 않는다. 시스템 수준의 단계 순서가 개별 풋의 도달을 결정하지 않는 자리다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 공적 풋 쪽의 보존이 서는 것과 사적 풋 쪽이 서지 않는 것이 함께 있어야 고리의
+좌변을 공적 풋으로 두는 설계가 임의의 선택이 아님이 보인다.
+-/
+-- DD:CF-3077
+theorem exists_private_put_not_preserved :
+    ∃ s t : EmergencyFundingTier, s.atLeastAsHigh t = true ∧
+      (t.reaches .fundingLiquidityAccess || t.reaches .marketLiquidityAccess) = true ∧
+      (s.reaches .fundingLiquidityAccess || s.reaches .marketLiquidityAccess) = false := by
+  exact ⟨.sovereign, .bank, rfl, rfl, rfl⟩
+
+/--
+풋 전량의 포함으로는 단계의 순서에서 보존되지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+높은 단계의 풋 묶음이 낮은 단계의 묶음을 전량 포함해야 한다. 원문이 주권에 통화 백스톱 하나만 주고
+은행에 자금조달 유동성과 최후대출자 접근을 주므로, 이 명제가 거짓이면 그 둘 가운데 하나의 묶음을
+잘못 옮긴 것이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+포함이 서지 않음은 반례가 되는 단계 쌍과 풋을 함께 들어야 보인다. 단계의 순서가 풋 묶음의 포함을
+결정하지 않는 자리이며, 그 사실이 단계의 비교를 선언한 자리의 기각 문단과 같은 것을 다른 방향에서
+든다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 풋 묶음의 포함이 서지 않는데 공적 풋의 논리합은 보존되는 것이 이 설계의 핵이며,
+그 둘을 함께 세워야 그 좁힘이 보인다.
+-/
+-- DD:CF-3077
+theorem exists_put_not_preserved :
+    ∃ (s t : EmergencyFundingTier) (p : LiquidityPutKind), s.atLeastAsHigh t = true ∧
+      t.reaches p = true ∧ s.reaches p = false := by
+  exact ⟨.sovereign, .bank, .lastResortLendingAccess, rfl, rfl, rfl⟩
+
+/--
+그 주체가 공적 유동성 풋에 닿는가.
+
+**대응 비형식 개념:** 한 주체가 공황에서 중앙은행이 집행하는 유동성 수단에 닿는가. 단계
+배정이 선택 타입이어서 접근자의 위계에 들지 않는 주체가 값을 갖지 않으므로, 그 자리를 거짓으로 접어
+주체 위의 술어로 둔다.
+
+**이 정의가 배제하는 사례:**
+풋의 위계를 집행하는 중앙은행. 단계 배정이 그 주체를 값이 없는 자리로 두고 이 술어가 그 자리를
+거짓으로 접으므로, 그 주체가 보유 유도 순서의 최상단이어도 이 술어는 참이 되지 않는다. 감독 규범이
+상관을 배제 사유로 쓰고 중앙은행은 실현 가능성과 예측 가능성만 쓰는 갈림이 그 주체를 접근자가 아니라
+판별의 주체로 두는 자리이며, 이 술어는 그 판별의 내용을 담지 않는다.
+조달처: E-49 §2-6 「판별 기준이 상관관계가 아니다」
+
+**기각한 대체 정의:**
+값이 없는 자리를 참으로 접는 안. 최상단이 무엇에든 닿는다는 읽기가 그럴듯해 보이나, 원문이 그 주체를
+위계를 집행하는 쪽으로 들고 접근하는 쪽으로 들지 않으므로 참으로 접으면 집행자가 접근자의 위계에
+서게 된다. 값이 없는 자리를 선택 타입으로 그대로 내보내는 안도 기각했다. 이 술어를 받는 자리가 제약을
+넓히는 분기이고 그 분기가 Bool 을 요구하므로, 선택 타입을 내보내면 그 접기가 쓰는 자리마다 따로 서고
+그 자리마다 접는 방향이 갈릴 수 있다.
+
+**수 체계를 받지 않는다.**
+-/
+-- DD:CF-3077
+def EmergencyFundingAccess.reachesPublicPut {Entity : Type}
+    (A : EmergencyFundingAccess Entity) (n : Entity) : Bool :=
+  (A.tierOf n).any EmergencyFundingTier.reachesPublicPut
+
+/--
+단계를 갖지 않는 주체는 공적 유동성 풋에 닿지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+단계 배정이 값을 갖지 않는 주체에서 이 술어가 참이어야 한다. 그러면 그 접기가 값이 없는 자리를 참으로
+두는 것이고, 그 읽기는 이 술어의 기각 문단이 이미 기각한 것이다.
+
+**가정과 그 배제 사례(T-4·T-5):** 그 주체의 단계 배정이 값을 갖지 않는다는 가정을 둔다. 그 가정이
+배제하는 것은 값을 갖는 주체이며, 그 자리에서는 이 등식이 단계의 술어에 걸려 참도 거짓도 될 수 있다.
+
+**T-3 분류:** 보조 보정이다. 정의를 전개하면 선택 타입의 접기가 값이 없는 자리에서 거짓이라는 등식으로
+닫히므로 기여 목록에서 제외한다. 그 대신 고리의 정의역에서 집행자가 빠지는 것이 선언의 꼴에서 읽히게
+하는 자리다.
+-/
+-- DD:CF-3077
+theorem EmergencyFundingAccess.reachesPublicPut_eq_false_of_tierOf_none
+    {Entity : Type} (A : EmergencyFundingAccess Entity) (n : Entity)
+    (h : A.tierOf n = none) : A.reachesPublicPut n = false := by
+  unfold EmergencyFundingAccess.reachesPublicPut
+  rw [h]
+  rfl
+
+/--
+보유 유도 순서의 최상단이면서 단계를 갖지 않는 주체가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+원문의 매트릭스가 드는 주체 가운데 보유 유도 순서의 최상단에 서는 것이 전부 단계 배정의 값을 가져야
+한다. 원문이 위계를 집행하는 쪽으로 중앙은행을 들고 그 주체에게 화폐인 것이 가장 강한 액면가 약속을
+받으므로, 이 명제가 거짓이면 그 주체의 단계 배정이나 그 주체의 화폐자산 배정 가운데 하나를 잘못 옮긴
+것이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+그 자리는 구체 배치가 실제로 그 쌍을 내야 보이고, 임의의 주체 타입에 대한 전칭으로는 진술되지 않는다.
+시스템 수준의 보유 유도 순서가 개별 주체의 단계 배정을 결정하지 않는 자리다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 고리의 정의역에서 집행자를 빼는 것이 임의의 선택이 아니라 구조가 강제하는 것임을
+이 진술과 다음 진술이 함께 보인다.
+-/
+-- DD:CF-3077
+theorem exists_top_without_tier :
+    ∃ e : MoneyMatrixEntity,
+      (∀ n : MoneyMatrixEntity, (moneyMatrixAssetFamily 0).aboveOrEqual e n = true) ∧
+      (moneyMatrixTierAccess 0).tierOf e = none := by
+  exact ⟨.centralBank, fun n => by cases n <;> rfl, rfl⟩
+
+/--
+보유 유도 순서의 엄격 비교에서 공적 유동성 풋 도달이 보존되지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+원문의 매트릭스에서 엄격하게 위에 선 주체가 아래의 주체가 닿는 공적 풋에 전부 닿아야 한다. 집행하는
+주체가 접근자의 위계에 들지 않아 단계를 갖지 않으므로, 이 명제가 거짓이면 그 주체를 접근자의 위계에
+넣은 것이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+보존되지 않음은 반례가 되는 주체 쌍을 들어야 보인다. 보유 유도 순서라는 시스템 수준의 비교가 개별
+주체의 공적 풋 도달을 결정하지 않는 자리이며, 그래서 고리의 좌변을 보유 유도 순서로 둘 수 없다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 이 진술이 고리의 좌변을 단계의 순서로 두고 보유 유도 순서로 두지 않는 설계의
+근거이며, 그 좁힘이 없으면 고리가 집행자에서 깨진다.
+-/
+-- DD:CF-3077
+theorem exists_strictly_above_without_publicPut :
+    ∃ m n : MoneyMatrixEntity,
+      (moneyMatrixAssetFamily 0).aboveOrEqual m n = true ∧
+      (moneyMatrixAssetFamily 0).aboveOrEqual n m = false ∧
+      (moneyMatrixTierAccess 0).reachesPublicPut n = true ∧
+      (moneyMatrixTierAccess 0).reachesPublicPut m = false := by
+  exact ⟨.centralBank, .bank, rfl, rfl, rfl, rfl⟩
+
+/--
+왼쪽 인자만 참인 자리의 증거다.
+
+논리 결합을 가리는 증거다. 은행은 최후대출자 대출에 닿고 통화 백스톱에 닿지 않으므로
+왼쪽 인자만 참이며, 합으로는 공적 유동성 풋에 닿고 곱으로는 닿지 않는다. 그래서 이 진술이 그 결합을
+곱으로 뒤집은 변이를 거부한다.
+-/
+example :
+    EmergencyFundingTier.bank.reachesPublicPut = true ∧
+      EmergencyFundingTier.bank.reaches .currencyBackstopAccess = false := by
+  exact ⟨rfl, rfl⟩
+
+/--
+오른쪽 인자만 참인 자리의 증거다.
+
+논리 결합을 가리는 증거다. 주권은 통화 백스톱에 닿고 최후대출자 대출에 닿지 않으므로
+오른쪽 인자만 참이며, 합으로는 공적 유동성 풋에 닿고 곱으로는 닿지 않는다. 그래서 이 진술이 그 결합을
+곱으로 뒤집은 변이를 거부한다.
+-/
+example :
+    EmergencyFundingTier.sovereign.reachesPublicPut = true ∧
+      EmergencyFundingTier.sovereign.reaches .lastResortLendingAccess = false := by
+  exact ⟨rfl, rfl⟩
+
 end CrisisFramework.Definition
