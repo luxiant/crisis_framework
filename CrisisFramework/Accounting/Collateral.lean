@@ -312,11 +312,19 @@ theorem exists_claimCoverageTotal_gt_amount :
   decide
 
 /--
-제공마다 반환 청구권이 다르면 제공 합이 청구권 전량의 금액 합을 넘지 못한다.
+제공마다 반환 청구권이 다르면 제공 합이 같은 통화로 표시된 청구권 금액 합을 넘지 못한다.
 
-**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 제공마다 반환 청구권이 다르고 금액이 음수가
-아닌데도 제공 합이 청구권 전량의 합을 넘는 담보 배치. 단사 가정이 제공을 서로 다른 청구권으로
-보내므로 그런 배치가 설 수 없고, 반증은 단사 가정이 깨진 자리에서 온다.
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+제공마다 반환 청구권이 다르고 금액이 음수가 아닌데도 제공 합이 그 통화로 표시된 청구권 합을 넘는
+담보 배치. 단사 가정이 제공을 서로 다른 청구권으로 보내고 제공 합이 이미 그 통화로 좁혀져 있으므로
+그런 배치가 설 수 없고, 반증은 단사 가정이 깨진 자리에서 온다.
+
+**우변을 통화로 좁히지 않는 꼴을 쓰지 않는 까닭.** 그 꼴은 우변을 청구권 전량의 금액 합으로
+둔다. 그러면 우변이 서로 다른 최소 화폐단위의 정수배를 한 정수로 더하므로 그 값에 단위가 서지
+않고, 좌변이 통화로 좁혀진 값이어서 두 변이 다른 것을 센다. 공시 규범도 가용 미부담 담보를 총액
+하나로 받지 않고 유의한 통화마다 갈라 적게 하며 그 유의성의 문턱을 그 통화의 몫이 관련 총액에서
+차지하는 비로 둔다.
+조달처: E-56 §2-7 「그 통화의 가용 미부담 담보가 관련 총액의 5% 이상인 것으로 둔다」
 
 **가정과 그 배제 사례(T-4·T-5):** 제공에서 반환 청구권으로의 사상이 단사라는 가정과 반환 청구권이
 청구권 집합의 색인에 든다는 가정과 금액이 음수가 아니라는 가정을 진술에 명시한다. 첫째 가정의
@@ -326,6 +334,9 @@ theorem exists_claimCoverageTotal_gt_amount :
 의무가 제공 단위가 아니라 당사자 쌍 단위로 선다. 그 양식에서는 제공 여럿이 같은 반환 청구권을
 가리키며 가정이 깨진다.
 
+**T-3 분류:** 기여다. 제공 합과 청구권 합이 같은 통화 색인 위에 서고 단사 가정이 그 둘을 맺는다는
+설계가 부등식으로 서는 자리이므로 기여 목록에 든다.
+
 **일대일을 구조로 강제하지 않는 까닭.** 강제하면 그 계약 양식이 표현 불가능해진다. 그래서 구조는
 허용하고 이 정리가 가정으로 명시한다.
 
@@ -333,7 +344,7 @@ theorem exists_claimCoverageTotal_gt_amount :
 이 진술의 중복은 세면 안 되는 것을 세는 결함이다. 색인도 다르다. 앞은 담보물이 가리키는 청구권에
 걸리고 뒤는 반환 청구권에 걸린다.
 -/
--- DD:CF-842
+-- DD:CF-3107
 theorem pledgedTotal_le_claimSetTotal {PIdx Idx Asset Party Obs Ext Lvl Currency : Type}
     [DecidableEq Currency]
     (e : Env ℤ Obs Ext Lvl)
@@ -343,19 +354,22 @@ theorem pledgedTotal_le_claimSetTotal {PIdx Idx Asset Party Obs Ext Lvl Currency
       (P.assign i₁).returns = (P.assign i₂).returns → i₁ = i₂)
     (hmem : ∀ i ∈ P.index, (P.assign i).returns ∈ S.index)
     (hnn : ∀ j ∈ S.index, 0 ≤ evalTerm e (S.assign j).amount) :
-    pledgedTotal e S P g ≤ ∑ j ∈ S.index, evalTerm e (S.assign j).amount := by
+    pledgedTotal e S P g
+      ≤ ∑ j ∈ S.index,
+          (if (S.assign j).currency = g then evalTerm e (S.assign j).amount else 0) := by
   -- 색인을 옮기는 Mathlib 보조정리를 하나도 부르지 않는다. `Finset.sum_le_sum` 과
   -- `Finset.sum_nonneg` 과 `Finset.sum_le_sum_of_subset_of_nonneg` 이 핀된 판에서
   -- `Classical.choice` 를 끄는 것이 실측됐고(`docs/baseline.md` §2-2), 회계층 기준선이
   -- `[propext, Quot.sound]` 이므로 그 한 번으로 A-6 의 초과가 선다.
   --
   -- 진술에 `DecidableEq Idx` 가 없으므로 `Finset.erase` 와 `Finset.image` 와 `Finset.filter`
-  -- 를 쓸 수 없다. 그 셋이 전부 판정을 요구하는데, 가정을 더해 통과시키는 것은 W-1 이 막는다.
-  -- 그래서 청구권 집합에서 한 원소를 떼는 일을 `Multiset.exists_cons_of_mem` 으로 받는다.
-  -- 그 보조정리는 판정을 요구하지 않고 Nodup 에서 분해를 바로 낸다.
-  have snn : ∀ (t : Finset Idx), (∀ j ∈ t, 0 ≤ evalTerm e (S.assign j).amount) →
-      0 ≤ ∑ j ∈ t, evalTerm e (S.assign j).amount := by
-    intro t
+  -- 를 쓸 수 없다. 그래서 청구권 집합에서 한 원소를 떼는 일을 `Multiset.exists_cons_of_mem` 으로
+  -- 받는다. 그 보조정리는 판정을 요구하지 않고 Nodup 에서 분해를 바로 낸다.
+  --
+  -- 보조 단계의 합은 가중 함수 `W` 위에 세운다. 금액을 그대로 더하는 합을 증명 안에 두면 통화를
+  -- 가로지른 합이 다시 서므로, 통화로 좁힌 가중을 끝에서 한 번만 넣는다.
+  have snn : ∀ (W : Idx → ℤ) (t : Finset Idx), (∀ j ∈ t, 0 ≤ W j) → 0 ≤ ∑ j ∈ t, W j := by
+    intro W t
     induction t using Finset.cons_induction with
     | empty => intro _; rw [Finset.sum_empty]
     | cons b u hb ih =>
@@ -373,18 +387,17 @@ theorem pledgedTotal_le_claimSetTotal {PIdx Idx Asset Party Obs Ext Lvl Currency
       Finset.val_injective hm⟩
   -- 단사 사상을 따라 색인을 옮기는 부분합 부등식. 제공 하나를 떼면 그것이 가리키는 청구권도
   -- 함께 떼이고, 단사 가정이 남은 제공들이 그 청구권을 가리키지 않음을 준다.
-  have key : ∀ (s : Finset PIdx) (t : Finset Idx),
+  have key : ∀ (W : Idx → ℤ) (s : Finset PIdx) (t : Finset Idx),
       (∀ i ∈ s, (P.assign i).returns ∈ t) →
       (∀ i₁ ∈ s, ∀ i₂ ∈ s, (P.assign i₁).returns = (P.assign i₂).returns → i₁ = i₂) →
-      (∀ j ∈ t, 0 ≤ evalTerm e (S.assign j).amount) →
-      ∑ i ∈ s, evalTerm e (S.assign (P.assign i).returns).amount
-        ≤ ∑ j ∈ t, evalTerm e (S.assign j).amount := by
-    intro s
+      (∀ j ∈ t, 0 ≤ W j) →
+      ∑ i ∈ s, W (P.assign i).returns ≤ ∑ j ∈ t, W j := by
+    intro W s
     induction s using Finset.cons_induction with
     | empty =>
         intro t _ _ hn
         rw [Finset.sum_empty]
-        exact snn t hn
+        exact snn W t hn
     | cons a s' ha ih =>
         intro t hm hj hn
         obtain ⟨t', ht', rfl⟩ :=
@@ -410,17 +423,30 @@ theorem pledgedTotal_le_claimSetTotal {PIdx Idx Asset Party Obs Ext Lvl Currency
         rw [Finset.sum_cons, Finset.sum_cons]
         exact add_le_add (h a (Finset.mem_cons_self a t))
           (ih fun i hi => h i (Finset.mem_cons_of_mem hi))
+  -- 그 통화로 좁힌 금액은 음이 아니다. 통화가 다르면 영이고 같으면 비음수 가정이 받는다.
+  have wnn : ∀ j ∈ S.index,
+      0 ≤ (if (S.assign j).currency = g then evalTerm e (S.assign j).amount else 0) := by
+    intro j hj
+    by_cases hc : (S.assign j).currency = g
+    · rw [if_pos hc]
+      exact hnn j hj
+    · rw [if_neg hc]
   calc pledgedTotal e S P g
-      ≤ ∑ i ∈ P.index, evalTerm e (S.assign (P.assign i).returns).amount := by
+      ≤ ∑ i ∈ P.index,
+          (if (S.assign (P.assign i).returns).currency = g
+           then evalTerm e (S.assign (P.assign i).returns).amount else 0) := by
         simp only [pledgedTotal]
         refine mono _ _ _ fun i hi => ?_
-        -- 조건이 서면 양변이 같고, 서지 않으면 왼쪽이 0 이어서 비음수 가정이 받는다. 판정
-        -- 명제를 `by_cases` 로 가르므로 배중률을 쓰지 않는다.
+        -- 조건이 서면 양변이 같고, 서지 않으면 왼쪽이 0 이어서 좁힌 금액의 비음수가 받는다.
+        -- 판정 명제를 `by_cases` 로 가르므로 배중률을 쓰지 않는다.
         by_cases h : (P.assign i).carriesRehypothecationRight = true
             ∧ (S.assign (P.assign i).returns).currency = g
-        · rw [if_pos h]
+        · rw [if_pos h, if_pos h.2]
         · rw [if_neg h]
-          exact hnn _ (hmem i hi)
-    _ ≤ ∑ j ∈ S.index, evalTerm e (S.assign j).amount := key P.index S.index hmem hinj hnn
+          exact wnn _ (hmem i hi)
+    _ ≤ ∑ j ∈ S.index,
+          (if (S.assign j).currency = g then evalTerm e (S.assign j).amount else 0) :=
+        key (fun j => if (S.assign j).currency = g then evalTerm e (S.assign j).amount else 0)
+          P.index S.index hmem hinj wnn
 
 end CrisisFramework.Accounting

@@ -260,6 +260,9 @@ inductive Concept where
   /-- 중앙은행 레포 라인. 적격 담보를 대가로 받는 유동성 라인이며, 그 담보가 공급자의 자국 통화
       표시 국채로 제한되므로 상대 통화의 잔고가 공급자에게 서지 않는다. -/
   | centralBankRepoLine
+  /-- 환위험 귀속. 되돌리는 거래의 환율이 처음과 같은지에 따라 환율 변동의 부담이 어느 주체의
+      장부에 서는가이며, 그 조항이 그것을 정하지 않는 자리가 아무도 지지 않는 자리와 다르다. -/
+  | fxRiskAttribution
   deriving DecidableEq, Repr
 
 /--

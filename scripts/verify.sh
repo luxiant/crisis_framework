@@ -13,7 +13,7 @@
 #                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
 #   step10-clausemut 논리 결합 변이 — 정의층과 관측층의 판정 반환 함수 본문에서 결합 하나를 뒤집은
 #                    사본이 통과하는 자리를 세어 docs/baseline.md 의 블록과 맞댄다 (늘면 실패)
-#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 쉰아홉)
+#   step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 예순)
 #                    아크 종료 검사 셋은 첫 인자로 아크 이름을 주면 함께 돌고
 #                    주지 않으면 돌지 않는다 (`bash scripts/verify.sh <아크>`)
 #   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)

@@ -140,6 +140,10 @@ structure SwapLineChannel (Node : Type) where
   readsDrawdownAvailability : Bool
   /-- 그 경로가 약정을 끝내는 통지를 내는가. -/
   readsTermination : Bool
+  /-- 그 경로가 공급하는 쪽의 환율 변동 노출을 내는가. -/
+  readsSupplierFxExposure : Bool
+  /-- 그 경로가 받는 쪽의 환율 변동 노출을 내는가. -/
+  readsRecipientFxExposure : Bool
   /-- 그 경로가 값을 내는 입도. 어느 축도 내지 않는 경로는 이 자리가 비어 있다. -/
   granularity : Option SwapLineGranularity
   /-- 그 경로의 공시를 받는 쪽. -/
@@ -202,6 +206,8 @@ def supplierCounterpartyTable : SwapLineChannel Unit where
   readsActivation := false
   readsDrawdownAvailability := false
   readsTermination := false
+  readsSupplierFxExposure := true
+  readsRecipientFxExposure := false
   granularity := some .pairLevel
   recipient := .publicReader
   provenance := .officialReport
@@ -237,6 +243,8 @@ def recipientOnlendingTerms : SwapLineChannel Unit where
   readsActivation := false
   readsDrawdownAvailability := false
   readsTermination := false
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := false
   granularity := some .recipientLevel
   recipient := .publicReader
   provenance := .officialReport
@@ -272,6 +280,8 @@ def macroStatisticsActivated : SwapLineChannel Unit where
   readsActivation := true
   readsDrawdownAvailability := false
   readsTermination := false
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := false
   granularity := some .aggregateLevel
   recipient := .publicReader
   provenance := .officialReport
@@ -307,6 +317,8 @@ def reserveTemplateDerived : SwapLineChannel Unit where
   readsActivation := true
   readsDrawdownAvailability := false
   readsTermination := false
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := false
   granularity := some .aggregateLevel
   recipient := .publicReader
   provenance := .staffEstimate
@@ -342,6 +354,8 @@ def recipientAnnualAccounts : SwapLineChannel Unit where
   readsActivation := true
   readsDrawdownAvailability := true
   readsTermination := false
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := false
   granularity := some .recipientLevel
   recipient := .publicReader
   provenance := .officialReport
@@ -376,6 +390,8 @@ def confidentialBilateral : SwapLineChannel Unit where
   readsActivation := true
   readsDrawdownAvailability := true
   readsTermination := true
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := true
   granularity := some .pairLevel
   recipient := .supervisor
   provenance := .officialReport
@@ -610,6 +626,8 @@ def SwapLineChannel.trivial : SwapLineChannel Unit where
   readsActivation := false
   readsDrawdownAvailability := false
   readsTermination := false
+  readsSupplierFxExposure := false
+  readsRecipientFxExposure := false
   granularity := none
   recipient := .publicReader
   provenance := .officialReport
@@ -643,6 +661,7 @@ def sampleLine : CentralBankSwapLine Unit Unit Unit Unit where
   scheduledEnd := none
   cap := none
   reciprocal := true
+  reversalAtInitialRate := true
 
 /-- 어느 기관도 적격으로 두지 않는 적격성의 족. 시점을 단위 타입으로 받는다. -/
 -- DD:CF-2976
@@ -764,5 +783,228 @@ theorem answer_undetermined_when_only_onlending_read :
       sampleLine.recipient sampleLine ()
         = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
   rfl
+
+/--
+그 경로가 환위험 귀속의 두 면을 함께 내는가.
+
+**대응 비형식 개념:** 한 공시가 공급하는 쪽의 노출과 받는 쪽의 노출을 한 문면에서 함께 내는가.
+두 면이 서로 다른 발행자의 문면에 나뉘어 있어 한 경로가 둘을 함께 내는 자리가 따로 선다.
+
+**이 정의가 배제하는 사례:**
+두 면을 한 축으로 접어 환위험 공시의 유무로 보는 읽기. 한 발행자의 질의응답이 되돌리는 거래의
+환율이 처음과 같으므로 자기가 환율 변동에 노출되지 않는다고 적고 다른 발행자의 문면이 차입하는
+중앙은행이 환위험을 전부 진다고 적으므로, 한 축으로 접으면 어느 쪽 면이 선 공시인지가 사라진다.
+조달처: E-61 §7 「그 서술이 자기 쪽의 노출을 들고 상대 쪽의 노출을 들지 않는다」
+
+**기각한 대체 정의:**
+두 면의 논리합을 축으로 두는 안. 환위험에 대해 무엇이든 내는 경로를 가르나 귀속이 서려면 두 면이
+함께 서야 하므로, 논리합으로 두면 한 면만 내는 경로가 귀속을 내는 경로로 읽힌다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-3105
+def SwapLineChannel.readsBothFxSides {Node : Type} (c : SwapLineChannel Node) : Bool :=
+  c.readsSupplierFxExposure && c.readsRecipientFxExposure
+
+/--
+공표 경로 가운데 받는 쪽의 노출을 내는 것이 없다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+공표 경로 가운데 받는 쪽의 노출을 내는 것이 하나라도 있어야 한다. 그 관측은 받는 쪽 면의 측정
+소스가 공표 경로에 있다는 뜻이며, 그러면 그 면이 공공 기관 문면에서만 서는 것이 아니다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 환위험 귀속의 받는 쪽 면에 공표 소스가 없다는 것이 관측층에 등재되는
+소스 없음이므로 기여 목록에 든다.
+-/
+-- DD:CF-3105
+theorem no_public_channel_reads_recipientFxExposure :
+    publicChannels.all (fun c => !c.readsRecipientFxExposure) = true := by
+  rfl
+
+/--
+공표 경로 가운데 두 면을 함께 내는 것이 없다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+공표 경로 가운데 두 면을 함께 내는 것이 하나라도 있어야 한다. 그 관측은 귀속이 공표 경로에서
+유도된다는 뜻이며, 그러면 두 문면을 함께 기록하라는 요구가 이 자리에서 성립하지 않는다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 앞 명제가 한 면의 결손을 들고 이 명제가 귀속 자체의 결손을 들므로, 둘이
+짝을 이루어 결손이 어느 층에서 오는지를 가른다.
+-/
+-- DD:CF-3105
+theorem no_public_channel_reads_both_fx_sides :
+    publicChannels.all (fun c => !c.readsBothFxSides) = true := by
+  rfl
+
+/--
+공표 경로 가운데 공급하는 쪽의 노출을 내는 것이 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+공표 경로 가운데 공급하는 쪽의 노출을 내는 것이 하나도 없어야 한다. 그 관측은 그 발행자의
+질의응답이 자기 노출을 적은 것이 공표 경로에 들지 않는다는 뜻이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 두 면의 결손이 비대칭임을 보이므로, 소스 없음이 축에 균일하게 걸리지 않고
+면마다 갈린다는 것이 이 자리에서 선다.
+-/
+-- DD:CF-3105
+theorem supplierFxExposure_read_by_some_public_channel :
+    publicChannels.any (fun c => c.readsSupplierFxExposure) = true := by
+  rfl
+
+/--
+받는 쪽의 노출을 내는 경로가 실재하고 그 수신자가 공표 상대가 아니다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 면을 내는 경로가 아예 없거나, 그 경로의 수신자가 공표 상대여야 한다. 앞의 관측은 그 면에 값이
+어디에도 없다는 뜻이고 뒤의 관측은 앞선 명제와 부딪히므로, 이 명제가 그 결손이 공표의 가름에서
+온다는 것을 든다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 받는 쪽 면의 결손이 자료의 부재가 아니라 수신자의 가름에서 온다는 것을
+보이므로 기여 목록에 든다.
+-/
+-- DD:CF-3105
+theorem fx_sides_split_across_channels :
+    confidentialBilateral.readsRecipientFxExposure = true
+      ∧ decide (confidentialBilateral.recipient = DisclosureRecipient.publicReader) = false := by
+  exact ⟨rfl, rfl⟩
+
+/--
+두 면을 함께 내는 판정의 각 항이 홀로 참인 경로가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+두 면 가운데 하나만 내는 경로가 한쪽에 없어야 한다. 그 관측은 그 판정의 두 항이 함께만 움직인다는
+뜻이며, 그러면 논리곱을 논리합으로 뒤집은 변이가 같은 값을 내어 그 판정이 재어지지 않는다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+두 항의 독립은 각 항이 홀로 참인 경로를 들어야 보이고, 임의의 경로에 대한 전칭으로는 그 독립이
+진술되지 않는다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. A-8 의 변이 검사가 논리 결합을 뒤집은 사본에서 실패하려면 각 항이 홀로 참인
+증거가 있어야 하며, 이 명제가 그 증거를 형식층에 둔다.
+-/
+-- DD:CF-3105
+theorem readsBothFxSides_pins_each_conjunct :
+    supplierCounterpartyTable.readsSupplierFxExposure = true
+      ∧ supplierCounterpartyTable.readsBothFxSides = false
+      ∧ confidentialBilateral.readsRecipientFxExposure = true
+      ∧ confidentialBilateral.readsBothFxSides = false := by
+  exact ⟨rfl, rfl, rfl, rfl⟩
+
+/--
+그 경로 목록이 그 발행자의 성립 조건 자리를 내는가.
+
+**대응 비형식 개념:** 어느 발행자의 성립 기준이 어느 공시에 드는가. 성립 조건의 자리가 수취자의
+성질과 두 주체 사이의 관계로 갈리고 그 둘을 내는 경로가 그 발행자를 덮어야 한다.
+
+**이 정의가 배제하는 사례:**
+성립 조건의 자리를 내는 경로가 그 발행자를 덮지 않아도 그 자리가 읽힌다고 보는 읽기. 공공 기관
+문면이 두 발행자의 기준을 각각 분석한 연구를 인용하면서 그 기준이 공시에서 유도되지 않고 추정으로
+복원된다고 적으므로, 덮지 않아도 읽힌다고 보면 그 추정이 공시로 읽힌다.
+조달처: E-62 §8-3 「그 기준의 측정 소스가 공시가 아니라 연구의 추정이다」
+
+**기각한 대체 정의:**
+덮는 쪽을 공급자 하나로 닫는 안. 성립 조건의 넷째 기준이 두 주체 사이의 관계에 붙으므로 공급자
+하나로 닫으면 그 기준이 어느 쪽 공시에서 읽히는지가 서지 않는다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-3105
+def readsAdmission {Node : Type} (chs : List (SwapLineChannel Node)) (n : Node) : Bool :=
+  chs.any (fun c => c.readsAdmissionLocus && (c.coversSupplier n || c.coversRecipient n))
+
+/--
+성립 조건의 값을 경로 목록에 걸어 내는 사상.
+
+**대응 비형식 개념:** 그 발행자의 성립 기준을 공시에서 읽을 수 있는가와 읽히면 무엇인가를 가르는
+사상. 읽을 수 없는 자리를 거짓으로 접지 않고 비어 있음으로 낸다.
+
+**이 정의가 배제하는 사례:**
+읽을 수 없는 자리를 거짓으로 접는 읽기. 관측층에 등재되는 소스 없음이 주요 산출물이라는 요구가
+이 자리에서 발행자별로 갈린 꼴로 선다고 한 기록이 적으므로, 거짓으로 접으면 그 기준을 두지 않는
+발행자와 그 기준을 읽을 수 없는 발행자가 한 값으로 선다.
+조달처: E-63 §6-4 「관측층에 등재되는 소스 없음이 주요 산출물이라는 요구가 이 자리에서 발행자별로 갈린 꼴로 선다」
+
+**기각한 대체 정의:**
+사상이 성립 조건의 거처 구조체를 내도록 두는 안. 그 구조체의 판정이 참거짓만 내므로 읽을 수 없는
+자리를 담을 값이 없고, 그 결손이 거짓으로 접힌다.
+
+**값을 담지 않는다.** 읽을 수 있는지를 경로에서 유도하고 값 자체는 인자로 받는다.
+-/
+-- DD:CF-3105
+def admissionCriteriaVia {Node : Type} (chs : List (SwapLineChannel Node))
+    (A : AdmissionCriteria Node) (n : Node) (l : AdmissionLocus) : Option Bool :=
+  if readsAdmission chs n then some (A.usesLocus n l) else none
+
+/--
+어느 축도 내지 않는 경로만으로는 성립 조건이 비어 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+어느 축도 내지 않는 경로 하나만으로 성립 조건의 값이 서야 한다. 그 관측은 그 사상이 경로의 축에
+걸리지 않는다는 뜻이며, 그러면 소스 없음이 사상에서 유도되지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 경로 목록이 어느 축도 내지 않는 경로 하나라는 것을 진술문의
+인자로 둔다. 전칭으로 두면 성립 조건을 내는 경로가 든 목록에서 거짓이며, 이 진술이 배제하는 것은
+그 자리를 내는 경로가 든 목록이다.
+
+**T-3 분류:** 보조 보정이다. 사상과 경로 판정의 정의를 전개하면 목록 멤버십과 조건 분기로 닫히므로
+기여 목록에서 제외한다.
+-/
+-- DD:CF-3105
+theorem admissionCriteriaVia_undetermined_of_trivial
+    (A : AdmissionCriteria Unit) (l : AdmissionLocus) :
+    admissionCriteriaVia [SwapLineChannel.trivial] A () l = none := by
+  rfl
+
+/--
+공표 경로 목록은 성립 조건의 자리를 낸다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+공표 경로 가운데 성립 조건의 자리를 내면서 그 발행자를 덮는 것이 하나도 없어야 한다. 그 관측은 그
+자리의 측정 소스가 공표 경로에 없다는 뜻이며, 그러면 앞선 명제가 든 발행자별 가름이 이 축에서는
+한쪽으로 닫힌다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 소스 없음이 축마다 갈린다는 것을 성립 조건 축에서 보이므로, 앞의 환위험 두
+면과 맞대어 결손이 균일하지 않음이 선다.
+-/
+-- DD:CF-3105
+theorem readsAdmission_publicChannels :
+    readsAdmission publicChannels () = true := by
+  rfl
+
+/--
+성립 조건 판정의 각 항이 홀로 값을 가르는 경로가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+성립 조건의 자리를 내지 않으면서 그 발행자를 덮는 경로에서 판정이 참이거나, 그 자리를 내면서 한
+쪽만 덮는 경로에서 판정이 거짓이어야 한다. 그 관측은 그 판정의 두 결합이 함께만 움직인다는 뜻이며,
+그러면 논리곱과 논리합을 뒤집은 변이가 같은 값을 내어 그 판정이 재어지지 않는다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+두 결합의 독립은 각 결합이 홀로 값을 가르는 경로를 들어야 보이고, 임의의 경로 목록에 대한 전칭으로는
+그 독립이 진술되지 않는다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. A-8 의 논리 결합 변이가 뒤집은 사본에서 실패하려면 각 결합이 홀로 값을 가르는
+증거가 있어야 하며, 이 명제가 그 증거를 형식층에 둔다.
+-/
+-- DD:CF-3105
+theorem readsAdmission_pins_each_conjunct :
+    readsAdmission [recipientOnlendingTerms] () = false
+      ∧ readsAdmission [{ supplierCounterpartyTable with
+            coversRecipient := fun _ => false }] () = true := by
+  exact ⟨rfl, rfl⟩
 
 end CrisisFramework.Observation

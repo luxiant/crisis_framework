@@ -120,6 +120,8 @@ structure CentralBankSwapLine (Node Currency Num Obs : Type) where
   cap : Option (Term Num Obs)
   /-- 그 쌍의 약정이 상호인가. -/
   reciprocal : Bool
+  /-- 되돌리는 거래의 환율이 처음과 같은가. 조항의 축이며 환위험 귀속이 이 자리에서 유도된다. -/
+  reversalAtInitialRate : Bool
 
 /--
 상시 지위를 예정 종료일의 부재로 유도한다.
@@ -277,6 +279,7 @@ def CentralBankSwapLine.trivial : CentralBankSwapLine Unit Unit Unit Unit where
   scheduledEnd := none
   cap := none
   reciprocal := false
+  reversalAtInitialRate := false
 
 /-- witness (A-3). **무엇을 증거하는가.** 재대출 적격성 구조체가 비어 있지 않다. 어느 기관도
 적격으로 두지 않는 수취자 하나를 든다. -/
@@ -377,9 +380,9 @@ theorem exists_standing_differing_on_cap :
       a.isStanding = true ∧ b.isStanding = true
         ∧ a.isUncapped = false ∧ b.isUncapped = true := by
   exact ⟨{ supplier := (), recipient := (), suppliedCurrency := (), scheduledEnd := none,
-            cap := some (Term.const ()), reciprocal := false },
+            cap := some (Term.const ()), reciprocal := false, reversalAtInitialRate := false },
           { supplier := (), recipient := (), suppliedCurrency := (), scheduledEnd := none,
-            cap := none, reciprocal := false },
+            cap := none, reciprocal := false, reversalAtInitialRate := false },
           rfl, rfl, rfl, rfl⟩
 
 /--
@@ -407,5 +410,142 @@ theorem exists_issuer_using_both_loci :
       A.usesLocus () AdmissionLocus.recipientAttribute = true
         ∧ A.usesLocus () AdmissionLocus.pairRelation = true := by
   exact ⟨{ usesLocus := fun _ _ => true }, rfl, rfl⟩
+
+/--
+환위험을 지는 주체.
+
+**대응 비형식 개념:** 그 약정의 조항이 환율 변동의 부담을 어느 주체의 장부에 두는가. 값이 없으면
+그 조항이 그것을 정하지 않는다는 뜻이며 아무도 지지 않는다는 뜻이 아니다.
+
+**이 정의가 배제하는 사례:**
+환위험 귀속을 참거짓으로 두는 읽기. 공급하는 쪽의 질의응답이 되돌리는 거래의 환율이 처음과 같으므로
+자기가 환율 변동에 노출되지 않는다고 적고 공공 기관 문면이 차입하는 중앙은행이 환위험을 전부 진다고
+적는데, 참거짓으로 두면 그 조항이 귀속을 정하지 않는 자리와 아무도 지지 않는 자리가 한 값으로 선다.
+조달처: E-62 §6 「그 둘이 같은 거래의 두 면이어서 어느 쪽도 틀리지 않으나 그 둘을 한 문장으로 합치면 환위험이 어느 주체의 장부에 서는지가 사라진다」
+
+**기각한 대체 정의:**
+귀속을 공급자와 수취자의 열거로 두고 선택 타입을 쓰지 않는 안. 두 문면이 같은 거래의 두 면이어서
+어느 쪽도 틀리지 않는데 열거로 두면 조항이 정하지 않는 자리에 둘 가운데 하나를 넣게 되고, 그 넣음이
+B-7 이 금지한 봉합이다.
+
+**수 체계를 받지 않는다.**
+-/
+-- DD:CF-3103
+def CentralBankSwapLine.fxRiskBearer {Node Currency Num Obs : Type}
+    (s : CentralBankSwapLine Node Currency Num Obs) : Option Node :=
+  if s.reversalAtInitialRate then some s.recipient else none
+
+/--
+되돌림이 처음 환율이면 귀속이 수취자다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+되돌리는 거래의 환율이 처음과 같은 약정인데 그 귀속이 수취자가 아니어야 한다. 그 관측은 조항의
+축과 귀속이 다른 자리에서 나온다는 뜻이며, 그러면 귀속이 조항에서 유도되지 않고 따로 저장되어야 한다.
+
+**가정과 그 배제 사례(T-4·T-5):** 되돌림이 처음 환율이라는 가정을 진술문에 둔다. 그 가정을 빼면
+임의의 약정에 대한 전칭이 되어 거짓이며, 그 가정이 배제하는 것은 되돌림 환율을 미리 정하지 않는
+약정이다.
+
+**T-3 분류:** 보조 보정이다. 정의를 전개하고 조건 분기의 참 갈래로 닫히므로 기여 목록에서 제외한다.
+-/
+-- DD:CF-3103
+theorem CentralBankSwapLine.fxRiskBearer_eq_recipient {Node Currency Num Obs : Type}
+    (s : CentralBankSwapLine Node Currency Num Obs)
+    (h : s.reversalAtInitialRate = true) : s.fxRiskBearer = some s.recipient := by
+  unfold CentralBankSwapLine.fxRiskBearer
+  rw [if_pos h]
+
+/--
+되돌림이 처음 환율이 아니면 귀속이 비어 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+되돌림 환율을 미리 정하지 않는 약정인데 그 귀속이 비어 있지 않아야 한다. 그 관측은 그 조항 밖의
+자리가 귀속을 정한다는 뜻이며, 그러면 그 자리를 타입이 받아야 한다.
+
+**가정과 그 배제 사례(T-4·T-5):** 되돌림이 처음 환율이 아니라는 가정을 진술문에 둔다. 그 가정을
+빼면 앞 명제와 부딪히며, 그 가정이 배제하는 것은 되돌림 환율이 처음과 같은 약정이다.
+
+**T-3 분류:** 보조 보정이다. 앞 명제와 같은 사유다.
+-/
+-- DD:CF-3103
+theorem CentralBankSwapLine.fxRiskBearer_eq_none {Node Currency Num Obs : Type}
+    (s : CentralBankSwapLine Node Currency Num Obs)
+    (h : s.reversalAtInitialRate = false) : s.fxRiskBearer = none := by
+  unfold CentralBankSwapLine.fxRiskBearer
+  rw [h, if_neg Bool.false_ne_true]
+
+/--
+귀속이 비어 있음과 되돌림 환율이 정해지지 않음이 서로 동치다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+귀속이 비어 있는데 되돌림 환율이 처음과 같거나, 되돌림 환율이 처음과 다른데 귀속이 선 약정이
+있어야 한다. 그 관측은 귀속이 그 조항 하나에서 유도되지 않는다는 뜻이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 귀속의 결손이 조항의 결손과 같은 것임을 양방향으로 보이므로, 소스 없음이
+어느 축에서 오는지를 관측층이 그 조항 하나로 환원할 수 있게 된다.
+-/
+-- DD:CF-3103
+theorem CentralBankSwapLine.fxRiskBearer_eq_none_iff_not_reversalAtInitialRate
+    {Node Currency Num Obs : Type} (s : CentralBankSwapLine Node Currency Num Obs) :
+    s.fxRiskBearer = none ↔ s.reversalAtInitialRate = false := by
+  constructor
+  · intro hn
+    cases hr : s.reversalAtInitialRate with
+    | false => rfl
+    | true =>
+      rw [CentralBankSwapLine.fxRiskBearer_eq_recipient s hr] at hn
+      cases hn
+  · exact CentralBankSwapLine.fxRiskBearer_eq_none s
+
+/--
+공급자와 수취자가 다르면 귀속이 공급자가 아니다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+공급자와 수취자가 다른 약정인데 그 귀속이 공급자여야 한다. 그 관측은 공급하는 쪽의 질의응답이
+자기가 환율 변동에 노출되지 않는다고 적은 것과 부딪히며, 그러면 그 두 문면 가운데 하나가 틀린다.
+
+**가정과 그 배제 사례(T-4·T-5):** 공급자와 수취자가 다르다는 가정을 진술문에 둔다. 그 가정을
+빼면 두 주체가 같은 약정에서 거짓이며, 그 가정이 배제하는 것은 한 중앙은행이 자기와 맺은 약정이다.
+
+**T-3 분류:** 기여다. 두 문면 가운데 공급자 쪽의 서술이 타입에서 따라 나옴을 보이므로, B-7 이
+금지한 봉합을 쓰지 않고 두 서술을 함께 담았음이 이 자리에서 선다.
+-/
+-- DD:CF-3103
+theorem CentralBankSwapLine.fxRiskBearer_ne_supplier {Node Currency Num Obs : Type}
+    (s : CentralBankSwapLine Node Currency Num Obs) (hne : s.supplier ≠ s.recipient) :
+    s.fxRiskBearer ≠ some s.supplier := by
+  intro heq
+  cases hr : s.reversalAtInitialRate with
+  | false =>
+    rw [CentralBankSwapLine.fxRiskBearer_eq_none s hr] at heq
+    cases heq
+  | true =>
+    rw [CentralBankSwapLine.fxRiskBearer_eq_recipient s hr] at heq
+    exact hne (Option.some.inj heq).symm
+
+/--
+귀속이 선 약정과 비어 있는 약정이 둘 다 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+약정이 전부 같은 귀속 지위를 가져야 한다. 그 반례는 조항의 축이 타입에서 다른 축에 묶여 있다는
+뜻이며, 그러면 두 문면이 같은 거래의 두 면이라는 사실이 담기지 않는다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+귀속의 결손이 실재함은 그 결손이 선 약정 하나를 들어야 보이고, 임의의 약정에 대한 전칭으로는
+그 결손이 진술되지 않는다. 시스템 수준의 조항 관례가 개별 약정의 귀속을 결정하지 않는 자리다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 선택 타입을 쓴 설계가 실제로 두 값을 함께 받는다는 것을 보이므로 기여
+목록에 든다.
+-/
+-- DD:CF-3103
+theorem exists_mismatch_on_bearer_not_supplier :
+    ∃ a b : CentralBankSwapLine Unit Unit Unit Unit,
+      a.fxRiskBearer = some a.recipient ∧ b.fxRiskBearer = none := by
+  exact ⟨{ CentralBankSwapLine.trivial with reversalAtInitialRate := true },
+    CentralBankSwapLine.trivial, rfl, rfl⟩
 
 end CrisisFramework.Definition

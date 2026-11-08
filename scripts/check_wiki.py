@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 쉰아홉을 돈다. 실패시키는 것 마흔일곱과 보고만 하는 것 아홉과
+`docs/decisions/SPEC.md` §2 의 검사 예순을 돈다. 실패시키는 것 마흔여덟과 보고만 하는 것 아홉과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1089,7 +1089,7 @@ ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
          "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
-         "55", "56", "57", "58", "59", "29", "30"]
+         "55", "56", "57", "58", "59", "60", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -3746,6 +3746,121 @@ def check_59(led: Ledger) -> Report:
     return r
 
 
+# 검사 60 이 읽는 자리와 꼴. 유니버스는 회계층 파일 전량이고 `Rat/` 도 든다. 층을 정하는 것이
+# 디렉터리이므로 그 아래를 전부 훑는다.
+CURRENCY_GUARD_DIR = "CrisisFramework/Accounting"
+# 최상위 선언의 머리. 주석과 문서화 문면을 걷어낸 뒤에 읽으므로 머리말 줄이 끼지 않는다.
+CURRENCY_GUARD_DECL = re.compile(
+    r"^(?:@\[[^\]\n]*\]\s*)?(?:(?:private|protected|noncomputable|partial|unsafe)\s+)*"
+    r"(def|theorem|lemma|abbrev|instance|example|structure|inductive|class|opaque)\b"
+    r"[ \t]*([^\s:({\[]*)", re.M)
+# 선언이 아닌 최상위 명령. 마지막 선언의 몸이 그 뒤 명령까지 번지지 않게 끊는다.
+CURRENCY_GUARD_STOP = re.compile(
+    r"^(?:end|namespace|section|open|variable|universe|set_option|attribute|#\w+)\b", re.M)
+# 청구권의 금액 항을 평가하는 문면. 색인이 다른 색인의 투영을 거쳐도 받는다.
+CURRENCY_GUARD_AMOUNT = re.compile(
+    r"evalTerm\s+[\w.']+\s+\(\s*[\w.']+\.assign\s+(?:[\w.']+|\([^()]*\)(?:\.[\w']+)*)\s*\)\.amount")
+# 청구권의 표시 통화를 비교하는 문면. 좌변이든 우변이든 받는다.
+CURRENCY_GUARD_CUR = re.compile(r"\.currency\s*=|=\s*\((?:[^()]|\([^()]*\))*\)\.currency\b")
+CURRENCY_GUARD_OPEN = "([{⟨"
+CURRENCY_GUARD_CLOSE = ")]}⟩"
+
+
+def sum_terms(code: str) -> list[str]:
+    """코드 문면의 합 기호마다 그 합의 항.
+
+    바인더 뒤 첫 쉼표에서 시작해 괄호 균형을 따라가고, 같은 깊이의 비교 연산자나 정의 기호나
+    전술 진입에서 멈춘다. 그 합을 감싼 괄호가 닫혀도 멈춘다. 항을 선언 본문 전량으로 잡으면
+    타입클래스 바인더의 결정 가능 등식이 그 안에 들어 가드로 읽히므로 항으로 좁힌다.
+    """
+    out: list[str] = []
+    n = len(code)
+    for m in re.finditer("∑", code):
+        # 바인더의 쉼표. 바인더 안의 괄호는 건너뛴다.
+        k, depth = m.end(), 0
+        while k < n:
+            ch = code[k]
+            if ch in CURRENCY_GUARD_OPEN:
+                depth += 1
+            elif ch in CURRENCY_GUARD_CLOSE:
+                depth -= 1
+            elif ch == "," and depth == 0:
+                break
+            k += 1
+        if k >= n:
+            continue
+        start = k = k + 1
+        depth = 0
+        while k < n:
+            ch = code[k]
+            if ch in CURRENCY_GUARD_OPEN:
+                depth += 1
+            elif ch in CURRENCY_GUARD_CLOSE:
+                if depth == 0:
+                    break
+                depth -= 1
+            elif depth == 0:
+                if code.startswith(":=", k):
+                    break
+                if ch in "≤≥≠":
+                    break
+                if ch == "=" and not code.startswith("=>", k):
+                    break
+                if ch in "<>" and not code.startswith(("<;>", "<|", "<-", "<$>"), k) \
+                        and not (ch == ">" and k > 0 and code[k - 1] in "=-<|"):
+                    break
+                if code.startswith("by", k) and (k == 0 or not (code[k - 1].isalnum()
+                                                                  or code[k - 1] in "_.'")) \
+                        and (k + 2 >= n or not (code[k + 2].isalnum() or code[k + 2] in "_'")):
+                    break
+            k += 1
+        out.append(code[start:k])
+    return out
+
+
+def currency_guard_decls(root: Path) -> list[tuple[str, str, int, int]]:
+    """유니버스의 선언마다 (파일, 이름, 그 선언의 금액 합의 수, 그 가운데 표시 통화 판정이 든 수)."""
+    res: list[tuple[str, str, int, int]] = []
+    d = root / CURRENCY_GUARD_DIR
+    for f in sorted(d.rglob("*.lean")):
+        code = _lean_code(f.read_text(encoding="utf-8"))
+        heads = list(CURRENCY_GUARD_DECL.finditer(code))
+        for i, h in enumerate(heads):
+            end = heads[i + 1].start() if i + 1 < len(heads) else len(code)
+            stop = CURRENCY_GUARD_STOP.search(code, h.end(), end)
+            body = code[h.start():stop.start() if stop else end]
+            terms = [t for t in sum_terms(body) if CURRENCY_GUARD_AMOUNT.search(t)]
+            if not terms:
+                continue
+            guarded = sum(1 for t in terms if CURRENCY_GUARD_CUR.search(t))
+            res.append((str(f.relative_to(root)), h.group(2) or h.group(1), len(terms), guarded))
+    return res
+
+
+def check_60(led: Ledger) -> Report:
+    r = Report("60", "wiki60-currency-guard",
+               "회계층에서 합의 피가수가 청구권의 금액 항을 평가하는 선언마다 그 합의 항에 "
+               "표시 통화 판정이 드는가", "fail")
+    if not (led.root / CURRENCY_GUARD_DIR).is_dir():
+        r.bad(f"{CURRENCY_GUARD_DIR}/ 가 없다")
+        return r
+    decls = currency_guard_decls(led.root)
+    # 유니버스가 비면 어느 선언도 적발되지 않아 0 으로 난다. 검사 58 과 59 가 같은 요구를 둔다.
+    if not decls:
+        r.bad(f"{CURRENCY_GUARD_DIR}/ 에서 합의 항이 청구권의 금액 항을 평가하는 선언을 하나도 "
+              "찾지 못했다")
+        return r
+    hit = [(f, n, t, g) for f, n, t, g in decls if g < t]
+    for f, n, t, g in hit:
+        r.bad(f"{f} 의 `{n}` 이 청구권의 금액을 더하는 합 {t} 가운데 {t - g} 의 항에 표시 통화 "
+              "판정을 두지 않는다")
+    r.note(f"유니버스의 선언 {len(decls)} · 모든 합의 항에 표시 통화 판정이 든 것 "
+           f"{len(decls) - len(hit)} · 들지 않은 것 {len(hit)}")
+    if hit:
+        r.note("적발된 선언: " + " · ".join(f"`{n}`" for _f, n, _t, _g in hit))
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3763,7 +3878,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_44(led), check_45(led), check_46(led), check_47(led),
         check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
         check_53(led), check_54(led), check_55(led), check_56(led), check_57(led),
-        check_58(led), check_59(led),
+        check_58(led), check_59(led), check_60(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3790,7 +3905,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 쉰아홉)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 예순)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

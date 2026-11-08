@@ -6075,6 +6075,256 @@
    "related": [
     "CF-3080"
    ]
+  },
+  {
+   "id": "CF-3139",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "색인의 완비성 미확인을 판정 불가의 까닭에 새 생성자로 더하는 안",
+   "reason": "경로가 망에 든 약정을 전량 덮어도 그 망이 실제의 전량인지는 내지 않으므로 완비성은 덮음의 논리곱으로 환원되지 않는다. **판정 불가의 까닭을 세분하는 것이 허용되는 개변이나 해소 경로가 같은 두 까닭을 더하면 그 열거의 기각 문단이 든 근거가 무너지는 요건이 함께 걸리며**, 완비성 미확인은 자료를 더 모아도 서지 않는 부류여서 귀속이 유일하지 않다는 기존 까닭과 해소 경로가 같다. 그래서 그 한계를 생성자로 두지 않고 문서화 문면의 배제 사례가 받는다. 재는 자리는 그 열거의 생성자 여섯과 그 가운데 자료로 풀리지 않는 것의 목록이다.",
+   "for": "약정 망의 색인이 실제의 전량인지를 내지 못하는 한계",
+   "statement": "색인의 완비성은 그 축으로 서지 않으며 그 까닭을 새 생성자로 더하지 않는다",
+   "basis": "경로가 망에 든 약정을 전량 덮어도 그 망이 실제의 전량인지는 내지 않으므로 완비성은 덮음의 논리곱으로 환원되지 않는다. **판정 불가의 까닭을 세분하는 것이 허용되는 개변이나 해소 경로가 같은 두 까닭을 더하면 그 열거의 기각 문단이 든 근거가 무너지는 요건이 함께 걸리며**, 완비성 미확인은 자료를 더 모아도 서지 않는 부류여서 귀속이 유일하지 않다는 기존 까닭과 해소 경로가 같다. 그래서 그 한계를 생성자로 두지 않고 문서화 문면의 배제 사례가 받는다. 재는 자리는 그 열거의 생성자 여섯과 그 가운데 자료로 풀리지 않는 것의 목록이다.",
+   "for_decl": "CrisisFramework.Observation.UndeterminedReason",
+   "related": []
+  },
+  {
+   "id": "CF-3216",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "자기 청구권을 세는 자리에서 거르는 선례를 그대로 옮겨 양쪽 끝이 같은 당사자인 청구권을 빼는 안.",
+   "reason": "보유자 쪽 총계는 그 보유자가 든 것을 전량 세는 값이고 자기 청구권도 그 보유자의 자산으로 서 있어서, 빼면 통화별 지급능력 판정의 자산 쪽이 부채 쪽과 다른 유니버스를 갖는다.",
+   "for": "claimTotalOfHolder 의 정의 선택",
+   "statement": "claimTotalOfHolder 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.claimTotalOfHolder",
+   "related": [
+    "CF-3101"
+   ]
+  },
+  {
+   "id": "CF-3217",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "불일치의 판정을 청구권의 표시 통화 하나로 받고 채무자의 축을 보지 않는 안.",
+   "reason": "청구권의 표시 통화가 채무자의 불일치와 다른 축이고, 한 편이 불일치의 꼴을 부채의 통화와 그 부채가 조달한 자산의 통화의 쌍으로 두므로 표시 통화 하나로는 그 쌍이 유도되지 않는다.",
+   "for": "claimsOnMismatchedDebtors 의 정의 선택",
+   "statement": "claimsOnMismatchedDebtors 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.claimsOnMismatchedDebtors",
+   "related": [
+    "CF-3101"
+   ]
+  },
+  {
+   "id": "CF-3218",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "자산 쪽을 불일치 채무자에 대한 청구권으로 좁혀 그것만 부채와 맞대는 안.",
+   "reason": "불일치가 상환 능력을 통해 전달되는 것이고 상환에 쓰이는 자산이 그 축으로 좁혀지지 않으므로, 좁히면 불일치가 없는 채무자에 대한 청구권이 상환 재원에서 빠진다.",
+   "for": "solventIn 의 정의 선택",
+   "statement": "solventIn 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.solventIn",
+   "related": [
+    "CF-3101"
+   ]
+  },
+  {
+   "id": "CF-3219",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "통화별 판정의 논리곱을 유한 집합 위의 접기로 두는 안.",
+   "reason": "색인 타입에 유한성 인스턴스를 요구하게 되고 그 요구가 통화의 유니버스를 조달의 범위와 무관하게 정한다.",
+   "for": "solventInEvery 의 정의 선택",
+   "statement": "solventInEvery 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.solventInEvery",
+   "related": [
+    "CF-3101"
+   ]
+  },
+  {
+   "id": "CF-3220",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "개별 거래의 타입을 따로 세우고 그 집합 위에서 더하는 안.",
+   "reason": "개별 거래가 청구권 셋과 담보 하나의 합성으로 이미 서므로 타입을 또 세우면 같은 실물이 두 색인을 갖고, 그 둘이 갈릴 수 있다.",
+   "for": "drawnTotalUnder 의 정의 선택",
+   "statement": "drawnTotalUnder 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.drawnTotalUnder",
+   "related": [
+    "CF-3102"
+   ]
+  },
+  {
+   "id": "CF-3221",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "한도의 부재를 판정 불가로 내고 참거짓을 내지 않는 안.",
+   "reason": "한도가 없는 약정에서 그 판정이 서지 않는 것이 아니라 어떤 인출 총액에도 참이므로, 판정 불가로 두면 무제한 약정과 한도를 읽을 수 없는 약정이 한 값으로 선다.",
+   "for": "withinCap 의 정의 선택",
+   "statement": "withinCap 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.withinCap",
+   "related": [
+    "CF-3102"
+   ]
+  },
+  {
+   "id": "CF-3222",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "귀속을 공급자와 수취자의 열거로 두고 선택 타입을 쓰지 않는 안.",
+   "reason": "두 문면이 같은 거래의 두 면이어서 어느 쪽도 틀리지 않는데 열거로 두면 조항이 정하지 않는 자리에 둘 가운데 하나를 넣게 되고, 그 넣음이 B-7 이 금지한 봉합이다.",
+   "for": "fxRiskBearer 의 정의 선택",
+   "statement": "fxRiskBearer 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CentralBankSwapLine.fxRiskBearer",
+   "related": [
+    "CF-3103"
+   ]
+  },
+  {
+   "id": "CF-3223",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "메울 후보를 역할 전량의 넓이 비교로 두고 등급의 비교를 그대로 쓰는 안.",
+   "reason": "교역 표시통화의 역할이 의무를 메우는 일에 닿지 않으므로 그 역할을 넣으면 메울 수 있는 쌍이 교역 표시의 넓이 때문에 배제되고, 그 배제가 문면에서 유도되지 않는다. 그리고 부채 표시 역할 하나로 두는 안도 기각했다. 그 역할의 넓이 비교가 전순서여서 어느 쌍에서도 한 방향이 서고, 그러면 메울 후보가 없는 쌍이 구조적으로 서지 못한다.",
+   "for": "coverCandidate 의 정의 선택",
+   "statement": "coverCandidate 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Definition.CurrencyStanding.coverCandidate",
+   "related": [
+    "CF-3104"
+   ]
+  },
+  {
+   "id": "CF-3224",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "두 면의 논리합을 축으로 두는 안.",
+   "reason": "환위험에 대해 무엇이든 내는 경로를 가르나 귀속이 서려면 두 면이 함께 서야 하므로, 논리합으로 두면 한 면만 내는 경로가 귀속을 내는 경로로 읽힌다.",
+   "for": "readsBothFxSides 의 정의 선택",
+   "statement": "readsBothFxSides 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.SwapLineChannel.readsBothFxSides",
+   "related": [
+    "CF-3105"
+   ]
+  },
+  {
+   "id": "CF-3225",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "덮는 쪽을 공급자 하나로 닫는 안.",
+   "reason": "성립 조건의 넷째 기준이 두 주체 사이의 관계에 붙으므로 공급자 하나로 닫으면 그 기준이 어느 쪽 공시에서 읽히는지가 서지 않는다.",
+   "for": "readsAdmission 의 정의 선택",
+   "statement": "readsAdmission 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.readsAdmission",
+   "related": [
+    "CF-3105"
+   ]
+  },
+  {
+   "id": "CF-3226",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "사상이 성립 조건의 거처 구조체를 내도록 두는 안.",
+   "reason": "그 구조체의 판정이 참거짓만 내므로 읽을 수 없는 자리를 담을 값이 없고, 그 결손이 거짓으로 접힌다.",
+   "for": "admissionCriteriaVia 의 정의 선택",
+   "statement": "admissionCriteriaVia 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Observation.admissionCriteriaVia",
+   "related": [
+    "CF-3105"
+   ]
+  },
+  {
+   "id": "CF-3227",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "자기 청구권을 집합에서 지우고 남은 것을 더하는 안.",
+   "reason": "지우면 그 청구권이 있었다는 사실이 사라지고, 총액과 순액의 차이가 어디서 왔는지를 셀 대상이 없어진다. L-12 가 순액으로 닫는 것을 금지하는 취지가 그것이며, 집합에 남겨 두고 세는 자리에서 거르는 것이 그 취지에 맞는다. 그리고 통화를 받지 않고 통화별 합을 뒤에 쪼개는 안도 기각했다. 쪼개려면 통화를 가로지른 값이 한 번 서야 하고 그 값이 L-12 가 금지한 환산을 전제한다.",
+   "for": "grossTotal 의 정의 선택",
+   "statement": "grossTotal 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.grossTotal",
+   "related": [
+    "CF-3106"
+   ]
+  },
+  {
+   "id": "CF-3228",
+   "origin": {
+    "arc": "currency",
+    "phase": "currency-7",
+    "kind": "decision_session",
+    "date": "2026-11-08"
+   },
+   "candidate": "옮긴 뒤에 자기 청구권인 것을 전부 세는 안.",
+   "reason": "그러면 처음부터 자기 청구권이던 것이 함께 들어와 총액의 차이와 어긋난다.",
+   "for": "newlyInternalized 의 정의 선택",
+   "statement": "newlyInternalized 의 기각 후보를 등재한다",
+   "basis": "D-2 3 항이 요구하는 기각 문단이 그 선언의 문서화 문면에 서고 R-8 이 그 문단마다 이 레지스터의 대응 항목을 요구한다. docstring 이 요지를 들고 이 항목이 사유를 든다.",
+   "for_decl": "CrisisFramework.Accounting.newlyInternalized",
+   "related": [
+    "CF-3106"
+   ]
   }
  ]
 }

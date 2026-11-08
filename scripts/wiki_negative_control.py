@@ -1952,6 +1952,51 @@ def inj_59_dup(root):
     return dst.name
 
 
+def _inj_60_target(root):
+    """회계층 파일 가운데 이름공간을 닫는 줄이 한 번 서는 첫 파일과 그 줄."""
+    anchor = "\nend CrisisFramework.Accounting\n"
+    for f in sorted((root / check_wiki.CURRENCY_GUARD_DIR).glob("*.lean")):
+        src = f.read_text(encoding="utf-8")
+        if src.count(anchor) == 1:
+            return f, src, anchor
+    raise SystemExit("이름공간을 닫는 줄이 한 번 서는 회계층 파일이 없어 주입할 자리가 없다")
+
+
+def _inj_60_put(root, name, binders, args):
+    f, src, anchor = _inj_60_target(root)
+    decl = (f"\ndef {name} {{ι Party Obs Ext Lvl Currency : Type}}{binders}\n"
+            f"    (e : Env ℤ Obs Ext Lvl){args} (S : ClaimSet ι Party ℤ Obs Ext Lvl Currency) : ℤ :=\n"
+            f"  ∑ i ∈ S.index, evalTerm e (S.assign i).amount\n")
+    # 주입한 합의 항이 금액을 평가하고 표시 통화 판정을 들지 않음을 넣기 전에 단언한다. 그 둘이
+    # 서지 않으면 이 주입이 겨눈 자리가 서지 않는다.
+    terms = [t for t in check_wiki.sum_terms(decl) if check_wiki.CURRENCY_GUARD_AMOUNT.search(t)]
+    if len(terms) != 1 or check_wiki.CURRENCY_GUARD_CUR.search(terms[0]):
+        raise SystemExit("주입할 선언의 합의 항이 겨눈 꼴이 아니다")
+    f.write_text(src.replace(anchor, decl + anchor), encoding="utf-8")
+    return name
+
+
+def inj_60_unguarded(root):
+    """가드 없는 합을 하나 더한다. 통화를 받지 않고 금액을 그대로 더하는 선언이다."""
+    return _inj_60_put(root, "injectedUnguardedTotal", "", "")
+
+
+def inj_60_binder_only(root):
+    """타입클래스 바인더와 통화 인자만 더하고 합의 항은 그대로 둔 선언을 주입한다.
+
+    가드를 선언 본문 전량에서 찾는 꼴이면 바인더의 결정 가능 등식이나 통화 인자를 가드로 읽어 이
+    주입을 놓친다. 그 거짓 음성을 재는 항이며, 바인더와 인자가 주입한 문면에 실제로 서는지를 넣기
+    전에 단언한다.
+    """
+    binders = " [DecidableEq Currency]"
+    args = " (c : Currency)"
+    name = _inj_60_put(root, "injectedBinderOnlyTotal", binders, args)
+    f, src, _anchor = _inj_60_target(root)
+    if binders.strip() not in src or args.strip() not in src:
+        raise SystemExit("주입한 선언에 바인더와 통화 인자가 서지 않는다")
+    return name
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -2052,6 +2097,8 @@ CASES = [
     ("57",  "wiki57-cq-count-numeral",       "그 머리 블록에 항의 수를 수사로 적는다", inj_57_numeral, None),
     ("58",  "wiki58-queue-marker",           "표지를 들지 않는 행을 넣는다", inj_58_unmarked, None),
     ("59",  "wiki59-extraction-stem-unique", "같은 줄기의 파일을 하나 더 둔다", inj_59_dup, None),
+    ("60",  "wiki60-currency-guard",         "가드 없는 합을 하나 더한다", inj_60_unguarded, None),
+    ("60",  "wiki60-currency-guard",         "타입클래스 바인더와 통화 인자만 더한 선언을 주입한다", inj_60_binder_only, None),
 ]
 
 

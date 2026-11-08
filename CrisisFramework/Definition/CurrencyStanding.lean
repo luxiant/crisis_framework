@@ -455,4 +455,81 @@ theorem exists_standing_strictly_higher :
       ∧ (globalCurrencyStandingFamily t).atLeastAsHigh b a = false := by
   -- 달러가 세 역할 모두에서 으뜸이고 유로가 넘는 단계이므로 한 방향으로만 참이다.
   exact ⟨GlobalCurrency.dollar, GlobalCurrency.euro, 0, rfl, rfl⟩
+/--
+한 통화의 의무를 다른 통화가 메울 후보인가.
+
+**대응 비형식 개념:** 어느 통화 표시 의무를 어느 통화로 조달해 메울 수 있는가의 순서. 조달의
+축과 준비의 축이 함께 서야 메울 수 있으므로 역할 둘의 넓이 비교를 곱으로 둔다.
+
+**이 정의가 배제하는 사례:**
+메울 후보를 규모의 비교로 재는 읽기. 한 편이 달러의 으뜸 역할을 적으면서 그 비교의 문턱을 들지
+않으므로, 규모로 재면 그 단계를 공시에서 읽을 때 정도를 단계로 접는 임계를 지어내게 된다
+(Avdjiev·McCauley·Shin 2016).
+조달처: E-18 §8-2 「그 비교의 문턱을 그 편이 들지 않는다」
+
+**기각한 대체 정의:**
+메울 후보를 역할 전량의 넓이 비교로 두고 등급의 비교를 그대로 쓰는 안. 교역 표시통화의 역할이
+의무를 메우는 일에 닿지 않으므로 그 역할을 넣으면 메울 수 있는 쌍이 교역 표시의 넓이 때문에
+배제되고, 그 배제가 문면에서 유도되지 않는다. 그리고 부채 표시 역할 하나로 두는 안도 기각했다.
+그 역할의 넓이 비교가 전순서여서 어느 쌍에서도 한 방향이 서고, 그러면 메울 후보가 없는 쌍이
+구조적으로 서지 못한다.
+
+**수 체계를 받지 않는다.**
+-/
+-- DD:CF-3104
+def CurrencyStanding.coverCandidate {Currency : Type} (S : CurrencyStanding Currency)
+    (target cover : Currency) : Bool :=
+  (S.reachOf cover CurrencyRole.debtDenomination).atLeastAsWide
+      (S.reachOf target CurrencyRole.debtDenomination)
+    && (S.reachOf cover CurrencyRole.officialReserve).atLeastAsWide
+        (S.reachOf target CurrencyRole.officialReserve)
+
+/--
+한 통화는 자기 의무를 메울 후보다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+어떤 통화가 자기와 비교했을 때 거짓을 내야 한다. 역할마다 넓이 비교의 반사성이 서므로 그 거짓은
+그 곱이 반사성이 서지 않는 역할을 끌어왔다는 뜻이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 보조 보정이다. 정의를 전개하면 역할 둘의 넓이 비교 반사성과 논리곱의 항등식으로
+닫히므로 기여 목록에서 제외한다.
+-/
+-- DD:CF-3104
+theorem CurrencyStanding.coverCandidate_self {Currency : Type} (S : CurrencyStanding Currency)
+    (a : Currency) : S.coverCandidate a a = true := by
+  unfold CurrencyStanding.coverCandidate
+  rw [CurrencyReach.atLeastAsWide_refl, CurrencyReach.atLeastAsWide_refl]
+  rfl
+
+/--
+어느 쪽도 다른 쪽을 메울 후보가 아닌 통화 쌍이 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+모든 통화 쌍에서 적어도 한 방향의 메울 후보 관계가 서야 한다. 그 관측은 메울 후보가 전순서라는
+뜻이며, 그러면 역할 둘을 곱으로 둔 설계가 역할 하나로 접히고 비교되지 않는 쌍이 사라진다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+메울 후보가 전순서가 아님은 어느 방향도 서지 않는 쌍 하나를 들어야 보이고, 임의의 쌍에 대한
+전칭으로는 그 비교되지 않음이 진술되지 않는다. 시스템 수준의 등급이 개별 쌍의 메울 후보 관계를
+결정하지 않는 자리다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 조달의 축과 준비의 축이 서로 독립임을 어느 쪽도 메울 수 없는 쌍으로
+보이므로 기여 목록에 든다.
+-/
+-- DD:CF-3104
+theorem exists_no_cover_either_way :
+    ∃ S : CurrencyStanding Bool,
+      S.coverCandidate true false = false ∧ S.coverCandidate false true = false := by
+  exact ⟨{ reachOf := fun c r => match c, r with
+      | true, .officialReserve => .confinedToIssueArea
+      | true, .tradeInvoicing => .confinedToIssueArea
+      | true, .debtDenomination => .preEminent
+      | false, .officialReserve => .preEminent
+      | false, .tradeInvoicing => .confinedToIssueArea
+      | false, .debtDenomination => .confinedToIssueArea }, rfl, rfl⟩
+
 end CrisisFramework.Definition
