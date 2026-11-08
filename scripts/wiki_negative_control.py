@@ -1676,6 +1676,63 @@ def inj_50_ghost(root):
     raise SystemExit("한 줄에서만 서고 그 줄이 다른 번호를 들지 않는 기록이 없어 주입이 서지 않는다")
 
 
+def _nc50_unread_row(root):
+    """사본의 인벤토리와 미추출 표지를 든 구성원 행 하나와 편 제목 하나. 행과 제목을 고르는 쪽은
+    검증기의 함수를 그대로 부른다. 전사하면 그 축이 꼴을 고칠 때 이 주입이 조용히 공허해진다."""
+    f, lines, rows, unread = _nc53_rows(root)
+    d = root / "docs" / "extractions"
+    title = None
+    for g in sorted(d.glob("extraction-*.md")):
+        if check_wiki.EXTRACTION_FILE_NO.match(g.name):
+            got = check_wiki.extraction_titles(g.read_text(encoding="utf-8"))
+            if got:
+                title = got[0]
+                break
+    if title is None:
+        raise SystemExit("사본의 추출 기록에서 편 제목을 하나도 읽지 못해 주입할 자리가 없다")
+    for line, cells, _sec in rows:
+        if unread in cells[-1] and len(cells) > 1:
+            return f, lines, line, cells, title
+    raise SystemExit("미추출 표지를 든 구성원 행이 없어 주입할 자리가 없다")
+
+
+def _nc50_insert(f, lines, line, cells, cell):
+    """고른 행 바로 뒤에 그 행의 칸을 옮긴 행을 더하되 비고 칸 앞의 마지막 칸을 바꾼다."""
+    row = list(cells)
+    row[-2] = cell
+    lines.insert(line, "| " + " | ".join(row) + " |")
+    f.write_text("\n".join(lines), encoding="utf-8")
+    return f"{check_wiki.INVENTORY_DOC}:{line + 1}"
+
+
+def inj_50_unread(root):
+    """미추출 표지를 든 구성원 행 하나를 더하고 그 칸 하나가 추출 기록의 편 제목을 들게 한다.
+
+    추출된 편을 미추출로 적은 낡은 표지가 서야 하며, 번호를 들지 않으므로 번호 대조의 두 방향은
+    움직이지 않는다.
+    """
+    f, lines, line, cells, title = _nc50_unread_row(root)
+    return _nc50_insert(f, lines, line, cells, title)
+
+
+def inj_50_unread_below(root):
+    """같은 행을 더하되 그 칸이 편 제목을 품고 그 뒤에 글자를 덧붙여 비가 문턱 아래로 가게 한다.
+
+    짧은 제목이 같은 계열의 긴 제목에 들어가는 자리이며 잡히지 않아야 한다. 비가 문턱 아래인지와
+    포함이 서는지를 주입 안에서 단언한다. 그 단언이 없으면 이 항이 문턱을 재지 않고 통과할 수 있다.
+    """
+    f, lines, line, cells, title = _nc50_unread_row(root)
+    cell = title
+    while True:
+        ratio = check_wiki.title_ratio(check_wiki.title_key(cell), check_wiki.title_key(title))
+        if ratio is None:
+            raise SystemExit("덧붙인 칸이 편 제목을 품지 않는다")
+        if ratio < check_wiki.INVENTORY_TITLE_RATIO / 2:
+            break
+        cell += " and its companion series"
+    return _nc50_insert(f, lines, line, cells, cell)
+
+
 # ----------------------------------------------------- 검사 51 · 원장 entry 의 키 유니버스
 
 def inj_51_key(root):
@@ -1983,6 +2040,8 @@ CASES = [
     ("49",  "wiki49-extraction-unpointed",  "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
     ("50",  "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
     ("50",  "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),
+    ("50",  "wiki50-inventory-extraction-mirror", "미추출 표지를 든 구성원 행의 칸이 추출 기록의 편 제목을 든다", inj_50_unread, None),
+    ("50",  "wiki50-inventory-extraction-mirror", "그 칸이 편 제목을 품되 비가 문턱 아래다", inj_50_unread_below, None, "nocatch"),
     ("51",  "wiki51-ledger-key-universe",  "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
     ("52",  "wiki52-open-arc-deferred-assignment", "열려 있는 아크를 ref 로 드는 차단 구멍 하나를 그 아크의 holes 에서 지운다", inj_52_arc, None),
     ("52",  "wiki52-open-arc-deferred-assignment", "그 구멍을 아크의 holes 에는 두고 모든 페이즈의 holes 에서 지운다", inj_52_phase, None),

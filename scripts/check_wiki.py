@@ -2920,6 +2920,52 @@ INVENTORY_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z-])E-(\d{1,2})(?![0-9A-Za-z
 # 안의 첫 자리가 네 자리 연도이고 마지막 자리가 기록 번호다. 연도를 요구하는 까닭은 산문 줄이
 # 괄호 안에 기록 번호만 드는 꼴(「기록 하나(E-44)」)을 구성원으로 읽지 않는 것이다.
 INVENTORY_LIST_MEMBER = re.compile(r"\(\s*\d{4}[^()]*?,\s*E-(\d{1,2})\s*\)")
+# 검사 50 의 미추출 축이 읽는 편 제목의 꼴. 추출 기록의 머리 곧 첫 `#` 제목 뒤에 처음 서는 문단에서
+# 찾으며, 제목이 줄을 넘어 이어지므로 그 문단의 줄을 공백 하나로 이어 붙인 뒤 찾는다. 꼴은 둘이다.
+# 발행 주체에 붙는 굵은 기울임 꼴(`**발행 주체, *제목***`)과 저자와 연도에 붙는 인용부호 꼴
+# (`**저자 (연도), "제목"`)이며, 한 꼴만 받으면 우변의 기록 대부분이 그 밖으로 떨어진다(SPEC §2.1).
+#
+# **굵은 글씨의 여는 표지를 공백이나 문단 머리 뒤로 묶고, 그 표지 뒤의 칸이 인용부호와 별표를 품지
+# 않게 한다.** 인용부호 꼴의 머리가 닫는 표지 뒤의 괄호 안에 게재지를 기울임으로 드는 자리가 있는데,
+# 그 닫는 표지를 여는 표지로 읽으면 게재지의 이름이 편 제목으로 들어온다. 목적 칸이 앞선 기록을
+# 인용부호로 드는 자리도 같은 묶음이 거른다.
+EXTRACTION_TITLE_QUOTED = re.compile(r'(?<!\S)\*\*(?=\S)[^*"]+?,\s*"([^"]+)"')
+EXTRACTION_TITLE_ITALIC = re.compile(r'(?<!\S)\*\*(?=\S)[^*"]+?,\s*\*([^*]+?)\*')
+# 두 정규화 문면의 짧은 쪽을 긴 쪽으로 나눈 값의 문턱이며, 그 값이 문턱 아래이면 포함을 받지
+# 않는다(SPEC §2.1). 짧은 편 제목이 같은 계열의 긴 제목에 들어가는 자리가 거짓 양성이고, 인벤토리가
+# 제목 앞에 발행자를 붙여 드는 자리가 받아야 할 쪽이므로 문턱이 그 둘 사이에 선다. 이 축이 처음 선
+# 판에서 앞쪽 비의 최댓값이 0.342 이고 뒤쪽 비가 0.835 였으므로, 그 사이에서 절반을 고른다.
+INVENTORY_TITLE_RATIO = 0.5
+
+
+def extraction_titles(text: str) -> list[str]:
+    """추출 기록의 머리가 드는 편 제목. 머리는 첫 `#` 제목 뒤에 처음 서는 문단이다."""
+    para: list[str] = []
+    started = False
+    for ln in text.splitlines():
+        if not started:
+            started = ln.startswith("# ")
+            continue
+        if not ln.strip():
+            if para:
+                break
+            continue
+        para.append(ln.strip())
+    head = " ".join(para)
+    found = EXTRACTION_TITLE_QUOTED.findall(head) + EXTRACTION_TITLE_ITALIC.findall(head)
+    return [x.strip() for x in found if x.strip()]
+
+
+def title_key(s: str) -> str:
+    """공백과 대소문자와 구두점을 지운 꼴. 글자와 숫자만 남기며 한글도 글자로 남는다."""
+    return "".join(ch for ch in s.casefold() if ch.isalnum())
+
+
+def title_ratio(a: str, b: str) -> float | None:
+    """정규화한 두 문면이 어느 방향으로든 포함되면 짧은 쪽을 긴 쪽으로 나눈 값을 내고, 아니면 None."""
+    if not a or not b or not (a in b or b in a):
+        return None
+    return min(len(a), len(b)) / max(len(a), len(b))
 
 
 def inventory_members(text: str) -> tuple[dict[int, list[int]], int, int]:
@@ -2956,6 +3002,59 @@ def inventory_members(text: str) -> tuple[dict[int, list[int]], int, int]:
                 out.setdefault(int(x), []).append(i + 1)
         i += 1
     return out, n_rows, n_lists
+
+
+def _check_50_unread(led: Ledger, r: Report, files: dict[int, Path]) -> None:
+    """검사 50 의 미추출 축. 미추출 표지를 든 구성원 행이 이미 추출된 편을 가리키는지 본다.
+
+    좌변은 그 표지를 든 구성원 행의 비고 칸을 뺀 칸 전량이고 우변은 추출 기록의 머리가 드는 편
+    제목이다. **번호 대조와 축을 가른다.** 번호를 들지 않는 구성원 행을 번호 대조의 좌변에서 빼는
+    요구가 그대로 서 있으므로, 이 축은 번호가 아니라 제목으로 그 행이 가리키는 편을 찾는다.
+    구성원 행과 표지 낱말은 검사 53 과 54 가 쓰는 함수와 블록을 그대로 부른다. 전사하면 그 둘이
+    꼴을 고칠 때 이 축이 조용히 낡는다. **적발은 0 을 요구한다**(SPEC §2.1).
+    """
+    marks = inventorymark_block(led)
+    missing = [k for k in (INVENTORYMARK_AGGREGATE, INVENTORYMARK_UNREAD) if k not in marks]
+    if missing:
+        r.bad("docs/baseline.md 의 INVENTORYMARK 블록에 " + " · ".join(missing) + " 가 없다")
+        return
+    rows, _n_tables, _n_rows = inventory_member_rows(
+        (led.root / INVENTORY_DOC).read_text(encoding="utf-8"), marks[INVENTORYMARK_AGGREGATE])
+    unread = [(line, cells) for line, cells, _sec in rows
+              if marks[INVENTORYMARK_UNREAD] in cells[-1]]
+    titles: list[tuple[int, str, str]] = []
+    untitled: list[int] = []
+    for n in sorted(files):
+        got = extraction_titles(files[n].read_text(encoding="utf-8"))
+        if not got:
+            untitled.append(n)
+        titles += [(n, x, title_key(x)) for x in got]
+    # 우변이 비면 어느 행도 걸리지 않아 0 으로 난다. 머리의 꼴이 바뀌어 제목을 하나도 읽지 못한
+    # 것과 맞는 편이 없는 것이 갈리지 않으므로 통과시키지 않는다.
+    if not titles:
+        r.bad("docs/extractions/ 의 머리에서 편 제목을 하나도 읽지 못했다")
+        return
+    hits = below = 0
+    for line, cells in unread:
+        for c in cells[:-1]:
+            k = title_key(c)
+            for n, x, xk in titles:
+                ratio = title_ratio(k, xk)
+                if ratio is None:
+                    continue
+                if ratio < INVENTORY_TITLE_RATIO:
+                    below += 1
+                    r.note(f"문턱 아래의 포함 {INVENTORY_DOC}:{line} `{c}` 와 E-{n:02d} `{x}` "
+                           f"(비 {ratio:.3f})")
+                    continue
+                hits += 1
+                r.bad(f"{INVENTORY_DOC}:{line} 의 구성원 행이 미추출 표지를 드는데 그 칸 `{c}` 가 "
+                      f"E-{n:02d} 의 편 제목 `{x}` 와 맞는다 (비 {ratio:.3f})")
+    r.note(f"미추출 축의 좌변은 미추출 표지를 든 구성원 행 {len(unread)} · 우변은 기록 "
+           f"{len(files) - len(untitled)} 의 편 제목 {len(titles)} · 적발 {hits} · 문턱 "
+           f"{INVENTORY_TITLE_RATIO} 아래로 받지 않은 포함 {below}")
+    if untitled:
+        r.note("머리에서 편 제목을 읽지 못한 기록 " + " · ".join(f"E-{n:02d}" for n in untitled))
 
 
 def check_50(led: Ledger) -> Report:
@@ -3013,6 +3112,7 @@ def check_50(led: Ledger) -> Report:
     r.note(f"좌에서 우로 미포착 {len(set(left) - set(right))} · 우에서 좌로 유령 {len(ghosts)}")
     for n in ghosts:
         r.note(f"유령 E-{n:02d} — {right[n]}")
+    _check_50_unread(led, r, {n: d / name for n, name in right.items()})
     return r
 
 

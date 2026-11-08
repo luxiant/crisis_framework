@@ -54,7 +54,7 @@
 | | Bagehot was a Shadow Banker | Mehrling·Pozsar·Sweeney·Neilson 2013 | E-10. 위계 + 딜러 중심 최종대부자. J-4 |
 | | Shadow Banking: Economics and Policy (파일명 `Shadow Banking.pdf`) | Claessens·Pozsar·Ratnovski·Singh 2012 (IMF SDN) | 개관 미추출 |
 | | The Federal Reserve's TALF | Ashcraft·Malz·Pozsar 2012 | E-11. 중앙은행 노드의 담보 대출. J-4 |
-| | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | 형식 모형. Holmström-Tirole 계열 미추출 |
+| | Crises in the modern financial ecosystem | di Iasio·Pozsar (ESRB WP 60) | E-48. 형식 모형. Holmström-Tirole 계열. 주차 공간의 공적·사적 가름이 액면가 약속 강도와 대응함을 §2-5 가 들고 공적 권위의 개입이 갈리는 것을 §2-6 이 든다 |
 | | A Model of Shadow Banking: Crises, Central Banks and Regulation | di Iasio·Pozsar 2015 | E-48. 위와 동일 모형의 다른 판본으로 추정 |
 | | Shadow Banking System: Implications for Financial Regulation (Adrian 폴더) | Adrian·Shin 2009 (SR 382) | **보조.** 중복 쌍의 유지본이다. Shin 폴더의 사본은 「중복」 절이 센다 미추출 |
 
@@ -263,8 +263,8 @@ Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of
 |---|---|---|
 | Basel III The Liquidity Coverage Ratio and liquidity risk monitoring tools | BCBS 2013년 1월판 | 고유동성자산 3단 분류와 범주별 가중, 30일 구간과 범주별 유출률. 머리말의 앞 두 물음을 결판냈고 E-49 §4-1 과 §4-2 가 그 해소를 든다 |
 | Bank of England Level B Collateral Set | 영란은행 2026년 6월 18일판 | 적격 집합과 판별 조건 둘. 머리말의 셋째 물음을 결판냈고 E-49 §4-3 이 그 해소를 든다 |
-| Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations | 영란은행 2026년 6월 18일판 | 범주와 잔존만기의 할인율 격자. 액면가 약속 강도의 자산 쪽 측정값 후보 미추출 |
-| Changes to collateral eligibility in the Sterling Monetary Framework | 영란은행 2026년 6월 11일 시장 공고 | 적격성이 시점 함수라는 것과 등급 분할의 폐지 예정 미추출 |
+| Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations | 영란은행 2026년 6월 18일판 | 범주와 잔존만기의 할인율 격자. 액면가 약속 강도의 자산 쪽 측정값 후보. E-49 §2-11 이 그 격자를 들고 §3-2 가 그 강도의 양면 측정을 든다 |
+| Changes to collateral eligibility in the Sterling Monetary Framework | 영란은행 2026년 6월 11일 시장 공고 | 적격성이 시점 함수라는 것과 등급 분할의 폐지 예정. E-49 §2-12 가 그 둘을 제목과 본문으로 든다 |
 
 ---
 
