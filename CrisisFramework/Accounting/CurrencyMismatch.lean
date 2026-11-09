@@ -64,9 +64,10 @@ def claimTotalOfHolder {Idx Party Obs Ext Lvl Currency : Type}
 /--
 그 통화 축에 불일치가 선 채무자에 대한 청구권의 금액 합.
 
-**대응 비형식 개념:** 한 금융 주체가 든 그 통화 표시 청구권 가운데 채무자 쪽에 통화 불일치가 선
-것의 총액. 불일치가 채권자의 장부가 아니라 채무자의 장부에 서는데 그 채무자의 상환 능력을 통해
-채권자의 제약 인자로 전달된다.
+**대응 비형식 개념:** 한 금융 주체가 든 어느 통화 표시 청구권 가운데 채무자 쪽에 다른 통화 축의
+통화 불일치가 선 것의 총액. 불일치가 채권자의 장부가 아니라 채무자의 장부에 서는데 그 채무자의
+상환 능력을 통해 채권자의 제약 인자로 전달되며, 표시 통화와 불일치 통화가 다른 축이므로 둘을 따로
+받는다.
 
 **이 정의가 배제하는 사례:**
 불일치를 채권자 쪽 장부에서 찾는 읽기. 한 모형을 다룬 문면이 은행이 외화 대출의 자금을 정확히 그
@@ -78,10 +79,15 @@ def claimTotalOfHolder {Idx Party Obs Ext Lvl Currency : Type}
 **기각한 대체 정의:**
 불일치의 판정을 청구권의 표시 통화 하나로 받고 채무자의 축을 보지 않는 안. 청구권의 표시 통화가
 채무자의 불일치와 다른 축이고, 한 편이 불일치의 꼴을 부채의 통화와 그 부채가 조달한 자산의 통화의
-쌍으로 두므로 표시 통화 하나로는 그 쌍이 유도되지 않는다.
+쌍으로 두므로 표시 통화 하나로는 그 쌍이 유도되지 않는다. 표시 통화 하나를 합의 색인과 불일치
+판정의 색인에 함께 쓰는 안도 기각한다. 그 꼴이 두 축을 따로 받는 꼴의 대각선과 정의로 같아 대각선의
+어느 자리도 낼 수 없는 값을 비대각선이 내는 배치가 존재한다.
 
 **판정을 정의층에서 받는다.** 그 판정이 정의층 대상이므로 이 파일은 그것을 인자로 받고 다시
 정의하지 않는다.
+
+인자 순서를 답할 항의 서명에서 받는다. 그 항이 금융 주체와 불일치 통화와 표시 통화의 순서로 받으
+므로 이 선언도 그 순서를 따른다.
 -/
 -- DD:CF-3101
 def claimsOnMismatchedDebtors {Idx Party Obs Ext Lvl Currency : Type}
@@ -89,27 +95,29 @@ def claimsOnMismatchedDebtors {Idx Party Obs Ext Lvl Currency : Type}
     (e : Env ℤ Obs Ext Lvl)
     (M : CurrencyPositionMismatch Party Currency)
     (S : ClaimSet Idx Party ℤ Obs Ext Lvl Currency)
-    (h : Party) (c : Currency) : ℤ :=
+    (h : Party) (c : Currency) (d : Currency) : ℤ :=
   ∑ i ∈ S.index,
-    (if (S.assign i).holder = h ∧ (S.assign i).currency = c
+    (if (S.assign i).holder = h ∧ (S.assign i).currency = d
         ∧ M.mismatched (S.assign i).obligor c = true
      then evalTerm e (S.assign i).amount else 0)
 
 /--
-불일치 채무자에 대한 청구권의 합이 그 보유자의 그 통화 총계를 넘지 않는다.
+불일치 채무자에 대한 청구권의 합이 그 보유자의 그 표시 통화 총계를 넘지 않는다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
-금액이 전부 음이 아닌 청구권 집합인데 불일치 채무자에 대한 합이 그 보유자의 그 통화 총계보다 커야
-한다. 그 관측은 불일치 판정이 거르는 것이 그 총계가 세는 것의 부분집합이 아니라는 뜻이며, 그러면
-두 집계가 서로 다른 유니버스를 세고 있다.
+금액이 전부 음이 아닌 청구권 집합인데 어느 통화 축에서 불일치를 가진 채무자에 대한 합이 그
+보유자의 그 표시 통화 총계보다 커야 한다. 그 관측은 불일치 판정이 거르는 것이 그 총계가 세는
+것의 부분집합이 아니라는 뜻이며, 그러면 두 집계가 서로 다른 유니버스를 세고 있다.
 
 **가정과 그 배제 사례(T-4·T-5):** 색인에 든 청구권의 금액이 전부 음이 아니라는 가정을 진술문에
 둔다. 회계층의 수 체계가 `ℤ` 여서 금액이 음일 수 있고 그러면 부분집합의 합이 전체의 합보다 커질
 수 있기 때문이다. 그 가정이 배제하는 것은 금액이 음인 항을 담은 청구권 집합이며, 상계로 금액이
-음이 된 자리가 그 사례다.
+음이 된 자리가 그 사례다. 불일치 통화는 가정에 들지 않는다. 그 축이 걸러내는 쪽에만 서므로
+어느 값이든 왼쪽이 오른쪽의 부분합이다.
 
 **T-3 분류:** 기여다. 두 집계가 같은 색인 위에 서고 뒤의 조건이 앞의 조건을 강화한다는 설계가
-부등식으로 서는 자리이므로 기여 목록에 든다.
+부등식으로 서는 자리이며, 그 강화가 표시 통화와 다른 축에서 와도 부분합 관계가 유지됨을 드는
+자리이므로 기여 목록에 든다.
 -/
 -- DD:CF-3101
 theorem claimsOnMismatchedDebtors_le_claimTotalOfHolder
@@ -118,9 +126,9 @@ theorem claimsOnMismatchedDebtors_le_claimTotalOfHolder
     (e : Env ℤ Obs Ext Lvl)
     (M : CurrencyPositionMismatch Party Currency)
     (S : ClaimSet Idx Party ℤ Obs Ext Lvl Currency)
-    (h : Party) (c : Currency)
+    (h : Party) (c : Currency) (d : Currency)
     (hnn : ∀ i ∈ S.index, 0 ≤ evalTerm e (S.assign i).amount) :
-    claimsOnMismatchedDebtors e M S h c ≤ claimTotalOfHolder e S h c := by
+    claimsOnMismatchedDebtors e M S h c d ≤ claimTotalOfHolder e S h d := by
   unfold claimsOnMismatchedDebtors claimTotalOfHolder
   -- 부분합 부등식을 색인의 귀납으로 직접 세운다. `Finset.sum_le_sum` 이 선택공리를 끌어오는
   -- 것이 실측돼 있어(`docs/baseline.md` §2-2) 그 보조정리를 쓰지 않는다.
@@ -136,14 +144,65 @@ theorem claimsOnMismatchedDebtors_le_claimTotalOfHolder
   refine key _ _ _ fun i hi => ?_
   -- 세 조건이 다 서면 양변이 같은 금액이고, 불일치 판정만 거짓이면 왼쪽이 영이어서 비음수
   -- 가정이 받는다.
-  by_cases h₁ : (S.assign i).holder = h ∧ (S.assign i).currency = c
+  by_cases h₁ : (S.assign i).holder = h ∧ (S.assign i).currency = d
       ∧ M.mismatched (S.assign i).obligor c = true
   · rw [if_pos h₁, if_pos (And.intro h₁.1 h₁.2.1)]
   · rw [if_neg h₁]
-    by_cases h₂ : (S.assign i).holder = h ∧ (S.assign i).currency = c
+    by_cases h₂ : (S.assign i).holder = h ∧ (S.assign i).currency = d
     · rw [if_pos h₂]
       exact hnn i hi
     · rw [if_neg h₂]
+
+/--
+표시 통화와 불일치 통화를 따로 받는 꼴이 대각선으로 접히지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+두 통화를 따로 받은 값이 영이 아닌 배치마다 두 통화 가운데 하나를 양쪽 색인에 함께 넣은 값도
+영이 아니어야 한다. 그 관측은 표시 통화와 채무자의 불일치가 같은 축이라는 뜻이며, 그러면 두
+인자를 따로 받을 까닭이 사라진다.
+
+**존재 형태로 진술하는 까닭(T-6):** 두 축이 다름을 드는 것이 어느 한 배치의 성질이고 모든 배치에
+대한 전칭이 아니다. 두 축이 같아지는 배치가 따로 있으므로 전칭으로 세우면 거짓이 된다.
+
+가정을 두지 않는다. 증인을 리터럴로 들고 세 등식이 전부 결정 가능하므로 가정이 설 자리가 없다.
+
+**T-3 분류:** 기여다. 두 인자를 따로 받는 설계가 필요하다는 것을 반례의 부재가 아니라 증인의
+존재로 세우는 자리이므로 기여 목록에 든다.
+-/
+-- DD:CF-3101
+theorem exists_claimsOnMismatchedDebtors_offDiagonal :
+    ∃ (e : Env ℤ Unit Unit Unit) (M : CurrencyPositionMismatch Bool Bool)
+      (S : ClaimSet Unit Bool ℤ Unit Unit Unit Bool),
+      claimsOnMismatchedDebtors e M S false true false = 1
+      ∧ claimsOnMismatchedDebtors e M S false false false = 0
+      ∧ claimsOnMismatchedDebtors e M S false true true = 0 := by
+  -- 증인은 청구권 하나가 `false` 통화로 표시되고 그 채무자가 `true` 통화 축에서만 불일치를 지는
+  -- 배치다. 표시 통화가 `false` 이고 불일치 통화가 `true` 인 자리에서만 그 청구권이 세어지고,
+  -- 두 통화가 같은 두 자리에서는 표시 통화나 불일치 판정이 그것을 걸러 낸다.
+  refine ⟨{ ops := { mul := fun a b => a * b
+                     add := fun a b => a + b
+                     le := fun a b => decide (a ≤ b)
+                     lt := fun a b => decide (a < b)
+                     lvlAtLeast := fun _ _ => true
+                     lvlEq := fun _ _ => true }
+            reading := { obs := fun _ => 0, extLvl := fun _ => () } },
+          { directionOf := fun _ c =>
+              bif c then MismatchDirection.liabilityHeavy else MismatchDirection.balanced },
+          { index := Finset.univ
+            assign := fun _ =>
+              { obligor := true
+                holder := false
+                currency := false
+                amount := Term.const 1
+                trigger :=
+                  TriggerFamily.constant (Trigger.le (Term.const 0) (Term.const 1))
+                inception := 0
+                expiry := 0
+                exercisable := fun _ => true } },
+          ?_, ?_, ?_⟩
+  · decide
+  · decide
+  · decide
 
 /--
 그 통화 축에서 지급능력이 서는가.
