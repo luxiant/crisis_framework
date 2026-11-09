@@ -3093,6 +3093,54 @@
    "layer": "meta",
    "reopen_when": null,
    "related": []
+  },
+  {
+   "id": "CF-3298",
+   "origin": {
+    "arc": "harness",
+    "phase": "harness-1",
+    "kind": "decision_session",
+    "date": "2026-11-09"
+   },
+   "statement": "검증 스크립트 파일의 부피는 읽기 경계의 축이고 호출 경계의 축이 아니므로 판별선 밖이다",
+   "basis": "검증 스크립트 네 파일의 부피는 읽기 경계의 축이고 호출 경계의 축이 아니므로 판별선 밖이다. 가름은 호출 횟수를 줄이려고 코드를 옮기는 것이 아크 안이고 읽기 쉽게 가르는 것이 밖이라는 것이다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": [
+    "CF-3297"
+   ]
+  },
+  {
+   "id": "CF-3299",
+   "origin": {
+    "arc": "harness",
+    "phase": "harness-1",
+    "kind": "decision_session",
+    "date": "2026-11-09"
+   },
+   "statement": "사본을 묶어 돌리는 것과 사본을 변이 선언 하나로 줄이는 것을 이 아크가 받지 않는다",
+   "basis": "사본을 묶어 돌리는 것과 사본을 변이 선언 하나로 줄이는 것을 이 아크가 받지 않는다. 앞의 추가 소득이 작고 뒤의 몫이 전체의 한 자리 수 퍼센트인데 둘 다 변이 검사의 의미를 바꿀 위험을 받기 때문이다. 측정값에 걸린 재개 트리거를 설비로 세우지 않으며, 그 결손을 이연으로 등재해 다음 아크가 받게 한다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": [
+    "CF-3297"
+   ]
+  },
+  {
+   "id": "CF-3300",
+   "origin": {
+    "arc": "harness",
+    "phase": "harness-1",
+    "kind": "decision_session",
+    "date": "2026-11-09"
+   },
+   "statement": "오케스트레이션을 한 자리로 모으는 재작성을 이 아크가 받지 않는다",
+   "basis": "오케스트레이션을 한 자리로 모으는 재작성을 이 아크가 받지 않는다. 이 아크의 처방 전량이 그 단계의 자리만 고치는 부분 수정으로 서므로 재작성이 선행 조건이 아니다.",
+   "layer": "meta",
+   "reopen_when": null,
+   "related": [
+    "CF-3297"
+   ]
   }
  ]
 }
