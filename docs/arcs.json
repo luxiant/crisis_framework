@@ -383,9 +383,9 @@
           ]
         }
       ],
-      "status": "open",
+      "status": "closed",
       "opened": "2026-11-05",
-      "closed": null,
+      "closed": "2026-11-09",
       "holes": [
         "CF-1236",
         "CF-1840",
