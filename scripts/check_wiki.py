@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 예순을 돈다. 실패시키는 것 마흔여덟과 보고만 하는 것 아홉과
+`docs/decisions/SPEC.md` §2 의 검사 예순하나를 돈다. 실패시키는 것 마흔아홉과 보고만 하는 것 아홉과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -1089,7 +1089,7 @@ ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
          "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
-         "55", "56", "57", "58", "59", "60", "29", "30"]
+         "55", "56", "57", "58", "59", "60", "61", "29", "30"]
 
 
 def check_26(led: Ledger) -> Report:
@@ -3861,6 +3861,73 @@ def check_60(led: Ledger) -> Report:
     return r
 
 
+def inventory_aggregate_rows(text: str, marker: str) -> list[tuple[int, list[str]]]:
+    """집계 마커가 선 표의 본문 행 (줄 번호, 칸).
+
+    마커 바로 뒤의 줄이 표의 머리이고 그 다음 줄이 구분 줄이어야 그 표로 읽는다. 마커가 없거나
+    그 뒤가 표가 아니면 빈 목록을 내며, 그것을 받는 검사가 빈 유니버스를 통과시키지 않는다.
+    """
+    lines = text.splitlines()
+    for i, ln in enumerate(lines):
+        if ln.strip() != marker:
+            continue
+        k = i + 1
+        if k + 1 >= len(lines) or not lines[k].startswith("|") \
+                or not lines[k + 1].startswith("|---"):
+            return []
+        out: list[tuple[int, list[str]]] = []
+        k += 2
+        while k < len(lines) and lines[k].startswith("|"):
+            out.append((k + 1, [c.strip() for c in lines[k].strip().strip("|").split("|")]))
+            k += 1
+        return out
+    return []
+
+
+def _aggregate_value(cell: str) -> int | None:
+    """집계 표의 칸이 든 수. 굵은 표기를 걷고 줄표는 영으로 읽으며, 수로 읽히지 않으면 None 이다."""
+    c = cell.replace("*", "").strip()
+    if c in ("—", "-", ""):
+        return 0
+    return int(c) if c.isdigit() else None
+
+
+def check_61(led: Ledger) -> Report:
+    r = Report("61", "wiki61-inventory-aggregate-sum",
+               "뭉치 인벤토리의 집계 표에서 무리 행의 편수와 zip 밖 칸을 더한 값이 합계 행과 같은가",
+               "fail")
+    # 표를 찾는 마커는 값 정본의 블록에서 읽는다. 구성원 행의 유니버스에서 그 표를 빼는 검사 53 이
+    # 이미 그 블록을 읽으므로, 여기서 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡는다.
+    marks = inventorymark_block(led)
+    if INVENTORYMARK_AGGREGATE not in marks:
+        r.bad(f"`{INVENTORYMARK_BLOCK}` 블록이 `{INVENTORYMARK_AGGREGATE}` 를 들지 않는다")
+        return r
+    rows = inventory_aggregate_rows((led.root / INVENTORY_DOC).read_text(encoding="utf-8"),
+                                    marks[INVENTORYMARK_AGGREGATE])
+    # 첫 칸이 굵은 표기로 시작하는 행이 합계 행이다. 그 행이 하나가 아니거나 무리 행이 없으면 맞댈
+    # 상대가 없으므로 통과가 아니라 실패다. 검사 58 과 59 가 같은 요구를 둔다.
+    groups = [(n, c) for n, c in rows if not c[0].startswith("**")]
+    totals = [(n, c) for n, c in rows if c[0].startswith("**")]
+    if not groups or len(totals) != 1:
+        r.bad(f"{INVENTORY_DOC} 의 집계 표에서 무리 행 {len(groups)} · 합계 행 {len(totals)} 을 "
+              "읽었다. 무리 행이 하나 이상이고 합계 행이 하나여야 맞댈 수 있다")
+        return r
+    line, total = totals[0]
+    # 절 제목이 드는 편수와 맞대는 축은 세우지 않는다. 그 꼴이 무리마다 달라 한 패턴으로 닫히지
+    # 않으므로, 인벤토리의 집계 절이 그 사실을 문면으로 든다.
+    for col, name in ((1, "편수"), (2, "zip 밖")):
+        vals = [_aggregate_value(c[col]) if len(c) > col else None for _n, c in groups]
+        tot = _aggregate_value(total[col]) if len(total) > col else None
+        if None in vals or tot is None:
+            r.bad(f"{INVENTORY_DOC} 의 집계 표의 `{name}` 칸에 수로 읽히지 않는 값이 있다")
+            continue
+        if sum(vals) != tot:
+            r.bad(f"{INVENTORY_DOC}:{line} 의 합계 행이 `{name}` 을 {tot} 로 드는데 무리 행의 합이 "
+                  f"{sum(vals)} 다")
+        r.note(f"`{name}` — 무리 행 {len(vals)} 의 합 {sum(vals)} · 합계 행 {tot}")
+    return r
+
+
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
     led = Ledger(root)
     reports = [
@@ -3878,7 +3945,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
         check_44(led), check_45(led), check_46(led), check_47(led),
         check_48(led), check_49(led), check_50(led), check_51(led), check_52(led),
         check_53(led), check_54(led), check_55(led), check_56(led), check_57(led),
-        check_58(led), check_59(led), check_60(led),
+        check_58(led), check_59(led), check_60(led), check_61(led),
         check_29(led, arc_close), check_30(led),
     ]
     order = {n: i for i, n in enumerate(ORDER)}
@@ -3905,7 +3972,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 예순)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 예순하나)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

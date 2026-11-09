@@ -1997,6 +1997,26 @@ def inj_60_binder_only(root):
     return name
 
 
+def inj_61_sum(root):
+    """무리 행 하나의 편수를 하나 늘린다. 합계 행은 그대로 둔다.
+
+    표를 고르는 쪽은 검증기의 함수를 그대로 부른다. 전사하면 그 검사가 표를 읽는 꼴을 고칠 때 이
+    주입이 조용히 공허해진다.
+    """
+    led = check_wiki.Ledger(root)
+    marker = check_wiki.inventorymark_block(led)[check_wiki.INVENTORYMARK_AGGREGATE]
+    f = root / check_wiki.INVENTORY_DOC
+    lines = f.read_text(encoding="utf-8").split("\n")
+    rows = check_wiki.inventory_aggregate_rows("\n".join(lines), marker)
+    hit = [(n, c) for n, c in rows if not c[0].startswith("**") and c[1].isdigit()]
+    if not hit:
+        raise SystemExit("집계 표에서 편수가 수인 무리 행을 찾지 못해 주입할 자리가 없다")
+    n, cells = hit[0]
+    lines[n - 1] = lines[n - 1].replace(f"| {cells[1]} |", f"| {int(cells[1]) + 1} |", 1)
+    f.write_text("\n".join(lines), encoding="utf-8")
+    return f"{check_wiki.INVENTORY_DOC}:{n}"
+
+
 CASES = [
     ("1",   "wiki1-id-unique",             "같은 id 를 두 파일에 넣는다",                  inj_01, None),
     ("2",   "wiki2-origin-arc",            "없는 아크명을 적는다",                        inj_02, None),
@@ -2099,6 +2119,7 @@ CASES = [
     ("59",  "wiki59-extraction-stem-unique", "같은 줄기의 파일을 하나 더 둔다", inj_59_dup, None),
     ("60",  "wiki60-currency-guard",         "가드 없는 합을 하나 더한다", inj_60_unguarded, None),
     ("60",  "wiki60-currency-guard",         "타입클래스 바인더와 통화 인자만 더한 선언을 주입한다", inj_60_binder_only, None),
+    ("61",  "wiki61-inventory-aggregate-sum", "무리 행 하나의 편수를 하나 늘린다", inj_61_sum, None),
 ]
 
 
