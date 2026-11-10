@@ -69,6 +69,12 @@ fi
 # 밖에 남으며, `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다.
 mapfile -t TARGETS < <(find CrisisFramework -name '*.lean' -type f | LC_ALL=C sort)
 
+# Lean 사본을 병렬로 부르는 자리의 동시 호출 수. 변이 검사와 논리 결합 변이가 이 값을 함께 쓴다.
+# 두 자리에 박으면 한쪽만 고쳐져 갈리므로 한 자리에 둔다. 값을 넷으로 두는 것은 받은 판의 논리
+# 결합 변이가 그 값으로 돌아 러너에서 통과한 선례가 있기 때문이며, 사본 하나가 의존 묶음의 빌드
+# 산출을 읽어 메모리를 쓰므로 코어 수에서 유도하지 않는다.
+LEAN_JOBS=4
+
 fail=0
 # 단계마다 경과를 찍어 아크의 기준점 맞댐이 단계별로 서게 한다. 한 단계의 끝은 다음
 # 단계의 시작이므로 이 함수가 앞 단계의 경과를 먼저 찍으며, 마지막 단계는 그 뒤에
@@ -815,20 +821,25 @@ else
   per_file=$(cut -f2 "$mut_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
   ok "변이 대상 ${#mut_rows[@]} ($per_file)"
   rep "구문 오류로 세는 머리: unexpected · unterminated comment · unterminated string literal · expected token · Invalid \`end\`"
+  # 사본마다 elaborate 를 따로 돌린다. 판정은 아래에서 원래 순서대로 하므로 병렬이 출력을 바꾸지 않는다.
+  # 결론을 잡지 못한 행은 사본을 갖지 않고 그 자리에 자리표를 드므로 그 행을 걸러 넘긴다. 자리로만
+  # 잘라 넘기면 그 자리표가 경로로 서서 호출이 돌고 그 실패가 어느 판정에도 들지 않는다.
+  awk -F'\t' '$1 == "MUT" { print $4 }' "$mut_list" \
+    | xargs -P "$LEAN_JOBS" -I{} sh -c '"${LEAN:-lean}" "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
   for row in "${mut_rows[@]}"; do
     IFS=$'\t' read -r m_kind m_file m_line m_copy m_concl <<< "$row"
     if [ "$m_kind" = NOCONCL ]; then
       bad "$m_file:$m_line $m_concl 의 결론을 잡지 못해 그 진술의 변이 검사가 수행되지 않았다"
       continue
     fi
-    if "${LEAN:-lean}" "$m_copy" >"$mut_dir/out" 2>&1; then
+    if [ "$(cat "$m_copy.rc")" = 0 ]; then
       bad "$m_file:$m_line 변이가 통과함 — 해당 진술은 공허한 검사다: $m_concl"
-    elif grep -qE "$mut_syntax_re" "$mut_dir/out"; then
+    elif grep -qE "$mut_syntax_re" "$m_copy.out"; then
       # 사본이 깨진 것을 거부로 세면 그 진술의 검사가 공허해지는데도 통과로 보고된다.
-      m_head=$(grep -oE "$mut_syntax_re" "$mut_dir/out" | head -1)
+      m_head=$(grep -oE "$mut_syntax_re" "$m_copy.out" | head -1)
       bad "$m_file:$m_line 변이 사본이 구문 오류로 깨져 그 진술의 검사가 수행되지 않았다 ($m_head): $m_concl"
     else
-      ok "$m_file:$m_line 변이 거부됨 ($(grep -cE 'error' "$mut_dir/out") error) — 실검사 확인"
+      ok "$m_file:$m_line 변이 거부됨 ($(grep -cE 'error' "$m_copy.out") error) — 실검사 확인"
     fi
   done
 fi
@@ -951,7 +962,7 @@ else
   per_file=$(cut -f1 "$cm_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
   ok "변이 대상 ${#cm_rows[@]} ($per_file)"
   # 사본마다 elaborate 를 따로 돌린다. 판정은 아래에서 원래 순서대로 하므로 병렬이 출력을 바꾸지 않는다.
-  cut -f8 "$cm_list" | xargs -P 4 -I{} sh -c '"${LEAN:-lean}" "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
+  cut -f8 "$cm_list" | xargs -P "$LEAN_JOBS" -I{} sh -c '"${LEAN:-lean}" "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
   cm_uncovered=0
   for row in "${cm_rows[@]}"; do
     IFS=$'\t' read -r c_file c_line c_name c_from c_to c_first c_last c_copy <<< "$row"
