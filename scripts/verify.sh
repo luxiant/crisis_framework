@@ -68,7 +68,29 @@ fi
 mapfile -t TARGETS < <(find CrisisFramework -name '*.lean' -type f | LC_ALL=C sort)
 
 fail=0
-step() { printf '\n\033[1m== %s\033[0m\n' "$*"; printf '[step:%s]\n' "$1"; }
+# 단계마다 경과를 찍어 아크의 기준점 맞댐이 단계별로 서게 한다. 한 단계의 끝은 다음
+# 단계의 시작이므로 이 함수가 앞 단계의 경과를 먼저 찍으며, 마지막 단계는 그 뒤에
+# 불리는 자리가 없어 말미의 판정 앞에서 한 번 더 찍는다. 둘을 가르지 않으면 마지막
+# 단계의 경과가 전량 빠지고 그 빠짐이 출력에서 드러나지 않는다.
+#
+# 값을 괄호 안의 초로 둔다. 자기 출력의 정규화 해시가 소요 시간 표기를 지우는 축을
+# 이미 들고 있어 그 꼴이면 해시가 판 사이에 안정적으로 서고, 괄호를 두지 않으면 그
+# 값이 남아 해시가 매 실행마다 달라져 출력이 리포 상태의 함수가 아니게 된다
+# (CF-674 와 같은 형). 소수 한 자리를 두는 것은 가장 가벼운 두 단계의 합이 초 단위로
+# 접히면 영으로 서기 때문이다.
+STEP_ID=
+STEP_T0=
+step_elapsed() {
+  [ -n "$STEP_ID" ] || return 0
+  printf '[elapsed:%s] (%ss)\n' "$STEP_ID" \
+    "$(awk -v a="$STEP_T0" -v b="$(date +%s.%N)" 'BEGIN { printf "%.1f", b - a }')"
+}
+step() {
+  step_elapsed
+  STEP_ID=$1
+  STEP_T0=$(date +%s.%N)
+  printf '\n\033[1m== %s\033[0m\n' "$*"; printf '[step:%s]\n' "$1"
+}
 ok()   { printf '  \033[32mOK\033[0m   %s\n' "$*"; }
 bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$*"; fail=1; }
 rep()  { printf '  \033[36mREPORT\033[0m %s\n' "$*"; }
@@ -824,6 +846,7 @@ else
   bad "CQ 고정 절과 관측층 선언이 어긋난다 — docs/baseline.md §6"
 fi
 
+step_elapsed
 printf '\n'
 if [ "$fail" -eq 0 ]; then printf '\033[1;32m전량 통과\033[0m\n'; else printf '\033[1;31m검증 실패 항목 있음\033[0m\n'; fi
 exit "$fail"
