@@ -663,3 +663,41 @@ RULEDOC_REINFORCE_BYTES_APPENDIX=30271
 유일한 수단이다. **그 꼴이 서지 않은 회차에 이 블록의 값이 측정기마다 갈렸다.** 상한 초과는 두
 문서에서 한 자리 수 퍼센트 차이를 냈고 갈래별 분류는 두 자리 수 배의 차이를 냈으며, 그 회차가
 자기 측정기의 값을 심고 그 재설정을 종료 문서에 적었다.
+
+## 9. 모듈 탐색 환경의 변수 이름
+
+**빌드 도구가 더하거나 바꾸는 환경 변수의 이름을 아래 블록이 든다.** `scripts/verify.sh` 의
+`step11-leanenv` 가 그 환경을 한 번 들여 뒤의 단계가 Lean 을 직접 부르게 하고, 그 이름의
+집합을 이 블록과 맞대어 늘거나 줄면 보고로 낸다. **실패시키지 않는다.** 그 집합이 빌드 도구의
+판과 의존 묶음이 정하는 것이어서 환경마다 갈릴 수 있기 때문이다. 들인 환경이 빌드 도구가
+세우던 것과 같은지는 그 단계의 둘째 축이 같은 파일을 두 길로 돌려 출력을 바이트로 맞대어
+재고 갈리면 실패시킨다. **블록을 읽지 못한 것만 그 단계가 실패로 센다.**
+
+**이 값은 그 검사가 처음 설 때 그 검사 자신이 낸 것으로 심는다.** 결정 세션의 환경에서 잰 값이
+집행의 환경과 갈릴 수 있으므로 결정 세션이 그 값을 미리 적지 않는다. **셸이 마지막 인자를 담는
+자리는 그 집합에서 뺀다.** 호출마다 달라져 그 집합의 안정을 깨뜨린다.
+
+<!-- LEANENV:BEGIN -->
+LEANENV_VAR=ELAN
+LEANENV_VAR=ELAN_HOME
+LEANENV_VAR=ELAN_TOOLCHAIN
+LEANENV_VAR=LAKE
+LEANENV_VAR=LAKE_ARTIFACT_CACHE
+LEANENV_VAR=LAKE_CACHE_DIR
+LEANENV_VAR=LAKE_CONFIG
+LEANENV_VAR=LAKE_HOME
+LEANENV_VAR=LAKE_NO_CACHE
+LEANENV_VAR=LAKE_PKG_URL_MAP
+LEANENV_VAR=LAKE_RESTORE_ARTIFACTS
+LEANENV_VAR=LD_LIBRARY_PATH
+LEANENV_VAR=LEAN
+LEANENV_VAR=LEAN_AR
+LEANENV_VAR=LEAN_GITHASH
+LEANENV_VAR=LEAN_PATH
+LEANENV_VAR=LEAN_RECURSION_COUNT
+LEANENV_VAR=LEAN_SRC_PATH
+LEANENV_VAR=LEAN_SYSROOT
+LEANENV_VAR=PATH
+<!-- LEANENV:END -->
+
+블록에 이름을 더하거나 뺄 때는 그 변수가 Lean 의 동작에 걸리는지를 함께 본다.

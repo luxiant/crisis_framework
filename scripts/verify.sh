@@ -4,6 +4,8 @@
 #   step1-duplicate  빌드 타깃 밖 중복 사본 탐지 (검증된 파일 ≠ 손에 든 파일 사고 방지)
 #   step2-build      프로젝트 olean 강제 삭제 후 lake build (디스크 내용 기준 재검증)
 #   step3-forbidden  금지 구문 정적 검사 (sorry / axiom / noncomputable / Classical / 층별 ℝ)
+#   step11-leanenv   모듈 탐색 환경을 한 번 들여 빌드 도구가 세우던 것과 대조
+#                    뒤의 네 자리가 Lean 을 직접 부르게 하고 그 환경이 같은지를 두 축으로 잰다
 #   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
 #                    감사 대상 선언은 매 실행마다 훑어 잡아 임시 프로브 파일로 찍는다
 #                    공리 출력이 비어 있지 않은 선언의 목록과 계수를 층별로 보고에 낸다 (실패시키지 않는다)
@@ -221,14 +223,131 @@ for t in "${TARGETS[@]}"; do
 done
 [ "$real_hits" -eq 0 ] && ok "\`ℝ\` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)"
 
+# 층별 기대 기준선과 모듈 탐색 환경의 변수 이름 집합을 docs/baseline.md 의 기계 판독
+# 블록이 든다. 그 경로를 뒤의 두 단계가 함께 읽으므로 이 자리에서 한 번 정한다.
+BASELINE_DOC=docs/baseline.md
+
+step step11-leanenv '모듈 탐색 환경을 한 번 들여 빌드 도구가 세우던 것과 대조'
+# 빌드 도구를 거쳐 Lean 을 부르면 그 호출마다 빌드 도구가 자기 명세를 다시 읽고 의존을 다시
+# 해소하므로 그 고정비가 호출마다 선다. 뒤의 네 자리가 그 꼴로 Lean 을 불렀고 그 가운데 둘이
+# 감사 대상의 수만큼 반복되므로, 그 환경을 이 자리에서 한 번 들여 뒤의 단계가 Lean 을 직접
+# 부르게 한다. 전량 재빌드 단계의 호출은 빌드 산출을 낳는 자리여서 그대로 둔다.
+#
+# 들이는 것이 모듈 탐색 경로 하나가 아니라 그 환경 전량이다. 빌드 도구가 세우는 것이 그 경로
+# 하나가 아니고 그 가운데 동적 라이브러리 경로와 소스 탐색 경로가 Lean 의 동작에 걸릴 수
+# 있는데, 그 걸림은 빌드 산출이 선 판에서만 재어지므로 경로 하나만 세우는 길은 그 전제가
+# 재어지지 않은 채 남는다. 환경 전량을 옮기면 빌드 도구가 세우던 것과 구조적으로 같다.
+#
+# 널 문자로 가른 꼴로 받는다. 줄 단위로 받으면 값에 줄바꿈이 든 변수가 그 자리에서 깨지고
+# 그 깨짐이 조용히 지나간다. 이름이 식별자가 아닌 레코드는 들이지 않는다. 그 꼴이 러너의
+# 환경에 서면 들이기가 실패하고 그 실패가 표준 오류로만 남는다.
+le_now=$(mktemp); le_inner=$(mktemp)
+env -0 > "$le_now"
+if lake env printenv -0 > "$le_inner" 2>"$le_inner.err"; then
+  :
+else
+  bad "빌드 도구의 환경 출력을 받지 못했다"; sed 's/^/       /' "$le_inner.err"
+fi
+
+# 축 첫째. 빌드 도구가 더하거나 바꾸는 변수의 이름 집합을 값 정본의 블록과 맞댄다. 그 집합이
+# 늘면 Lean 의 동작에 걸리는 변수가 새로 섰을 수 있으므로 보고로 내고 실패시키지 않는다.
+# 블록을 읽지 못한 것만 실패로 센다. 그 값은 이 검사가 처음 설 때 이 검사 자신이 낸 것으로
+# 심으며, 그 집합이 빌드 도구의 판과 의존 묶음이 정하는 것이어서 환경마다 갈릴 수 있다.
+while IFS=$'\t' read -r le_v le_m; do
+  case "$le_v" in
+    OK)     ok "$le_m" ;;
+    FAIL)   bad "$le_m" ;;
+    REPORT) rep "$le_m" ;;
+  esac
+done < <(python3 - "$le_now" "$le_inner" "$BASELINE_DOC" <<'LEEOF'
+import sys
+
+def load(path):
+    out = {}
+    with open(path, "rb") as fh:
+        for rec in fh.read().split(b"\0"):
+            if b"=" in rec:
+                k, v = rec.split(b"=", 1)
+                out[k] = v
+    return out
+
+now, inner, doc = load(sys.argv[1]), load(sys.argv[2]), sys.argv[3]
+# 셸이 마지막 인자를 담는 자리는 호출마다 달라지므로 그 집합의 안정을 깨뜨린다.
+SHELL_SET = {b"_"}
+touched = sorted(k.decode("utf-8", "replace") for k in inner
+                 if k not in SHELL_SET and now.get(k) != inner[k])
+want, inblock = [], False
+for ln in open(doc, encoding="utf-8"):
+    if "<!-- LEANENV:BEGIN -->" in ln:
+        inblock = True
+        continue
+    if "<!-- LEANENV:END -->" in ln:
+        inblock = False
+        continue
+    if inblock and ln.startswith("LEANENV_VAR="):
+        want.append(ln.strip().split("=", 1)[1])
+rows = []
+if not want:
+    rows.append("FAIL\t값 정본의 LEANENV 블록에서 변수 이름을 읽지 못했다")
+else:
+    extra = [n for n in touched if n not in want]
+    missing = [n for n in want if n not in touched]
+    rows.append("REPORT\t빌드 도구가 더하거나 바꾼 변수 %d · 블록이 든 이름 %d"
+                % (len(touched), len(want)))
+    if extra:
+        rows.append("REPORT\t블록에 없는 변수 %d — %s" % (len(extra), " · ".join(extra)))
+    if missing:
+        rows.append("REPORT\t블록이 드는데 이 환경에 서지 않는 변수 %d — %s"
+                    % (len(missing), " · ".join(missing)))
+    if not extra and not missing:
+        rows.append("OK\t더하거나 바꾼 변수의 이름이 블록과 같다 (%d)" % len(want))
+sys.stdout.write("".join(r + "\n" for r in rows))
+LEEOF
+)
+
+# 축 둘째. 같은 파일을 두 길로 돌려 종료 코드와 출력이 바이트로 같은지 잰다. 대상은 뒤의
+# 단계가 이미 돌리는 층별 프로브이며, 이름의 집합만 보면 이름이 같은데 값의 뜻이 바뀐 자리를
+# 놓치고 이 축만 보면 그 파일이 쓰지 않는 자리에 걸린 변수가 늘어도 재어지지 않는다.
+#
+# 받은 판의 꼴을 들이기 앞에서 잰다. 들인 환경 위에서 빌드 도구를 다시 부르면 그 도구가
+# 자기 경로를 기존 값 앞에 다시 붙여 모듈 탐색 경로가 두 배로 서고, 그 중첩이 오류 메시지의
+# 경로 목록을 늘려 두 길의 출력이 갈린다. 그 갈림은 환경이 다른 것이 아니라 한쪽이 중첩된
+# 것이므로 이 순서가 아니면 이 축이 늘 실패한다.
+le_a=$(lake env lean Scratch/VerifyBuilt.lean 2>&1); le_a_rc=$?
+
+while IFS= read -r -d '' le_kv; do
+  le_name=${le_kv%%=*}
+  case "$le_name" in
+    *[!A-Za-z0-9_]*|'') continue ;;
+  esac
+  export "$le_kv"
+done < "$le_inner"
+if [ -z "${LEAN:-}" ]; then
+  bad "들인 환경이 Lean 바이너리의 경로를 들지 않는다"
+  # 이 스크립트가 미정의 변수를 오류로 받으므로 뒤의 단계가 이 변수를 맨몸으로
+  # 참조하면 셸이 그 자리에서 끝나고 그 끊김이 적발로 기록되지 않는다. 그래서 그
+  # 참조마다 기본값을 두어 이 경로에서도 뒤의 단계가 돌아 실패를 남기게 한다.
+else
+  ok "Lean 을 직접 부를 경로를 들였다"
+fi
+
+le_c=$("${LEAN:-lean}" Scratch/VerifyBuilt.lean 2>&1); le_c_rc=$?
+if [ "$le_a_rc" -eq "$le_c_rc" ] && [ "$le_a" = "$le_c" ]; then
+  ok "두 길의 출력이 바이트로 같다 (종료 코드 $le_a_rc)"
+else
+  bad "두 길의 출력이 갈린다 — 들인 환경이 빌드 도구가 세우던 것과 다르다"
+  diff <(printf '%s\n' "$le_a") <(printf '%s\n' "$le_c") | sed 's/^/       /' | head -20
+fi
+rm -f "$le_now" "$le_inner" "$le_inner.err"
+
 step step4-baseline '공리 의존 + `docs/baseline.md` 기준선 차분'
 # 층별 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
 # 전사하면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다 (baseline.md 머리말).
 # 화이트리스트가 아니라 차분이다. 실효 기준선 자체는 매 실행마다
 # Scratch/VerifyBuilt.lean 의 층별 프로브가 다시 찍는다.
-BASELINE_DOC=docs/baseline.md
-
-vb_out=$(lake env lean Scratch/VerifyBuilt.lean 2>&1); vb_rc=$?
+#
+# Lean 을 빌드 도구를 거치지 않고 직접 부른다. 그 환경은 step11-leanenv 가 한 번 들였다.
+vb_out=$("${LEAN:-lean}" Scratch/VerifyBuilt.lean 2>&1); vb_rc=$?
 printf '%s\n' "$vb_out" | sed 's/^/  /'
 if [ "$vb_rc" -eq 0 ]; then ok "VerifyBuilt 통과 (DecidableEq 없이 적용됨)"
 else bad "VerifyBuilt 실패"; fi
@@ -282,7 +401,7 @@ with open(os.path.join(audit, "Probe.lean"), "w", encoding="utf-8") as out:
     for _, n in rows:
         out.write(f"#print axioms {n}\n")
 PYEOF
-pr_out=$(lake env lean "$AUDIT/Probe.lean" 2>&1); pr_rc=$?
+pr_out=$("${LEAN:-lean}" "$AUDIT/Probe.lean" 2>&1); pr_rc=$?
 printf '%s\n' "$pr_out" | sed 's/^/  /'
 if [ "$pr_rc" -eq 0 ]; then ok "선언 감사 프로브 통과 (임시 파일, 선언 $(wc -l < "$AUDIT/decls.tsv"))"
 else bad "선언 감사 프로브 실패"; fi
@@ -702,7 +821,7 @@ else
       bad "$m_file:$m_line $m_concl 의 결론을 잡지 못해 그 진술의 변이 검사가 수행되지 않았다"
       continue
     fi
-    if lake env lean "$m_copy" >"$mut_dir/out" 2>&1; then
+    if "${LEAN:-lean}" "$m_copy" >"$mut_dir/out" 2>&1; then
       bad "$m_file:$m_line 변이가 통과함 — 해당 진술은 공허한 검사다: $m_concl"
     elif grep -qE "$mut_syntax_re" "$mut_dir/out"; then
       # 사본이 깨진 것을 거부로 세면 그 진술의 검사가 공허해지는데도 통과로 보고된다.
@@ -832,7 +951,7 @@ else
   per_file=$(cut -f1 "$cm_list" | uniq -c | awk '{printf "%s%s %s", (NR>1?" · ":""), $2, $1}')
   ok "변이 대상 ${#cm_rows[@]} ($per_file)"
   # 사본마다 elaborate 를 따로 돌린다. 판정은 아래에서 원래 순서대로 하므로 병렬이 출력을 바꾸지 않는다.
-  cut -f8 "$cm_list" | xargs -P 4 -I{} sh -c 'lake env lean "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
+  cut -f8 "$cm_list" | xargs -P 4 -I{} sh -c '"${LEAN:-lean}" "$1" > "$1.out" 2>&1; echo $? > "$1.rc"' _ {}
   cm_uncovered=0
   for row in "${cm_rows[@]}"; do
     IFS=$'\t' read -r c_file c_line c_name c_from c_to c_first c_last c_copy <<< "$row"
