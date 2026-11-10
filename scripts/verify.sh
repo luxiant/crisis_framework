@@ -98,31 +98,47 @@ rep()  { printf '  \033[36mREPORT\033[0m %s\n' "$*"; }
 step step1-duplicate "빌드 타깃 밖 중복 사본 탐지"
 # 저장소 전체를 훑는다. crisis-framework/ 안만 보면 상위 디렉터리에 놓인
 # 낡은 초안 사본을 놓친다 (1차 검증 직후 실제로 발생한 사고).
+#
+# 탐색을 대상마다 돌리지 않고 한 번만 돌린다. 제외를 부정 경로로 거르는 꼴은 그 디렉터리
+# 안을 전량 순회한 뒤 결과만 버리므로 빌드 산출에 받아 둔 의존 패키지 전량이 대상 파일마다
+# 다시 순회되며, 가지치기로 바꾸면 그 디렉터리에 아예 들어가지 않는다. 빌드 타깃 판별도
+# 대상 전량을 다시 훑지 않고 해소된 경로의 집합으로 한 번에 받는다. `-type f` 를 두지
+# 않는 것은 받은 판의 동작을 그대로 두기 위한 것이다.
+#
+# 적발의 순서는 대상 경로로 정렬해 고정한다. 탐색이 낸 순서를 그대로 쓰면 디렉터리 순회
+# 순서가 출력에 들어와 OUTPUT_DIGEST 가 리포 상태의 함수가 아니게 된다 (CF-674 와 같은 형).
 SCAN="$(git rev-parse --show-toplevel 2>/dev/null || echo "$ROOT")"
 dup=0
+declare -A TARGET_ABS=() TARGET_OF=()
 for t in "${TARGETS[@]}"; do
-  base=$(basename "$t")
-  abs="$ROOT/$t"
-  while IFS= read -r other; do
-    other_abs=$(readlink -f "$other")
-    [ "$other_abs" = "$(readlink -f "$abs")" ] && continue
-    # 다른 빌드 타깃은 사본이 아니다. `lakefile.toml` 의 glob 이 둘을 함께 세우고
-    # `lake` 가 경로로 구별하므로 검증에서 빠지는 파일이 아니다. 이 검사가 잡으려는
-    # 것은 빌드 타깃 **밖**의 낡은 초안이며 CF-83 의 사고가 그 형이었다.
-    is_target=0
-    for u in "${TARGETS[@]}"; do
-      [ "$other_abs" = "$(readlink -f "$ROOT/$u")" ] && { is_target=1; break; }
-    done
-    [ "$is_target" -eq 1 ] && continue
-    dup=1
-    rel=${other#"$SCAN"/}
-    if diff -q "$other" "$abs" >/dev/null 2>&1; then
-      bad "중복 사본(내용 동일, 그래도 혼동 위험): $rel  ↔  $t"
-    else
-      bad "중복 사본(내용 다름 — 위험): $rel  ↔  $t"
-    fi
-  done < <(find "$SCAN" -name "$base" -not -path '*/.lake/*' -not -path '*/.git/*')
+  TARGET_ABS["$(readlink -f "$ROOT/$t")"]=1
+  # 한 파일명이 여러 층에 서므로 대상을 쌓는다. 받은 판이 대상마다 탐색을 돌려 같은
+  # 사본을 대상마다 적발하므로 그 쌍의 수가 같아야 한다.
+  TARGET_OF["$(basename "$t")"]+="$t"$'\n'
 done
+dup_rows=()
+while IFS= read -r other; do
+  base=$(basename "$other")
+  [ -n "${TARGET_OF[$base]:-}" ] || continue
+  other_abs=$(readlink -f "$other")
+  # 다른 빌드 타깃은 사본이 아니다. `lakefile.toml` 의 glob 이 둘을 함께 세우고
+  # `lake` 가 경로로 구별하므로 검증에서 빠지는 파일이 아니다. 이 검사가 잡으려는
+  # 것은 빌드 타깃 **밖**의 낡은 초안이며 CF-83 의 사고가 그 형이었다.
+  [ -n "${TARGET_ABS[$other_abs]:-}" ] && continue
+  rel=${other#"$SCAN"/}
+  while IFS= read -r t; do
+    [ -n "$t" ] || continue
+    if diff -q "$other" "$ROOT/$t" >/dev/null 2>&1; then
+      dup_rows+=("$t"$'\t'"중복 사본(내용 동일, 그래도 혼동 위험): $rel  ↔  $t")
+    else
+      dup_rows+=("$t"$'\t'"중복 사본(내용 다름 — 위험): $rel  ↔  $t")
+    fi
+  done <<< "${TARGET_OF[$base]}"
+done < <(find "$SCAN" \( -name .lake -o -name .git \) -prune -o -name '*.lean' -print)
+if [ "${#dup_rows[@]}" -gt 0 ]; then
+  dup=1
+  while IFS= read -r row; do bad "${row#*$'\t'}"; done < <(printf '%s\n' "${dup_rows[@]}" | LC_ALL=C sort)
+fi
 [ "$dup" -eq 0 ] && ok "저장소 전체에 빌드 타깃 파일명과 겹치는 사본 없음"
 
 step step2-build "olean 삭제 후 전량 재빌드"
@@ -146,34 +162,41 @@ step step3-forbidden '금지 구문 정적 검사 (층별 `ℝ` 포함)'
 # 주석·docstring 을 먼저 제거한다. 그러지 않으면 헤더에 적은
 # "`sorry` 0" 같은 설명 문구가 스스로 걸린다 (실제로 발생했다).
 # Lean 의 /- -/ 는 중첩 가능하므로 깊이를 세어 제거하고, -- 는 줄 끝까지 지운다.
-strip_comments() {
-  python3 - "$1" <<'PYEOF'
-import sys
-src = open(sys.argv[1], encoding='utf-8').read()
-out, i, depth, n = [], 0, 0, len(src)
-while i < n:
-    if src.startswith('/-', i):
-        depth += 1; i += 2; continue
-    if src.startswith('-/', i) and depth:
-        depth -= 1; i += 2; continue
-    if depth:
-        out.append('\n' if src[i] == '\n' else ' '); i += 1; continue
-    if src.startswith('--', i):
-        j = src.find('\n', i); i = n if j < 0 else j; continue
-    out.append(src[i]); i += 1
-sys.stdout.write(''.join(out))
+#
+# 사본을 한 벌만 만들고 뒤의 네 단계가 그것을 함께 읽는다. 단계마다 다시 만들면 같은
+# 산출을 네 번 세우고 파일마다 파이썬을 새로 띄워 그 횟수가 대상 수의 네 배로 선다.
+# 전량을 한 호출에서 처리하므로 기동 비용도 한 번으로 선다. 지우는 자리는 이 벌을
+# 읽는 마지막 단계의 뒤다 (step9-propfree).
+#
+# 변이 검사와 논리 결합 변이는 이 벌을 쓰지 않는다. 그 둘은 자리 수를 보존해 공백으로
+# 덮는 다른 꼴을 쓰고 원본의 자리 번호를 그대로 쓰기 때문이다.
+STRIPPED=$(mktemp -d)
+python3 - "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
+import os, sys
+dest, files = sys.argv[1], sys.argv[2:]
+def strip(src):
+    out, i, depth, n = [], 0, 0, len(src)
+    while i < n:
+        if src.startswith('/-', i):
+            depth += 1; i += 2; continue
+        if src.startswith('-/', i) and depth:
+            depth -= 1; i += 2; continue
+        if depth:
+            out.append('\n' if src[i] == '\n' else ' '); i += 1; continue
+        if src.startswith('--', i):
+            j = src.find('\n', i); i = n if j < 0 else j; continue
+        out.append(src[i]); i += 1
+    return ''.join(out)
+for f in files:
+    p = os.path.join(dest, f)
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    with open(p, 'w', encoding='utf-8') as out:
+        out.write(strip(open(f, encoding='utf-8').read()))
 PYEOF
-}
-
-CODE=$(mktemp -d)
-for t in "${TARGETS[@]}"; do
-  mkdir -p "$CODE/$(dirname "$t")"
-  strip_comments "$t" > "$CODE/$t"
-done
 
 check_absent() {  # 표시명, 정규식
   local name="$1" pat="$2" hits
-  hits=$(cd "$CODE" && grep -nE "$pat" "${TARGETS[@]}" 2>/dev/null)
+  hits=$(cd "$STRIPPED" && grep -nE "$pat" "${TARGETS[@]}" 2>/dev/null)
   if [ -n "$hits" ]; then bad "코드에 금지 구문: $name"; printf '%s\n' "$hits" | sed 's/^/       /'
   else ok "코드에 없음: $name"; fi
 }
@@ -190,14 +213,13 @@ for t in "${TARGETS[@]}"; do
   case "$t" in
     CrisisFramework/Dynamics/*) continue ;;
   esac
-  hits=$(cd "$CODE" && grep -nE 'ℝ' "$t" 2>/dev/null)
+  hits=$(cd "$STRIPPED" && grep -nE 'ℝ' "$t" 2>/dev/null)
   if [ -n "$hits" ]; then
     real_hits=1
     bad "층별 \`ℝ\` 금지 위반: $t"; printf '%s\n' "$hits" | sed 's/^/       /'
   fi
 done
 [ "$real_hits" -eq 0 ] && ok "\`ℝ\` 없음: 동학층 밖 대상 전량 (동학층은 검사 대상이 아니다)"
-rm -rf "$CODE"
 
 step step4-baseline '공리 의존 + `docs/baseline.md` 기준선 차분'
 # 층별 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
@@ -217,13 +239,9 @@ else bad "VerifyBuilt 실패"; fi
 # 그 자리에서 열려 있는 namespace 를 앞에 붙인다. example 은 이름이 없어 대상이 아니다.
 # 뽑은 이름마다 `#print axioms` 한 줄을 내는 프로브 파일을 임시 디렉터리에 만들어 돌린다.
 AUDIT=$(mktemp -d)
-for t in "${TARGETS[@]}"; do
-  mkdir -p "$AUDIT/code/$(dirname "$t")"
-  strip_comments "$t" > "$AUDIT/code/$t"
-done
-python3 - "$AUDIT" "${TARGETS[@]}" <<'PYEOF'
+python3 - "$AUDIT" "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
 import os, re, sys
-audit, files = sys.argv[1], sys.argv[2:]
+audit, stripped, files = sys.argv[1], sys.argv[2], sys.argv[3:]
 DECL = re.compile(r"^(inductive|structure|def|theorem|abbrev|instance)\s+([^\s({\[:]+)")
 ANON = re.compile(r"^instance\b(?!\s+[^\s({\[:]+)")
 OPEN = re.compile(r"^(namespace|section)\b[ \t]*(\S*)")
@@ -238,7 +256,7 @@ def layer_of(f):
     return f.split("/")[1]
 for f in files:
     stack = []
-    code = open(os.path.join(audit, "code", f), encoding="utf-8").read()
+    code = open(os.path.join(stripped, f), encoding="utf-8").read()
     for i, ln in enumerate(code.split("\n"), 1):
         m = OPEN.match(ln)
         if m:
@@ -272,115 +290,143 @@ while IFS= read -r a; do
   [ -n "$a" ] && bad "이름 없는 instance 는 이름으로 감사할 수 없다: $a"
 done < "$AUDIT/anon.txt"
 
-# `#print axioms` 는 목록이 길면 줄바꿈해 출력하므로 공백을 접어서 대조한다.
-norm=$(printf '%s\n%s' "$vb_out" "$pr_out" | python3 -c "import sys,re;print(re.sub(r'\s+',' ',sys.stdin.read()))")
-
-# 이름 하나의 공리 목록을 낸다. 무의존이면 [] 를 내고 찾지 못하면 빈 문자열을 낸다.
-axioms_of() {
-  local n=$1 g
-  g=$(printf '%s' "$norm" | grep -o "'$n' depends on axioms: \[[^]]*\]" | sed "s/.*axioms: //")
-  if [ -n "$g" ]; then printf '%s' "$g"; return; fi
-  if printf '%s' "$norm" | grep -q "'$n' does not depend on any axioms"; then printf '[]'; return; fi
-  printf ''
-}
-
-# 기준선을 넘은 공리만 낸다. 부분집합 대조이므로 기준선 이하도 통과시킨다.
-excess_of() {
-  python3 -c "
-import sys
-def p(s): return set(t.strip() for t in s.strip().strip('[]').split(',') if t.strip())
-ex=sorted(p(sys.argv[1])-p(sys.argv[2]))
-print('['+', '.join(ex)+']' if ex else '[]')
-" "$1" "$2"
-}
-
-AUDITED=0
-AUDIT_DETAIL=()
-# 공리 출력이 비어 있지 않은 선언의 누계와 층별 내역. 기준선 초과가 없다는 것과 공리 출력이
-# 비어 있다는 것이 다른 사실인데 둘을 가르는 출력이 없었다. 차분은 그 층의 기준선과 맞대므로
-# 기준선이 비어 있지 않은 층에서는 비어 있지 않은 값이 전부 통과로 묻힌다. 관측층의 기준선이
-# 비어 있어 그 층의 선언이 아래 층 선언을 부르면 초과가 서는데, 그 초과가 설 자리를 미리
-# 드러내는 것이 이 보고의 몫이다. **실패시키지 않는다.** 지금 서 있는 호출이 전부 막히고,
-# 초과분이 도구 구현에서 오는 종류라 처리가 회피이며, 기준선을 올리면 추적 의무가 그 층에서
-# 무력해지기 때문이다. 보고로 두면 발원지를 깨끗하게 만드는 작업의 대상 목록이 매 회차
-# 갱신된다. 패턴의 모양으로 가르지 않고 공리를 직접 재는 까닭은, 와일드카드를 든 선언을 세는
-# 쪽이 유한집합과 몫 구성에서 오는 공리를 전부 놓치고 맨 끝 포괄 분기 하나뿐인 선언도 공리를
-# 내는 것이 실측됐기 때문이다.
-NONEMPTY=0
-NONEMPTY_DETAIL=()
-audit_layer() {
-  local label=$1 key=$2 probe=$3; shift 3
-  local base measured c got ex n=0 ne=0
-  local -a nonempty=()
-  base=$(sed -n '/<!-- BASELINE:BEGIN -->/,/<!-- BASELINE:END -->/p' "$BASELINE_DOC" \
-         | sed -n "s/^$key=//p")
-  if [ -z "$base" ]; then
-    bad "$BASELINE_DOC 의 기계 판독 블록에서 $key 를 읽지 못함 — 형식 확인 필요"
-    AUDIT_DETAIL+=("$label 0")
-    return
-  fi
-  ok "기준선을 $BASELINE_DOC 에서 읽음: $key=$base"
-  measured=$(axioms_of "$probe")
-  if [ -z "$measured" ]; then
-    bad "$label 기준선 프로브 출력을 찾지 못함 ($probe) — Scratch/VerifyBuilt.lean 확인 필요"
-  elif [ "$measured" = "$base" ]; then
-    ok "$label 실효 기준선 실측 = $measured (기대값과 일치)"
-  else
-    bad "$label 실효 기준선이 기대값과 다름: 측정 $measured / 기대 $base — docs/baseline.md 의 갱신은 사람의 결정"
-  fi
-  for c in "$@"; do
-    got=$(axioms_of "$c")
-    AUDITED=$((AUDITED + 1)); n=$((n + 1))
-    if [ -z "$got" ]; then
-      bad "$c: 공리 출력을 찾지 못함"
-      continue
-    fi
-    if [ "$got" != "[]" ]; then
-      ne=$((ne + 1)); nonempty+=("$c  $got")
-    fi
-    ex=$(excess_of "$got" "$base")
-    if [ "$ex" = "[]" ]; then
-      if [ "$got" = "$base" ]; then ok "$c: $got (기준선과 동일)"
-      else ok "$c: $got (기준선 이하)"; fi
-    else
-      bad "$c: 기준선 초과 — $got / 기준선 $base / 초과분 $ex. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)"
-    fi
-  done
-  AUDIT_DETAIL+=("$label $n")
-  rep "$label 공리 출력이 비어 있지 않은 선언 $ne / $n"
-  if [ "$ne" -gt 0 ]; then
-    printf '       %s\n' "${nonempty[@]}"
-  fi
-  NONEMPTY=$((NONEMPTY + ne))
-  NONEMPTY_DETAIL+=("$label $ne")
-}
+# 층별 판정을 한 호출에 모은다. 받은 판은 선언마다 공리 목록을 셸에서 뽑고 기준선 차분을
+# 파이썬으로 내므로 그 호출이 선언 수만큼 서며 그 수가 세 자리다. 공리 출력과 값 정본의
+# 블록과 선언 목록을 한 번에 넘기면 전량이 한 호출에서 판정되고 셸은 그 판정 행을 읽어
+# 찍는다. 그 꼴은 층별 수 타입 검사와 발동조건 문법 검사가 이미 쓰는 선례를 따른다.
+# `#print axioms` 는 목록이 길면 줄바꿈해 출력하므로 공백을 접어서 대조하며 접는 자리도
+# 그 호출 안이다.
+#
+# 공리 출력이 비어 있지 않은 선언의 누계와 층별 내역을 함께 낸다. 기준선 초과가 없다는 것과
+# 공리 출력이 비어 있다는 것이 다른 사실인데 둘을 가르는 출력이 없었다. 차분은 그 층의
+# 기준선과 맞대므로 기준선이 비어 있지 않은 층에서는 비어 있지 않은 값이 전부 통과로 묻힌다.
+# 관측층의 기준선이 비어 있어 그 층의 선언이 아래 층 선언을 부르면 초과가 서는데, 그 초과가
+# 설 자리를 미리 드러내는 것이 이 보고의 몫이다. **실패시키지 않는다.** 지금 서 있는 호출이
+# 전부 막히고, 초과분이 도구 구현에서 오는 종류라 처리가 회피이며, 기준선을 올리면 추적
+# 의무가 그 층에서 무력해지기 때문이다. 보고로 두면 발원지를 깨끗하게 만드는 작업의 대상
+# 목록이 매 회차 갱신된다. 패턴의 모양으로 가르지 않고 공리를 직접 재는 까닭은, 와일드카드를
+# 든 선언을 세는 쪽이 유한집합과 몫 구성에서 오는 공리를 전부 놓치고 맨 끝 포괄 분기 하나뿐인
+# 선언도 공리를 내는 것이 실측됐기 때문이다.
+printf '%s\n%s' "$vb_out" "$pr_out" > "$AUDIT/axioms.txt"
+audit_out=$(python3 - "$AUDIT/axioms.txt" "$BASELINE_DOC" "$AUDIT/decls.tsv" <<'PYEOF'
+import re, sys
+axfile, basedoc, declfile = sys.argv[1], sys.argv[2], sys.argv[3]
+norm = re.sub(r"\s+", " ", open(axfile, encoding="utf-8").read())
 
 # 디렉터리가 층을 결정한다. 층마다 docs/baseline.md 의 키와 실효 기준선을 내는 프로브가
 # 짝을 이룬다. 이 표에 없는 디렉터리에 선언이 서면 차분할 기준선이 없으므로 실패시킨다.
 # 회계층 아래의 `Rat` 디렉터리는 위의 생성부가 따로 내는 자리이며 유리수 기준선과 차분한다.
-LAYERS=(
-  "Accounting|회계층|ACCOUNTING_INT|baselineProbeSum"
-  "Accounting/Rat|회계층(ℚ)|ACCOUNTING_RAT|ratProbeSum"
-  "Glossary|용어집|GLOSSARY|glossaryProbeList"
-  "Definition|정의층|DEFINITION|definitionProbeFamily"
-  "Observation|관측층|OBSERVATION|observationProbeProd"
+LAYERS = [
+    ("Accounting",     "회계층",    "ACCOUNTING_INT", "baselineProbeSum"),
+    ("Accounting/Rat", "회계층(ℚ)", "ACCOUNTING_RAT", "ratProbeSum"),
+    ("Glossary",       "용어집",    "GLOSSARY",       "glossaryProbeList"),
+    ("Definition",     "정의층",    "DEFINITION",     "definitionProbeFamily"),
+    ("Observation",    "관측층",    "OBSERVATION",    "observationProbeProd"),
+]
+
+# 층별 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
+# 전사하면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다 (baseline.md 머리말).
+doc = open(basedoc, encoding="utf-8").read()
+m = re.search(r"<!-- BASELINE:BEGIN -->(.*?)<!-- BASELINE:END -->", doc, re.S)
+base_of = {}
+for ln in (m.group(1) if m else "").split("\n"):
+    if "=" in ln:
+        k, _, v = ln.partition("=")
+        base_of[k.strip()] = v.strip()
+
+def axioms_of(n):
+    """이름 하나의 공리 목록을 낸다. 무의존이면 [] 를 내고 찾지 못하면 빈 문자열을 낸다."""
+    g = re.search(r"'" + re.escape(n) + r"' depends on axioms: \[([^\]]*)\]", norm)
+    if g:
+        return "[" + g.group(1) + "]"
+    if re.search(r"'" + re.escape(n) + r"' does not depend on any axioms", norm):
+        return "[]"
+    return ""
+
+def parse(s):
+    return set(t.strip() for t in s.strip().strip("[]").split(",") if t.strip())
+
+rows = []
+for ln in open(declfile, encoding="utf-8"):
+    ln = ln.rstrip("\n")
+    if ln:
+        d, _, n = ln.partition("\t")
+        rows.append((d, n))
+
+out, audited, ne_total = [], 0, 0
+detail, ne_detail, known = [], [], set()
+for d, label, key, probe in LAYERS:
+    known.add(d)
+    base = base_of.get(key, "")
+    if not base:
+        out.append(f"BASE_MISS\t{key}")
+        detail.append(f"{label} 0")
+        continue
+    out.append(f"BASE_OK\t{key}\t{base}")
+    measured = axioms_of(probe)
+    if not measured:
+        out.append(f"PROBE_MISS\t{label}\t{probe}")
+    elif measured == base:
+        out.append(f"PROBE_OK\t{label}\t{measured}")
+    else:
+        out.append(f"PROBE_DIFF\t{label}\t{measured}\t{base}")
+    n = ne = 0
+    nonempty = []
+    for c in [nm for dd, nm in rows if dd == d]:
+        got = axioms_of(c)
+        audited += 1
+        n += 1
+        if not got:
+            out.append(f"DECL_MISS\t{c}")
+            continue
+        if got != "[]":
+            ne += 1
+            nonempty.append(f"{c}  {got}")
+        # 기준선을 넘은 공리만 낸다. 부분집합 대조이므로 기준선 이하도 통과시킨다.
+        ex = sorted(parse(got) - parse(base))
+        if not ex:
+            out.append(f"DECL_SAME\t{c}\t{got}" if got == base else f"DECL_UNDER\t{c}\t{got}")
+        else:
+            out.append(f"DECL_EXCESS\t{c}\t{got}\t{base}\t[{', '.join(ex)}]")
+    detail.append(f"{label} {n}")
+    out.append(f"NONEMPTY\t{label}\t{ne}\t{n}")
+    out += [f"NONEMPTY_ITEM\t{x}" for x in nonempty]
+    ne_total += ne
+    ne_detail.append(f"{label} {ne}")
+for d, n in rows:
+    if d not in known:
+        out.append(f"LAYER_UNKNOWN\t{d}\t{n}")
+out.append(f"TOTAL\t{audited}\t" + " · ".join(detail))
+out.append(f"NE_TOTAL\t{ne_total}\t" + " · ".join(ne_detail))
+print("\n".join(out))
+PYEOF
 )
-known=""
-for row in "${LAYERS[@]}"; do
-  IFS='|' read -r dir label key probe <<< "$row"
-  known="$known $dir"
-  mapfile -t names < <(awk -F'\t' -v d="$dir" '$1 == d { print $2 }' "$AUDIT/decls.tsv")
-  audit_layer "$label" "$key" "$probe" "${names[@]}"
-done
-while IFS=$'\t' read -r dir name; do
-  case " $known " in *" $dir "*) ;; *) bad "층 기준선이 정해지지 않은 자리의 선언: $dir 의 $name" ;; esac
-done < "$AUDIT/decls.tsv"
+AUDITED=0
+AUDIT_DETAIL_S=
+NONEMPTY=0
+NE_DETAIL_S=
+while IFS=$'\t' read -r kind a b c d; do
+  case "$kind" in
+    BASE_MISS)     bad "$BASELINE_DOC 의 기계 판독 블록에서 $a 를 읽지 못함 — 형식 확인 필요" ;;
+    BASE_OK)       ok "기준선을 $BASELINE_DOC 에서 읽음: $a=$b" ;;
+    PROBE_MISS)    bad "$a 기준선 프로브 출력을 찾지 못함 ($b) — Scratch/VerifyBuilt.lean 확인 필요" ;;
+    PROBE_OK)      ok "$a 실효 기준선 실측 = $b (기대값과 일치)" ;;
+    PROBE_DIFF)    bad "$a 실효 기준선이 기대값과 다름: 측정 $b / 기대 $c — docs/baseline.md 의 갱신은 사람의 결정" ;;
+    DECL_MISS)     bad "$a: 공리 출력을 찾지 못함" ;;
+    DECL_SAME)     ok "$a: $b (기준선과 동일)" ;;
+    DECL_UNDER)    ok "$a: $b (기준선 이하)" ;;
+    DECL_EXCESS)   bad "$a: 기준선 초과 — $b / 기준선 $c / 초과분 $d. 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)" ;;
+    NONEMPTY)      rep "$a 공리 출력이 비어 있지 않은 선언 $b / $c" ;;
+    NONEMPTY_ITEM) printf '       %s\n' "$a" ;;
+    LAYER_UNKNOWN) bad "층 기준선이 정해지지 않은 자리의 선언: $a 의 $b" ;;
+    TOTAL)         AUDITED=$a; AUDIT_DETAIL_S=$b ;;
+    NE_TOTAL)      NONEMPTY=$a; NE_DETAIL_S=$b ;;
+  esac
+done <<< "$audit_out"
 rm -rf "$AUDIT"
 
-detail=$(printf '%s · ' "${AUDIT_DETAIL[@]}"); detail=${detail% · }
-ok "공리 감사 대상 선언 $AUDITED ($detail)"
-ne_detail=$(printf '%s · ' "${NONEMPTY_DETAIL[@]}"); ne_detail=${ne_detail% · }
-rep "공리 출력이 비어 있지 않은 선언 $NONEMPTY / $AUDITED ($ne_detail). 실패시키지 않는다"
+ok "공리 감사 대상 선언 $AUDITED ($AUDIT_DETAIL_S)"
+rep "공리 출력이 비어 있지 않은 선언 $NONEMPTY / $AUDITED ($NE_DETAIL_S). 실패시키지 않는다"
 
 step step8-layertype '층별 수 타입 정적 검사 (L-10)'
 # CLAUDE.md §2 의 층별 금지 표를 주석을 지운 코드에서 대조한다. 디렉터리가 층을 결정한다.
@@ -388,12 +434,7 @@ step step8-layertype '층별 수 타입 정적 검사 (L-10)'
 # 이 보므로 여기서 다시 세지 않는다. L-4 가 invariant 로 그 단계에 걸려 있기 때문이다. 다만 영문명
 # Real 은 step3 가 기호만 보므로 여기서 잡는다. 회계층의 ℚ·Rat 은 L-15 의 판정이 docstring 의
 # 사유를 읽어야 서므로 실패가 아니라 보고로 낸다.
-LT=$(mktemp -d)
-for t in "${TARGETS[@]}"; do
-  mkdir -p "$LT/$(dirname "$t")"
-  strip_comments "$t" > "$LT/$t"
-done
-lt_out=$(python3 - "$LT" "${TARGETS[@]}" <<'PYEOF'
+lt_out=$(python3 - "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
 import os, re, sys
 root, files = sys.argv[1], sys.argv[2:]
 # 디렉터리: (층, 금지 기호, 금지 영문명, 수치 리터럴 금지, 처분)
@@ -427,7 +468,6 @@ for d, (layer, *_rest) in RULES.items():
 print(f"OTHER\t{other}")
 PYEOF
 )
-rm -rf "$LT"
 declare -A lt_fail=() lt_rep=()
 while IFS=$'\t' read -r kind layer where what line; do
   case "$kind" in
@@ -452,13 +492,8 @@ step step9-propfree '발동조건 문법의 `Prop` 금지 (C-10)'
 # Prop 를 몰아내면 발동조건의 의미가 Bool 반환 계산 함수로 선다는 요구가 타입으로 선다.
 # 최상위 def·abbrev·theorem 의 서명은 대상이 아니다. 구조에 들어가지 않는 보조 술어는
 # 발동조건의 판정 경로에 있지 않기 때문이다. 필드와 생성자는 선언 머리의 where 뒤에 선다.
-PF=$(mktemp -d)
 mapfile -t DEF_TARGETS < <(printf '%s\n' "${TARGETS[@]}" | grep '^CrisisFramework/Definition/')
-for t in "${DEF_TARGETS[@]}"; do
-  mkdir -p "$PF/$(dirname "$t")"
-  strip_comments "$t" > "$PF/$t"
-done
-pf_out=$(python3 - "$PF" "${DEF_TARGETS[@]}" <<'PYEOF'
+pf_out=$(python3 - "$STRIPPED" "${DEF_TARGETS[@]}" <<'PYEOF'
 import os, re, sys
 root, files = sys.argv[1], sys.argv[2:]
 HEAD = re.compile(r"^(structure|inductive)\s+([^\s({\[:]+)")
@@ -494,7 +529,7 @@ for f in files:
 print(f"SCAN\t{len(files)}\t{n['structure']}\t{n['inductive']}")
 PYEOF
 )
-rm -rf "$PF"
+rm -rf "$STRIPPED"
 pf_bad=0
 while IFS=$'\t' read -r kind a b c; do
   case "$kind" in

@@ -643,13 +643,20 @@ QUEUEMARK_SPENT=소진
 상대가 없다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=188569
-RULEDOC_OVER_BYTES_APPENDIX=80940
-RULEDOC_IMPL_BYTES_SI=138
-RULEDOC_REASON_BYTES_SI=3680
-RULEDOC_REINFORCE_BYTES_SI=0
+RULEDOC_OVER_BYTES_SI=177873
+RULEDOC_OVER_BYTES_APPENDIX=79597
+RULEDOC_IMPL_BYTES_SI=27596
+RULEDOC_REASON_BYTES_SI=31452
+RULEDOC_REINFORCE_BYTES_SI=7108
 <!-- RULEDOC:END -->
 
 **이 절을 고칠 때.** 그 값을 손으로 적지 않고 그 탐지를 돌려 받으며, 탐지의 꼴을 바꾸는 회차가
 이 블록을 함께 고쳐 그 변경이 의식적 결정으로 서게 한다. **값이 늘면 그 회차가 그 사유를
 종료 문서에 적는다.**
+
+**그 측정기가 결정 세션의 컨테이너에만 살아 회차를 건너 승계되지 않으므로 그 꼴을 결정 세션이
+유지하는 규율 문서가 산문으로 든다.** 사전 검사 스크립트가 리포에 남지 않는다는 요구가 그
+설비를 리포에 두는 길을 막으므로, 꼴을 산문으로 두는 것이 다음 회차가 같은 것을 재게 하는
+유일한 수단이다. **그 꼴이 서지 않은 회차에 이 블록의 값이 측정기마다 갈렸다.** 상한 초과는 두
+문서에서 한 자리 수 퍼센트 차이를 냈고 갈래별 분류는 두 자리 수 배의 차이를 냈으며, 그 회차가
+자기 측정기의 값을 심고 그 재설정을 종료 문서에 적었다.
