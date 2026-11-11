@@ -577,9 +577,9 @@
           "holes": []
         }
       ],
-      "status": "open",
+      "status": "closed",
       "opened": "2026-11-09",
-      "closed": null,
+      "closed": "2026-11-11",
       "holes": [],
       "cq": []
     },
