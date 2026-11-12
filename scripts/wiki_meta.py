@@ -21,6 +21,7 @@ from wiki_common import (
     Report,
     SPEC_FIELD_HEAD,
     SPEC_TABLE_RULE,
+    WIKI_NC_UNITS,
     WIKI_UNITS,
     md_cells,
 )
@@ -229,13 +230,10 @@ def check_40(led: Ledger) -> Report:
     return r
 
 
-# 검사 44 가 읽는 자리 셋. 음성 대조의 사례 목록과 검사가 선언한 단계 id 와 명세의 주입 시험 칸이며,
+# 검사 44 가 읽는 자리 셋. 음성 대조 단위의 사례 목록과 검사가 선언한 단계 id 와 명세의 주입 시험 칸이며,
 # **셋을 전부 뿌리의 소스에서 읽는다.** 돌고 있는 모듈의 값을 세면 사본을 뿌리로 지목한 음성 대조가
 # 그 사본에 든 주입을 보지 못해 그 주입이 공허해진다. 검사 40 의 정렬 상수가 같은 사유로 그렇게 선다.
 COUNT_COMMON = "scripts/wiki_common.py"
-
-
-NC_SOURCE = "scripts/wiki_negative_control.py"
 
 
 NC_CASES_LIST = re.compile(r"^CASES = \[(.*?)^\]", re.M | re.S)
@@ -271,8 +269,7 @@ def check_44(led: Ledger) -> Report:
                "주입 시험 칸이 든 검사마다 음성 대조에 사례가 있고 그 역도 서며, "
                "사례가 전사한 단계 id 가 그 검사의 선언과 같은가", "fail")
     spec = led.root / COUNT_SPEC
-    nc = led.root / NC_SOURCE
-    for f in (spec, nc, *(led.root / rel for rel in WIKI_UNITS)):
+    for f in (spec, *(led.root / rel for rel in WIKI_NC_UNITS + WIKI_UNITS)):
         if not f.is_file():
             r.bad(f"{f.name} 이 없다")
             return r
@@ -282,30 +279,42 @@ def check_44(led: Ledger) -> Report:
     if not cells:
         r.bad(f"{COUNT_SPEC} 의 §2 에서 표의 행을 하나도 읽지 못했다")
         return r
-    m = NC_CASES_LIST.search(nc.read_text(encoding="utf-8"))
-    if m is None:
-        r.bad(f"{NC_SOURCE} 에서 사례 목록 `CASES` 를 읽을 수 없다")
-        return r
-    cases = NC_CASE_ROW.findall(m.group(1))
+    # 사례 목록이 음성 대조 단위마다 서므로 그 전량을 돌아 행을 합집합으로 받는다. 한
+    # 단위에서 그 블록을 읽지 못하면 통과가 아니라 실패다. 좌변이 비면 한 방향의 어긋남이
+    # 0 으로 나므로 읽지 못한 자리를 전량 실패로 둔다.
+    # 행마다 그것이 온 단위를 함께 받는다. **적발 문면이 그 단위를 드는 까닭은** 그것을
+    # 들지 않으면 그 적발을 받은 쪽이 네 단위 가운데 어느 파일을 열어야 하는지를 다시
+    # 재야 하고, 선언을 읽는 자리의 적발이 같은 요구를 이미 받았다는 것이다.
+    cases: list[tuple[str, str, str]] = []
+    for rel in WIKI_NC_UNITS:
+        m = NC_CASES_LIST.search((led.root / rel).read_text(encoding="utf-8"))
+        if m is None:
+            r.bad(f"{rel} 에서 사례 목록 `CASES` 를 읽을 수 없다")
+            return r
+        cases.extend((num, step, rel) for num, step in NC_CASE_ROW.findall(m.group(1)))
     if not cases:
-        r.bad(f"{NC_SOURCE} 의 사례 목록이 비어 있다")
+        r.bad("음성 대조 단위의 사례 목록이 전량 비어 있다")
         return r
     declared = unit_declarations(led.root)
     want = {num for num, cell in cells.items() if cell}
-    got = {num for num, _step in cases}
+    got = {num for num, _step, _rel in cases}
+    where = {}
+    for num, _step, rel in cases:
+        where.setdefault(num, []).append(rel)
     for num in sorted(want - got):
         r.bad(f"검사 {num} 의 주입 시험 칸이 섰는데 음성 대조의 사례 목록에 그 항이 없다")
     for num in sorted(got - want):
-        r.bad(f"음성 대조가 검사 {num} 의 사례를 드는데 §2 의 그 행에 주입 시험 칸이 없다")
+        r.bad(f"음성 대조가 검사 {num} 의 사례를 드는데 §2 의 그 행에 주입 시험 칸이 없다: "
+              + " · ".join(sorted(set(where[num]))))
     # 사례 이름이 전사한 단계 id 를 그 검사의 선언과 맞댄다. 이름을 맞대지 않으면 그 전사가 낡아도
     # 걸리지 않고, 그 낡음은 사례 이름이 실재하지 않는 단계를 가리키는 꼴로만 남는다.
-    for num, step in cases:
+    for num, step, rel in cases:
         if num not in declared:
-            r.bad(f"음성 대조의 사례가 드는 검사 {num} 를 단위 전량의 어느 검사도 "
+            r.bad(f"{rel} 의 사례가 드는 검사 {num} 를 단위 전량의 어느 검사도 "
                   f"선언하지 않는다: " + " · ".join(WIKI_UNITS))
         elif declared[num] != step:
-            r.bad(f"검사 {num} 의 사례가 전사한 단계 id `{step}` 가 그 검사의 선언 "
-                  f"`{declared[num]}` 와 다르다")
+            r.bad(f"{rel} 의 사례가 전사한 검사 {num} 의 단계 id `{step}` 가 그 검사의 "
+                  f"선언 `{declared[num]}` 와 다르다")
     r.note(f"주입 시험 칸이 든 검사 {len(want)} · 사례 목록의 검사 {len(got)} · 사례 항 {len(cases)}")
     r.note(f"좌에서 우로 미포착 {len(want - got)} · 우에서 좌로 유령 {len(got - want)}")
     return r
