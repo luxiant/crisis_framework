@@ -38,6 +38,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import check_wiki          # noqa: E402  주입 대상을 검증기의 수집기로 고른다
+import wiki_common         # noqa: E402  둘 이상의 검사가 쓰는 설비가 그 모듈에 산다
 CHECKER = ROOT / "scripts" / "check_wiki.py"
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
 
@@ -177,7 +178,7 @@ def inj_03p(root):
     이름이 함께 뒤로 가므로 유도가 스스로 유지된다."""
     a = arcs(root)
     charter = next(x for x in a["arcs"] if x["name"] == "charter")
-    declared = check_wiki.arc_phase_names(charter)
+    declared = wiki_common.arc_phase_names(charter)
     phase = f"charter-{max(int(p.rsplit('-', 1)[1]) for p in declared) + 1}"
     if phase in declared:
         raise SystemExit(f"유도한 페이즈 `{phase}` 가 이미 선언돼 있어 주입이 조건을 만들지 못한다")
@@ -597,8 +598,8 @@ def _boundary_decls(root: Path):
 
     경계와 머리말 표를 여기서 다시 읽으면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 주입이
     경계 밖을 겨누게 되어도 그것을 어느 검사도 잡지 않는다."""
-    led = check_wiki.Ledger(root)
-    since, forms = check_wiki.heading_rules(led)
+    led = wiki_common.Ledger(root)
+    since, forms = wiki_common.heading_rules(led)
     inside = [] if since is None else [d for d in led.doc_decls() if d.no >= since]
     return inside, forms
 
@@ -611,7 +612,7 @@ def _append_para(root: Path, d, para: str) -> None:
     f = root / d.rel
     text = f.read_text(encoding="utf-8")
     cut = sum(len(x) for x in text.splitlines(keepends=True)[:d.line - 1])
-    blocks = [m for m in check_wiki.DOC_BLOCK.finditer(text) if m.end() <= cut]
+    blocks = [m for m in wiki_common.DOC_BLOCK.finditer(text) if m.end() <= cut]
     if not blocks:
         raise SystemExit(f"{d.full} 의 docstring 블록을 찾지 못했다")
     end = blocks[-1].end() - 2            # 닫는 `-/` 앞
@@ -674,7 +675,7 @@ def inj_34_period(root):
         f = root / d.rel
         text = f.read_text(encoding="utf-8")
         for p in d.paras:
-            head = check_wiki.para_heading(p)
+            head = wiki_common.para_heading(p)
             if not head or not head.endswith(".") or not any(w in head for w in forms):
                 continue
             old = f"**{head}**"
@@ -816,15 +817,15 @@ def _excl_paras(root: Path):
     문단마다 (문면, 모든 쌍이 배타적이라 적었는가) 를 든다. 그 판별을 검증기의 함수로 하므로
     주입과 판정이 같은 것을 읽는다. 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡는다.
     """
-    led = check_wiki.Ledger(root)
-    forms = check_wiki.heading_rules(led)[1].get(check_wiki.EXCLUSIVITY_WORD, [])
+    led = wiki_common.Ledger(root)
+    forms = wiki_common.heading_rules(led)[1].get(check_wiki.EXCLUSIVITY_WORD, [])
     got = check_wiki.excl_registry(led)
     if got is None:
         raise SystemExit("등록 관계를 드는 선언이 없어 주입 대상이 없다")
     decl, parts, excl = got
     paras = []
     for p in decl.paras:
-        head = check_wiki.para_heading(p)
+        head = wiki_common.para_heading(p)
         if head is None:
             continue
         for f in forms:
@@ -845,7 +846,7 @@ def inj_38_para(root):
     if text.count(para + "\n\n") != 1:
         raise SystemExit("배타성 문단의 문면을 파일에서 한 번으로 찾지 못했다")
     f.write_text(text.replace(para + "\n\n", "", 1), encoding="utf-8")
-    return check_wiki.para_heading(para)
+    return wiki_common.para_heading(para)
 
 
 def inj_38_pair(root):
@@ -856,7 +857,7 @@ def inj_38_pair(root):
     """
     led, decl, parts, _excl, paras = _excl_paras(root)
     labels = check_wiki.concept_labels(led, decl.rel)
-    forms = check_wiki.heading_rules(led)[1][check_wiki.EXCLUSIVITY_WORD]
+    forms = wiki_common.heading_rules(led)[1][check_wiki.EXCLUSIVITY_WORD]
     all_form = next(f for f in forms if check_wiki.EXCL_ALL_MARK in f)
     target = None
     for name in _excl_block(root):
@@ -865,7 +866,7 @@ def inj_38_pair(root):
         if not label or len(cells) < 2:
             continue
         for para, is_all in paras:
-            fill = check_wiki.heading_fill(all_form, check_wiki.para_heading(para) or "")
+            fill = check_wiki.heading_fill(all_form, wiki_common.para_heading(para) or "")
             if is_all and fill is not None and fill.startswith(label):
                 target = (name, cells[0], cells[1])
                 break
@@ -923,7 +924,7 @@ def inj_41_pointer(root):
     다른 쪽이 조용히 낡는다. 폐기되지 않은 조항을 고르는 까닭은 폐기된 것을 고르면 규율 ID
     토큰을 보는 검사 23 이 먼저 잡아 이 주입이 그 뒤에 가려지는 것이다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     _dist, exempt = check_wiki.r11_rules(led)
     if not exempt:
         raise SystemExit("R11 블록의 면제 목록이 비어 주입과 판정이 같은 목록을 쓰지 못한다")
@@ -948,8 +949,8 @@ def ko_word(value: int) -> str:
     주입이 수를 하나 틀리게 적는 자리에서 쓴다. 조합의 두 표를 검증기에서 가져오므로 주입과
     판정이 같은 어휘를 쓰고, 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡는다.
     """
-    unit = {v: w for w, v in check_wiki.COUNT_KO_UNIT.items()}
-    for tens, base in sorted(check_wiki.COUNT_KO_TENS.items(),
+    unit = {v: w for w, v in wiki_common.COUNT_KO_UNIT.items()}
+    for tens, base in sorted(wiki_common.COUNT_KO_TENS.items(),
                              key=lambda x: -x[1]):
         if value >= base:
             rest = value - base
@@ -972,7 +973,7 @@ def inj_40_count(root):
     첫 항을 집던 앞 판은 설 자리가 없어졌다. 꼴을 전사하면 그 검사가 꼴을 고칠 때 이 주입이
     조용히 공허해진다.
     """
-    rel = check_wiki.COUNT_SPEC
+    rel = wiki_common.COUNT_SPEC
     f = root / rel
     text = f.read_text(encoding="utf-8")
     m = check_wiki.COUNT_GROUP_FORM.search(text)
@@ -1005,7 +1006,7 @@ def inj_42_drop(root):
     주입이 다른 갈래를 재게 된다. 판정과 같은 읽기를 쓰는 까닭은 전사하면 한쪽을 고칠 때 다른
     쪽이 조용히 낡는 것이다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     _series, clauses = check_wiki.sessionclause_rules(led)
     live = sorted(c for c in clauses
                   if any(i not in led.dead
@@ -1023,12 +1024,12 @@ def inj_42_drop(root):
 
 def inj_42_retired(root):
     """블록에 폐기된 조항 하나를 더한다. 실패 문면이 「전부 폐기됐다」를 들어야 한다."""
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     series, clauses = check_wiki.sessionclause_rules(led)
     dead = sorted(n for n, owner in led.name_owner.items()
                   if n not in clauses and owner in led.dead
                   and (lambda m: m is not None and (m.group(2) or "PH-R") in series)(
-                      check_wiki.RULE_TOKEN.fullmatch(n)))
+                      wiki_common.RULE_TOKEN.fullmatch(n)))
     if not dead:
         raise SystemExit("블록 밖의 폐기된 조항이 없어 주입이 서지 않는다")
     tok = dead[0]
@@ -1045,11 +1046,11 @@ def inj_42_ghost(root):
     계열은 블록이 든 것에서 고르고 번호는 그 계열의 현행 최대보다 크게 잡는다. 계열 밖의 이름을
     쓰면 검사가 다른 갈래로 가른다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     series, _clauses = check_wiki.sessionclause_rules(led)
     ser = sorted(series)[0]
     used = [int(m.group(3)) for m in
-            (check_wiki.RULE_TOKEN.fullmatch(n) for n in led.name_owner)
+            (wiki_common.RULE_TOKEN.fullmatch(n) for n in led.name_owner)
             if m is not None and m.group(2) == ser]
     tok = f"{ser}-{max(used, default=0) + 90}"
     f, s = _clause_block(root)
@@ -1071,7 +1072,7 @@ def inj_42_empty(root):
 
 def _extraction_pattern(root: Path):
     """추출 기록의 꼴과 그 디렉터리의 번호별 파일 목록. 번호 그룹이 없으면 멈춘다."""
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     s = (root / "docs" / "baseline.md").read_text(encoding="utf-8")
     m = check_wiki.DOCFORM_BLOCK.search(s)
     if m is None:
@@ -1129,7 +1130,7 @@ def inj_26(root):
     """
     tail = pick(root, "decisions", lambda e: e.get("clarifies") is not None)
     ghost = "CF-99026"
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     if ghost in led.by_id:
         raise SystemExit(f"{ghost} 가 원장에 이미 있어 없는 id 로 쓰지 못한다")
     edit(root, "decisions", tail["id"], lambda e: e.__setitem__("clarifies", ghost))
@@ -1142,7 +1143,7 @@ def inj_27(root):
     `clarifies` 는 그대로 두어 검사 26 이 걸리지 않게 한다. 대상이 살아 있는 꼬리를 고르는
     까닭은 검사 27 이 폐기된 대상을 건너뛰어 주입이 조건을 만들지 못하는 것이다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     tail = pick(root, "decisions",
                 lambda e: (e.get("clarifies") in led.by_id
                            and e.get("clarifies") not in led.dead
@@ -1174,7 +1175,7 @@ def inj_29(root):
     없다」 하나만 새로 선다. 고정 절 밖의 번호로 바꾸면 한 주입이 두 위반을 내어 어느 쪽이
     이 검사의 몫인지가 갈리지 않는다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     a = led.arcs.get(INJ_29_ARC)
     if a is None or a.get("status") != "closed":
         raise SystemExit(f"아크 `{INJ_29_ARC}` 가 없거나 닫혀 있지 않다")
@@ -1247,7 +1248,7 @@ def _inject_pointer(root, key):
     적발을 세는 쪽은 검증기에 선 함수를 그대로 부른다. 전사하면 한쪽을 고칠 때 다른 쪽이
     조용히 낡는다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     dist, _exempt = check_wiki.r11_rules(led)
     if dist is None:
         raise SystemExit("R11 블록에 거리가 없어 주입과 판정이 같은 값을 쓰지 못한다")
@@ -1262,7 +1263,7 @@ def _inject_pointer(root, key):
                  + INJ_POINTER_LINE[key].format(tok=live[0]), encoding="utf-8")
     after = {k: len(v) for k, v in
              check_wiki.pointer_hits(
-                 check_wiki.Ledger(root).pointer_scan_targets(), dist).items()}
+                 wiki_common.Ledger(root).pointer_scan_targets(), dist).items()}
     for k in before:
         want = before[k] + 1 if k == key else before[k]
         if after[k] != want:
@@ -1393,7 +1394,7 @@ def inj_45_string(root):
     다른 검사를 함께 실패시킨다.
     """
     doc = arcs(root)
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     used = {(e.get("origin") or {}).get("phase") for _n, e in led.entries}
     used |= {p.get("from") for p in led.patches} | {p.get("phase") for p in led.patches}
     used |= {f.name[:-len("-closure.md")]
@@ -1458,14 +1459,14 @@ def inj_47_ghost(root):
     번호를 선언된 검사에서 빼어 고른다. 실재하는 번호를 적으면 그 칸이 다른 검사를 가리키는
     꼴이 되어 이 주입이 아무것도 겨누지 않는다.
     """
-    f = root / check_wiki.COUNT_SPEC
+    f = root / wiki_common.COUNT_SPEC
     text = f.read_text(encoding="utf-8")
     rows, _outside = check_wiki.spec_field_rows(text)
     target = next((x for x in rows if x[3]), None)
     if target is None:
-        raise SystemExit(f"{check_wiki.COUNT_SPEC} 에 검사 칸이 선 필드 표의 행이 없다")
-    declared = set(dict(check_wiki.REPORT_DECL.findall(
-        (root / check_wiki.COUNT_WIKI).read_text(encoding="utf-8"))))
+        raise SystemExit(f"{wiki_common.COUNT_SPEC} 에 검사 칸이 선 필드 표의 행이 없다")
+    declared = set(dict(wiki_common.REPORT_DECL.findall(
+        (root / wiki_common.COUNT_WIKI).read_text(encoding="utf-8"))))
     ghost = next((str(n) for n in range(90, 100) if str(n) not in declared), None)
     if ghost is None:
         raise SystemExit("선언되지 않은 번호를 고를 자리가 없어 주입이 서지 않는다")
@@ -1474,7 +1475,7 @@ def inj_47_ghost(root):
     raw = lines[line - 1]
     tail = "\n" if raw.endswith("\n") else ""
     inner = raw.rstrip("\n").strip()
-    parts = check_wiki.SPEC_CELL_SPLIT.split(inner[1:-1])
+    parts = wiki_common.SPEC_CELL_SPLIT.split(inner[1:-1])
     parts[at] = parts[at].rstrip() + check_wiki.SPEC_CHECK_JOIN + ghost + " "
     lines[line - 1] = "|" + "|".join(parts) + "|" + tail
     f.write_text("".join(lines), encoding="utf-8")
@@ -1498,14 +1499,14 @@ def _nc48_material(root):
     검증기의 수집기로 고른다.** 꼴을 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히
     공허해지고, 번호를 박으면 기록이 늘거나 절이 덧붙을 때 다른 자리를 겨누게 된다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     _since, minlen = check_wiki.sourcing_rules(led)
     if minlen is None:
         raise SystemExit("사본의 SOURCING 블록에서 구절의 최소 길이를 읽지 못했다")
     want = minlen + 8          # 짧게 줄이는 주입이 하한 아래로 내려갈 여유를 둔다
     d = root / "docs" / "extractions"
     for f in sorted(d.glob("extraction-*.md")):
-        m = check_wiki.EXTRACTION_FILE_NO.match(f.name)
+        m = wiki_common.EXTRACTION_FILE_NO.match(f.name)
         if m is None:
             continue
         secs = check_wiki.extraction_sections(f)
@@ -1534,7 +1535,7 @@ def _nc48_plant(root, bend):
 
     굽히지 않은 꼴은 그 검사를 통과하므로, 굽힌 자리 하나만이 새 위반 줄을 낸다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     since, minlen = check_wiki.sourcing_rules(led)
     if since is None:
         raise SystemExit("사본의 SOURCING 블록에서 경계를 읽지 못했다")
@@ -1597,7 +1598,7 @@ def inj_49_unpointed(root):
     """
     d = root / "docs" / "extractions"
     nums = [int(m.group(1)) for f in d.glob("extraction-*.md")
-            for m in [check_wiki.EXTRACTION_FILE_NO.match(f.name)] if m]
+            for m in [wiki_common.EXTRACTION_FILE_NO.match(f.name)] if m]
     if not nums:
         raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
     n = max(nums) + 1
@@ -1614,7 +1615,7 @@ def inj_49_unpointed(root):
 def _nc50_inventory(root):
     """사본의 뭉치 인벤토리 경로와 그 문면과 구성원 행의 번호. 구성원 행을 고르는 쪽은 검증기의
     함수를 그대로 부른다. 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히 공허해진다."""
-    f = root / check_wiki.INVENTORY_DOC
+    f = root / wiki_common.INVENTORY_DOC
     text = f.read_text(encoding="utf-8")
     left, _rows, _lists = check_wiki.inventory_members(text)
     if not left:
@@ -1631,7 +1632,7 @@ def inj_50_missing(root):
     f, text, left = _nc50_inventory(root)
     d = root / "docs" / "extractions"
     nums = [int(m.group(1)) for g in d.glob("extraction-*.md")
-            for m in [check_wiki.EXTRACTION_FILE_NO.match(g.name)] if m]
+            for m in [wiki_common.EXTRACTION_FILE_NO.match(g.name)] if m]
     if not nums:
         raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
     n = max(nums) + 1
@@ -1639,12 +1640,12 @@ def inj_50_missing(root):
         raise SystemExit("기록 번호가 두 자리를 넘어 검사의 꼴이 그 번호를 읽지 못한다")
     lines = text.split("\n")
     at = left[min(left)][0] - 1
-    m = check_wiki.INVENTORY_EXTRACTION_NO.search(lines[at])
+    m = wiki_common.INVENTORY_EXTRACTION_NO.search(lines[at])
     if m is None:
         raise SystemExit("고른 구성원 행에서 기록 번호를 다시 찾지 못했다")
     lines[at] = lines[at][:m.end()] + f" · E-{n:02d}" + lines[at][m.end():]
     f.write_text("\n".join(lines), encoding="utf-8")
-    return f"{check_wiki.INVENTORY_DOC}:{at + 1} 에 E-{n:02d}"
+    return f"{wiki_common.INVENTORY_DOC}:{at + 1} 에 E-{n:02d}"
 
 
 def inj_50_ghost(root):
@@ -1663,7 +1664,7 @@ def inj_50_ghost(root):
             continue
         at = where[0] - 1
         others = {int(x.group(1))
-                  for x in check_wiki.INVENTORY_EXTRACTION_NO.finditer(lines[at])}
+                  for x in wiki_common.INVENTORY_EXTRACTION_NO.finditer(lines[at])}
         if others != {n}:
             continue
         del lines[at]
@@ -1683,7 +1684,7 @@ def _nc50_unread_row(root):
     d = root / "docs" / "extractions"
     title = None
     for g in sorted(d.glob("extraction-*.md")):
-        if check_wiki.EXTRACTION_FILE_NO.match(g.name):
+        if wiki_common.EXTRACTION_FILE_NO.match(g.name):
             got = check_wiki.extraction_titles(g.read_text(encoding="utf-8"))
             if got:
                 title = got[0]
@@ -1702,7 +1703,7 @@ def _nc50_insert(f, lines, line, cells, cell):
     row[-2] = cell
     lines.insert(line, "| " + " | ".join(row) + " |")
     f.write_text("\n".join(lines), encoding="utf-8")
-    return f"{check_wiki.INVENTORY_DOC}:{line + 1}"
+    return f"{wiki_common.INVENTORY_DOC}:{line + 1}"
 
 
 def inj_50_unread(root):
@@ -1744,7 +1745,7 @@ def inj_51_key(root):
     겨눈 자리가 흐려진다.
     """
     names, _seen, _odd = check_wiki.ledger_key_universe(
-        (root / check_wiki.COUNT_SPEC).read_text(encoding="utf-8"))
+        (root / wiki_common.COUNT_SPEC).read_text(encoding="utf-8"))
     universe = set().union(*names.values())
     if not universe:
         raise SystemExit("사본의 명세에서 키 유니버스를 읽지 못했다")
@@ -1798,15 +1799,15 @@ def inj_52_phase(root):
 def _nc53_rows(root):
     """사본의 인벤토리 경로와 줄과 구성원 행과 표지 낱말. 구성원 행을 고르는 쪽은 검증기의 함수를
     그대로 부른다. 전사하면 그 검사가 꼴을 고칠 때 이 주입이 조용히 공허해진다."""
-    led = check_wiki.Ledger(root)
-    marks = check_wiki.inventorymark_block(led)
-    f = root / check_wiki.INVENTORY_DOC
+    led = wiki_common.Ledger(root)
+    marks = wiki_common.inventorymark_block(led)
+    f = root / wiki_common.INVENTORY_DOC
     text = f.read_text(encoding="utf-8")
-    rows, _t, _r = check_wiki.inventory_member_rows(
-        text, marks[check_wiki.INVENTORYMARK_AGGREGATE])
+    rows, _t, _r = wiki_common.inventory_member_rows(
+        text, marks[wiki_common.INVENTORYMARK_AGGREGATE])
     if not rows:
         raise SystemExit("사본의 인벤토리에서 구성원 행을 하나도 읽지 못했다")
-    return f, text.split("\n"), rows, marks[check_wiki.INVENTORYMARK_UNREAD]
+    return f, text.split("\n"), rows, marks[wiki_common.INVENTORYMARK_UNREAD]
 
 
 def inj_53_drop(root):
@@ -1818,14 +1819,14 @@ def inj_53_drop(root):
     f, lines, rows, unread = _nc53_rows(root)
     for line, cells, _sec in rows:
         if unread in cells[-1] and not any(
-                check_wiki.INVENTORY_EXTRACTION_NO.search(c) for c in cells):
+                wiki_common.INVENTORY_EXTRACTION_NO.search(c) for c in cells):
             at = line - 1
             k = lines[at].rfind(" " + unread)
             if k < 0:
                 raise SystemExit("고른 구성원 행에서 표지를 다시 찾지 못했다")
             lines[at] = lines[at][:k] + lines[at][k + len(unread) + 1:]
             f.write_text("\n".join(lines), encoding="utf-8")
-            return f"{check_wiki.INVENTORY_DOC}:{line}"
+            return f"{wiki_common.INVENTORY_DOC}:{line}"
     raise SystemExit("번호 없이 미추출 표지만 든 구성원 행이 없어 주입할 자리가 없다")
 
 
@@ -1840,7 +1841,7 @@ def inj_54_add(root):
                 raise SystemExit("고른 구성원 행의 마지막 칸을 찾지 못했다")
             lines[at] = lines[at][:k].rstrip() + " " + unread + " " + lines[at][k:]
             f.write_text("\n".join(lines), encoding="utf-8")
-            return f"{check_wiki.INVENTORY_DOC}:{line}"
+            return f"{wiki_common.INVENTORY_DOC}:{line}"
     raise SystemExit("미추출 표지를 들지 않은 구성원 행이 없어 주입할 자리가 없다")
 
 
@@ -1849,7 +1850,7 @@ def inj_54_add(root):
 
 def _fixed_cq(root: Path) -> list[int]:
     """고정 절 블록이 드는 CQ 번호. 검증기의 수집기를 그대로 써서 주입과 판정이 같은 목록을 본다."""
-    return check_wiki.cq_fixed(types.SimpleNamespace(root=root))
+    return wiki_common.cq_fixed(types.SimpleNamespace(root=root))
 
 
 def inj_55_foreign(root):
@@ -1919,10 +1920,10 @@ def inj_58_unmarked(root):
     지목 참조 대기 표의 마지막 행 뒤에 칸 셋의 행을 하나 더한다. 그 행의 칸이 블록의 어느 낱말도 품지
     않음을 넣기 전에 단언한다. 품으면 그 행이 표지를 든 행으로 읽혀 이 주입이 겨눈 자리가 서지 않는다.
     """
-    led = check_wiki.Ledger(root)
+    led = wiki_common.Ledger(root)
     marks = check_wiki.queuemark_block(led)
     words = [v for _k, v in check_wiki.queuemark_words(marks)]
-    f = root / check_wiki.READING_QUEUE_DOC
+    f = root / wiki_common.READING_QUEUE_DOC
     lines = f.read_text(encoding="utf-8").split("\n")
     _at, rows = check_wiki.queue_section_rows("\n".join(lines),
                                               marks[check_wiki.QUEUEMARK_SECTION])
@@ -1934,19 +1935,19 @@ def inj_58_unmarked(root):
     last = rows[-1][0]
     lines.insert(last, row)
     f.write_text("\n".join(lines), encoding="utf-8")
-    return f"{check_wiki.READING_QUEUE_DOC}:{last + 1}"
+    return f"{wiki_common.READING_QUEUE_DOC}:{last + 1}"
 
 
 def inj_59_dup(root):
     """같은 줄기의 파일을 하나 더 둔다. 번호는 실재하는 기록과 겹치지 않는 두 자리로 고른다."""
     d = root / "docs" / "extractions"
-    files = [f for f in sorted(d.glob("extraction-*.md")) if check_wiki.EXTRACTION_FILE_NO.match(f.name)]
+    files = [f for f in sorted(d.glob("extraction-*.md")) if wiki_common.EXTRACTION_FILE_NO.match(f.name)]
     if not files:
         raise SystemExit("번호를 든 추출 기록이 없어 주입할 자리가 없다")
-    used = {int(check_wiki.EXTRACTION_FILE_NO.match(f.name).group(1)) for f in files}
+    used = {int(wiki_common.EXTRACTION_FILE_NO.match(f.name).group(1)) for f in files}
     n = next(k for k in range(99, 9, -1) if k not in used)
     src = files[-1]
-    stem = src.name[check_wiki.EXTRACTION_FILE_NO.match(src.name).end():]
+    stem = src.name[wiki_common.EXTRACTION_FILE_NO.match(src.name).end():]
     dst = d / f"extraction-{n:02d}-{stem}"
     dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
     return dst.name
@@ -2003,9 +2004,9 @@ def inj_61_sum(root):
     표를 고르는 쪽은 검증기의 함수를 그대로 부른다. 전사하면 그 검사가 표를 읽는 꼴을 고칠 때 이
     주입이 조용히 공허해진다.
     """
-    led = check_wiki.Ledger(root)
-    marker = check_wiki.inventorymark_block(led)[check_wiki.INVENTORYMARK_AGGREGATE]
-    f = root / check_wiki.INVENTORY_DOC
+    led = wiki_common.Ledger(root)
+    marker = wiki_common.inventorymark_block(led)[wiki_common.INVENTORYMARK_AGGREGATE]
+    f = root / wiki_common.INVENTORY_DOC
     lines = f.read_text(encoding="utf-8").split("\n")
     rows = check_wiki.inventory_aggregate_rows("\n".join(lines), marker)
     hit = [(n, c) for n, c in rows if not c[0].startswith("**") and c[1].isdigit()]
@@ -2014,7 +2015,7 @@ def inj_61_sum(root):
     n, cells = hit[0]
     lines[n - 1] = lines[n - 1].replace(f"| {cells[1]} |", f"| {int(cells[1]) + 1} |", 1)
     f.write_text("\n".join(lines), encoding="utf-8")
-    return f"{check_wiki.INVENTORY_DOC}:{n}"
+    return f"{wiki_common.INVENTORY_DOC}:{n}"
 
 
 CASES = [
