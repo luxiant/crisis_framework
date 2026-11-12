@@ -500,6 +500,17 @@ COUNT_SPEC = "docs/decisions/SPEC.md"
 COUNT_VERIFY = "scripts/verify.sh"
 COUNT_WIKI = "scripts/check_wiki.py"
 
+# 러너가 거느리는 단위의 경로. 검사의 선언과 기계 판독 블록을 읽는 자리가 이것을
+# 유니버스로 쓴다. **뿌리의 소스에서 읽는 까닭은** 음성 대조가 사본을 뿌리로 지목하므로
+# 돌고 있는 모듈을 세면 사본의 그 자리에 든 주입을 보지 못한다는 것이다. 러너는 검사의
+# 선언을 들지 않으므로 그 유니버스에 러너를 두지 않는다.
+WIKI_UNITS = (
+    "scripts/wiki_ledger.py",
+    "scripts/wiki_formal.py",
+    "scripts/wiki_prose.py",
+    "scripts/wiki_meta.py",
+)
+
 # 한글 수사를 값으로 읽는 표. 검사 36 의 `KO_NUMERAL` 을 쓰지 않는 까닭은 그 표가 스물까지의 닫힌
 # 목록이고 표 밖의 수사를 실패로 내는 것이 그 검사의 처분이라는 데 있다. 검사의 계수가 이미 서른을
 # 넘었으므로 이 자리는 열 자리와 한 자리를 조합해 읽는다.
