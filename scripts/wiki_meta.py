@@ -21,6 +21,7 @@ from wiki_common import (
     Report,
     SPEC_FIELD_HEAD,
     SPEC_TABLE_RULE,
+    VRUN_UNITS,
     VSTEP_UNITS,
     WIKI_NC_UNITS,
     WIKI_UNITS,
@@ -335,7 +336,8 @@ SPEC_BLOCK_NAME = re.compile(r"`([A-Z][A-Z0-9]*)`")
 BLOCK_READ_FORM = re.compile(r"<!--\s*([A-Z][A-Z0-9]*):BEGIN|([A-Z][A-Z0-9]*):BEGIN")
 
 
-BLOCK_READERS = (COUNT_WIKI, COUNT_COMMON, COUNT_VERIFY) + WIKI_UNITS + VSTEP_UNITS
+BLOCK_READERS = ((COUNT_WIKI, COUNT_COMMON, COUNT_VERIFY)
+                 + WIKI_UNITS + VSTEP_UNITS + VRUN_UNITS)
 
 
 def check_46(led: Ledger) -> Report:

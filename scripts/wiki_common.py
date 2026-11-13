@@ -46,7 +46,7 @@ ARCS_DOC = "docs/arcs.json"
 ID_FORM = re.compile(r"^CF-(\d+)$")
 
 DD_TOKEN = re.compile(r"--\s*DD:\s*(\S+)")
-STEP_CALL = re.compile(r"^\s*step\s+['\"]?([^\s'\"]+)")
+STEP_CALL = re.compile(r'^\s*Step\(\s*"([^"]+)"')
 
 # 검사 25 의 유니버스. 최상위 선언만 보며 생성자와 필드는 자기를 담은 선언의 표지를 딛는다.
 # abbrev 도 최상위 선언이다. 투영이 쓰이는 족을 abbrev 로 두므로(CF-641) 빼면 표지 누락이 그물 밖에
@@ -178,8 +178,14 @@ class Ledger:
             if (root / "docs").is_dir() else []
 
     def _read_verify_steps(self) -> list[str]:
-        """`verify.sh` 가 선언한 단계 id. `step <id> "<제목>"` 호출의 첫 인자다."""
-        path = self.root / "scripts" / "verify.sh"
+        """선언된 단계 id. `scripts/vrun.py` 의 `STEPS` 가 드는 각 항의 첫 인자다.
+
+        그 모듈을 들여 선언을 묻지 않고 문면을 읽는 까닭은, 음성 대조가 사본을 뿌리로
+        지목하므로 들이면 돌고 있는 트리의 모듈을 읽고 사본의 그 자리에 든 주입을 보지
+        못한다는 것이다. 갈래별 단위의 경로를 뿌리의 소스에서 읽는 자리가 같은 사유를
+        이미 든다.
+        """
+        path = self.root / "scripts" / "vrun.py"
         if not path.is_file():
             return []
         out = []
@@ -497,7 +503,7 @@ def _lean_code(src: str) -> str:
     return "".join(out)
 
 COUNT_SPEC = "docs/decisions/SPEC.md"
-COUNT_VERIFY = "scripts/verify.sh"
+COUNT_VERIFY = "scripts/vrun.py"
 COUNT_WIKI = "scripts/check_wiki.py"
 
 # 러너가 거느리는 단위의 경로. 검사의 선언과 기계 판독 블록을 읽는 자리가 이것을
@@ -538,6 +544,25 @@ VSTEP_UNITS = (
     "scripts/vstep_leanenv.py",
     "scripts/vstep_mutation.py",
     "scripts/vstep_propfree.py",
+)
+
+# 검증의 오케스트레이터가 들이는 단계 본문의 경로. 기계 판독 블록을 읽는 자리와 검사의 계수가
+# 실리는 자리가 이것을 유니버스로 쓴다. **`VSTEP_UNITS` 와 가르는 까닭은** 그 목록이 단계가
+# 부르는 모듈을 들고 이 목록이 단계 자신의 본문을 들어 둘의 역할이 다르다는 것이다. 그 가운데
+# 하나가 값 정본의 블록을 읽으며, 읽지 않는 것을 함께 두는 까닭은 그 목록이 단위의 전량을
+# 들어야 블록을 읽는 자리가 하나 늘 때 이 목록이 낡지 않는다는 것이다.
+VRUN_UNITS = (
+    "scripts/vrun_step1.py",
+    "scripts/vrun_step10.py",
+    "scripts/vrun_step11.py",
+    "scripts/vrun_step2.py",
+    "scripts/vrun_step3.py",
+    "scripts/vrun_step4.py",
+    "scripts/vrun_step5.py",
+    "scripts/vrun_step6.py",
+    "scripts/vrun_step7.py",
+    "scripts/vrun_step8.py",
+    "scripts/vrun_step9.py",
 )
 
 # 한글 수사를 값으로 읽는 표. 검사 36 의 `KO_NUMERAL` 을 쓰지 않는 까닭은 그 표가 스물까지의 닫힌
