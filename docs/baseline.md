@@ -5,7 +5,7 @@
 행동을 정하는 문면은 `CLAUDE.md`가 들고, 판단을 정하는 문면은 세션 지시가 든다. 이 파일은 그
 둘이 지목하는 값만 담으며 규율을 새로 세우지 않는다.
 
-**`scripts/verify.sh`와 CI는 이 파일의 §5 기계 판독 블록을 읽는다.** 값을 스크립트에 전사하지
+**검증 설비와 CI는 이 파일의 §5 기계 판독 블록을 읽는다.** 값을 스크립트에 전사하지
 않는 이유는 전사가 이루어지면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다. 값을 고칠 때는
 이 파일만 고친다.
 
@@ -90,8 +90,8 @@ docstring 만 바뀐 회차는 이 칸을 움직이지 않는다.** 그 문면�
 더할 때뿐이고 정의층의 `Finset` 이 그 경우다.
 
 **공리 감사의 대상은 `CrisisFramework` 아래 최상위 선언 전량이다.** 목록을 이 파일에도
-`verify.sh` 에도 박지 않고 매 실행마다 훑어 잡으며, 각 층의 선언을 그 층의 실효 기준선과
-차분한다. 계수와 층별 내역은 `verify.sh` 의 보고 줄이 낸다. 박아 두면 새 선언이 그물 밖에 남고,
+검증 설비에도 박지 않고 매 실행마다 훑어 잡으며, 각 층의 선언을 그 층의 실효 기준선과
+차분한다. 계수와 층별 내역은 `scripts/vrun.py` 의 그 단계가 내는 보고 줄이 낸다. 박아 두면 새 선언이 그물 밖에 남고,
 `lakefile.toml` 의 glob 이 빌드는 하므로 그 사실이 빌드로 드러나지 않는다. 그 전에는 회계층
 다섯만 재고 나머지 열은 그물 밖에 있었으며, 그 사실이 이 표의 「미측정」 칸으로만 서 있었다.
 동학층은 파일이 아직 없다.
@@ -167,7 +167,7 @@ C-8이 정하며 세 가지다. 분류의 판정은 결정 세션이 하고 Clau
 
 ## 5. 기계 판독 블록
 
-아래의 블록은 `scripts/verify.sh`와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
+아래의 블록은 검증 설비와 CI가 읽는다. **형식을 바꾸지 않는다.** 주석 표지와
 `KEY=VALUE` 형태를 유지하며, 한 줄에 하나씩 적는다.
 
 <!-- BASELINE:BEGIN -->
@@ -367,7 +367,7 @@ CLAUSEMUT_UNCOVERED=42
 고정한 뒤의 개변은 세 자리에서만 들어간다. 새 CQ 를 더하는 것과, 답이 함수로 받는 열거에 원소를
 더하는 것과, 판정 불가의 까닭을 세분하는 것이다.
 
-대조는 `scripts/verify.sh` 의 `step7-cqfin` 단계가 수행한다.
+대조는 `scripts/vrun.py` 의 `step7-cqfin` 단계가 수행한다.
 
 ---
 
@@ -632,7 +632,7 @@ QUEUEMARK_SPENT=소진
 요구하지 않고 줄어드는 방향으로만 움직일 것을 요구하며, 지표는 요구 단위의 계수가 아니라 그
 바이트다.** 요구의 단위를 세우는 조작이 단위의 수를 늘리므로 계수로 재면 그 조작이 적발된다.
 
-**그 유니버스가 리포 밖에 있으므로 `scripts/verify.sh` 가 이 값을 쓰지 않는다.** 세션 지시와
+**그 유니버스가 리포 밖에 있으므로 검증 설비가 이 값을 쓰지 않는다.** 세션 지시와
 부록이 프로젝트 디렉터리에 살고 리포에 들어가지 않으므로 그 대조는 결정 세션의 사전 검사가
 돌리고 그 결과를 그 회차의 종료 문서가 적는다. **이 블록은 그 대조의 좌변을 리포 안에 남기는
 자리이고 검사의 입력이 아니다.**
@@ -643,14 +643,14 @@ QUEUEMARK_SPENT=소진
 상대가 없다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=28914
+RULEDOC_OVER_BYTES_SI=20488
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
-RULEDOC_REASON_BYTES_SI=1060
-RULEDOC_REINFORCE_BYTES_SI=7883
-RULEDOC_IMPL_BYTES_APPENDIX=2345
-RULEDOC_REASON_BYTES_APPENDIX=859
-RULEDOC_REINFORCE_BYTES_APPENDIX=31824
+RULEDOC_REASON_BYTES_SI=0
+RULEDOC_REINFORCE_BYTES_SI=12709
+RULEDOC_IMPL_BYTES_APPENDIX=481
+RULEDOC_REASON_BYTES_APPENDIX=0
+RULEDOC_REINFORCE_BYTES_APPENDIX=32772
 <!-- RULEDOC:END -->
 
 **이 절을 고칠 때.** 그 값을 손으로 적지 않고 그 탐지를 돌려 받으며, 탐지의 꼴을 바꾸는 회차가
@@ -666,7 +666,7 @@ RULEDOC_REINFORCE_BYTES_APPENDIX=31824
 
 ## 9. 모듈 탐색 환경의 변수 이름
 
-**빌드 도구가 더하거나 바꾸는 환경 변수의 이름을 아래 블록이 든다.** `scripts/verify.sh` 의
+**빌드 도구가 더하거나 바꾸는 환경 변수의 이름을 아래 블록이 든다.** `scripts/vrun.py` 의
 `step11-leanenv` 가 그 환경을 한 번 들여 뒤의 단계가 Lean 을 직접 부르게 하고, 그 이름의
 집합을 이 블록과 맞대어 늘거나 줄면 보고로 낸다. **실패시키지 않는다.** 그 집합이 빌드 도구의
 판과 의존 묶음이 정하는 것이어서 환경마다 갈릴 수 있기 때문이다. 들인 환경이 빌드 도구가

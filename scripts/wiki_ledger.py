@@ -160,9 +160,9 @@ def check_06(led: Ledger) -> Report:
 
 def check_07(led: Ledger) -> Report:
     r = Report("7", "wiki7-invariant-check",
-               "tier: invariant 인 항목의 check 가 verify.sh 의 선언된 단계에 실재하는가", "fail")
+               "tier: invariant 인 항목의 check 가 vrun.py 의 선언된 단계에 실재하는가", "fail")
     steps = led.verify_steps
-    r.note(f"verify.sh 가 선언한 단계 id: {steps}")
+    r.note(f"vrun.py 가 선언한 단계 id: {steps}")
     for e in led.reg["decisions"]:
         if e.get("tier") != "invariant":
             continue
@@ -170,7 +170,7 @@ def check_07(led: Ledger) -> Report:
         if not val:
             r.bad(f"{e.get('id')}: tier 가 invariant 인데 check 가 비었다")
         elif val not in steps:
-            r.bad(f"{e.get('id')}: check `{val}` 가 verify.sh 의 선언된 단계에 없다")
+            r.bad(f"{e.get('id')}: check `{val}` 가 vrun.py 의 선언된 단계에 없다")
     return r
 
 
