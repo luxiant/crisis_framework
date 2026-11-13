@@ -179,28 +179,7 @@ step step3-forbidden '금지 구문 정적 검사 (층별 `ℝ` 포함)'
 # 변이 검사와 논리 결합 변이는 이 벌을 쓰지 않는다. 그 둘은 자리 수를 보존해 공백으로
 # 덮는 다른 꼴을 쓰고 원본의 자리 번호를 그대로 쓰기 때문이다.
 STRIPPED=$(mktemp -d)
-python3 - "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
-import os, sys
-dest, files = sys.argv[1], sys.argv[2:]
-def strip(src):
-    out, i, depth, n = [], 0, 0, len(src)
-    while i < n:
-        if src.startswith('/-', i):
-            depth += 1; i += 2; continue
-        if src.startswith('-/', i) and depth:
-            depth -= 1; i += 2; continue
-        if depth:
-            out.append('\n' if src[i] == '\n' else ' '); i += 1; continue
-        if src.startswith('--', i):
-            j = src.find('\n', i); i = n if j < 0 else j; continue
-        out.append(src[i]); i += 1
-    return ''.join(out)
-for f in files:
-    p = os.path.join(dest, f)
-    os.makedirs(os.path.dirname(p), exist_ok=True)
-    with open(p, 'w', encoding='utf-8') as out:
-        out.write(strip(open(f, encoding='utf-8').read()))
-PYEOF
+python3 scripts/vstep_forbidden.py "$STRIPPED" "${TARGETS[@]}"
 
 check_absent() {  # 표시명, 정규식
   local name="$1" pat="$2" hits
@@ -265,51 +244,7 @@ while IFS=$'\t' read -r le_v le_m; do
     FAIL)   bad "$le_m" ;;
     REPORT) rep "$le_m" ;;
   esac
-done < <(python3 - "$le_now" "$le_inner" "$BASELINE_DOC" <<'LEEOF'
-import sys
-
-def load(path):
-    out = {}
-    with open(path, "rb") as fh:
-        for rec in fh.read().split(b"\0"):
-            if b"=" in rec:
-                k, v = rec.split(b"=", 1)
-                out[k] = v
-    return out
-
-now, inner, doc = load(sys.argv[1]), load(sys.argv[2]), sys.argv[3]
-# 셸이 마지막 인자를 담는 자리는 호출마다 달라지므로 그 집합의 안정을 깨뜨린다.
-SHELL_SET = {b"_"}
-touched = sorted(k.decode("utf-8", "replace") for k in inner
-                 if k not in SHELL_SET and now.get(k) != inner[k])
-want, inblock = [], False
-for ln in open(doc, encoding="utf-8"):
-    if "<!-- LEANENV:BEGIN -->" in ln:
-        inblock = True
-        continue
-    if "<!-- LEANENV:END -->" in ln:
-        inblock = False
-        continue
-    if inblock and ln.startswith("LEANENV_VAR="):
-        want.append(ln.strip().split("=", 1)[1])
-rows = []
-if not want:
-    rows.append("FAIL\t값 정본의 LEANENV 블록에서 변수 이름을 읽지 못했다")
-else:
-    extra = [n for n in touched if n not in want]
-    missing = [n for n in want if n not in touched]
-    rows.append("REPORT\t빌드 도구가 더하거나 바꾼 변수 %d · 블록이 든 이름 %d"
-                % (len(touched), len(want)))
-    if extra:
-        rows.append("REPORT\t블록에 없는 변수 %d — %s" % (len(extra), " · ".join(extra)))
-    if missing:
-        rows.append("REPORT\t블록이 드는데 이 환경에 서지 않는 변수 %d — %s"
-                    % (len(missing), " · ".join(missing)))
-    if not extra and not missing:
-        rows.append("OK\t더하거나 바꾼 변수의 이름이 블록과 같다 (%d)" % len(want))
-sys.stdout.write("".join(r + "\n" for r in rows))
-LEEOF
-)
+done < <(python3 scripts/vstep_leanenv.py "$le_now" "$le_inner" "$BASELINE_DOC")
 
 # 축 둘째. 같은 파일을 두 길로 돌려 종료 코드와 출력이 바이트로 같은지 잰다. 대상은 뒤의
 # 단계가 이미 돌리는 층별 프로브이며, 이름의 집합만 보면 이름이 같은데 값의 뜻이 바뀐 자리를
@@ -364,49 +299,7 @@ else bad "VerifyBuilt 실패"; fi
 # 그 자리에서 열려 있는 namespace 를 앞에 붙인다. example 은 이름이 없어 대상이 아니다.
 # 뽑은 이름마다 `#print axioms` 한 줄을 내는 프로브 파일을 임시 디렉터리에 만들어 돌린다.
 AUDIT=$(mktemp -d)
-python3 - "$AUDIT" "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
-import os, re, sys
-audit, stripped, files = sys.argv[1], sys.argv[2], sys.argv[3:]
-DECL = re.compile(r"^(inductive|structure|def|theorem|abbrev|instance)\s+([^\s({\[:]+)")
-ANON = re.compile(r"^instance\b(?!\s+[^\s({\[:]+)")
-OPEN = re.compile(r"^(namespace|section)\b[ \t]*(\S*)")
-END = re.compile(r"^end\b")
-rows, anon = [], []
-# 경로의 둘째 칸이 층이다. 다만 회계층 아래의 `Rat` 디렉터리는 유리수를 쓰는 파일의 자리이고 그
-# 기준선이 정수 기준선과 따로 서므로, 그 디렉터리의 선언을 회계층과 다른 자리로 낸다. 회계층으로
-# 들이면 유리수가 끌어오는 공리가 정수 기준선 위의 초과로 전량 잡힌다.
-def layer_of(f):
-    if f.startswith("CrisisFramework/Accounting/Rat/"):
-        return "Accounting/Rat"
-    return f.split("/")[1]
-for f in files:
-    stack = []
-    code = open(os.path.join(stripped, f), encoding="utf-8").read()
-    for i, ln in enumerate(code.split("\n"), 1):
-        m = OPEN.match(ln)
-        if m:
-            stack.append((m.group(1), m.group(2))); continue
-        if END.match(ln):
-            if stack: stack.pop()
-            continue
-        m = DECL.match(ln)
-        if m:
-            ns = ".".join(n for k, n in stack if k == "namespace" and n)
-            rows.append((layer_of(f), f"{ns}.{m.group(2)}" if ns else m.group(2)))
-        elif ANON.match(ln):
-            anon.append(f"{f}:{i}")
-with open(os.path.join(audit, "decls.tsv"), "w", encoding="utf-8") as out:
-    for d, n in rows:
-        out.write(f"{d}\t{n}\n")
-with open(os.path.join(audit, "anon.txt"), "w", encoding="utf-8") as out:
-    out.write("".join(a + "\n" for a in anon))
-with open(os.path.join(audit, "Probe.lean"), "w", encoding="utf-8") as out:
-    for f in files:
-        out.write("import " + f[:-len(".lean")].replace("/", ".") + "\n")
-    out.write("\n")
-    for _, n in rows:
-        out.write(f"#print axioms {n}\n")
-PYEOF
+python3 scripts/vstep_declprobe.py "$AUDIT" "$STRIPPED" "${TARGETS[@]}"
 pr_out=$("${LEAN:-lean}" "$AUDIT/Probe.lean" 2>&1); pr_rc=$?
 printf '%s\n' "$pr_out" | sed 's/^/  /'
 if [ "$pr_rc" -eq 0 ]; then ok "선언 감사 프로브 통과 (임시 파일, 선언 $(wc -l < "$AUDIT/decls.tsv"))"
@@ -433,99 +326,7 @@ done < "$AUDIT/anon.txt"
 # 든 선언을 세는 쪽이 유한집합과 몫 구성에서 오는 공리를 전부 놓치고 맨 끝 포괄 분기 하나뿐인
 # 선언도 공리를 내는 것이 실측됐기 때문이다.
 printf '%s\n%s' "$vb_out" "$pr_out" > "$AUDIT/axioms.txt"
-audit_out=$(python3 - "$AUDIT/axioms.txt" "$BASELINE_DOC" "$AUDIT/decls.tsv" <<'PYEOF'
-import re, sys
-axfile, basedoc, declfile = sys.argv[1], sys.argv[2], sys.argv[3]
-norm = re.sub(r"\s+", " ", open(axfile, encoding="utf-8").read())
-
-# 디렉터리가 층을 결정한다. 층마다 docs/baseline.md 의 키와 실효 기준선을 내는 프로브가
-# 짝을 이룬다. 이 표에 없는 디렉터리에 선언이 서면 차분할 기준선이 없으므로 실패시킨다.
-# 회계층 아래의 `Rat` 디렉터리는 위의 생성부가 따로 내는 자리이며 유리수 기준선과 차분한다.
-LAYERS = [
-    ("Accounting",     "회계층",    "ACCOUNTING_INT", "baselineProbeSum"),
-    ("Accounting/Rat", "회계층(ℚ)", "ACCOUNTING_RAT", "ratProbeSum"),
-    ("Glossary",       "용어집",    "GLOSSARY",       "glossaryProbeList"),
-    ("Definition",     "정의층",    "DEFINITION",     "definitionProbeFamily"),
-    ("Observation",    "관측층",    "OBSERVATION",    "observationProbeProd"),
-]
-
-# 층별 기대 기준선은 docs/baseline.md 의 기계 판독 블록이 든다. 값을 스크립트에
-# 전사하면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다 (baseline.md 머리말).
-doc = open(basedoc, encoding="utf-8").read()
-m = re.search(r"<!-- BASELINE:BEGIN -->(.*?)<!-- BASELINE:END -->", doc, re.S)
-base_of = {}
-for ln in (m.group(1) if m else "").split("\n"):
-    if "=" in ln:
-        k, _, v = ln.partition("=")
-        base_of[k.strip()] = v.strip()
-
-def axioms_of(n):
-    """이름 하나의 공리 목록을 낸다. 무의존이면 [] 를 내고 찾지 못하면 빈 문자열을 낸다."""
-    g = re.search(r"'" + re.escape(n) + r"' depends on axioms: \[([^\]]*)\]", norm)
-    if g:
-        return "[" + g.group(1) + "]"
-    if re.search(r"'" + re.escape(n) + r"' does not depend on any axioms", norm):
-        return "[]"
-    return ""
-
-def parse(s):
-    return set(t.strip() for t in s.strip().strip("[]").split(",") if t.strip())
-
-rows = []
-for ln in open(declfile, encoding="utf-8"):
-    ln = ln.rstrip("\n")
-    if ln:
-        d, _, n = ln.partition("\t")
-        rows.append((d, n))
-
-out, audited, ne_total = [], 0, 0
-detail, ne_detail, known = [], [], set()
-for d, label, key, probe in LAYERS:
-    known.add(d)
-    base = base_of.get(key, "")
-    if not base:
-        out.append(f"BASE_MISS\t{key}")
-        detail.append(f"{label} 0")
-        continue
-    out.append(f"BASE_OK\t{key}\t{base}")
-    measured = axioms_of(probe)
-    if not measured:
-        out.append(f"PROBE_MISS\t{label}\t{probe}")
-    elif measured == base:
-        out.append(f"PROBE_OK\t{label}\t{measured}")
-    else:
-        out.append(f"PROBE_DIFF\t{label}\t{measured}\t{base}")
-    n = ne = 0
-    nonempty = []
-    for c in [nm for dd, nm in rows if dd == d]:
-        got = axioms_of(c)
-        audited += 1
-        n += 1
-        if not got:
-            out.append(f"DECL_MISS\t{c}")
-            continue
-        if got != "[]":
-            ne += 1
-            nonempty.append(f"{c}  {got}")
-        # 기준선을 넘은 공리만 낸다. 부분집합 대조이므로 기준선 이하도 통과시킨다.
-        ex = sorted(parse(got) - parse(base))
-        if not ex:
-            out.append(f"DECL_SAME\t{c}\t{got}" if got == base else f"DECL_UNDER\t{c}\t{got}")
-        else:
-            out.append(f"DECL_EXCESS\t{c}\t{got}\t{base}\t[{', '.join(ex)}]")
-    detail.append(f"{label} {n}")
-    out.append(f"NONEMPTY\t{label}\t{ne}\t{n}")
-    out += [f"NONEMPTY_ITEM\t{x}" for x in nonempty]
-    ne_total += ne
-    ne_detail.append(f"{label} {ne}")
-for d, n in rows:
-    if d not in known:
-        out.append(f"LAYER_UNKNOWN\t{d}\t{n}")
-out.append(f"TOTAL\t{audited}\t" + " · ".join(detail))
-out.append(f"NE_TOTAL\t{ne_total}\t" + " · ".join(ne_detail))
-print("\n".join(out))
-PYEOF
-)
+audit_out=$(python3 scripts/vstep_axiomdiff.py "$AUDIT/axioms.txt" "$BASELINE_DOC" "$AUDIT/decls.tsv")
 AUDITED=0
 AUDIT_DETAIL_S=
 NONEMPTY=0
@@ -559,40 +360,7 @@ step step8-layertype '층별 수 타입 정적 검사 (L-10)'
 # 이 보므로 여기서 다시 세지 않는다. L-4 가 invariant 로 그 단계에 걸려 있기 때문이다. 다만 영문명
 # Real 은 step3 가 기호만 보므로 여기서 잡는다. 회계층의 ℚ·Rat 은 L-15 의 판정이 docstring 의
 # 사유를 읽어야 서므로 실패가 아니라 보고로 낸다.
-lt_out=$(python3 - "$STRIPPED" "${TARGETS[@]}" <<'PYEOF'
-import os, re, sys
-root, files = sys.argv[1], sys.argv[2:]
-# 디렉터리: (층, 금지 기호, 금지 영문명, 수치 리터럴 금지, 처분)
-RULES = {
-    "Glossary":    ("용어집", "ℚℤℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
-    "Definition":  ("정의층", "ℚℤ",  ("Rat", "Int", "Real"),        False, "FAIL"),
-    "Accounting":  ("회계층", "ℚ",   ("Rat",),                      False, "REPORT"),
-    "Observation": ("관측층", "ℚℤℕ", ("Rat", "Int", "Real", "Nat"), True,  "FAIL"),
-}
-# 영문명은 토큰 경계를 요구하고 대소문자를 구별한다. `intermediation` 의 Int 나 `Rational` 의
-# Rat 이 걸리지 않게 한다. 수치 리터럴은 식별자의 일부가 아닌 독립 정수·소수이며 첨자는 들지 않는다.
-LIT = re.compile(r"(?<![\w'.])[0-9]+(?:\.[0-9]+)?(?![\w'])")
-scanned = {d: 0 for d in RULES}
-other = 0
-for f in files:
-    d = f.split("/")[1] if f.count("/") >= 2 else ""
-    if d not in RULES:
-        other += 1
-        continue
-    layer, syms, names, no_lit, verdict = RULES[d]
-    scanned[d] += 1
-    tok = re.compile("[" + syms + "]|(?<![\\w'.])(?:" + "|".join(names) + ")(?![\\w'])")
-    for i, ln in enumerate(open(os.path.join(root, f), encoding="utf-8").read().split("\n"), 1):
-        hits = [m.group(0) for m in tok.finditer(ln)]
-        if no_lit:
-            hits += [f"리터럴 {m.group(0)}" for m in LIT.finditer(ln)]
-        if hits:
-            print(f"{verdict}\t{layer}\t{f}:{i}\t{', '.join(hits)}\t{ln.strip()}")
-for d, (layer, *_rest) in RULES.items():
-    print(f"SCAN\t{layer}\t{scanned[d]}")
-print(f"OTHER\t{other}")
-PYEOF
-)
+lt_out=$(python3 scripts/vstep_layertype.py "$STRIPPED" "${TARGETS[@]}")
 declare -A lt_fail=() lt_rep=()
 while IFS=$'\t' read -r kind layer where what line; do
   case "$kind" in
@@ -618,42 +386,7 @@ step step9-propfree '발동조건 문법의 `Prop` 금지 (C-10)'
 # 최상위 def·abbrev·theorem 의 서명은 대상이 아니다. 구조에 들어가지 않는 보조 술어는
 # 발동조건의 판정 경로에 있지 않기 때문이다. 필드와 생성자는 선언 머리의 where 뒤에 선다.
 mapfile -t DEF_TARGETS < <(printf '%s\n' "${TARGETS[@]}" | grep '^CrisisFramework/Definition/')
-pf_out=$(python3 - "$STRIPPED" "${DEF_TARGETS[@]}" <<'PYEOF'
-import os, re, sys
-root, files = sys.argv[1], sys.argv[2:]
-HEAD = re.compile(r"^(structure|inductive)\s+([^\s({\[:]+)")
-TOP = re.compile(r"^\S")
-WHERE = re.compile(r"\bwhere\b")
-PROP = re.compile(r"(?<![\w'.])Prop(?![\w'])")
-n = {"structure": 0, "inductive": 0}
-for f in files:
-    lines = open(os.path.join(root, f), encoding="utf-8").read().split("\n")
-    for i, ln in enumerate(lines):
-        m = HEAD.match(ln)
-        if not m:
-            continue
-        kind, name = m.groups()
-        n[kind] += 1
-        body = False
-        j = i
-        while j < len(lines) and (j == i or not TOP.match(lines[j])):
-            seg = lines[j]
-            if not body:
-                w = WHERE.search(seg)
-                if w:
-                    body, seg = True, seg[w.end():]
-                elif kind == "inductive" and seg.lstrip().startswith("|"):
-                    body = True
-                else:
-                    j += 1
-                    continue
-            if not seg.strip().startswith("deriving") and PROP.search(seg):
-                part = "필드" if kind == "structure" else "생성자"
-                print(f"FAIL\t{f}:{j + 1}\t{kind} {name} 의 {part}\t{lines[j].strip()}")
-            j += 1
-print(f"SCAN\t{len(files)}\t{n['structure']}\t{n['inductive']}")
-PYEOF
-)
+pf_out=$(python3 scripts/vstep_propfree.py "$STRIPPED" "${DEF_TARGETS[@]}")
 rm -rf "$STRIPPED"
 pf_bad=0
 while IFS=$'\t' read -r kind a b c; do
@@ -669,147 +402,7 @@ step step5-mutation "변이 검사"
 # 감싼 사본을 만든다 (CF-675). 변이 사본은 파일별로 임시 디렉터리에 만들어 원본을 건드리지 않고 돌린 뒤 지운다.
 mut_dir=$(mktemp -d)
 mut_list="$mut_dir/targets.tsv"
-python3 - "$mut_dir" "${TARGETS[@]}" > "$mut_list" <<'MUTEOF'
-import pathlib, re, sys
-
-tmp, files = pathlib.Path(sys.argv[1]), sys.argv[2:]
-
-OPEN = {'(': ')', '[': ']', '{': '}', '⟨': '⟩', '⦃': '⦄'}
-CLOSE = {v: k for k, v in OPEN.items()}
-DECL = re.compile(r'^(theorem|example)(?=[\s:])', re.M)
-NAME = re.compile(r'[^\s(){}\[\]⟨⟩⦃⦄:]+')
-
-
-def mask(src: str) -> str:
-    """주석과 문자열 리터럴을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다.
-
-    리터럴을 함께 덮는 까닭은 그 안의 `--` 와 `/-` 가 주석 제거를 어긋나게 하고 그 안의 괄호가
-    괄호 묶음 건너뛰기를 어긋나게 하기 때문이다 (CF-680). 여는 따옴표와 닫는 따옴표는 남기고
-    안쪽만 덮으며, 따옴표는 괄호가 아니므로 깊이 셈에 들지 않는다.
-    """
-    out, i, n, depth = list(src), 0, len(src), 0
-    while i < n:
-        if depth == 0 and src[i] == '"':
-            j = i + 1
-            while j < n and src[j] != '"':
-                if src[j] == '\\' and j + 1 < n:
-                    out[j] = ' '
-                    j += 1                 # 이스케이프된 글자는 리터럴을 닫지 않는다
-                if src[j] != '\n':
-                    out[j] = ' '
-                j += 1
-            i = j + 1 if j < n else n
-            continue
-        if depth == 0 and src.startswith('--', i):
-            j = src.find('\n', i)
-            j = n if j < 0 else j
-            for k in range(i, j):
-                out[k] = ' '
-            i = j
-            continue
-        if src.startswith('/-', i):
-            depth += 1
-            out[i] = out[i + 1] = ' '
-            i += 2
-            continue
-        if depth > 0 and src.startswith('-/', i):
-            depth -= 1
-            out[i] = out[i + 1] = ' '
-            i += 2
-            continue
-        if depth > 0 and src[i] != '\n':
-            out[i] = ' '
-        i += 1
-    return ''.join(out)
-
-
-def skip_group(m: str, i: int):
-    """여는 괄호 자리에서 짝의 다음 자리를 낸다. 짝이 없으면 None 이다."""
-    stack, n = [OPEN[m[i]]], len(m)
-    i += 1
-    while i < n and stack:
-        c = m[i]
-        if c in OPEN:
-            stack.append(OPEN[c])
-        elif c == stack[-1]:
-            stack.pop()
-        i += 1
-    return None if stack else i
-
-
-def conclusion(m: str, kw: str, i: int):
-    """선언 머리 뒤에서 결론의 (시작, 끝) offset 을 낸다. 못 잡으면 None 이다."""
-    n = len(m)
-    if kw == 'theorem':
-        while i < n and m[i].isspace():
-            i += 1
-        while i < n and not m[i].isspace() and m[i] not in OPEN and m[i] != ':':
-            i += 1
-    # 괄호 묶음을 차례로 건너뛰고 깊이 0 의 ':' 를 결론의 시작으로 잡는다. 결론 안의
-    # `∃ m : T,` 같은 콜론을 시작으로 잡지 않기 위해서다.
-    while i < n:
-        c = m[i]
-        if c.isspace():
-            i += 1
-            continue
-        if c in OPEN:
-            j = skip_group(m, i)
-            if j is None:
-                return None
-            i = j
-            continue
-        if c == ':':
-            if m[i:i + 2] == ':=':
-                return None
-            i += 1
-            break
-        i += 1
-    else:
-        return None
-    start, depth = i, 0
-    while i < n:
-        c = m[i]
-        if c in OPEN:
-            depth += 1
-        elif c in CLOSE:
-            depth -= 1
-        elif depth == 0 and m[i:i + 2] == ':=':
-            return (start, i)
-        i += 1
-    return None
-
-
-def decl_name(m: str, kw: str, i: int) -> str:
-    """선언 머리의 이름. `example` 은 이름을 갖지 않으므로 그 낱말을 그대로 낸다."""
-    if kw == 'example':
-        return 'example'
-    g = NAME.search(m, i)
-    return g.group(0) if g else '<이름을 읽지 못했다>'
-
-
-rows, serial = [], 0
-for f in files:
-    src = pathlib.Path(f).read_text(encoding='utf-8')
-    m = mask(src)
-    for d in DECL.finditer(m):
-        line = src[:d.start()].count('\n') + 1
-        span = conclusion(m, d.group(1), d.end())
-        if span is None:
-            # 결론을 잡지 못한 선언을 조용히 건너뛰면 그 진술이 알림 없이 그물 밖에 남고 통과
-            # 계수에도 들지 않아 밖에서 보이지 않는다 (CF-682). 이름과 파일을 알리고 실패로 센다.
-            rows.append('NOCONCL\t%s\t%d\t-\t%s' % (f, line, decl_name(m, d.group(1), d.end())))
-            continue
-        a, b = span
-        serial += 1
-        box = tmp / ('m%03d' % serial)
-        box.mkdir()
-        copy = box / 'Mutant.lean'
-        copy.write_text(src[:a] + '¬ (' + src[a:b] + ')' + src[b:], encoding='utf-8')
-        brief = ' '.join(src[a:b].split())
-        rows.append('MUT\t%s\t%d\t%s\t%s' % (f, line, copy, brief))
-
-sys.stdout.write(''.join(r + '\n' for r in rows))
-MUTEOF
+python3 scripts/vstep_mutation.py "$mut_dir" "${TARGETS[@]}" > "$mut_list"
 mapfile -t mut_rows < "$mut_list"
 # 구문 오류의 머리 목록. 사본을 일부러 깨뜨려 Lean 이 내는 머리를 모은 것이다 (CF-681).
 # 한 가지 머리로만 가르면 그 밖의 머리로 깨진 사본이 거부로 세어지고, 그 진술의 검사가
@@ -865,91 +458,7 @@ step step10-clausemut "논리 결합 변이 — 판정 반환 함수의 증거�
 cm_dir=$(mktemp -d)
 cm_list="$cm_dir/targets.tsv"
 mapfile -t CM_FILES < <(printf '%s\n' "${TARGETS[@]}" | grep -E '^CrisisFramework/(Definition|Observation)/')
-python3 - "$cm_dir" "${CM_FILES[@]}" > "$cm_list" <<'CMEOF'
-import pathlib, re, sys
-
-tmp, files = pathlib.Path(sys.argv[1]), sys.argv[2:]
-
-# 판정 반환 함수의 머리. 주석을 덮은 뒤 줄머리에 선 def 이며 속성과 가시성 수식을 앞에 둘 수 있다.
-DEF = re.compile(r'^(?:@\[[^\]\n]*\]\s*)?(?:private\s+|protected\s+)?def\s+([^\s(){}\[\]⟨⟩⦃⦄:]+)', re.M)
-# 선언의 끝. 본문과 match 갈래는 들여 쓰므로 줄머리에 글자가 선 다음 줄이 다음 항목이다.
-NEXT = re.compile(r'^\S', re.M)
-# 머리와 본문의 경계. `:=` 이거나 줄머리를 들여 쓴 match 갈래의 `|` 다.
-SPLIT = re.compile(r':=|\n[ \t]*\|')
-OPS = re.compile(r'&&|\|\||∧|∨')
-SWAP = {'&&': '||', '||': '&&', '∧': '∨', '∨': '∧'}
-
-
-def mask(src: str) -> str:
-    """주석과 문자열 리터럴을 공백으로 덮은 사본. 자리 수가 같아 원본의 offset 이 그대로 쓰인다."""
-    out, i, n, depth = list(src), 0, len(src), 0
-    while i < n:
-        if depth == 0 and src[i] == '"':
-            j = i + 1
-            while j < n and src[j] != '"':
-                if src[j] == '\\' and j + 1 < n:
-                    out[j] = ' '
-                    j += 1
-                if src[j] != '\n':
-                    out[j] = ' '
-                j += 1
-            i = j + 1 if j < n else n
-            continue
-        if depth == 0 and src.startswith('--', i):
-            j = src.find('\n', i)
-            j = n if j < 0 else j
-            for k in range(i, j):
-                out[k] = ' '
-            i = j
-            continue
-        if src.startswith('/-', i):
-            depth += 1
-            out[i] = out[i + 1] = ' '
-            i += 2
-            continue
-        if depth > 0 and src.startswith('-/', i):
-            depth -= 1
-            out[i] = out[i + 1] = ' '
-            i += 2
-            continue
-        if depth > 0 and src[i] != '\n':
-            out[i] = ' '
-        i += 1
-    return ''.join(out)
-
-
-def line_of(src: str, k: int) -> int:
-    """offset 의 줄 번호. 칸 번호는 그 줄 머리에서 센 글자 수이며 바이트가 아니다."""
-    return src.count('\n', 0, k) + 1
-
-
-rows, serial = [], 0
-for f in files:
-    src = pathlib.Path(f).read_text(encoding='utf-8')
-    m = mask(src)
-    for d in DEF.finditer(m):
-        nl = m.find('\n', d.end())
-        nx = NEXT.search(m, nl + 1) if nl >= 0 else None
-        end = nx.start() if nx else len(m)
-        cut = SPLIT.search(m, d.end(), end)
-        if cut is None:
-            continue
-        if not m[d.end():cut.start()].rstrip().endswith('Bool'):
-            continue
-        first, last = line_of(src, d.start()), line_of(src, end - 1)
-        for o in OPS.finditer(m, cut.start(), end):
-            serial += 1
-            box = tmp / ('c%03d' % serial)
-            box.mkdir()
-            copy = box / 'Mutant.lean'
-            a, b = o.span()
-            copy.write_text(src[:a] + SWAP[o.group(0)] + src[b:], encoding='utf-8')
-            col = a - (src.rfind('\n', 0, a) + 1) + 1
-            rows.append('\t'.join([f, '%d:%d' % (line_of(src, a), col), d.group(1), o.group(0),
-                                   SWAP[o.group(0)], str(first), str(last), str(copy)]))
-
-sys.stdout.write(''.join(r + '\n' for r in rows))
-CMEOF
+python3 scripts/vstep_clausemut.py "$cm_dir" "${CM_FILES[@]}" > "$cm_list"
 mapfile -t cm_rows < "$cm_list"
 cm_cap=$(sed -n '/<!-- CLAUSEMUT:BEGIN -->/,/<!-- CLAUSEMUT:END -->/p' "$BASELINE_DOC" \
   | grep -oE '^CLAUSEMUT_UNCOVERED=[0-9]+$' | cut -d= -f2)

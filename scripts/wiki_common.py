@@ -523,6 +523,23 @@ WIKI_NC_UNITS = (
     "scripts/wiki_nc_meta.py",
 )
 
+# 검증 스크립트의 단계가 부르는 모듈의 경로. 기계 판독 블록을 읽는 자리가 이것을
+# 유니버스로 쓴다. **원장 검증기의 단위와 가르는 까닭은** 그 둘이 서로 다른 진입점에서
+# 불리고 이 목록이 그 스크립트의 단계가 부르는 것만 든다는 것이다. 그 가운데 둘이 값
+# 정본의 블록을 읽으며, 읽지 않는 것을 함께 두는 까닭은 그 목록이 단위의 전량을 들어야
+# 블록을 읽는 자리가 하나 늘 때 이 목록이 낡지 않는다는 것이다.
+VSTEP_UNITS = (
+    "scripts/vstep_axiomdiff.py",
+    "scripts/vstep_clausemut.py",
+    "scripts/vstep_common.py",
+    "scripts/vstep_declprobe.py",
+    "scripts/vstep_forbidden.py",
+    "scripts/vstep_layertype.py",
+    "scripts/vstep_leanenv.py",
+    "scripts/vstep_mutation.py",
+    "scripts/vstep_propfree.py",
+)
+
 # 한글 수사를 값으로 읽는 표. 검사 36 의 `KO_NUMERAL` 을 쓰지 않는 까닭은 그 표가 스물까지의 닫힌
 # 목록이고 표 밖의 수사를 실패로 내는 것이 그 검사의 처분이라는 데 있다. 검사의 계수가 이미 서른을
 # 넘었으므로 이 자리는 열 자리와 한 자리를 조합해 읽는다.
