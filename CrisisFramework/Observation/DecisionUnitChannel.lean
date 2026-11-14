@@ -69,12 +69,18 @@ structure DecisionUnitChannel (Entity : Type) where
   coversDecisionHorizon : Entity → Bool
   /-- 이 경로가 결정 시계와 자산 만기를 맞대어 그 적합을 내는가. -/
   resolvesHorizonFit : Bool
+  /-- 그 주체를 노드로 묶는 입도를 이 경로가 내는가. 법인과 지점을 가르는 분해가 이 칸을
+      채운다. -/
+  coversNodeGranularity : Entity → Bool
+  /-- 이 경로가 그 입도를 결정의 경계로 내는가. 회계 단위의 경계를 내는 것으로는 이 칸이
+      채워지지 않는다. -/
+  resolvesDecisionBoundary : Bool
 
 /--
 witness 인스턴스 (A-3).
 
 **무엇을 증거하는가.** `DecisionUnitChannel` 이 비어 있지 않음을 증거한다. 어느 주체도 보지 않고
-네 칸을 하나도 내지 않는 경로다.
+여섯 칸을 하나도 내지 않는 경로다.
 -/
 -- DD:CF-2293
 def DecisionUnitChannel.noSource {Entity : Type} : DecisionUnitChannel Entity where
@@ -82,6 +88,8 @@ def DecisionUnitChannel.noSource {Entity : Type} : DecisionUnitChannel Entity wh
   resolvesInstrumentHolder := false
   coversDecisionHorizon := fun _ => false
   resolvesHorizonFit := false
+  coversNodeGranularity := fun _ => false
+  resolvesDecisionBoundary := false
 
 /--
 소재지 기준 은행통계를 보유자 부문의 경로로 읽은 것.
@@ -113,6 +121,8 @@ def locationalBankingStatisticsChannel {Entity : Type} : DecisionUnitChannel Ent
   resolvesInstrumentHolder := false
   coversDecisionHorizon := fun _ => false
   resolvesHorizonFit := false
+  coversNodeGranularity := fun _ => true
+  resolvesDecisionBoundary := false
 
 /--
 연결 기준 은행통계를 보유자 부문의 경로로 읽은 것.
@@ -143,6 +153,8 @@ def consolidatedBankingStatisticsChannel {Entity : Type} : DecisionUnitChannel E
   resolvesInstrumentHolder := false
   coversDecisionHorizon := fun _ => false
   resolvesHorizonFit := false
+  coversNodeGranularity := fun _ => true
+  resolvesDecisionBoundary := false
 
 /--
 규제 공시의 임원 보상 항목을 결정 시계의 경로로 읽은 것.
@@ -171,6 +183,8 @@ def executiveCompensationFilingChannel {Entity : Type} : DecisionUnitChannel Ent
   resolvesInstrumentHolder := false
   coversDecisionHorizon := fun _ => true
   resolvesHorizonFit := false
+  coversNodeGranularity := fun _ => false
+  resolvesDecisionBoundary := false
 
 /--
 세 공시 경로 가운데 어느 것도 수단별 보유자와 시계의 적합을 내지 않는다.
@@ -210,5 +224,31 @@ theorem sector_and_horizon_channels_are_disjoint {Entity : Type} (e : Entity) :
     (executiveCompensationFilingChannel (Entity := Entity)).coversSectorAssignment e = false ∧
     (executiveCompensationFilingChannel (Entity := Entity)).coversDecisionHorizon e = true := by
   exact ⟨rfl, rfl, rfl, rfl⟩
+
+/--
+세 공시 경로 가운데 어느 것도 주체를 노드로 묶는 입도를 결정의 경계로 내지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+결정이 하나로 내려지는 단위를 공시에서 읽어 내는 자료집합이 있어야 한다. 두 은행통계가 법인과
+지점을 가르는 입도를 내되 그 가름이 소재지와 본국이라는 회계 단위의 경계에서 오고, 같은 청구권이
+어느 기준으로 세느냐에 따라 다른 나라에 귀속된다는 것이 그 두 경로가 서로 다른 답을 낸다는 뜻이므로,
+이 명제가 거짓이면 그 두 자료 가운데 하나가 결정의 경계를 따로 드는 항목을 가진 것이다.
+
+**이 자리가 소스 없음의 등재다(L-14).** 주체를 노드로 묶는 입도가 정의층에 서 있고 그 입도를
+결정의 경계로 재는 경로가 관측층에 서지 않는다는 것이 이 진술로 기록된다.
+
+**T-3 분류:** 기여다. 두 칸의 값이 어느 경로에서 갈리는지를 고정하는 자리이고, 입도를 내는 것과
+결정의 경계를 내는 것이 다르다는 가름이 정의를 전개하기만 해서는 서지 않으므로 기여 목록에 든다.
+
+**가정을 두지 않는다.**
+-/
+-- DD:CF-3700
+theorem no_channel_resolves_decision_boundary {Entity : Type} (e : Entity) :
+    (locationalBankingStatisticsChannel (Entity := Entity)).coversNodeGranularity e = true ∧
+    (consolidatedBankingStatisticsChannel (Entity := Entity)).coversNodeGranularity e = true ∧
+    (locationalBankingStatisticsChannel (Entity := Entity)).resolvesDecisionBoundary = false ∧
+    (consolidatedBankingStatisticsChannel (Entity := Entity)).resolvesDecisionBoundary = false ∧
+    (executiveCompensationFilingChannel (Entity := Entity)).resolvesDecisionBoundary = false := by
+  exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
 end CrisisFramework.Observation
