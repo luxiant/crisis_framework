@@ -232,6 +232,12 @@ _OVER_BYTES = 3000
 
 _SECTION = re.compile(r"^#{2,3}\s+")
 _LIST_ID = re.compile(r"^\s*[-*]\s+\*\*?[A-Z]{1,2}-\d+\b")
+
+
+# 표의 행이 식별자를 머리로 두는 꼴. 한 행이 한 조항의 탐지를 드는 표가 열거이고 합칠
+# 상대가 없는데, 항을 목록의 꼴로만 받으면 그 절이 한 단위로 서서 상한을 넘고 행을 더하는
+# 조작이 전부 적발된다.
+_ROW_ID = re.compile(r"^\s*\|\s*\*{0,2}[A-Z]{1,2}-\d+\b")
 _HEAD_BOLD = re.compile(r"^\*\*")
 _HEAD_NUM = re.compile(r"^\(\d+\)|^\d+\.\s")
 _HEAD_ID = re.compile(r"^\s*[-*]\s+\*\*[A-Z]{1,2}-\d+\b")
@@ -256,11 +262,20 @@ def _sections(text: str):
 
 def _is_enumeration(body: str) -> bool:
     """열거를 드는 절은 유니버스 밖이다. 그 가름을 절의 항 가운데 식별자를
-    머리로 둔 것이 절반을 넘는지로 유도하고 손으로 열거하지 않는다."""
+    머리로 둔 것이 절반을 넘는지로 유도하고 손으로 열거하지 않는다.
+
+    표의 행도 항으로 받는다. 한 행이 한 조항의 탐지를 드는 표가 열거이고 합칠
+    상대가 없는데, 목록의 꼴만 받으면 그 절 전량이 한 단위로 서서 상한을 넘고
+    그 표에 행을 더하는 조작이 전부 적발되며 그 적발이 처방을 갖지 않는다."""
     items = [l for l in body.split("\n") if re.match(r"^\s*[-*]\s+", l)]
-    if not items:
+    rows = [l for l in body.split("\n")
+            if l.lstrip().startswith("|") and not re.match(r"^\s*\|\s*-", l)]
+    total = len(items) + len(rows)
+    if not total:
         return False
-    return len([l for l in items if _LIST_ID.match(l)]) * 2 > len(items)
+    ident = (len([l for l in items if _LIST_ID.match(l)])
+             + len([l for l in rows if _ROW_ID.match(l)]))
+    return ident * 2 > total
 
 
 def _units(body: str):
