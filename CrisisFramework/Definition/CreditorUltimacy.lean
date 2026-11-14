@@ -316,7 +316,7 @@ theorem ultimacyWithAccess_agrees_off_middle
 
 **수 체계를 받지 않는다.**
 -/
--- DD:CF-3698
+-- DD:CF-3719
 inductive InstitutionalSector where
   /-- 비금융법인. -/
   | nonfinancialCorporation
@@ -358,7 +358,7 @@ inductive InstitutionalSector where
 
 **수 체계를 받지 않는다.**
 -/
--- DD:CF-3698
+-- DD:CF-3719
 def InstitutionalSector.toClaimHolder : InstitutionalSector → Option ClaimHolderSector
   | .nonfinancialCorporation => some .nonfinancialFirm
   | .financialCorporation => some .financialInstitution
@@ -382,7 +382,7 @@ def InstitutionalSector.toClaimHolder : InstitutionalSector → Option ClaimHold
 
 **가정을 두지 않는다.**
 -/
--- DD:CF-3698
+-- DD:CF-3719
 theorem toClaimHolder_not_total :
     ∃ s : InstitutionalSector, s.toClaimHolder = none := by
   exact ⟨.generalGovernment, rfl⟩
@@ -403,7 +403,7 @@ theorem toClaimHolder_not_total :
 
 **가정을 두지 않는다.**
 -/
--- DD:CF-3698
+-- DD:CF-3719
 theorem toClaimHolder_not_surjective :
     ∃ h : ClaimHolderSector, ∀ s : InstitutionalSector, s.toClaimHolder ≠ some h := by
   -- 대외부문은 배정의 상에 들지 않으므로 그 원소를 증거로 든다. 편람의 다섯 부문을 `cases` 로 가른 뒤,

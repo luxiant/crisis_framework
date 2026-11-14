@@ -33,6 +33,7 @@
 
 import CrisisFramework.Definition.HolderMandate
 import CrisisFramework.Definition.CreditorUltimacy
+import Mathlib.Data.Nat.Notation
 
 namespace CrisisFramework.Definition
 
@@ -367,5 +368,148 @@ theorem mandate_does_not_determine_horizonFit :
     ∃ u v : DecisionUnit, u.mandate = v.mandate ∧ u.horizonFit ≠ v.horizonFit := by
   exact ⟨⟨.lossAvoidance, .horizonCoversMaturity⟩,
          ⟨.lossAvoidance, .maturityExceedsHorizon⟩, rfl, by decide⟩
+
+/--
+시점 인덱스를 갖는 부문 배정의 족 (L-13).
+
+**대응 비형식 개념:** 어느 시점에 각 주체가 어느 보유자 부문에 드는가. 국제 기준의 편람이 준법인을
+가르는 기준으로 완전한 회계의 존재를 두므로 같은 비법인기업이 그 회계를 갖추기 전과 뒤에 서로 다른
+부문에 들며, 그 이동이 시점에 걸린다.
+
+**이 정의가 배제하는 사례:**
+한 주체를 소비자로서의 가계와 생산자로서의 가계로 가르는 축. 그 편람이 분리 가능성을 자산의 분리로
+적어 현금에 이르는 금융자산까지 그 둘로 가를 수 있어야 한다고 두는데, 이 족은 주체 타입을 시점과
+무관하게 받으므로 한 주체가 둘로 갈리는 것을 담지 않는다.
+조달처: E-54 §2-3 「현금에 이르는 금융자산까지 소비자로서의 가계와 생산자로서의 가계로」
+
+**기각한 대체 정의:**
+배정 구조체 안에 시점을 받는 필드를 더하는 안. 필드를 더하면 그 구조체를 받는 기존 선언이 전부 그
+필드를 채워야 하고 시점을 쓰지 않는 자리까지 그 값을 지어 넣게 된다. 시점을 받는 새 구조체를 따로
+세우는 안도 기각했다. 같은 것을 가리키는 타입이 둘이 되고 그 둘의 관계를 다시 세워야 하는데, 족으로
+올리면 기존 구조체가 그대로 서고 시점을 쓰지 않는 자리가 상수 축약으로 닫힌다.
+
+**인덱스가 `ℕ` 인 것은 L-13 의 명시적 예외다.**
+-/
+-- DD:CF-3723
+abbrev SectorAssignmentFamily (Party : Type) := ℕ → SectorAssignment Party
+
+/-- witness (A-3). -/
+-- DD:CF-3723
+def SectorAssignment.constant {Party : Type} (A : SectorAssignment Party) :
+    SectorAssignmentFamily Party := fun _ => A
+
+/--
+부문 배정이 시점에 따라 달라지는 자리에서 편람이 든 주체.
+
+**대응 비형식 개념:** 없다. 이 열거는 그 경계가 언제 옮겨 가는지를 드는 편람의 조문이 사례로 든
+주체를 그대로 옮겨 아래 진술의 증거로 쓰는 표현 수단이며, 기관의 법적 꼴은 의사결정 단위에 대한 관측
+투영이므로 비형식 개념에 대응하지 않는다.
+
+**이 정의가 배제하는 사례:**
+규모로 준법인을 가르는 축. 그 편람이 규모 같은 추가 기준을 도입하는 것이 유용하지 않다고 적고 아무리
+커도 법인처럼 운영되지 않고 자기 회계를 갖지 않으면 준법인으로 다룰 수 없다고 적으므로, 규모로 가르면
+그 조문이 거짓이라 적은 것을 구조가 참으로 둔다.
+조달처: E-54 §2-3 「아무리 커도 법인처럼 운영되지 않고 자기 회계를 갖지 않으면 준법인으로 다룰 수
+없다고 적는다」
+
+**기각한 대체 정의:**
+중앙은행을 그 주체로 두는 안. 위기시에 그것이 받는 부문을 정해야 하는데 보유자 부문 열거가 그 부채를
+최종 국내 채권자가 드는가로 가르고 원전이 중앙은행을 그 축의 어디에도 두지 않으므로 값을 지어 넣게
+된다. 주체를 매개변수로 받고 값을 호출하는 쪽이 넣게 하는 안도 기각했다. 그 증거가 참인 까닭이
+호출하는 쪽의 값에 걸려 리포에 남지 않는다.
+
+**수 체계를 받지 않는다.**
+-/
+-- DD:CF-3724
+inductive AccountingSeparationParty where
+  /-- 완전한 회계를 갖추어 준법인으로 분리되는 비법인기업. -/
+  | separatingEnterprise
+  /-- 자기 회계를 갖지 않아 가계에 남는 비법인기업. -/
+  | stayingEnterprise
+  deriving DecidableEq, Repr
+
+/--
+그 두 주체의 부문 배정이 시점에 따라 달라지는 족.
+
+**대응 비형식 개념:** 회계의 분리가 서기 전과 뒤에 같은 비법인기업이 어느 부문에 드는가. 편람이 그
+분리를 준법인의 필요조건으로 두므로 분리가 서면 법인 부문으로 옮겨 가고 서지 않으면 가계에 남는다.
+
+**이 정의가 배제하는 사례:**
+조합을 책임의 범위로 가르는 축. 그 편람이 무한책임 조합은 가계에 남고 유한책임 조합은 법인으로
+다루어진다고 적어 같은 이동을 다른 기준으로 내는데, 이 족은 회계의 분리만 담으므로 그 기준을 담지
+않는다.
+조달처: E-54 §2-3 「무한책임 조합은 가계에 남고 유한책임 조합은 법인으로 다루어진다」
+
+**기각한 대체 정의:**
+시점을 비교 연산으로 가르는 안. 그 문턱이 수로 서고 시점 인덱스가 아닌 자리의 수가 되어 정의층의 수
+체계 제한에 걸리며, 그 문턱의 값을 정하는 입력이 어느 편에도 없다. 상수 족으로만 두고 변하는 자리를
+호출하는 쪽에 맡기는 안도 기각했다. 그러면 그 족이 실제로 변하는 것을 드는 증거가 리포에 서지 않아
+구멍이 묻는 것이 그대로 남는다.
+
+**이 꼴은 리포에 선례가 없다.** 족의 인스턴스가 전부 상수 족이어서 시점을 패턴으로 가르는 선언이
+없으며, 이 선언이 그 꼴을 처음 세운다.
+
+**수 체계를 받지 않는다.** 패턴이 가르는 `0` 은 시점 인덱스의 값이므로 L-10 의 명시적 예외에 든다.
+-/
+-- DD:CF-3724
+def accountingSeparationFamily : SectorAssignmentFamily AccountingSeparationParty :=
+  fun t =>
+    match t with
+    | 0 => { sectorOf := fun _ => some ClaimHolderSector.household }
+    | _ + 1 =>
+        { sectorOf := fun p =>
+            match p with
+            | .separatingEnterprise => some ClaimHolderSector.nonfinancialFirm
+            | .stayingEnterprise => some ClaimHolderSector.household }
+
+/--
+같은 주체가 시점에 따라 서로 다른 부문을 받는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 편람이 완전한 회계를 갖춘 비법인기업을 가계에 그대로 두어야 한다. 조문이 그 회계를 준법인의
+필요조건으로 두고 그것을 갖춘 비법인기업을 법인 부문에 넣으므로, 이 명제가 거짓이면 그 조문을 잘못
+옮긴 것이다.
+
+**T-3 분류:** 보조 보정이 아니다. 부문 배정이 시점을 받아야 하는 까닭이 이 진술로 서며, 어느 주체와
+어느 두 시점이 그 반례인지를 고르는 일이 정의를 전개하기만 해서는 서지 않으므로 기여 목록에 든다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+배정이 시점에 따라 달라지는 것이 그런 주체와 시점 쌍의 존재이므로 그 꼴로만 진술된다.
+
+**가정을 두지 않는다.**
+-/
+-- DD:CF-3724
+theorem accountingSeparationFamily_varies :
+    ∃ (p : AccountingSeparationParty) (t u : ℕ),
+      (accountingSeparationFamily t).sectorOf p
+        ≠ (accountingSeparationFamily u).sectorOf p := by
+  exact ⟨.separatingEnterprise, 0, 1, by decide⟩
+
+/--
+시점이 달라져도 부문이 달라지지 않는 주체가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 편람이 자기 회계를 갖지 않는 비법인기업도 언젠가 법인 부문으로 옮긴다고 적어야 한다. 조문이 그
+회계를 필요조건으로 두므로 그것이 없으면 옮겨 갈 길이 없고, 이 명제가 거짓이면 그 필요조건을 잘못
+옮긴 것이다.
+
+**T-3 분류:** 보조 보정이 아니다. 족으로 올리는 것이 모든 주체를 움직이게 만들지 않는다는 것이 이
+진술로 서고, 그 가름이 정의를 전개하기만 해서는 어느 주체에서 서는지가 나오지 않으므로 기여 목록에
+든다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+움직이지 않는 주체가 있다는 것이 그 주체의 존재이므로 그 꼴로만 진술된다.
+
+**가정을 두지 않는다.**
+-/
+-- DD:CF-3724
+theorem accountingSeparationFamily_fixes_some :
+    ∃ p : AccountingSeparationParty, ∀ t u : ℕ,
+      (accountingSeparationFamily t).sectorOf p
+        = (accountingSeparationFamily u).sectorOf p := by
+  -- 가계에 남는 비법인기업은 어느 시점에서나 가계를 받으므로 그 주체를 증거로 든다. 두 시점을
+  -- `cases` 로 영과 그 뒤로 가르면 네 자리 모두 정의를 펼친 값이 같아 `rfl` 이 닫는다.
+  refine ⟨.stayingEnterprise, fun t u => ?_⟩
+  cases t <;> cases u <;> rfl
 
 end CrisisFramework.Definition

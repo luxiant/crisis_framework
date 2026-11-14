@@ -75,6 +75,12 @@ structure DecisionUnitChannel (Entity : Type) where
   /-- 이 경로가 그 입도를 결정의 경계로 내는가. 회계 단위의 경계를 내는 것으로는 이 칸이
       채워지지 않는다. -/
   resolvesDecisionBoundary : Bool
+  /-- 그 주체가 자본 보유 규제를 받는 유형인지를 이 경로가 보는가. 기관 유형을 가르는 분해가 이
+      칸을 채운다. -/
+  coversCapitalRegulationType : Entity → Bool
+  /-- 이 경로가 같은 위임을 받는 주체를 그 유형으로 가르는가. 유형을 보는 것으로는 이 칸이
+      채워지지 않는다. -/
+  resolvesRegulationSplit : Bool
 
 /--
 witness 인스턴스 (A-3).
@@ -90,6 +96,8 @@ def DecisionUnitChannel.noSource {Entity : Type} : DecisionUnitChannel Entity wh
   resolvesHorizonFit := false
   coversNodeGranularity := fun _ => false
   resolvesDecisionBoundary := false
+  coversCapitalRegulationType := fun _ => false
+  resolvesRegulationSplit := false
 
 /--
 소재지 기준 은행통계를 보유자 부문의 경로로 읽은 것.
@@ -123,6 +131,8 @@ def locationalBankingStatisticsChannel {Entity : Type} : DecisionUnitChannel Ent
   resolvesHorizonFit := false
   coversNodeGranularity := fun _ => true
   resolvesDecisionBoundary := false
+  coversCapitalRegulationType := fun _ => false
+  resolvesRegulationSplit := false
 
 /--
 연결 기준 은행통계를 보유자 부문의 경로로 읽은 것.
@@ -155,6 +165,8 @@ def consolidatedBankingStatisticsChannel {Entity : Type} : DecisionUnitChannel E
   resolvesHorizonFit := false
   coversNodeGranularity := fun _ => true
   resolvesDecisionBoundary := false
+  coversCapitalRegulationType := fun _ => false
+  resolvesRegulationSplit := false
 
 /--
 규제 공시의 임원 보상 항목을 결정 시계의 경로로 읽은 것.
@@ -185,6 +197,8 @@ def executiveCompensationFilingChannel {Entity : Type} : DecisionUnitChannel Ent
   resolvesHorizonFit := false
   coversNodeGranularity := fun _ => false
   resolvesDecisionBoundary := false
+  coversCapitalRegulationType := fun _ => false
+  resolvesRegulationSplit := false
 
 /--
 세 공시 경로 가운데 어느 것도 수단별 보유자와 시계의 적합을 내지 않는다.
@@ -249,6 +263,35 @@ theorem no_channel_resolves_decision_boundary {Entity : Type} (e : Entity) :
     (locationalBankingStatisticsChannel (Entity := Entity)).resolvesDecisionBoundary = false ∧
     (consolidatedBankingStatisticsChannel (Entity := Entity)).resolvesDecisionBoundary = false ∧
     (executiveCompensationFilingChannel (Entity := Entity)).resolvesDecisionBoundary = false := by
+  exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+/--
+세 공시 경로 가운데 어느 것도 같은 위임을 받는 주체를 자본 보유 규제의 유형으로 가르지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+같은 위임의 주체를 그 유형으로 가르는 값을 공시에서 읽어 내는 자료집합이 있어야 한다. 한 편이 딜러가
+누구에게 자금을 대는지에 대한 정보가 제한적이라고 적고 모기지 리츠의 규모만 자금순환표에 서며 그 밖의
+헤지펀드와 뮤추얼펀드와 분리계정이 딜러 대차대조표의 큰 소비자라는 것을 그 통계가 전혀 시사하지
+않는다고 적으므로, 이 명제가 거짓이면 그 편의 제한을 잘못 옮긴 것이다.
+
+**이 자리가 소스 없음의 등재다(L-14).** 자본 보유 규제가 걸리는 유형이 정의층에 서 있고 같은 위임의
+주체를 그 유형으로 가르는 경로가 관측층에 서지 않는다는 것이 이 진술로 기록된다.
+
+**T-3 분류:** 보조 보정이 아니다. 두 칸의 값이 어느 경로에서도 갈리지 않는다는 것이 이 진술로 서고,
+유형을 보는 것과 그 유형으로 가르는 것이 다르다는 가름이 정의를 전개하기만 해서는 서지 않으므로 기여
+목록에 든다.
+
+**가정을 두지 않는다.**
+-/
+-- DD:CF-3726
+theorem no_channel_resolves_regulation_split {Entity : Type} (e : Entity) :
+    (locationalBankingStatisticsChannel (Entity := Entity)).coversCapitalRegulationType e
+      = false ∧
+    (consolidatedBankingStatisticsChannel (Entity := Entity)).coversCapitalRegulationType e
+      = false ∧
+    (locationalBankingStatisticsChannel (Entity := Entity)).resolvesRegulationSplit = false ∧
+    (consolidatedBankingStatisticsChannel (Entity := Entity)).resolvesRegulationSplit = false ∧
+    (executiveCompensationFilingChannel (Entity := Entity)).resolvesRegulationSplit = false := by
   exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
 end CrisisFramework.Observation
