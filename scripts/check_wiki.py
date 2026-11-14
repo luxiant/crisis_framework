@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """원장 검증기.
 
-`docs/decisions/SPEC.md` §2 의 검사 예순하나를 돈다. 실패시키는 것 마흔아홉과 보고만 하는 것 아홉과
+`docs/decisions/SPEC.md` §2 의 검사 예순셋을 돈다. 실패시키는 것 쉰과 보고만 하는 것 열과
 아크 종료 시에만 도는 것 셋이다. 검사마다 단계 id 를 선언하고 그것을 출력에 낸다.
 
     python3 scripts/check_wiki.py [--root PATH] [--arc-close ARC] [--quiet]
@@ -50,7 +50,7 @@ ORDER = ["1", "2", "3", "3-a", "4-a", "5", "6", "7", "8", "9", "10",
          "11", "12", "13", "14", "15", "23", "24", "25", "16", "17", "18", "19", "20", "21", "26", "27",
          "28", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41",
          "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
-         "55", "56", "57", "58", "59", "60", "61", "29", "30"]
+         "55", "56", "57", "58", "59", "60", "61", "29", "30", "62", "63"]
 
 
 def run(root: Path, arc_close: str | None, quiet: bool) -> int:
@@ -84,7 +84,7 @@ def run(root: Path, arc_close: str | None, quiet: bool) -> int:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 예순하나)")
+    ap = argparse.ArgumentParser(description="원장 검증기 (SPEC.md §2 의 검사 예순셋)")
     ap.add_argument("--root", default=None, help="원장을 읽을 뿌리. 음성 대조가 사본을 지목한다")
     ap.add_argument("--arc-close", default=None, metavar="ARC",
                     help="아크 종료 시에만 도는 검사 20·21·29 를 그 아크에 대해 돌린다")

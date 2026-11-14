@@ -515,6 +515,74 @@ def inj_58_unmarked(root):
     return f"{wiki_common.READING_QUEUE_DOC}:{last + 1}"
 
 
+# 검사 63 의 주입이 `ref` 에 심는 값. 그 표의 어느 행에도 닿지 않고 추출 기록의 번호로도 읽히지 않는
+# 것을 넣기 전에 단언한다.
+NC63_REF = "음성 대조가 주입한 지목"
+
+
+def _nc63(root):
+    """사본의 원장과 소진 낱말과 지목 참조 대기 표의 행. 검증기의 수집기를 그대로 써서 주입과 판정이
+    같은 행을 본다."""
+    led = wiki_common.Ledger(root)
+    marks = wiki_prose.queuemark_block(led)
+    if wiki_prose.QUEUEMARK_SPENT not in marks:
+        raise SystemExit("QUEUEMARK 블록에 소진 낱말이 없어 주입 대상을 고를 수 없다")
+    _at, rows = wiki_prose.queue_section_rows(
+        (root / wiki_common.READING_QUEUE_DOC).read_text(encoding="utf-8"),
+        marks[wiki_prose.QUEUEMARK_SECTION])
+    if not rows:
+        raise SystemExit("지목 참조 대기 표의 행이 없어 주입 대상이 없다")
+    return led, marks[wiki_prose.QUEUEMARK_SPENT], rows
+
+
+def _nc63_extraction(e) -> str | None:
+    """재개 트리거가 추출 갈래이면 그 `ref`, 아니면 None 이다."""
+    rw = e.get("reopen_when")
+    if isinstance(rw, dict) and rw.get("kind") == "extraction":
+        return str(rw.get("ref") or "")
+    return None
+
+
+def inj_63_retired(root):
+    """소진 표지를 든 행이 가리키는 이연의 폐기 레코드를 지운다.
+
+    그 이연이 살아나 소진 표지를 든 행에 닿으므로 적발에 들어야 한다. 이연을 박지 않고 사본의
+    원장과 표에서 고르며, 고른 이연의 id 를 표지로 돌려준다.
+    """
+    led, spent, rows = _nc63(root)
+    cell = wiki_prose.QUEUEMARK_CELL
+    for e in led.reg["deferred"]:
+        ref = _nc63_extraction(e)
+        if ref is None or e.get("id") not in led.dead:
+            continue
+        hit = wiki_prose.queue_ref_rows(rows, ref)
+        if any(len(c) > cell and spent in c[cell] for _line, c in hit):
+            doc = load(root, "retirements")
+            doc["retirements"] = [q for q in doc["retirements"] if q.get("target") != e["id"]]
+            save(root, "retirements", doc)
+            return e["id"]
+    raise SystemExit("소진 표지를 든 행에 닿는 폐기된 이연이 없어 주입 대상이 없다")
+
+
+def inj_63_ref(root):
+    """살아 있는 이연 하나의 `ref` 를 그 표의 어느 행에도 닿지 않는 값으로 바꾼다.
+
+    그 이연이 닿는 항에서 빠져 어느 행에도 닿지 않는 항으로 세어져야 한다. 고른 이연의 id 를
+    표지로 돌려준다.
+    """
+    led, _spent, rows = _nc63(root)
+    if wiki_prose.queue_ref_rows(rows, NC63_REF) or wiki_common.extraction_ref_number(NC63_REF) is not None:
+        raise SystemExit("주입할 `ref` 가 표의 행에 닿거나 추출 기록의 번호로 읽힌다")
+    for e in led.reg["deferred"]:
+        ref = _nc63_extraction(e)
+        if ref is None or e.get("id") in led.dead or not wiki_prose.queue_ref_rows(rows, ref):
+            continue
+        edit(root, "deferred", e["id"],
+             lambda x: x["reopen_when"].__setitem__("ref", NC63_REF))
+        return e["id"]
+    raise SystemExit("표의 행에 닿는 살아 있는 이연이 없어 주입 대상이 없다")
+
+
 def inj_59_dup(root):
     """같은 줄기의 파일을 하나 더 둔다. 번호는 실재하는 기록과 겹치지 않는 두 자리로 고른다."""
     d = root / "docs" / "extractions"
@@ -586,4 +654,6 @@ CASES = [
     ("58", "wiki58-queue-marker", "표지를 들지 않는 행을 넣는다", inj_58_unmarked, None),
     ("59", "wiki59-extraction-stem-unique", "같은 줄기의 파일을 하나 더 둔다", inj_59_dup, None),
     ("61", "wiki61-inventory-aggregate-sum", "무리 행 하나의 편수를 하나 늘린다", inj_61_sum, None),
+    ("63", "wiki63-queue-spent-alive", "소진 표지를 든 행이 가리키는 이연의 폐기 레코드를 지운다", inj_63_retired, None),
+    ("63", "wiki63-queue-spent-alive", "한 이연의 ref 를 그 표의 어느 행에도 닿지 않는 값으로 바꾼다", inj_63_ref, None),
 ]

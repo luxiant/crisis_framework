@@ -402,6 +402,22 @@ def heading_fill(form: str, head: str) -> str | None:
     return head[len(pre):len(head) - len(suf)]
 
 
+def registry_code(led: Ledger, d: DocDecl) -> str:
+    """등록 관계를 드는 선언의 본문에서 주석을 지우고 코드만 남긴 것.
+
+    본문은 그 선언이 선 줄부터 다음 최상위 선언이나 이름공간의 끝까지다. 검사 38 과 62 가 같은
+    본문을 읽으므로 그 자리를 하나로 둔다. 둘로 두면 한쪽의 범위가 바뀔 때 다른 쪽이 옛 범위를
+    읽고, 그 어긋남은 두 검사가 같은 선언에서 다른 관계를 보는 꼴로만 남는다.
+    """
+    lines = (led.root / d.rel).read_text(encoding="utf-8").splitlines()
+    end = len(lines)
+    for i in range(d.line, len(lines)):
+        if TOP_DECL.match(lines[i]) or NAMESPACE_END.match(lines[i]):
+            end = i
+            break
+    return _lean_code("\n".join(lines[d.line - 1:end]))
+
+
 def excl_registry(led: Ledger) -> tuple[DocDecl, dict[str, list[str]], set[frozenset]] | None:
     """등록 관계를 드는 선언과 그 본문이 든 분할과 배타 관계. 선언이 없으면 None 이다.
 
@@ -412,13 +428,7 @@ def excl_registry(led: Ledger) -> tuple[DocDecl, dict[str, list[str]], set[froze
     d = next((x for x in led.doc_decls() if x.full == EXCL_DECL), None)
     if d is None:
         return None
-    lines = (led.root / d.rel).read_text(encoding="utf-8").splitlines()
-    end = len(lines)
-    for i in range(d.line, len(lines)):
-        if TOP_DECL.match(lines[i]) or NAMESPACE_END.match(lines[i]):
-            end = i
-            break
-    body = _lean_code("\n".join(lines[d.line - 1:end]))
+    body = registry_code(led, d)
     parts = {m.group(1): PART_ITEM.findall(m.group(2))
              for m in PARTITIONS_ROW.finditer(body)}
     excl = {frozenset(m.groups()) for m in EXCLUDES_ROW.finditer(body)}
@@ -540,6 +550,124 @@ def check_38(led: Ledger) -> Report:
     r.note(f"EXCL 블록의 분할 {len(names)} · 모든 쌍이 배타적인 것 {n_all} · 쌍의 전량 "
            f"{n_pair} · 블록에 들지 않은 분할 {outside}")
     r.note("블록에 들지 않은 분할은 소급되지 않고 미정리분의 크기만 보고된다(SPEC §2.1)")
+    return r
+
+
+# 검사 62 가 읽는 V-9 의 대상 쌍. `docs/baseline.md` 의 `OVERLAP` 블록이며 한 줄이 쌍 하나를 들고
+# 두 개념의 생성자 이름을 세로줄로 가른다. 같은 상위 개념의 정제로 선 쌍 전량을 유니버스로 열면
+# 배타가 등록되지 않은 쌍이 많아 그 전량에 문단을 요구하게 되므로, 검사 38 의 `EXCL` 블록과 같은
+# 형으로 유니버스를 블록으로 닫는다(SPEC §2.1).
+OVERLAP_BLOCK = re.compile(r"<!-- OVERLAP:BEGIN -->\n(.*?)<!-- OVERLAP:END -->", re.S)
+
+
+OVERLAP_LINE = re.compile(r"^OVERLAP=(\w+)\|(\w+)$")
+
+
+# 겹침 문단의 형을 `HEADING` 블록에서 꺼내는 **예약 낱말**. 그 블록의 다른 행과 같이 이 낱말이 자기
+# 형의 문면에 서므로, 검사 34 가 이 낱말을 든 머리말을 그 형과 맞댄다. 이 검사는 머리말을 낱말로
+# 고르지 않고 형과 맞대어 고른다. 형과 맞는 머리말은 이 낱말을 반드시 들고, 낱말을 들면서 형과 맞지
+# 않는 머리말은 검사 34 가 받는다. 그 낱말이 블록에 실재하는지와 형이 하나인지를 단언이 지킨다.
+OVERLAP_WORD = "겹치되"
+
+
+REFINES_ROW = re.compile(r"\.refines\s+\.(\w+)\s+\.(\w+)")
+
+
+def overlap_pairs(led: Ledger) -> list[tuple[str, str]]:
+    """`OVERLAP` 블록이 든 쌍. 블록의 줄 순서를 지킨다."""
+    return [(m.group(1), m.group(2)) for m in
+            map(OVERLAP_LINE.match, _baseline_block(led, OVERLAP_BLOCK).splitlines()) if m]
+
+
+def registry_refines(led: Ledger, d: DocDecl) -> dict[str, set[str]]:
+    """등록 관계의 본문이 든 정제. 하위 개념마다 그 상위 개념의 집합을 낸다."""
+    out: dict[str, set[str]] = {}
+    for m in REFINES_ROW.finditer(registry_code(led, d)):
+        out.setdefault(m.group(1), set()).add(m.group(2))
+    return out
+
+
+def check_62(led: Ledger) -> Report:
+    r = Report("62", "wiki62-overlap-paragraph",
+               "OVERLAP 블록이 든 쌍마다 두 개념이 같은 상위 개념의 정제로 등록되어 있고 배타 관계가 "
+               "등록되지 않았으며, 두 개념의 한국어 이름을 머리말에 함께 든 겹침 문단이 하나 서는가",
+               "fail")
+    # 유니버스. 블록이 비어 있으면 통과가 아니라 실패다. 가리킬 대상이 없는데 통과시키면 이
+    # 검사가 공허해진다. 검사 38 이 같은 요구를 둔다.
+    pairs = overlap_pairs(led)
+    if not pairs:
+        r.bad("docs/baseline.md 의 OVERLAP 블록이 없거나 비어 있다")
+        return r
+    _, forms = heading_rules(led)
+    if OVERLAP_WORD not in forms:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에 예약 낱말 `{OVERLAP_WORD}` 이 없다")
+        return r
+    # 형이 하나이고 가변 구간이 하나인 것을 단언한다. `heading_fill` 이 그 형만 받으며, 형이 둘이면
+    # 어느 것으로 고를지가 서지 않는다.
+    if len(forms[OVERLAP_WORD]) != 1 or forms[OVERLAP_WORD][0].count("*") != 1:
+        r.bad(f"docs/baseline.md 의 HEADING 블록에서 예약 낱말 `{OVERLAP_WORD}` 의 형이 "
+              f"{len(forms[OVERLAP_WORD])} 개이거나 가변 구간을 하나 두지 않는다. 형 하나에 "
+              f"가변 구간 하나여야 한다")
+        return r
+    form = forms[OVERLAP_WORD][0]
+
+    got = excl_registry(led)
+    if got is None:
+        r.bad(f"등록 관계를 드는 선언 `{EXCL_DECL}` 이 리포 소스에 없다")
+        return r
+    decl, _parts, excl = got
+    refines = registry_refines(led, decl)
+    labels = concept_labels(led, decl.rel)
+
+    # 겹침 문단. 머리말이 형과 맞는 문단을 고르고 그 가변 구간의 문면을 얻는다. 쌍과 문단을 맺는
+    # 것은 그 문면이 두 개념의 한국어 이름을 함께 드는가이며, 이름의 순서와 그 사이의 조사는 보지
+    # 않는다.
+    fills: list[str] = []
+    for p in decl.paras:
+        head = para_heading(p)
+        fill = heading_fill(form, head) if head is not None else None
+        if fill is not None:
+            fills.append(fill)
+
+    used: set[int] = set()
+    for a, b in pairs:
+        # ㉠ 두 개념이 같은 상위 개념의 정제로 등록되어 있는가. 유령 이름과 정제가 아닌 쌍을 막는다.
+        if not (refines.get(a, set()) & refines.get(b, set())):
+            r.bad(f"OVERLAP 블록의 `{a}` 와 `{b}` 가 `{EXCL_DECL}` 에서 같은 상위 개념의 정제로 "
+                  f"등록되어 있지 않다")
+        # ㉡ 그 쌍에 배타 관계가 등록되지 않았는가. 등록되어 있으면 겹친다는 문단이 거짓이 된다.
+        if frozenset((a, b)) in excl:
+            r.bad(f"OVERLAP 블록의 `{a}` 와 `{b}` 에 `{EXCL_DECL}` 이 배타 관계를 등록하고 있다")
+        la, lb = labels.get(a), labels.get(b)
+        if not la or not lb:
+            r.bad(f"OVERLAP 블록의 `{a if not la else b}` 의 한국어 이름을 그 생성자의 "
+                  f"docstring 에서 읽을 수 없다")
+            continue
+        # ㉢ 그 쌍을 드는 겹침 문단이 하나인가.
+        hit = [i for i, fill in enumerate(fills) if la in fill and lb in fill]
+        used.update(hit)
+        if len(hit) != 1:
+            r.bad(f"{decl.rel}:{decl.line}: OVERLAP 블록의 `{a}`(`{la}`) 와 `{b}`(`{lb}`) 를 "
+                  f"머리말에 함께 든 겹침 문단이 {len(hit)} 개다. 하나여야 한다")
+
+    # 미정리분. 같은 상위 개념의 정제로 선 쌍 가운데 블록에 들지 않은 것이며, 배타 관계가 등록된
+    # 것과 등록되지 않은 것을 갈라 낸다. 앞의 것은 이미 정리된 쌍이고 뒤의 것이 겹침 여부가 문면에
+    # 서지 않은 쌍이다.
+    by_parent: dict[str, set[str]] = {}
+    for child, parents in refines.items():
+        for parent in parents:
+            by_parent.setdefault(parent, set()).add(child)
+    siblings: set[frozenset] = set()
+    for kids in by_parent.values():
+        ks = sorted(kids)
+        siblings.update(frozenset((x, y)) for i, x in enumerate(ks) for y in ks[i + 1:])
+    outside = siblings - {frozenset(p) for p in pairs}
+    n_excl = sum(1 for s in outside if s in excl)
+    r.note(f"OVERLAP 블록의 쌍 {len(pairs)} · 겹침 문단 {len(fills)} · 블록의 쌍에 맺히지 않은 "
+           f"겹침 문단 {len(fills) - len(used)}")
+    r.note(f"같은 상위 개념의 정제로 선 쌍 {len(siblings)} · 블록에 들지 않은 것 {len(outside)} "
+           f"(배타 관계가 등록된 것 {n_excl} · 등록되지 않은 것 {len(outside) - n_excl})")
+    r.note("블록에 들지 않은 정제 쌍은 소급되지 않고 미정리분의 크기만 보고된다(SPEC §2.1)")
     return r
 
 
@@ -942,4 +1070,5 @@ CHECKS = (
     check_48,
     check_57,
     check_60,
+    check_62,
 )

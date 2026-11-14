@@ -1046,6 +1046,107 @@ def check_58(led: Ledger) -> Report:
     return r
 
 
+# 검사 63 이 소진 표지로 읽는 `QUEUEMARK` 블록의 키. 낱말을 코드에 박지 않고 이 키로 블록에서 꺼내며,
+# 그 키가 블록에 실재하는지를 단언이 지킨다. 검사 58 은 표지의 낱말을 키로 고르지 않으나, 이 검사는
+# 표지 셋 가운데 소진 하나를 골라야 하므로 그 키 하나를 든다.
+QUEUEMARK_SPENT = "QUEUEMARK_SPENT"
+
+
+# 검사 63 이 지목을 맞대는 칸. 첫 칸이 편의 이름이고 이연의 `ref` 가 그 이름을 든다. 행 전체로 맞대면
+# 다른 행의 기대 재료 칸이 든 번호나 구절에 닿아 닿지 않아야 할 항이 닿은 것으로 세어진다.
+QUEUE_REF_CELL = 0
+
+
+def queue_ref_key(s: str) -> str:
+    """지목을 맞대는 변. 공백을 전량 지운다.
+
+    접지 않으면 저자 이름의 가운뎃점 둘레에 선 공백 때문에 닿는 행이 닿지 않는 것으로 세어지고, 그
+    거짓 음성이 적발을 작게 낸다(SPEC §2.2).
+    """
+    return re.sub(r"\s+", "", s)
+
+
+def queue_ref_rows(rows: list[tuple[int, list[str]]], ref: str) -> list[tuple[int, list[str]]]:
+    """그 지목이 닿는 표의 행. 공백을 지운 지목이 공백을 지운 편의 이름 칸 안에 서면 닿는다."""
+    key = queue_ref_key(ref)
+    if not key:
+        return []
+    return [(line, cells) for line, cells in rows
+            if len(cells) > QUEUE_REF_CELL and key in queue_ref_key(cells[QUEUE_REF_CELL])]
+
+
+def check_63(led: Ledger) -> Report:
+    r = Report("63", "wiki63-queue-spent-alive",
+               "재개 트리거가 추출 갈래인 살아 있는 이연 가운데 읽기 대기열의 지목 참조 대기 표에서 "
+               "소진 표지를 든 행에 닿는 것과 그 표의 어느 행에도 닿지 않는 것의 계수와 번호", "report")
+    marks = queuemark_block(led)
+    for key in (QUEUEMARK_SECTION, QUEUEMARK_SPENT):
+        if key not in marks:
+            r.bad(f"docs/baseline.md 의 QUEUEMARK 블록에 {key} 가 없다")
+            return r
+    spent = marks[QUEUEMARK_SPENT]
+    q = led.root / READING_QUEUE_DOC
+    if not q.is_file():
+        r.bad(f"{READING_QUEUE_DOC} 이 없다")
+        return r
+    heading = marks[QUEUEMARK_SECTION]
+    at, rows = queue_section_rows(q.read_text(encoding="utf-8"), heading)
+    if at is None:
+        r.bad(f"{READING_QUEUE_DOC} 에서 절 제목 `{heading}` 을 찾지 못했다")
+        return r
+    # 행이 비면 어느 항도 닿지 않아 적발이 0 으로 난다. 검사 58 이 같은 요구를 둔다.
+    if not rows:
+        r.bad(f"{READING_QUEUE_DOC}:{at} 의 절에서 표의 행을 하나도 읽지 못했다")
+        return r
+    # 유니버스. 검사 43 과 같은 이연을 본다. 그 검사는 추출 기록의 실재를 보고 이 검사는 읽기
+    # 대기열의 표지를 본다.
+    live = [e for e in led.reg["deferred"]
+            if isinstance(e.get("reopen_when"), dict)
+            and e["reopen_when"].get("kind") == "extraction"
+            and e.get("id") not in led.dead]
+    caught: list[str] = []
+    multi: list[str] = []
+    numbered: list[str] = []
+    loose: list[str] = []
+    n_hit = 0
+    for e in live:
+        eid = str(e.get("id"))
+        ref = str(e["reopen_when"].get("ref") or "")
+        hit = queue_ref_rows(rows, ref)
+        if not hit:
+            # 닿지 않는 항은 적발의 유니버스 밖이다. 추출 기록의 번호를 드는 항은 해소되는 자리가
+            # 그 표가 아니므로 별도 계수로 내고, 번호도 들지 않는 항은 그 지목이 어느 자리에도
+            # 맺히지 않은 것이므로 따로 낸다.
+            n = extraction_ref_number(ref)
+            if n is not None:
+                numbered.append(f"{eid} — E-{n:02d}")
+            else:
+                loose.append(f"{eid} — `ref` {ref!r}")
+            continue
+        n_hit += 1
+        if len(hit) > 1:
+            multi.append(f"{eid} — " + " · ".join(f"{READING_QUEUE_DOC}:{line}" for line, _ in hit))
+        for line, cells in hit:
+            cell = cells[QUEUEMARK_CELL] if len(cells) > QUEUEMARK_CELL else ""
+            if spent in cell:
+                caught.append(f"{eid} — {READING_QUEUE_DOC}:{line} — {cells[QUEUE_REF_CELL]}")
+    r.note(f"유니버스는 재개 트리거가 추출 갈래인 살아 있는 이연 {len(live)}건 · 절 `{heading}` "
+           f"({READING_QUEUE_DOC}:{at}) 의 표의 행 {len(rows)}")
+    r.note(f"표의 행에 닿은 항 {n_hit}건 · 그 가운데 둘 이상의 행에 닿은 항 {len(multi)}건")
+    for line in multi:
+        r.note(line)
+    r.note(f"`{spent}` 표지를 든 행에 닿은 항 {len(caught)}건")
+    for line in caught:
+        r.note(line)
+    r.note(f"어느 행에도 닿지 않고 추출 기록의 번호를 드는 항 {len(numbered)}건")
+    for line in numbered:
+        r.note(line)
+    r.note(f"어느 행에도 닿지 않고 추출 기록의 번호도 들지 않는 항 {len(loose)}건")
+    for line in loose:
+        r.note(line)
+    return r
+
+
 def check_59(led: Ledger) -> Report:
     r = Report("59", "wiki59-extraction-stem-unique",
                "추출 기록 디렉터리의 파일 이름에서 번호를 뗀 줄기가 전량 유일한가", "fail")
@@ -1165,4 +1266,5 @@ CHECKS = (
     check_58,
     check_59,
     check_61,
+    check_63,
 )

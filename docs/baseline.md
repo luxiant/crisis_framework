@@ -235,6 +235,7 @@ HEADING=수 체계|L-10|수 체계를 받지 않는다.
 HEADING=값을 담지 않는다|L-14|값을 담지 않는다.
 HEADING=배타적|V-8|* 분할의 모든 쌍이 배타적이다.
 HEADING=배타적|V-8|* 분할에 배타적이지 않은 쌍이 있다.
+HEADING=겹치되|V-9|* 쌍이 겹치되 어느 쪽도 다른 쪽을 포함하지 않는다.
 <!-- HEADING:END -->
 
 <!-- DOCFORM:BEGIN -->
@@ -440,6 +441,13 @@ EXCL=pledge
 EXCL=assetPartitionRegime
 <!-- EXCL:END -->
 
+**겹치는 정제 쌍.** 검사 62 가 읽는다. 상위 개념의 정제로 둘 다 등록된 쌍 가운데 어느 쪽도 다른 쪽을 포함하지 않으면서 겹치는 것을 든다. 블록에 들지 않은 쌍은 소급되지 않고 미정리분의 크기만 보고된다.
+
+<!-- OVERLAP:BEGIN -->
+OVERLAP=ultimateCreditorClaim|retailOutflowEquivalentClaim
+OVERLAP=currencyPositionMismatch|currencyFundingLinkMismatch
+<!-- OVERLAP:END -->
+
 블록에 분할을 더하면 그 분할의 배타성 문단을 함께 세운다. 문단만 쓰고 블록에 더하지 않으면 검사가
 그것을 보지 않으며, 블록에 더하고 문단을 쓰지 않으면 검사가 실패시킨다.
 
@@ -571,6 +579,7 @@ SESSIONCLAUSE=V-5
 SESSIONCLAUSE=V-6
 SESSIONCLAUSE=V-7
 SESSIONCLAUSE=V-8
+SESSIONCLAUSE=V-9
 SESSIONCLAUSE=W-1
 SESSIONCLAUSE=W-3
 SESSIONCLAUSE=W-4

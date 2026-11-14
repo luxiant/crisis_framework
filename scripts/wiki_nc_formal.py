@@ -312,6 +312,71 @@ def inj_38_empty(root):
     f.write_text(new, encoding="utf-8")
 
 
+def _nc62(root):
+    """사본의 등록 관계와 겹침 문단의 형. 검증기의 수집기를 그대로 써서 주입과 판정이 같은 자리를 본다."""
+    led = wiki_common.Ledger(root)
+    got = wiki_formal.excl_registry(led)
+    if got is None:
+        raise SystemExit("등록 관계를 드는 선언이 없어 주입 대상이 없다")
+    decl, _parts, excl = got
+    forms = wiki_common.heading_rules(led)[1].get(wiki_formal.OVERLAP_WORD) or []
+    if len(forms) != 1:
+        raise SystemExit("겹침 문단의 형이 하나가 아니어서 주입 대상을 고를 수 없다")
+    return led, decl, excl, forms[0]
+
+
+def inj_62_excl(root):
+    """`OVERLAP` 블록의 한 쌍을 배타 관계가 등록된 쌍으로 바꾼다.
+
+    같은 상위 개념의 정제이면서 배타 관계가 등록된 쌍을 고른다. 정제의 조건까지 맞추어 두어야 이
+    주입이 배타의 단언을 겨누며, 정제가 아닌 쌍을 고르면 다른 단언이 먼저 걸려 그 단언이 재어지지
+    않는다. 쌍을 박지 않고 등록 관계에서 유도한다.
+    """
+    led, decl, excl, _form = _nc62(root)
+    refines = wiki_formal.registry_refines(led, decl)
+    target = next((p for p in sorted(tuple(sorted(x)) for x in excl)
+                   if refines.get(p[0], set()) & refines.get(p[1], set())), None)
+    if target is None:
+        raise SystemExit("같은 상위 개념의 정제이면서 배타 관계가 등록된 쌍이 없어 주입 대상이 없다")
+    f = root / "docs" / "baseline.md"
+    text = f.read_text(encoding="utf-8")
+    m = wiki_formal.OVERLAP_BLOCK.search(text)
+    first = next((ln for ln in (m.group(1).splitlines() if m else [])
+                  if wiki_formal.OVERLAP_LINE.match(ln)), None)
+    if first is None:
+        raise SystemExit("OVERLAP 블록의 쌍을 찾지 못했다")
+    body = m.group(1).replace(first, f"OVERLAP={target[0]}|{target[1]}", 1)
+    f.write_text(text[:m.start(1)] + body + text[m.end(1):], encoding="utf-8")
+    return f"{target[0]}|{target[1]}"
+
+
+def inj_62_name(root):
+    """겹침 문단 하나의 머리말에서 한 개념의 이름을 지운다.
+
+    문단은 남기고 이름 하나만 지운다. 문단을 통째로 지우는 주입은 형과 맞는 문단을 고르는
+    자리만 재고, 쌍과 문단을 두 이름으로 맺는 자리를 재지 않는다.
+    """
+    led, decl, _excl, form = _nc62(root)
+    labels = wiki_formal.concept_labels(led, decl.rel)
+    for a, b in wiki_formal.overlap_pairs(led):
+        la, lb = labels.get(a), labels.get(b)
+        if not la or not lb:
+            continue
+        for p in decl.paras:
+            head = wiki_common.para_heading(p)
+            fill = wiki_formal.heading_fill(form, head) if head is not None else None
+            if fill is None or la not in fill or lb not in fill:
+                continue
+            f = root / decl.rel
+            text = f.read_text(encoding="utf-8")
+            raw = f"**{head}**"
+            if text.count(raw) != 1:
+                raise SystemExit("겹침 문단의 머리말을 파일에서 한 번으로 찾지 못했다")
+            f.write_text(text.replace(raw, f"**{head.replace(lb, '', 1)}**", 1), encoding="utf-8")
+            return f"{a}|{b}"
+    raise SystemExit("OVERLAP 블록의 쌍을 든 겹침 문단이 없어 주입 대상이 없다")
+
+
 # 검사 48 의 주입이 세우는 사본의 파일. **주입이 제 대상을 세운다.** 경계 안 표지를 가진 선언이
 # 받은 판에 아직 없으므로 기존 선언을 굽히는 꼴로는 이 주입이 서지 않으며, 경계가 뒤 회차에
 # 올라가도 같은 사유로 공허해지지 않는다. 자리를 정의층에 두는 까닭은 그 검사의 유니버스가
@@ -516,4 +581,6 @@ CASES = [
     ("57", "wiki57-cq-count-numeral", "그 머리 블록에 항의 수를 수사로 적는다", inj_57_numeral, None),
     ("60", "wiki60-currency-guard", "가드 없는 합을 하나 더한다", inj_60_unguarded, None),
     ("60", "wiki60-currency-guard", "타입클래스 바인더와 통화 인자만 더한 선언을 주입한다", inj_60_binder_only, None),
+    ("62", "wiki62-overlap-paragraph", "OVERLAP 블록의 한 쌍을 배타 관계가 등록된 쌍으로 바꾼다", inj_62_excl, None),
+    ("62", "wiki62-overlap-paragraph", "겹침 문단 하나의 머리말에서 한 개념의 이름을 지운다", inj_62_name, None),
 ]
