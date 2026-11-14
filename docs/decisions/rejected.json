@@ -6594,6 +6594,312 @@
    "related": [
     "CF-3725"
    ]
+  },
+  {
+   "id": "CF-3747",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "망의 종류를 담보와 자금조달과 결제처럼 기능으로 가르는 안. 종류를 타입 클래스로 두고 각 망 구조가 인스턴스를 갖게 하는 안.",
+   "reason": "이름이 짧아지나 한 기능이 여러 구조에 걸쳐 그 원소가 어느 선언을 가리키는지가 서지 않으며, 구조의 이름으로 두면 그 대응이 단사이고 구조가 늘 때 원소를 더하는 것이 그 자리에서 유도된다. 타입 클래스로 두면 종류를 값으로 받는 술어를 세울 수 없고, 이 열거를 받는 답할 항이 그 종류를 인자로 받으므로 값이어야 한다.",
+   "for": "망의 종류를 무엇으로 가를지.",
+   "statement": "망의 종류를 기능으로 가르는 안과 타입 클래스로 두는 안을 기각한다",
+   "basis": "그 원소 이름을 리포에 이미 선 망 구조에서 받기로 했다. 주체와 노드의 입도를 드는 열거가 같은 꼴로 선 선례다.",
+   "for_decl": "CrisisFramework.Definition.NetworkKind",
+   "related": [
+    "CF-3740"
+   ]
+  },
+  {
+   "id": "CF-3748",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "열거 자체를 시점으로 색인된 타입족으로 두는 안. 종류마다 처음 선 시점을 필드로 두는 안.",
+   "reason": "시대 의존이 타입에 서나 그 열거를 받는 답할 항의 공역이 시점마다 갈려 고정한 서명을 어기며, 그 항의 기각 문단이 층 위의 술어로 두면 층을 더하는 것이 새 삼항을 더할 뿐 옛 삼항의 답을 바꾸지 않는다고 이미 적는다. 처음 선 시점을 필드로 두면 사라지는 종류를 담지 못하는데 한 발행자의 상대방 집합이 늘어나고 줄어들며 그 줄어듦이 폐기가 아니라 만료다.",
+   "for": "망의 종류가 시점에 따라 달라지는 것을 어디에 담을지.",
+   "statement": "열거를 시점으로 색인하는 안과 처음 선 시점을 필드로 두는 안을 기각한다",
+   "basis": "그 종류가 그 시점에 섰는지를 내는 술어를 따로 두기로 했다. 답할 항의 서명이 값 정본의 고정 블록에 서 있다.",
+   "for_decl": "CrisisFramework.Definition.NetworkVintage",
+   "related": [
+    "CF-3741"
+   ]
+  },
+  {
+   "id": "CF-3749",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "종류마다 색인 집합과 배정 함수를 갖는 구조체를 두는 안. 이어짐을 청구권의 색인으로 두는 안.",
+   "reason": "앞 아크들의 꼴과 같아지나 그 색인이 유한 집합이어서 몫의 건전성과 명제 외연성을 끌어오고, 관측층의 공리 기준선이 비어 있어 그 층이 이 대상을 서명에서 받는 순간 초과가 선다. 청구권의 색인으로 두면 종류가 다섯이고 그 가운데 둘이 청구권을 색인으로 쓰지 않아 한 색인 타입으로 묶이지 않는다.",
+   "for": "노드 쌍의 이어짐을 무엇으로 담을지.",
+   "statement": "색인 집합을 갖는 구조체로 두는 안과 청구권의 색인으로 두는 안을 기각한다",
+   "basis": "색인을 쓰지 않는 술어로 담기로 했다. 그 색인의 합이 회계층 전반의 항등식에 쓰여 그릇을 전역으로 바꾸는 것이 그 층 전량을 다시 쓰는 일이다.",
+   "for_decl": "CrisisFramework.Definition.NetworkMembership",
+   "related": [
+    "CF-3742"
+   ]
+  },
+  {
+   "id": "CF-3750",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이어짐 구조체 안에 시점을 받는 필드를 더하는 안.",
+   "reason": "필드를 더하면 그 구조체를 받는 선언이 전부 그 필드를 채워야 하고 시점을 쓰지 않는 자리까지 값을 지어 넣게 되며, 족으로 올리면 기존 구조체가 그대로 서고 시점을 쓰지 않는 자리가 상수 축약으로 닫힌다.",
+   "for": "이어짐의 시점 의존을 어느 자리에 담을지.",
+   "statement": "이어짐 구조체에 시점 필드를 더하는 안을 기각한다",
+   "basis": "시점 인덱스를 갖는 족으로 올리고 상수 축약을 함께 세우기로 했다. 같은 꼴의 족이 정의층에 여럿 서 있다.",
+   "for_decl": "CrisisFramework.Definition.NetworkMembershipFamily",
+   "related": [
+    "CF-3742"
+   ]
+  },
+  {
+   "id": "CF-3751",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "종류의 목록을 받아 그 전량에서 이어지는지를 접는 안. 겹침을 종류의 쌍이 아니라 그 쌍의 집합으로 두는 안.",
+   "reason": "종류가 늘어도 서명이 그대로이나 목록을 받으면 그 접기가 빈 목록에서 참을 내어 아무 쌍도 잇지 않는 자리가 둘 다 이어지는 것으로 선다. 집합으로 두면 유한 집합이 몫의 건전성을 끌어오고 이 대상이 관측층의 서명에 드는 자리가 그 초과를 낸다.",
+   "for": "두 종류의 겹침을 무엇으로 물을지.",
+   "statement": "종류의 목록을 접는 안과 종류의 집합으로 두는 안을 기각한다",
+   "basis": "종류 둘을 인자로 받는 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.NetworkMembership.linkedInBoth",
+   "related": [
+    "CF-3742"
+   ]
+  },
+  {
+   "id": "CF-3752",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "증거의 주체를 불린 타입으로 두는 안.",
+   "reason": "선언이 하나 줄지만 불린이 판정의 타입이어서 노드로 쓰면 이어짐의 값과 노드의 값이 같은 타입으로 서고, 선례가 증거용 주체마다 열거를 세운다.",
+   "for": "증거의 주체 타입을 무엇으로 둘지.",
+   "statement": "증거의 주체를 불린 타입으로 두는 안을 기각한다",
+   "basis": "증거용 주체 열거를 따로 세우기로 했다. 전달 엣지의 증거가 같은 꼴로 선 선례다.",
+   "for_decl": "CrisisFramework.Definition.NetworkWitnessNode",
+   "related": [
+    "CF-3742"
+   ]
+  },
+  {
+   "id": "CF-3753",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "구조가 비어 있지 않음을 보이는 인스턴스를 존재 정리의 증거로 쓰는 안.",
+   "reason": "앞 페이즈들이 같은 안을 기각하면서 그 인스턴스의 값이 무엇인지가 우연이고 존재 정리가 그것을 증거로 쓰면 그 정리가 그 값에 매달린다고 적었으며, 그 값을 뒤에 고치면 정리가 조용히 다른 것을 말하게 된다.",
+   "for": "존재 정리의 증거를 무엇으로 둘지.",
+   "statement": "비어 있지 않음의 인스턴스를 존재 정리의 증거로 쓰는 안을 기각한다",
+   "basis": "한 종류에서만 이어지는 쌍과 두 종류에서 이어지는 쌍을 함께 내는 증거를 따로 세우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.networkMembershipWitness",
+   "related": [
+    "CF-3742"
+   ]
+  },
+  {
+   "id": "CF-3754",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "종류가 사라지는 배치를 증거로 두는 안.",
+   "reason": "한 발행자의 임시 약정이 만료되도록 두어진 것이 그 사례이나 이 증거가 딛는 정리가 어느 시점에 서지 않는 종류의 존재를 들므로 생김과 사라짐 가운데 하나면 족하고, 둘을 함께 담으면 그 정리가 어느 쪽을 딛는지가 흐려진다.",
+   "for": "시대 지위의 증거를 무엇으로 둘지.",
+   "statement": "종류가 사라지는 배치를 시대 지위의 증거로 두는 안을 기각한다",
+   "basis": "한 종류가 뒤늦게 서는 배치를 증거로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.networkVintageWitness",
+   "related": [
+    "CF-3741"
+   ]
+  },
+  {
+   "id": "CF-3755",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "한 쌍이 드는지를 내는가와 그 망의 쌍 전량을 내는가를 한 칸으로 접는 안. 경로를 종류마다 따로 세우는 안.",
+   "reason": "칸이 짧아지나 자기 쌍만 내는 공시와 전량을 내는 공시가 같은 값으로 서고, 앞은 그 발행자를 한쪽 끝으로 갖는 쌍만 유도되는데 뒤는 그렇지 않으므로 그 갈림이 사라진다. 종류마다 경로를 세우면 한 공시가 여러 종류를 함께 내는 자리에서 그 공시의 수취인과 값의 성질이 종류마다 중복으로 선다.",
+   "for": "공시 경로의 축을 어떻게 가를지.",
+   "statement": "두 축을 한 칸으로 접는 안과 경로를 종류마다 세우는 안을 기각한다",
+   "basis": "쌍의 이어짐과 전량의 완비성을 다른 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.NetworkIndexChannel",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3756",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "발행자의 공시를 종류마다 갈라 여러 경로로 세우는 안.",
+   "reason": "결손이 종류별로 보이나 같은 표에서 읽히는 종류들이 서로 다른 경로로 갈려 그 표가 자기 쌍만 낸다는 사실이 종류마다 중복으로 선다.",
+   "for": "발행자의 공시를 몇 경로로 셀지.",
+   "statement": "발행자의 공시를 종류마다 여러 경로로 세우는 안을 기각한다",
+   "basis": "한 경로로 두고 내는 종류를 칸이 들게 했다.",
+   "for_decl": "CrisisFramework.Observation.issuerCounterpartyTable",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3757",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "제삼자의 분석을 경로 목록에서 빼는 안.",
+   "reason": "공식 자료만 남아 목록이 깔끔해지나 완비성을 내는 자리가 실재한다는 사실이 사라지고, 그러면 그 축의 결손이 어디에도 값이 없다는 뜻으로 읽힌다.",
+   "for": "제삼자의 분석을 경로 목록에 둘지.",
+   "statement": "제삼자의 분석을 경로 목록에서 빼는 안을 기각한다",
+   "basis": "그 분석을 경로로 두고 값의 성질을 추정으로 적기로 했다.",
+   "for_decl": "CrisisFramework.Observation.thirdPartyNetworkStudy",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3758",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "그 등록부를 경로 목록에서 빼는 안.",
+   "reason": "쌍을 내지 않는 경로가 사라져 목록이 짧아지나 그 종류의 망에 대해 어느 축도 내지 않는 자리가 실재한다는 사실이 목록에서 지워지고, 관측층에 등재되는 소스 없음이 주요 산출물이라는 요구가 그 자리에서 집행되지 않는다.",
+   "for": "어느 축도 내지 않는 원천을 경로로 둘지.",
+   "statement": "쌍을 내지 않는 등록부를 경로 목록에서 빼는 안을 기각한다",
+   "basis": "그 등록부를 경로로 두고 그 칸을 거짓으로 적기로 했다.",
+   "for_decl": "CrisisFramework.Observation.tradeFinanceRegistry",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3759",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "경로를 수취인으로 걸러 공표되는 것만 목록에 두는 안.",
+   "reason": "이 목록의 세 경로가 전부 일반 관측자를 수취인으로 두어 그 거르기가 지금은 아무것도 걸러 내지 않으나, 걸러 내는 자리를 매번 다시 세우면 목록 전량을 훑는 판정이 그 거르기의 결과에 걸려 한 자리에 고정되지 않는다.",
+   "for": "경로 목록을 무엇으로 닫을지.",
+   "statement": "경로를 수취인으로 걸러 목록을 짓는 안을 기각한다",
+   "basis": "목록을 한 자리에 고정하고 수취인을 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.networkIndexChannels",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3760",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "종류를 내는 경로와 쌍을 내는 경로가 따로 있으면 이어짐이 읽힌다고 보는 안.",
+   "reason": "더 많은 자리에서 참이 되나 한 경로가 둘을 함께 내야 한다는 요구가 사라져 다른 종류의 쌍을 내는 경로가 이 종류의 이어짐을 메우는 것으로 선다.",
+   "for": "이어짐을 읽을 자리가 있는가를 무엇으로 물을지.",
+   "statement": "두 축을 다른 경로에서 읽어도 이어짐이 선다고 보는 안을 기각한다",
+   "basis": "한 경로가 그 종류와 쌍을 함께 내는 것을 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.readsNetworkCut",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3761",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "전량을 내는가를 자기 쌍만 내는가의 부정으로 두는 안.",
+   "reason": "칸이 하나 줄지만 자기 쌍만 내지 않는 경로가 전량을 내는 것으로 서며, 어느 축도 내지 않는 경로가 그 부정에서 참이 되어 아무것도 내지 않는 자리가 전량을 내는 자리로 둔갑한다.",
+   "for": "완비성을 무엇으로 물을지.",
+   "statement": "완비성을 자기 쌍만 내는가의 부정으로 두는 안을 기각한다",
+   "basis": "완비성을 독립한 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.readsNetworkCompleteness",
+   "related": [
+    "CF-3743"
+   ]
+  },
+  {
+   "id": "CF-3762",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "절단의 술어를 정의층 구조체로 세워 이 선언이 그것을 받게 하는 안. 전량을 내는 경로가 없으면 답을 내지 않는 안.",
+   "reason": "타입이 하나 늘고 그 구조체가 실제 문면에서 조달한 배제 사례를 요구하는데, 제재의 시점열이 동학층의 외생 입력이고 시점열이 데이터이지 모형이 아니라는 판정이 이미 서 있으므로 그 구조체가 담을 것이 함수 하나다. 완비성을 요구하면 이 물음이 한 주체가 잘렸는지를 묻고 빠진 쌍이 없음을 묻지 않으므로 답이 서는 자리가 과하게 좁아진다.",
+   "for": "제재의 절단을 어디서 받을지.",
+   "statement": "절단을 정의층 구조체로 세우는 안과 완비성을 답의 조건으로 두는 안을 기각한다",
+   "basis": "절단을 함수로 받고 이어짐을 읽을 자리가 있는가만 조건으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.sanctionTextCutVia",
+   "related": [
+    "CF-3744"
+   ]
+  },
+  {
+   "id": "CF-3763",
+   "origin": {
+    "arc": "network",
+    "phase": "network-5",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "절단이 어느 종류에서 참을 내는 값을 증거로 두는 안.",
+   "reason": "성립과 불성립을 함께 보일 수 있으나 이 파일이 드는 것은 절단의 값이 아니라 그 값을 읽을 자리가 있는가이며, 참을 주면 그 둘이 한 증거에 섞인다.",
+   "for": "절단의 증거를 무엇으로 둘지.",
+   "statement": "절단에 참을 주는 값을 증거로 두는 안을 기각한다",
+   "basis": "어느 자리에서도 거짓을 내는 족을 증거로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.noSanctionCut",
+   "related": [
+    "CF-3744"
+   ]
   }
  ]
 }
