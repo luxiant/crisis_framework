@@ -36,8 +36,8 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `currency-8` (2026-11-09, `b9d65bc`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-5` (2026-11-14, `d80b8a4`) |
-| 관측층 | 무차원 | `[]` | `network-5` (2026-11-14, `d80b8a4`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-6` (2026-11-15, `1db53ec`) |
+| 관측층 | 무차원 | `[]` | `network-6` (2026-11-15, `1db53ec`) |
 | 용어집 | 없음 | `[]` | `network-4` (2026-11-14, `45f243e`) |
 | 동학층 | `ℝ` | **미측정** | |
 

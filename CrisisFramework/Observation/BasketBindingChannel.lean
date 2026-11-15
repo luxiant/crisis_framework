@@ -279,7 +279,7 @@ def basketCurrencyWeightObserved (chs : List BasketBindingChannel) : ObservedTru
 -- DD:CF-3770
 theorem no_channel_answers_basket_binding :
     basketBindingChannels.all (fun c => !c.answersBinding) = true := by
-  sorry
+  rfl
 
 /--
 통화와 금액의 축은 읽히고 의무 식별의 축은 어느 경로에서도 읽히지 않는다.
@@ -299,7 +299,7 @@ theorem basket_binding_axes_split :
     basketBindingChannels.all (fun c => c.readsLegCurrency) = true
       ∧ basketBindingChannels.all (fun c => c.readsLegAmount) = true
       ∧ basketBindingChannels.all (fun c => !c.readsObligationIdentity) = true := by
-  sorry
+  exact ⟨rfl, rfl, rfl⟩
 
 /--
 묶음의 판정이 각 인자에서 홀로 값을 가른다.
@@ -326,7 +326,7 @@ theorem basket_binding_answer_pins_each_conjunct :
             readsLegCurrency := false,
             readsObligationIdentity := true }.answersBinding = false
       ∧ BasketBindingChannel.noSource.answersBinding = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl, rfl⟩
 
 /--
 그 묶음의 관측이 측정 소스 없음으로 선다.
@@ -344,7 +344,7 @@ theorem basket_binding_answer_pins_each_conjunct :
 theorem basket_binding_observed_undetermined :
     basketBindingObserved basketBindingChannels
       = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
-  sorry
+  rfl
 
 /--
 통화별 몫의 판정이 각 인자에서 홀로 값을 가른다.
@@ -367,7 +367,7 @@ theorem currency_weight_answer_pins_each_conjunct :
       ∧ { documentaryCreditIssue with
             readsLegAmount := false,
             readsObligationIdentity := true }.answersCurrencyWeight = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl⟩
 
 /--
 금액이 읽히는데도 통화별 몫의 관측이 측정 소스 없음으로 선다.
@@ -388,6 +388,6 @@ theorem basket_currency_weight_undetermined :
     basketBindingChannels.all (fun c => c.readsLegAmount) = true
       ∧ basketCurrencyWeightObserved basketBindingChannels
           = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
-  sorry
+  exact ⟨rfl, rfl⟩
 
 end CrisisFramework.Observation

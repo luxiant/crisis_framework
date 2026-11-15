@@ -256,7 +256,7 @@ def inducedLinkObserved {Node : Type}
 -- DD:CF-3769
 theorem no_channel_answers_induced_link :
     inducedLinkChannels.all (fun c => !c.answersInducedLink) = true := by
-  sorry
+  rfl
 
 /--
 적격 판정의 축은 읽히고 쌍의 축은 어느 경로에서도 읽히지 않는다.
@@ -279,7 +279,7 @@ theorem induced_link_axes_split :
     eligibleCollateralList.readsInducingConstraint = true
       ∧ inducedLinkChannels.all (fun c => !c.readsInducedMembership) = true
       ∧ pledgeMembershipReadByIndex = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl⟩
 
 /--
 그 판정이 각 인자에서 홀로 값을 가른다.
@@ -308,7 +308,7 @@ theorem induced_link_answer_pins_each_conjunct :
             readsInducingConstraint := false,
             readsInducedMembership := true } :
               InducedLinkChannel Unit).answersInducedLink = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl, rfl⟩
 
 /--
 그 사상의 관측이 측정 소스 없음으로 선다.
@@ -326,6 +326,6 @@ theorem induced_link_answer_pins_each_conjunct :
 theorem induced_link_observed_undetermined :
     inducedLinkObserved inducedLinkChannels
       = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
-  sorry
+  rfl
 
 end CrisisFramework.Observation

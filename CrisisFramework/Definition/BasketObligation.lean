@@ -198,6 +198,6 @@ theorem exists_same_obligation_across_currencies :
         BasketWitnessLeg.secondCurrencyLeg = true
       ∧ basketObligationWitness.currencyOf BasketWitnessLeg.firstCurrencyLeg ≠
           basketObligationWitness.currencyOf BasketWitnessLeg.secondCurrencyLeg := by
-  sorry
+  exact ⟨rfl, fun h => BasketWitnessCurrency.noConfusion h⟩
 
 end CrisisFramework.Definition

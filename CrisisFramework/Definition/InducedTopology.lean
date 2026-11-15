@@ -135,6 +135,6 @@ theorem exists_induce_split_by_constraint :
         NetworkKind.collateralPledge () () = true
       ∧ (constraintInducedLinkWitness.induce 0 (constraintStateBy false)).linked
           NetworkKind.collateralPledge () () = false := by
-  sorry
+  exact ⟨rfl, rfl⟩
 
 end CrisisFramework.Definition

@@ -39,7 +39,11 @@ def run(ctx) -> None:
             if "Build completed successfully" in ln:
                 ctx.line(ln)
                 break
-        diag = [f"{i}:{ln}" for i, ln in enumerate(log, 1) if _DIAG.search(ln)]
+        # 진단 줄은 빌드 로그 안의 줄 번호를 붙이지 않고 문면의 순서로 정렬해 낸다. 병렬 빌드가
+        # job 이 끝나는 순서대로 로그를 쌓으므로, 그 번호를 붙이거나 로그의 순서를 그대로 두면
+        # 같은 트리의 두 돌림 사이에서 표기가 움직여 OUTPUT_DIGEST 가 재현되지 않는다
+        # (docs/decisions/SPEC.md §4).
+        diag = sorted(ln for ln in log if _DIAG.search(ln))
         if diag:
             ctx.bad("빌드 로그에 error/warning 존재:")
             for d in diag:
