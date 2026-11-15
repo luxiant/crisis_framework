@@ -6900,6 +6900,348 @@
    "related": [
     "CF-3744"
    ]
+  },
+  {
+   "id": "CF-3781",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이어짐의 족을 유도의 상으로 좁혀 외생으로 받는 길을 닫는 안. 이어짐 구조체에 제약을 받는 필드를 더하는 안.",
+   "reason": "위상이 내생이라는 것이 구조에 더 강하게 서나 제약 밖의 사유로 끊기는 자리가 담기지 않는다. 필드를 더하면 그 구조체를 받는 선언이 전부 그 필드를 채워야 하고 제약을 쓰지 않는 자리까지 값을 지어 넣게 된다.",
+   "for": "제약이 낸 이어짐을 무엇으로 담을지.",
+   "statement": "이어짐의 족을 유도의 상으로 좁히는 안과 이어짐 구조체에 필드를 더하는 안을 기각한다",
+   "basis": "제약 상태를 받아 이어짐의 족의 한 값을 내는 사상으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.ConstraintInducedLink",
+   "related": [
+    "CF-3764"
+   ]
+  },
+  {
+   "id": "CF-3782",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "몫마다 가중치를 필드로 두어 금액을 통화별로 가르는 안. 묶음을 두 몫 사이의 동치 관계로 두는 안.",
+   "reason": "묶음의 금액이 구조에서 나오나 그 가중치가 어느 공시에서도 읽히지 않고, 가중합을 쓰는 순간 회계층의 환산 금지에 걸린다. 관계를 쌍으로 두면 추이성이 성립함을 따로 증명해야 하고, 의무 식별자로 가는 사상은 그 성질을 공역의 상등에서 그대로 받는다.",
+   "for": "바스켓의 묶음을 무엇으로 담을지.",
+   "statement": "가중치를 필드로 두는 안과 묶음을 동치 관계로 두는 안을 기각한다",
+   "basis": "의무 식별자로 가는 사상으로 두고 금액을 들지 않기로 했다.",
+   "for_decl": "CrisisFramework.Definition.BasketObligation",
+   "related": [
+    "CF-3765"
+   ]
+  },
+  {
+   "id": "CF-3783",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "묶음 구조체 안에 시점을 받는 필드를 더하는 안.",
+   "reason": "필드를 더하면 그 구조체를 받는 선언이 전부 그 필드를 채워야 하고 시점을 쓰지 않는 자리까지 값을 지어 넣게 되며, 족으로 올리면 기존 구조체가 그대로 서고 시점을 쓰지 않는 자리가 상수 축약으로 닫힌다.",
+   "for": "묶음에 시점을 어떻게 줄지.",
+   "statement": "묶음 구조체에 시점 필드를 더하는 안을 기각한다",
+   "basis": "그 사상을 시점 인덱스를 갖는 족으로 올리기로 했다.",
+   "for_decl": "CrisisFramework.Definition.BasketObligationFamily",
+   "related": [
+    "CF-3765"
+   ]
+  },
+  {
+   "id": "CF-3784",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "판정을 두 몫의 표시 통화가 다른지로 함께 묻는 안.",
+   "reason": "바스켓의 성질이 한 판정에 담기나 같은 의무에 같은 통화의 몫이 둘 드는 배치가 거짓으로 서고, 그 배치가 분할 선적에서 실재한다.",
+   "for": "같은 의무에 묶였는지를 무엇으로 판정할지.",
+   "statement": "표시 통화의 다름을 판정에 함께 묻는 안을 기각한다",
+   "basis": "의무 식별자의 상등만으로 판정하기로 했다.",
+   "for_decl": "CrisisFramework.Definition.BasketObligation.sameObligation",
+   "related": [
+    "CF-3765"
+   ]
+  },
+  {
+   "id": "CF-3785",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "적격 판정의 축을 앞서 선 제약 인자 경로의 칸에서 받아 이 구조를 세우지 않는 안. 수취인과 값의 성질을 칸에서 빼는 안.",
+   "reason": "타입이 늘지 않으나 그 경로의 칸이 자기자본과 부채 총계와 부채 측 상한을 들고 자산의 적격 판정을 들지 않으므로 받으면 이 사상이 받는 제약과 다른 제약의 인자가 축으로 선다. 두 축이 같은 수취인에게 가는지와 같은 성질의 값인지가 그 결손의 해소 경로를 가르는데, 빼면 그 가름이 사라진다.",
+   "for": "제약이 낸 이어짐의 공시 축을 어떻게 가를지.",
+   "statement": "제약 인자 경로의 칸에서 받는 안과 수취인과 값의 성질을 빼는 안을 기각한다",
+   "basis": "적격 판정과 쌍의 이어짐을 두 칸으로 두고 수취인과 값의 성질을 함께 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.InducedLinkChannel",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3786",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "두 축의 논리합으로 두는 안.",
+   "reason": "답이 서는 자리가 늘어나나 적격 판정만 내는 경로가 그 사상을 답하는 것으로 서며, 그러면 쌍이 어디에서도 읽히지 않는다는 사실이 이 판정에서 사라진다.",
+   "for": "그 사상이 한 경로에서 답되는지를 무엇으로 판정할지.",
+   "statement": "두 축의 논리합으로 두는 안을 기각한다",
+   "basis": "두 축의 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.InducedLinkChannel.answersInducedLink",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3787",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로를 세우지 않고 적격 판정의 축을 어느 경로도 내지 않는 것으로 두는 안.",
+   "reason": "두 축이 함께 비어 목록이 짧아지나 적격성이 공표되는 것과 쌍이 공표되지 않는 것이 다른 사실인데, 접으면 그 둘이 한 경로의 거짓 칸으로 서고 해소 경로가 조달인 몫과 그렇지 않은 몫이 갈리지 않는다.",
+   "for": "적격 판정을 내는 경로를 목록에 둘지.",
+   "statement": "적격 판정의 경로를 세우지 않는 안을 기각한다",
+   "basis": "그 경로를 세우고 쌍의 축만 거짓으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.eligibleCollateralList",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3788",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로를 적격 판정의 축도 내는 것으로 두는 안.",
+   "reason": "한 경로가 두 축을 내어 그 사상이 재어지나 그 주석이 드는 것은 제공된 금액이고 그 자산이 담보로 받아들여지는지의 판정이 아니므로, 두면 공시가 내지 않는 축이 내는 것으로 선다.",
+   "for": "담보 제공분의 주석이 어느 축을 내는지.",
+   "statement": "그 주석이 적격 판정의 축도 내는 것으로 두는 안을 기각한다",
+   "basis": "두 축을 둘 다 거짓으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.pledgedAssetNote",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3789",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "적격 판정을 내는 경로만 목록에 두는 안.",
+   "reason": "목록이 짧아지고 전량을 훑는 판정의 값이 달라지지 않으나, 쌍을 내는 축이 거짓인 경로가 실재한다는 사실이 사라져 그 축의 결손이 경로의 부재로 읽힌다.",
+   "for": "경로 목록을 무엇으로 닫을지.",
+   "statement": "적격 판정을 내는 경로만 목록에 두는 안을 기각한다",
+   "basis": "어느 축도 내지 않는 경로를 목록의 원소로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.inducedLinkChannels",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3790",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 선언을 세우지 않고 이 명세의 칸만으로 그 축을 내는 안.",
+   "reason": "선언이 하나 줄고 목록 전량을 훑는 판정이 그대로 서나, 같은 축의 값이 한 경로에서만 나와 그 값이 공시의 성질을 재는지 이 명세의 칸을 재는지가 구별되지 않는다.",
+   "for": "쌍의 축을 몇 경로에서 잴지.",
+   "statement": "그 축을 한 경로에서만 재는 안을 기각한다",
+   "basis": "앞 페이즈의 망 색인 경로 목록에서 한 번 더 재기로 했다.",
+   "for_decl": "CrisisFramework.Observation.pledgeMembershipReadByIndex",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3791",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "읽을 자리가 없을 때 구조가 그 대상을 담지 않는다는 까닭을 내는 안. 판정 불가를 쓰지 않고 거짓을 내는 안.",
+   "reason": "그 까닭이 형식층의 결손을 드는 자리인데 이 페이즈가 그 사상을 정의층에 세우므로 담는 대상이 있으며, 그러면 조달로 풀리는 결손이 구조의 결손으로 적힌다. 거짓은 그 쌍이 이어지지 않았다는 관측인데 읽을 자리가 없는 것은 그 관측이 아니다.",
+   "for": "읽을 자리가 없을 때 무엇을 낼지.",
+   "statement": "구조의 결손을 까닭으로 내는 안과 거짓을 내는 안을 기각한다",
+   "basis": "측정 소스 없음을 까닭으로 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.inducedLinkObserved",
+   "related": [
+    "CF-3769"
+   ]
+  },
+  {
+   "id": "CF-3792",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "통화와 금액을 한 칸으로 접는 안. 묶음의 축을 통화의 축의 부정으로 두는 안.",
+   "reason": "그 표준의 필수 필드가 둘을 함께 담으므로 그 전문에 대해서는 접어도 값이 같으나, 금액에 허용 편차와 추가 금액을 더하는 선택 필드가 따로 서서 금액이 하나의 수로 서지 않는데 통화는 그 선택에 걸리지 않으므로 두 축의 결손이 갈리는 자리가 사라진다. 통화를 내지 않는 경로가 묶음을 내는 것으로 서며, 어느 축도 내지 않는 경로가 그 부정에서 참이 되어 아무것도 내지 않는 자리가 묶음을 내는 자리로 둔갑한다.",
+   "for": "바스켓의 공시 축을 어떻게 가를지.",
+   "statement": "통화와 금액을 접는 안과 묶음의 축을 부정으로 두는 안을 기각한다",
+   "basis": "통화와 금액과 의무 식별을 세 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.BasketBindingChannel",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3793",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "세 축의 논리곱으로 두는 안.",
+   "reason": "더 좁은 자리에서만 참이 되나 금액은 묶음의 성립과 다른 축이고 그 금액이 선택 필드로 갈리는 자리가 따로 서므로, 넣으면 금액의 결손이 묶음의 결손으로 세어진다.",
+   "for": "묶음이 한 경로에서 답되는지를 무엇으로 판정할지.",
+   "statement": "세 축의 논리곱으로 두는 안을 기각한다",
+   "basis": "통화와 의무 식별의 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.BasketBindingChannel.answersBinding",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3794",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로가 의무의 식별까지 내는 것으로 두는 안.",
+   "reason": "한 경로가 묶음을 답하여 이 명세의 산출이 사라지는데, 그 전문의 범위가 발행을 알리는 것이고 여러 전문을 한 의무로 묶는 식별자를 그 서식이 필수로 두지 않으므로 두면 공시가 내지 않는 축이 내는 것으로 선다.",
+   "for": "발행 전문이 어느 축을 내는지.",
+   "statement": "발행 전문이 의무의 식별까지 내는 것으로 두는 안을 기각한다",
+   "basis": "통화와 금액만 참으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.documentaryCreditIssue",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3795",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로를 목록에서 빼고 발행 전문 하나로 갈음하는 안.",
+   "reason": "목록이 짧아지나 통화의 축이 한 경로에서만 읽히는 것과 두 경로에서 읽히는 것이 다른 사실이며, 갈음하면 그 축의 값이 한 서식의 필수 필드 하나에 걸려 그 축이 공시의 성질을 재는지 그 서식의 설계를 재는지가 구별되지 않는다.",
+   "for": "상업송장을 목록에 둘지.",
+   "statement": "상업송장을 목록에서 빼는 안을 기각한다",
+   "basis": "두 경로를 목록의 원소로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.commercialInvoiceSet",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3796",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "수취인으로 걸러 일반 관측자에게 가는 것만 목록에 두는 안.",
+   "reason": "두 경로의 수취인이 갈려 그 거르기가 지금 하나를 걸러 내는데, 걸러 내면 감독 당국에게만 가는 자리에서도 묶음이 읽히지 않는다는 사실이 목록에서 사라지고 그 결손이 공표의 재량에서 온 것으로 읽힌다.",
+   "for": "경로 목록을 무엇으로 닫을지.",
+   "statement": "수취인으로 걸러 목록을 짓는 안을 기각한다",
+   "basis": "두 경로를 수취인과 무관하게 목록에 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.basketBindingChannels",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3797",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "읽을 자리가 없을 때 구조가 그 대상을 담지 않는다는 까닭을 내는 안. 귀속이 유일하지 않다는 까닭을 내는 안.",
+   "reason": "그 까닭이 형식층의 결손을 드는 자리인데 이 페이즈가 그 묶음을 정의층에 세우므로 담는 대상이 있으며, 그러면 조달로 풀리는 결손이 구조의 결손으로 적힌다. 귀속의 까닭은 자료가 있어도 값이 하나로 정해지지 않는 자리인데 여기서는 그 자료 자체가 공시에 서지 않는다.",
+   "for": "묶음을 읽을 자리가 없을 때 무엇을 낼지.",
+   "statement": "구조의 결손을 까닭으로 내는 안과 귀속의 유일성을 까닭으로 내는 안을 기각한다",
+   "basis": "측정 소스 없음을 까닭으로 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.basketBindingObserved",
+   "related": [
+    "CF-3770"
+   ]
+  },
+  {
+   "id": "CF-3798",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "표시 통화의 축을 이 판정에 더하는 안.",
+   "reason": "몫이 통화에 걸리므로 통화의 축이 필요해 보이나 그 축이 묶음의 판정에서 이미 서 있고 이 판정이 묶음의 판정과 갈리는 자리는 금액의 축이므로, 더하면 두 판정이 같은 칸을 공유하여 몫의 결손이 묶음의 결손에서 유도된다는 것이 보이지 않는다.",
+   "for": "통화별 몫이 한 경로에서 답되는지를 무엇으로 판정할지.",
+   "statement": "표시 통화의 축을 그 판정에 더하는 안을 기각한다",
+   "basis": "금액과 의무 식별의 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.BasketBindingChannel.answersCurrencyWeight",
+   "related": [
+    "CF-3771"
+   ]
+  },
+  {
+   "id": "CF-3799",
+   "origin": {
+    "arc": "network",
+    "phase": "network-6",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "그 몫을 묶음의 판정 하나로 갈음하고 이 선언을 세우지 않는 안.",
+   "reason": "선언이 하나 줄고 두 판정의 값이 이 목록에서 같으나, 묶음이 읽히는 경로가 뒤에 서면 그 경로가 금액을 내지 않을 수 있어 두 값이 갈리며 그때 이 몫의 결손이 묶음의 결손에 흡수되어 보이지 않는다.",
+   "for": "통화별 몫의 판정을 따로 둘지.",
+   "statement": "묶음의 판정 하나로 갈음하는 안을 기각한다",
+   "basis": "그 몫의 판정을 따로 세우기로 했다.",
+   "for_decl": "CrisisFramework.Observation.basketCurrencyWeightObserved",
+   "related": [
+    "CF-3771"
+   ]
   }
  ]
 }
