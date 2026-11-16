@@ -34,11 +34,11 @@
 
 | 층 | 수 체계 | 기준선 | 측정 시점 |
 |---|---|---|---|
-| 회계층 | `ℤ` | `[propext, Quot.sound]` | `network-8` (2026-11-16, `038b856`) |
+| 회계층 | `ℤ` | `[propext, Quot.sound]` | `network-9` (2026-11-16, `0fbb1e0`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-8` (2026-11-16, `038b856`) |
-| 관측층 | 무차원 | `[]` | `network-8` (2026-11-16, `038b856`) |
-| 용어집 | 없음 | `[]` | `network-8` (2026-11-16, `038b856`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-9` (2026-11-16, `0fbb1e0`) |
+| 관측층 | 무차원 | `[]` | `network-9` (2026-11-16, `0fbb1e0`) |
+| 용어집 | 없음 | `[]` | `network-9` (2026-11-16, `0fbb1e0`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -659,7 +659,7 @@ RULEDOC_OVER_BYTES_SI=39619
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
 RULEDOC_REASON_BYTES_SI=1916
-RULEDOC_REINFORCE_BYTES_SI=10818
+RULEDOC_REINFORCE_BYTES_SI=11342
 RULEDOC_IMPL_BYTES_APPENDIX=0
 RULEDOC_REASON_BYTES_APPENDIX=859
 RULEDOC_REINFORCE_BYTES_APPENDIX=34271
