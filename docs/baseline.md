@@ -439,6 +439,7 @@ Lean docstring 의 문단 머리말 가운데 **예약 낱말**을 든 것은 �
 EXCL=moneyness
 EXCL=pledge
 EXCL=assetPartitionRegime
+EXCL=lossBearer
 <!-- EXCL:END -->
 
 **겹치는 정제 쌍.** 검사 62 가 읽는다. 상위 개념의 정제로 둘 다 등록된 쌍 가운데 어느 쪽도 다른 쪽을 포함하지 않으면서 겹치는 것을 든다. 블록에 들지 않은 쌍은 소급되지 않고 미정리분의 크기만 보고된다.

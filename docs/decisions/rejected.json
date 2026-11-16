@@ -8448,6 +8448,168 @@
    "related": [
     "CF-3881"
    ]
+  },
+  {
+   "id": "CF-3948",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "부담을 셋으로 두는 안. 담보와 자기자본 사이에 보증이나 공적 지원을 한 부담으로 더하는 안이다. 부담 주체를 주체의 이름으로 두는 안.",
+   "reason": "익스포저가 담보를 넘는 몫이 그 밖의 재원으로 덮이는지는 그 재원의 실재에 달려 있고 그 실재가 이 열거 밖의 사실이다. 민간 보증이 효력을 갖지 않고 정부 보증만 효력을 갖는다는 것을 유동성 규범이 적으므로 그 부담을 하나로 두면 효력이 갈리는 둘이 접힌다. 이름으로 두면 이 열거가 가르는 어느 재원이 지는가와 그 재원을 가진 주체가 두 자리에 서고 그 둘이 갈릴 수 있으며, 그 주체는 청구권의 두 당사자에서 이미 유도된다.",
+   "for": "손실의 부담 주체를 몇으로 가르고 무엇의 이름으로 둘지.",
+   "statement": "부담을 셋으로 두는 안과 주체의 이름으로 두는 안을 기각한다",
+   "basis": "담보와 자기자본의 둘로 두고 재원의 이름으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.LossBearer",
+   "related": [
+    "CF-3933"
+   ]
+  },
+  {
+   "id": "CF-3949",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "음수를 그대로 내는 안.",
+   "reason": "담보가 익스포저를 넘으면 그 차이가 음수로 서는데 살아남은 쪽이 음의 손실을 지는 것이 아니고 그 남는 담보가 부도난 쪽에 돌아가는 것이어서, 음수를 그대로 내면 그 값이 자기자본을 늘리는 것으로 읽힌다. 담보 계약의 두 양식이 신용보전금액을 음수가 되면 영으로 본다고 적어 그 자름이 실물에 선례를 갖는다. 부채수용력 여지가 같은 자름을 기각한 사유는 그 자름이 제약이 이미 물린 자리와 아직 여유가 있는 자리를 같은 값으로 접는다는 것인데, 이 값의 목적이 물림을 재는 것이 아니라 흡수 뒤 남는 몫을 재는 것이어서 그 사유가 이 자리에 걸리지 않는다.",
+   "for": "담보가 익스포저를 넘는 배치에서 생존자의 몫을 어느 값으로 둘지.",
+   "statement": "음수를 그대로 내는 안을 기각한다",
+   "basis": "영으로 자르고 그 자름의 선례를 담보 계약의 두 양식에서 받기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.survivorLossOf",
+   "related": [
+    "CF-3932"
+   ]
+  },
+  {
+   "id": "CF-3950",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "두 몫을 각각 따로 선언하는 안. 부담 주체를 받지 않고 쌍을 내는 안.",
+   "reason": "따로 두면 부담 주체의 열거와 그 금액 사이의 대응이 구조에 서지 않고 그 열거가 어느 금액도 받지 않는 표현 수단으로 떨어지며, 두 몫의 합이 익스포저와 같다는 항등식의 좌변을 그 열거로 유도할 수 없다. 쌍으로 내면 그 두 성분이 어느 주체의 몫인지가 자리로만 서고 열거가 늘어날 때 그 자리가 소리 없이 어긋난다.",
+   "for": "부담 주체와 금액의 대응을 어느 꼴로 둘지.",
+   "statement": "두 몫을 따로 선언하는 안과 쌍을 내는 안을 기각한다",
+   "basis": "부담 주체를 인자로 받아 금액을 내는 한 함수로 두기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.lossBorneBy",
+   "related": [
+    "CF-3932"
+   ]
+  },
+  {
+   "id": "CF-3951",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "읽는 칸을 하나로 두는 안. 두 부담의 가름을 읽는 칸을 두지 않는 안.",
+   "reason": "그 귀속이 금액과 상환 실패의 곱으로만 서므로 칸을 하나로 두면 어느 쪽이 빠져서 귀속이 서지 않는지가 구조에 남지 않는다. 증거금 규범이 두 부담의 가름을 자기 문면으로 들고 그 문면이 공시 경로의 하나이므로, 그 칸을 빼면 규범이 드는 것과 수치가 내는 것이 같은 자리에서 맞대어지지 않는다.",
+   "for": "그 사슬의 공시 경로를 몇 칸으로 읽을지.",
+   "statement": "읽는 칸을 하나로 두는 안과 가름의 칸을 두지 않는 안을 기각한다",
+   "basis": "금액과 상환 실패와 가름의 세 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.LossTransmissionChannel",
+   "related": [
+    "CF-3936"
+   ]
+  },
+  {
+   "id": "CF-3952",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "세 칸의 곱으로 두는 안. 합으로 두는 안.",
+   "reason": "두 부담의 가름을 문면으로 드는 것은 규범이 이미 하는 일이고 그것이 수치의 귀속을 세우지 않으므로, 그 칸을 곱에 넣으면 규범을 드는 경로가 귀속을 답하는 것으로 읽힌다. 합으로 두면 금액만 내는 경로가 귀속을 답하는 것이 되어 그 결손이 사라진다.",
+   "for": "귀속을 답하는 판정을 어느 논리 결합으로 둘지.",
+   "statement": "세 칸의 곱으로 두는 안과 합으로 두는 안을 기각한다",
+   "basis": "금액과 상환 실패의 두 칸의 곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.LossTransmissionChannel.answersAttribution",
+   "related": [
+    "CF-3936"
+   ]
+  },
+  {
+   "id": "CF-3953",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "받는 쪽을 감독자로 두는 안. 값의 성질을 추정으로 두는 안.",
+   "reason": "손상이 재무제표의 자리이고 그 제표가 일반 독자에게 공표되므로 받는 쪽이 공개 독자다. 그 금액이 공표된 제표의 수치이고 작성자의 추정이 그 안에 들어 있더라도 그 경로가 내는 것은 공표된 보고다.",
+   "for": "손상 공시 경로의 받는 쪽과 값의 성질을 어느 값으로 둘지.",
+   "statement": "받는 쪽을 감독자로 두는 안과 값의 성질을 추정으로 두는 안을 기각한다",
+   "basis": "받는 쪽을 공개 독자로 두고 값의 성질을 공표된 보고로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.impairmentDisclosure",
+   "related": [
+    "CF-3936"
+   ]
+  },
+  {
+   "id": "CF-3954",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "이 경로를 목록에 두지 않는 안. 금액을 내는 칸을 참으로 두는 안.",
+   "reason": "목록에 두지 않으면 규범이 두 부담의 가름을 드는 사실이 관측층에 서지 않고, 그 가름을 용어집이 등재한 근거가 어느 경로에도 닿지 않는다. 그 규범이 드는 것은 요건의 산정 기준이고 실현된 부담의 금액이 아니므로 금액을 내는 칸을 참으로 두면 규범이 수치를 낸다고 읽힌다.",
+   "for": "증거금 규범을 공시 경로로 둘지와 그 경로가 금액을 내는지.",
+   "statement": "그 경로를 목록에 두지 않는 안과 금액의 칸을 참으로 두는 안을 기각한다",
+   "basis": "목록에 두고 금액의 칸을 거짓으로 두며 가름의 칸만 참으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.marginRequirementNorm",
+   "related": [
+    "CF-3936"
+   ]
+  },
+  {
+   "id": "CF-3955",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "전수라고 적는 안. 목록을 두지 않고 판정을 경로마다 따로 쓰는 안.",
+   "reason": "뭉치 밖의 경로를 이 회차가 조사하지 않았으므로 전수 주장을 세울 근거가 없다. 목록이 없으면 관측 결과를 내는 함수가 받을 변이 서지 않는다.",
+   "for": "공시 경로의 목록을 둘지와 그것을 전수로 주장할지.",
+   "statement": "전수라고 적는 안과 목록을 두지 않는 안을 기각한다",
+   "basis": "목록을 두고 전수 주장을 세우지 않기로 했다.",
+   "for_decl": "CrisisFramework.Observation.lossTransmissionChannels",
+   "related": [
+    "CF-3936"
+   ]
+  },
+  {
+   "id": "CF-3956",
+   "origin": {
+    "arc": "network",
+    "phase": "network-10",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "거짓을 내는 안. 경로의 수를 받아 임계를 두는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르고, 관측층이 그 둘을 가르는 열거를 이미 들고 있으므로 거짓을 내면 그 가름이 사라진다. 하나가 답하면 귀속이 서므로 임계가 하나보다 클 근거가 없다.",
+   "for": "소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "거짓을 내는 안과 임계를 두는 안을 기각한다",
+   "basis": "판정 불가를 내고 그 까닭을 측정 소스 없음으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.lossTransmissionObserved",
+   "related": [
+    "CF-3936"
+   ]
   }
  ]
 }
