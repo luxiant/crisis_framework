@@ -19,6 +19,11 @@
 셋째는 **잡히지 않아야 하는 항**이며 `CASES` 의 여섯째 자리에 `"nocatch"` 를 둔 항이 그것이다.
 새 위반 줄이 나지 않아야 통과다. 검사 5 가 날짜로 가르므로 닫힌 날 이전 날짜의 항목은 잡히지
 않아야 하고, 그 방향을 재지 않으면 「날짜를 보지 않고 여전히 전량을 잡는다」와 갈리지 않는다.
+
+**주입 자리가 없는 항은 건너뛴다.** 주입 함수가 `SystemExit` 로 그 사실을 알리면 그 항을 재지 않고
+다음 항으로 간다. 그 항은 기대대로인 것으로도 어긋난 것으로도 세지 않으며, 그 이름과 사유를 별도의
+표가 들고 그 계수를 요약 줄이 든다. 원장이 바뀌어 주입 대상이 사라지는 일이 실재하므로, 그 자리에서
+순회 전체가 멈추면 뒤의 항이 재어지지 않은 채로 남고 그 사실이 출력에 드러나지 않는다.
 """
 
 
@@ -96,6 +101,7 @@ def main() -> int:
 
     tmp = Path(tempfile.mkdtemp(prefix="wiki-nc-"))
     rows = []
+    skipped = []
     # 항의 이름은 `<단계 id>#<차례>` 다. 검사 번호에 접미를 붙이면 실재하는 검사 3-a·4-a 와
     # 같은 꼴이 되어 항인지 검사인지 갈리지 않는다. 단계 id 는 네임스페이스가 다르다.
     seen_step: dict = {}
@@ -115,7 +121,15 @@ def main() -> int:
             # **표지가 주입 자신에게서 나온다.** 사례 목록이 그것을 상수로 들면 주입이 심는 값을
             # 고치는 회차가 그 상수를 잊어도 어느 검사도 걸리지 않으며, 그 낡음은 보고 부류의
             # 판정이 제 표지를 잃고 「새 보고 줄이 있다」로 떨어지는 꼴로만 남는다.
-            marker = fn(work)
+            try:
+                marker = fn(work)
+            except SystemExit as exc:
+                # 주입 자리가 없음을 알린 항이다. 사본을 지우고 다음 항으로 가며, 사유는
+                # 그 예외가 든 문면을 그대로 옮긴다.
+                why = "" if exc.code is None else str(exc.code)
+                skipped.append((cid, num, desc, why))
+                shutil.rmtree(work)
+                continue
             got = run_checker(work, arc_close=arc)
             base = base_arc if arc else base_plain
             b = base["checks"].get(num, {"verdict": "?", "violations": [], "notes": []})
@@ -164,10 +178,18 @@ def main() -> int:
     print()
     for cid, num, desc, bv, gv, ok, detail in rows:
         print(f"{cid}: {detail}")
+    if skipped:
+        print()
+        print("| 건너뛴 항 | 검사 | 주입하려던 위반 | 주입 자리가 없는 사유 |")
+        print("|---|---|---|---|")
+        for cid, num, desc, why in skipped:
+            print(f"| `{cid}` | {num} | {desc} | {why} |")
     bad = [r for r in rows if not r[5]]
     print()
-    print(f"주입 항 {len(rows)}개 가운데 기대대로인 것 {len(rows)-len(bad)}개, "
-          f"어긋난 것 {len(bad)}개")
+    print(f"주입 항 {len(rows) + len(skipped)}개 가운데 기대대로인 것 {len(rows)-len(bad)}개, "
+          f"어긋난 것 {len(bad)}개, 건너뛴 것 {len(skipped)}개")
+    if skipped:
+        print("건너뛴 항: " + ", ".join(r[0] for r in skipped))
     if bad:
         print("어긋난 항: " + ", ".join(r[0] for r in bad))
         return 1
