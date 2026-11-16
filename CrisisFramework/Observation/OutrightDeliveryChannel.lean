@@ -235,7 +235,7 @@ def outrightDeliveryObserved {Party : Type}
 -- DD:CF-3808
 theorem no_channel_answers_outright_delivery :
     outrightDeliveryChannels.all (fun c => !c.answersOutrightDelivery) = true := by
-  sorry
+  rfl
 
 /--
 측정의 두 축이 함께 비어 있다.
@@ -253,7 +253,7 @@ theorem no_channel_answers_outright_delivery :
 theorem outright_delivery_axes_both_absent :
     outrightDeliveryChannels.all (fun c => !c.readsConveyingParties) = true
       ∧ outrightDeliveryChannels.all (fun c => !c.readsConveyedKind) = true := by
-  sorry
+  exact ⟨rfl, rfl⟩
 
 /--
 범위와 포착의 교차가 비어 있다.
@@ -277,7 +277,7 @@ theorem outright_delivery_scope_capture_cross_empty :
         (fun c => !(c.coversTradingEntity && c.capturesTitleTransfer)) = true
       ∧ conveyanceInventoryNote.coversTradingEntity = true
       ∧ conveyanceEncumbranceReport.capturesTitleTransfer = true := by
-  sorry
+  exact ⟨rfl, rfl, rfl⟩
 
 /--
 그 판정이 각 인자에서 홀로 값을 가른다.
@@ -309,7 +309,7 @@ theorem outright_delivery_answer_pins_each_conjunct :
       ∧ ({ conveyanceInventoryNote with
             readsConveyedKind := true } :
               OutrightDeliveryChannel Unit).answersOutrightDelivery = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
 /--
 그 인도의 관측이 측정 소스 없음으로 선다.
@@ -327,6 +327,6 @@ theorem outright_delivery_answer_pins_each_conjunct :
 theorem outright_delivery_observed_undetermined :
     outrightDeliveryObserved outrightDeliveryChannels
       = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
-  sorry
+  rfl
 
 end CrisisFramework.Observation

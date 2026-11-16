@@ -313,7 +313,34 @@ theorem exists_delivery_step_beyond_pledge_step :
       (D : DeliverySet Unit Bool Bool (Option Bool))
       (p q : Pledge Bool Bool),
       p.linksTo S q = false ∧ p.linksVia S D q = true := by
-  sorry
+  refine
+    ⟨{ index := {false, true}
+     , assign := fun b =>
+         { obligor := cond b none (some false)
+         , holder := cond b (some true) none
+         , currency := false
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { index := {()}
+      , assign := fun _ =>
+          { conveyed := { asset := false, asClaim := none }
+          , giver := some false
+          , taker := some true
+          , defeatsPriorClaims := false } }
+    , { pledged := { asset := false, asClaim := none }
+      , secures := false
+      , returns := false
+      , rehypothecable := true }
+    , { pledged := { asset := false, asClaim := none }
+      , secures := true
+      , returns := true
+      , rehypothecable := true }
+    , ?_, ?_⟩
+  · rfl
+  · rfl
 
 /--
 그 이어짐 판정이 각 인자에서 홀로 값을 가른다.
@@ -343,7 +370,34 @@ theorem delivery_bridge_pins_each_conjunct :
              OutrightDelivery Bool Bool (Option Bool)).bridges S p q = false
         ∧ d.bridges S p q' = false
         ∧ q'.returns ≠ q.returns := by
-  sorry
+  refine
+    ⟨{ index := {false, true}
+     , assign := fun b =>
+         { obligor := cond b (some true) none
+         , holder := some false
+         , currency := b
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { conveyed := { asset := false, asClaim := none }
+      , giver := some true
+      , taker := some false
+      , defeatsPriorClaims := false }
+    , { pledged := { asset := false, asClaim := none }
+      , secures := true
+      , returns := true
+      , rehypothecable := true }
+    , { pledged := { asset := false, asClaim := none }
+      , secures := true
+      , returns := true
+      , rehypothecable := true }
+    , { pledged := { asset := false, asClaim := none }
+      , secures := false
+      , returns := false
+      , rehypothecable := true }
+    , rfl, rfl, rfl, rfl, fun h => Bool.noConfusion h⟩
 
 /--
 한 걸음이 서지 않는데 그 뒤가 닿는 배치가 있다.
@@ -372,7 +426,30 @@ theorem exists_reach_via_tail_without_first_step :
       P.reachesWithinVia S D 2 false true = false
         ∧ (P.assign false).linksVia S D (P.assign true) = false
         ∧ P.reachesWithinVia S D 1 true true = true := by
-  sorry
+  refine
+    ⟨{ index := {false, true}
+     , assign := fun b =>
+         { obligor := cond b (some true) (some false)
+         , holder := cond b (some true) none
+         , currency := false
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { index := ∅
+      , assign := fun _ =>
+          { conveyed := { asset := false, asClaim := none }
+          , giver := none
+          , taker := none
+          , defeatsPriorClaims := false } }
+    , { index := {false, true}
+      , assign := fun b =>
+          { pledged := { asset := false, asClaim := none }
+          , secures := b
+          , returns := b
+          , rehypothecable := true } }
+    , rfl, rfl, rfl⟩
 
 /--
 담보권이 끊긴 제공이 사슬에 그대로 서서 다른 제공에 닿는다.
@@ -397,7 +474,30 @@ theorem exists_right_defeated_and_still_reaches :
       (P : PledgeSet Bool Bool Bool) (i j : Bool),
       P.rightDefeated S D i = true
         ∧ P.reachesWithinVia S D P.index.card i j = true := by
-  sorry
+  refine
+    ⟨{ index := {true}
+     , assign := fun _ =>
+         { obligor := some true
+         , holder := some true
+         , currency := false
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { index := {()}
+      , assign := fun _ =>
+          { conveyed := { asset := false, asClaim := none }
+          , giver := none
+          , taker := none
+          , defeatsPriorClaims := true } }
+    , { index := {true}
+      , assign := fun b =>
+          { pledged := { asset := false, asClaim := none }
+          , secures := b
+          , returns := b
+          , rehypothecable := true } }
+    , true, true, rfl, rfl⟩
 
 /--
 그 끊김 판정이 각 인자에서 홀로 값을 가른다.
@@ -433,7 +533,28 @@ theorem right_defeat_pins_each_conjunct :
               (fun _ => { d with conveyed := { d.conveyed with
                                                 asset := !d.conveyed.asset } })) i
             = false := by
-  sorry
+  refine
+    ⟨{ index := {true}
+     , assign := fun _ =>
+         { obligor := some true
+         , holder := some false
+         , currency := false
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { conveyed := { asset := false, asClaim := none }
+      , giver := none
+      , taker := none
+      , defeatsPriorClaims := true }
+    , { index := {true}
+      , assign := fun b =>
+          { pledged := { asset := false, asClaim := none }
+          , secures := b
+          , returns := b
+          , rehypothecable := true } }
+    , true, rfl, rfl, rfl, rfl, rfl⟩
 
 /--
 두 머리 술어가 갈리는 자리가 실재한다.
@@ -456,6 +577,29 @@ theorem exists_chain_head_split_by_delivery :
       (D : DeliverySet Unit Bool Bool (Option Bool))
       (P : PledgeSet Bool Bool Bool) (i : Bool),
       P.isChainHead S i = true ∧ P.isChainHeadVia S D i = false := by
-  sorry
+  refine
+    ⟨{ index := {false, true}
+     , assign := fun b =>
+         { obligor := cond b none (some false)
+         , holder := cond b (some true) none
+         , currency := false
+         , amount := Term.const ()
+         , trigger := TriggerFamily.constant (Trigger.le (Term.const ()) (Term.const ()))
+         , inception := 0
+         , expiry := 0
+         , exercisable := fun _ => true } }
+    , { index := {()}
+      , assign := fun _ =>
+          { conveyed := { asset := false, asClaim := none }
+          , giver := some false
+          , taker := some true
+          , defeatsPriorClaims := false } }
+    , { index := {false}
+      , assign := fun b =>
+          { pledged := { asset := false, asClaim := none }
+          , secures := b
+          , returns := b
+          , rehypothecable := true } }
+    , true, rfl, rfl⟩
 
 end CrisisFramework.Definition

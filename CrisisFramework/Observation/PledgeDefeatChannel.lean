@@ -227,7 +227,7 @@ def pledgeDefeatObserved {Party : Type}
 -- DD:CF-3809
 theorem no_channel_answers_pledge_defeat :
     pledgeDefeatChannels.all (fun c => !c.answersPledgeDefeat) = true := by
-  sorry
+  rfl
 
 /--
 요건은 문면으로 서 있고 그 성립은 어느 경로에서도 읽히지 않는다.
@@ -247,7 +247,7 @@ theorem pledge_defeat_rule_stated_not_reported :
     warehouseDispositionNorm.statesQualification = true
       ∧ pledgeDefeatChannels.all (fun c => !c.readsOrdinaryCourse) = true
       ∧ pledgeDefeatChannels.all (fun c => !c.readsFungibleDealer) = true := by
-  sorry
+  exact ⟨rfl, rfl, rfl⟩
 
 /--
 그 판정이 각 인자에서 홀로 값을 가른다.
@@ -279,7 +279,7 @@ theorem pledge_defeat_answer_pins_each_conjunct :
       ∧ ({ warehouseDispositionNorm with
             readsFungibleDealer := true } :
               PledgeDefeatChannel Unit).answersPledgeDefeat = false := by
-  sorry
+  exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
 /--
 그 신호의 관측이 측정 소스 없음으로 선다.
@@ -297,6 +297,6 @@ theorem pledge_defeat_answer_pins_each_conjunct :
 theorem pledge_defeat_observed_undetermined :
     pledgeDefeatObserved pledgeDefeatChannels
       = ObservedTruth.undetermined UndeterminedReason.noMeasurementSource := by
-  sorry
+  rfl
 
 end CrisisFramework.Observation
