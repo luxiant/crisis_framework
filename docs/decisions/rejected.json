@@ -7620,6 +7620,384 @@
    "related": [
     "CF-3807"
    ]
+  },
+  {
+   "id": "CF-3855",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "평가율을 차감률로 담고 판정마다 여수를 계산하는 안. 범주와 잔존만기의 격자를 생성자로 박는 안.",
+   "reason": "차감률로 담으면 분모가 100 으로 고정되어 조문의 단위가 다른 자리에서 다시 환산이 서고 그 환산이 정수 나눗셈이어서 버림이 생긴다. 격자를 박는 안은 범주와 잔존만기의 격자가 발행자마다 다르고 시점에 따라 바뀌므로 한 발행자의 값만 담기며, 문턱을 생성자에 박지 않고 관할권을 색인으로 받는 포트폴리오 한도의 설계가 같은 사유로 섰다.",
+   "for": "평가율을 어느 꼴로 담을지.",
+   "statement": "평가율을 차감률로 담는 안과 격자를 생성자로 박는 안을 기각한다",
+   "basis": "분자와 분모의 쌍으로 받아 판정에서 분모를 양변에 곱하기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.CollateralValuationRate",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3856",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "담보물의 값이 없는 자리에 영을 돌려주는 안. 담보물의 금액을 인자로 받는 안.",
+   "reason": "영은 값이 없다는 것이 아니라 값이 영이라는 것이고 그러면 몫의 판정이 자명하게 거짓으로 서서 결손이 판정으로 읽힌다. 인자로 받으면 그 값의 출처가 구조에 없어 어디서 왔는지가 이 층에서 서지 않으며, 창고증권이 가리키는 물건의 값이 그 증권의 금액으로 서지 않는 자리가 그 결손의 실례다.",
+   "for": "담보물이 청구권이 아닐 때 그 값을 어떻게 둘지.",
+   "statement": "값이 없는 자리에 영을 돌려주는 안과 금액을 인자로 받는 안을 기각한다",
+   "basis": "선택을 비워 그 결손을 판정의 정의역에 남기기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.pledgedClaimValue",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3857",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "요구 금액을 평가한 값이 아니라 금액 항 자체로 두는 안.",
+   "reason": "항은 신호를 읽으므로 비교에 쓰려면 평가가 서야 하고, 평가를 판정으로 미루면 같은 항이 여러 판정에서 서로 다른 환경으로 평가될 수 있다.",
+   "for": "요구 금액을 항으로 둘지 평가한 값으로 둘지.",
+   "statement": "요구 금액을 금액 항 자체로 두는 안을 기각한다",
+   "basis": "환경을 받아 평가한 값으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.pledgeDemandValue",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3858",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "표시가 다를 때 거짓을 돌려주는 안. 표시를 인자로 받아 양쪽에 같은 값을 요구하는 안.",
+   "reason": "거짓은 몫이 넘친다는 것이고 표시가 다른 것은 재어지지 않는다는 것이라 뜻이 다르며, 그러면 통화 간 환산을 막는 요구가 제약 위반으로 읽힌다. 표시를 인자로 받는 안은 그 인자가 두 청구권의 표시와 어긋나도 판정이 서므로 가드가 헐거워진다.",
+   "for": "담보의 표시가 떠받치는 청구권의 표시와 다를 때 그 판정을 어떻게 둘지.",
+   "statement": "표시가 다를 때 거짓을 돌려주는 안과 표시를 인자로 받는 안을 기각한다",
+   "basis": "두 청구권의 표시를 직접 맞대어 다르면 값을 비우기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.pledgeShareCovered",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3859",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "담보의 종류물만 가드로 받는 안. 노출의 표시만 가드로 받는 안.",
+   "reason": "앞은 노출의 표시가 섞여 그 합이 통화를 가로지른 합이 되고, 뒤는 서로 다른 담보물에 걸린 요구가 한 합으로 서서 여력이 담보물마다 서지 않는다.",
+   "for": "한 담보물에 걸린 요구의 총계를 어느 가드로 닫을지.",
+   "statement": "가드를 한 축만 받는 두 안을 기각한다",
+   "basis": "담보의 종류물과 노출의 표시를 둘 다 가드로 받기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.collateralDemandTotal",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3860",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "여력을 참거짓으로만 내는 안. 담보물의 값을 더해 총계로 두는 안.",
+   "reason": "앞은 남은 몫의 크기를 묻는 진술이 그 값으로 답해지지 않으며 이 자리가 받는 구멍의 재개 트리거가 그 크기를 요구하는 진술을 명시적으로 든다. 뒤는 담보물마다 평가율이 달라 그 합이 제공마다 다른 비율을 품는다.",
+   "for": "쓰지 않은 여력을 어느 꼴로 낼지.",
+   "statement": "여력을 참거짓으로만 내는 안과 담보물의 값을 더해 총계로 두는 안을 기각한다",
+   "basis": "두 교차곱의 차이를 선택으로 내기로 했다.",
+   "for_decl": "CrisisFramework.Accounting.collateralHeadroom",
+   "related": [
+    "CF-3836"
+   ]
+  },
+  {
+   "id": "CF-3861",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "제공자를 떠받치는 청구권의 의무자로 읽는 안. 담보물의 의무자로 읽는 안.",
+   "reason": "떠받치는 청구권의 의무자는 담보를 받는 쪽일 수도 제3자일 수도 있어 그 자리가 제공자를 정하지 않는다. 담보물의 의무자는 담보물의 발행자이고 이 선언이 가르려는 것이 바로 그 둘의 다름이다.",
+   "for": "제공자를 어느 청구권에서 읽을지.",
+   "statement": "제공자를 떠받치는 청구권이나 담보물에서 읽는 두 안을 기각한다",
+   "basis": "반환 청구권의 권리자에서 읽기로 했다.",
+   "for_decl": "CrisisFramework.Definition.Pledge.provider",
+   "related": [
+    "CF-3837"
+   ]
+  },
+  {
+   "id": "CF-3862",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "청구권이 아닌 담보물에 발행자를 인자로 받아 채우는 안. 그 자리를 제공자로 채우는 안.",
+   "reason": "인자로 받으면 그 값의 출처가 구조에 없어 어디서 왔는지가 이 층에서 서지 않고 창고증권이 가리키는 물건의 발행자가 누구인지는 애초에 서지 않는다. 제공자로 채우면 모든 외부 자산 담보가 자기 발행으로 판정된다.",
+   "for": "담보물이 청구권이 아닐 때 발행자를 어떻게 둘지.",
+   "statement": "발행자를 인자로 받는 안과 제공자로 채우는 안을 기각한다",
+   "basis": "선택을 비우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.Pledge.pledgedIssuer",
+   "related": [
+    "CF-3837"
+   ]
+  },
+  {
+   "id": "CF-3863",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "담보물이 청구권이 아닐 때 거짓을 돌려주는 안. 제공자와 발행자의 쌍을 돌려주는 안.",
+   "reason": "거짓은 자기 발행이 아니라는 것이고 청구권이 아닌 것은 재어지지 않는다는 것이라 뜻이 다르며, 그러면 외부 자산 담보가 전량 자기 발행이 아닌 것으로 세어진다. 쌍은 판정이 아니라 재료이고 그 비교를 쓰는 쪽마다 다시 세우게 된다.",
+   "for": "자기 발행 판정을 어느 꼴로 낼지.",
+   "statement": "거짓을 돌려주는 안과 쌍을 돌려주는 안을 기각한다",
+   "basis": "선택을 돌려주는 참거짓으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.Pledge.isSelfIssued",
+   "related": [
+    "CF-3837"
+   ]
+  },
+  {
+   "id": "CF-3864",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "격자를 드는 칸을 두지 않는 안. 두 재료를 한 칸으로 접는 안.",
+   "reason": "앞은 격자가 서 있는 것과 그 격자가 적용된 비율을 내는 것이 다른 사실인데 빼면 이 결손이 공시의 부재로 읽힌다. 뒤는 요구 금액이 떠받치는 청구권에 붙고 평가율이 담보물에 붙어 색인이 달라 접으면 그 가름이 사라진다.",
+   "for": "제공별 몫의 공시 경로에 어느 칸을 둘지.",
+   "statement": "격자 칸을 빼는 안과 두 재료를 접는 안을 기각한다",
+   "basis": "두 재료의 칸과 격자의 칸을 따로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.CollateralShareChannel",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3865",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "격자를 드는 칸을 그 답의 논리곱에 함께 넣는 안.",
+   "reason": "그 칸은 그 경로가 무엇을 내는가가 아니라 그 규범이 무엇을 적는가이며, 넣으면 격자가 공표된 사실이 비율이 관측된다는 것으로 세어진다.",
+   "for": "그 답의 논리곱에 어느 칸을 넣을지.",
+   "statement": "격자 칸을 논리곱에 넣는 안을 기각한다",
+   "basis": "두 재료의 칸만 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.CollateralShareChannel.answersCollateralShare",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3866",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "격자를 공표하는 경로를 목록에 두지 않는 안.",
+   "reason": "격자가 공표된다는 사실이 사라지고 이 결손이 공시의 부재인지 공시의 불완전인지가 갈리지 않는다.",
+   "for": "격자를 공표하는 경로를 둘지.",
+   "statement": "그 경로를 두지 않는 안을 기각한다",
+   "basis": "그 경로를 세우고 두 재료의 칸을 거짓으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.haircutGridDisclosure",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3867",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "재량 유보를 적는 경로를 격자를 공표하는 경로와 한 값으로 묶는 안.",
+   "reason": "격자를 드는 것과 유보를 적는 것이 같은 문서에 있어도 다른 사실이며, 묶으면 격자의 공표가 그 유보까지 공표하는 것으로 세어진다.",
+   "for": "같은 문서의 두 자리를 한 경로로 둘지.",
+   "statement": "두 자리를 한 값으로 묶는 안을 기각한다",
+   "basis": "경로 둘로 따로 세우기로 했다.",
+   "for_decl": "CrisisFramework.Observation.discretionaryHaircutReservation",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3868",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "경로 목록을 비우고 소스 없음을 바로 적는 안.",
+   "reason": "그러면 격자가 공표된다는 사실이 사라지고 이 결손이 조달로 풀리는 몫인지 아닌지가 갈리지 않는다.",
+   "for": "경로 목록을 어떻게 둘지.",
+   "statement": "목록을 비우는 안을 기각한다",
+   "basis": "경로 둘을 목록에 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.collateralShareChannels",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3869",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "판정이 이 모형의 범위 밖이라는 까닭을 내는 안. 귀속이 유일하지 않다는 까닭을 내는 안.",
+   "reason": "회계층이 그 몫을 판정으로 세우므로 답할 자리가 있으며 그러면 조달로 풀릴 수 있는 결손이 범위의 결손으로 적힌다. 그 비율은 담보마다 하나로 정해지고 그것이 공시되지 않을 뿐이므로 귀속의 유일성은 이 자리의 까닭이 아니다.",
+   "for": "그 관측이 서지 않는 까닭을 어느 것으로 낼지.",
+   "statement": "범위 밖이라는 까닭과 귀속이 유일하지 않다는 까닭을 기각한다",
+   "basis": "측정 소스 없음을 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.collateralShareObserved",
+   "related": [
+    "CF-3839"
+   ]
+  },
+  {
+   "id": "CF-3870",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "등급의 이동을 드는 칸을 두지 않는 안. 두 재료를 한 칸으로 접는 안.",
+   "reason": "앞은 정책이 그 이동을 문면으로 적는 것과 그 이동이 걸린 제공을 공시가 집어내는 것이 다른 사실인데 빼면 이 결손이 규칙의 부재로 읽힌다. 뒤는 발행자가 증권 단위 공시에서 읽히고 제공자가 어디에서도 읽히지 않아 결손의 자리가 달라 접으면 그 가름이 사라진다.",
+   "for": "자기 담보화의 공시 경로에 어느 칸을 둘지.",
+   "statement": "등급 칸을 빼는 안과 두 재료를 접는 안을 기각한다",
+   "basis": "두 재료의 칸과 등급의 칸을 따로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.SelfCollateralizationChannel",
+   "related": [
+    "CF-3840"
+   ]
+  },
+  {
+   "id": "CF-3871",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "등급의 이동을 드는 칸을 그 답의 논리곱에 함께 넣는 안.",
+   "reason": "그 칸은 그 경로가 무엇을 내는가가 아니라 그 규범이 무엇을 적는가이며, 넣으면 정책이 그 이동을 적는 사실이 그 이동이 관측된다는 것으로 세어진다.",
+   "for": "그 답의 논리곱에 어느 칸을 넣을지.",
+   "statement": "등급 칸을 논리곱에 넣는 안을 기각한다",
+   "basis": "두 재료의 칸만 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.SelfCollateralizationChannel.answersSelfCollateralization",
+   "related": [
+    "CF-3840"
+   ]
+  },
+  {
+   "id": "CF-3872",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "적격담보 정책을 드는 경로를 목록에 두지 않는 안.",
+   "reason": "정책이 그 이동을 적는다는 사실이 사라지고 이 결손이 규칙의 부재인지 공시의 결손인지가 갈리지 않는다.",
+   "for": "적격담보 정책을 경로로 둘지.",
+   "statement": "그 경로를 두지 않는 안을 기각한다",
+   "basis": "그 경로를 세우고 등급의 칸만 참으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.collateralEligibilityPolicy",
+   "related": [
+    "CF-3840"
+   ]
+  },
+  {
+   "id": "CF-3873",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "증권 단위 공시가 발행자를 낸다는 것을 거짓으로 두는 안.",
+   "reason": "그 규칙이 증권마다 발행자의 이름을 명시적으로 들게 하므로 거짓이며, 그러면 결손의 자리가 발행자 쪽으로 옮겨져 제공자 쪽이 비어 있다는 산출이 흐려진다.",
+   "for": "증권 단위 공시가 발행자를 내는지를 어떻게 둘지.",
+   "statement": "그 칸을 거짓으로 두는 안을 기각한다",
+   "basis": "발행자 칸을 참으로 두고 제공자 칸만 거짓으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.securityLevelHoldingDisclosure",
+   "related": [
+    "CF-3840"
+   ]
+  },
+  {
+   "id": "CF-3874",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "경로 목록을 비우고 소스 없음을 바로 적는 안.",
+   "reason": "그러면 발행자가 공시된다는 사실이 사라지고 이 결손이 어느 재료에서 서는지가 갈리지 않는다.",
+   "for": "경로 목록을 어떻게 둘지.",
+   "statement": "목록을 비우는 안을 기각한다",
+   "basis": "경로 둘을 목록에 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.selfCollateralizationChannels",
+   "related": [
+    "CF-3840"
+   ]
+  },
+  {
+   "id": "CF-3875",
+   "origin": {
+    "arc": "network",
+    "phase": "network-8",
+    "kind": "decision_session",
+    "date": "2026-11-16"
+   },
+   "candidate": "구조가 그 대상을 담지 않는다는 까닭을 내는 안. 귀속이 유일하지 않다는 까닭을 내는 안.",
+   "reason": "정의층이 그 판정을 세우므로 담는 대상이 있으며 그러면 조달로 풀릴 수 있는 결손이 구조의 결손으로 적힌다. 제공자는 제공마다 하나로 정해지고 그것이 공시되지 않을 뿐이므로 귀속의 유일성은 이 자리의 까닭이 아니다.",
+   "for": "그 관측이 서지 않는 까닭을 어느 것으로 낼지.",
+   "statement": "구조가 담지 않는다는 까닭과 귀속이 유일하지 않다는 까닭을 기각한다",
+   "basis": "측정 소스 없음을 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.selfCollateralizationObserved",
+   "related": [
+    "CF-3840"
+   ]
   }
  ]
 }
