@@ -7242,6 +7242,384 @@
    "related": [
     "CF-3771"
    ]
+  },
+  {
+   "id": "CF-3815",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "담보 제공의 두 색인 필드를 선택으로 열어 이 자리를 담는 안. 옮겨진 것의 종류물을 칸으로 들어 사슬의 이어짐을 그것으로 재는 안.",
+   "reason": "받은 구멍이 담보 제공이 아닌 이전을 구조가 받아야 하고 그것은 담보의 판별선 밖이라고 적으므로 그 문면과 부딪히며, 용어집이 제공을 담보권형과 소유권 이전형으로 분할하고 그 둘을 배타로 등록해 두어 어느 꼴에도 들지 않는 제공이 서게 된다. 그러면 이어짐의 논리곱이 넷이 되어 각 인자가 홀로 값을 가르는 자리를 드는 정리가 청구권 집합을 둘 들어야 하고, 기존 이어짐 술어가 종류물의 같음을 두 반환 청구권에서 한 번만 재는 것과 꼴이 갈린다.",
+   "for": "돌려줄 의무가 서지 않는 이전을 어디에 담을지.",
+   "statement": "담보 제공의 두 색인 필드를 선택으로 열어 이 자리를 담는 안을 기각한다",
+   "basis": "담보 제공을 넓히지 않고 별도 구조체로 세우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.OutrightDelivery",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3816",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "당사자를 인도의 두 칸이 아니라 제공의 반환 청구권에서 읽는 안. 종류물의 같음을 인도가 든 칸으로 재는 안.",
+   "reason": "확정 인도는 반환 청구권을 갖지 않으므로 읽을 자리가 없다. 그러면 논리곱이 넷이 되고 각 인자가 홀로 값을 가르는 자리를 드는 정리가 청구권 집합을 둘 들어야 한다.",
+   "for": "그 이전이 사슬을 잇는 조건을 어디서 읽을지.",
+   "statement": "당사자를 인도의 두 칸이 아니라 제공의 반환 청구권에서 읽는 안을 기각한다",
+   "basis": "당사자를 인도의 두 칸에서 읽고 종류물의 같음을 앞뒤 제공의 두 반환 청구권에서 읽기로 했다.",
+   "for_decl": "CrisisFramework.Definition.OutrightDelivery.bridges",
+   "related": [
+    "CF-3804"
+   ]
+  },
+  {
+   "id": "CF-3817",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "색인 없이 인도의 유한 집합을 직접 두는 안.",
+   "reason": "담보물이 선택 필드를 품어 같음의 판정이 자산 타입에 매달리므로 색인 방식이 아니면 중복이 눌린다. 제공 집합과 청구권 집합이 같은 사유로 색인을 쓰며 리포 안에서 관례가 갈리지 않는다.",
+   "for": "인도의 모음을 어떤 꼴로 둘지.",
+   "statement": "색인 없이 인도의 유한 집합을 직접 두는 안을 기각한다",
+   "basis": "색인 집합과 배정 함수를 가진 구조체로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.DeliverySet",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3818",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "시점을 인도 자신의 필드로 두는 안.",
+   "reason": "그러면 한 집합 안에 여러 시점의 인도가 섞여 그 시점의 인도 전부를 가리키는 자리가 사라진다.",
+   "for": "시점을 어디에 둘지.",
+   "statement": "시점을 인도 자신의 필드로 두는 안을 기각한다",
+   "basis": "집합을 시점으로 색인된 족으로 올리기로 했다.",
+   "for_decl": "CrisisFramework.Definition.DeliveryFamily",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3819",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "기존 이어짐 술어를 고쳐 인도를 받게 하는 안. 인도를 여러 번 건너는 전이 폐포로 두는 안.",
+   "reason": "그 술어를 딛는 재담보 판정과 순환 판정과 사슬 머리 판정이 전량 뜻을 갈아타고 앞 페이즈들이 그 술어로 세운 배제 사례가 가리키는 대상이 사라진다. 한 걸음의 뜻이 사슬의 단계 수와 갈리면 단계 수를 받는 도달 판정이 무엇을 세는지가 서지 않는다.",
+   "for": "그 이전을 거쳐 잇는 관계를 어떻게 세울지.",
+   "statement": "기존 이어짐 술어를 고쳐 인도를 받게 하는 안을 기각한다",
+   "basis": "기존 이어짐 술어를 고치지 않고 그 논리합으로 새 관계를 세우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.Pledge.linksVia",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3820",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "단계 수 없이 전이 폐포를 직접 재는 안. 인도의 수를 길이에 함께 세는 안.",
+   "reason": "사슬에 순환이 설 수 있으므로 소박한 재귀가 종료하지 않는다. 저자의 회전 수가 제공과 인도를 가리지 않고 세는 것으로 읽히나 그 편이 그 수의 정의를 적지 않으므로, 세는 꼴을 정하면 읽지 않은 편의 성질을 근거로 쓰게 된다.",
+   "for": "그 관계를 거쳐 재는 도달 판정을 어떤 꼴로 둘지.",
+   "statement": "단계 수 없이 전이 폐포를 직접 재는 안을 기각한다",
+   "basis": "단계 수를 받는 판정으로 두고 인도를 한 걸음으로 세기로 했다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.reachesWithinVia",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3821",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "기존 머리 술어를 이 관계로 다시 가리키는 안.",
+   "reason": "그 술어의 문서화 문면이 담보 속도의 분모가 세는 대상이 그것이라고 적으므로 분모가 세는 대상이 조용히 바뀌고, 그 술어를 이름으로 드는 결정 넷의 문면이 가리키는 대상이 사라진다.",
+   "for": "사슬의 머리를 그 관계로 재는 자리를 어디에 둘지.",
+   "statement": "기존 머리 술어를 이 관계로 다시 가리키는 안을 기각한다",
+   "basis": "기존 머리 술어를 고치지 않고 그 옆에 새 술어를 세우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.isChainHeadVia",
+   "related": [
+    "CF-3802"
+   ]
+  },
+  {
+   "id": "CF-3822",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "끊김을 제공 자신의 필드로 두는 안. 요건 전량을 구성적으로 재는 안.",
+   "reason": "처분은 제공 밖의 사건이므로 그 필드가 인도 집합과 어긋날 수 있고 어긋났을 때 어느 쪽이 참인지를 구조가 말하지 않는다. 통상의 영업 과정과 대체 가능 물건의 매매는 분쟁이 서야 법원이 내리는 판정이어서 신호로 받을 수밖에 없고, 검증 불가능한 조항을 외생 확인 신호로 두라는 요구가 그 자리를 이미 정한다.",
+   "for": "제3자 처분으로 담보권이 끊기는 경로를 어떤 꼴로 둘지.",
+   "statement": "끊김을 제공 자신의 필드로 두는 안을 기각한다",
+   "basis": "제공 집합과 이전 집합을 함께 받는 판정 술어로 두고 법적 판정인 몫을 외생 확인 신호로 받기로 했다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.rightDefeated",
+   "related": [
+    "CF-3805"
+   ]
+  },
+  {
+   "id": "CF-3823",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "측정의 두 축만 칸으로 두고 범위와 포착을 두지 않는 안. 수취인과 값의 성질을 칸에서 빼는 안.",
+   "reason": "타입이 줄어드나 두 축이 함께 비는 사실만 남고 그 까닭이 사라지므로, 그 결손이 공시의 항목이 모자란 데서 오는지 경로의 적용 대상이 갈린 데서 오는지가 구별되지 않는다. 두 축이 같은 수취인에게 가는지와 같은 성질의 값인지가 그 결손의 해소 경로를 가르는데, 빼면 그 가름이 이 파일에서 사라진다.",
+   "for": "확정 인도를 내는 경로의 칸을 무엇으로 둘지.",
+   "statement": "측정의 두 축만 칸으로 두고 범위와 포착을 두지 않는 안을 기각한다",
+   "basis": "측정의 두 축에 경로의 범위와 포착을 더해 넷으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.OutrightDeliveryChannel",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3824",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "두 축의 논리합으로 두는 안. 범위와 포착의 칸을 이 논리곱에 함께 넣는 안.",
+   "reason": "답이 서는 자리가 늘어나나 종류만 내는 경로가 그 인도를 답하는 것으로 서며, 그러면 당사자가 어디에서도 읽히지 않는다는 사실이 이 판정에서 사라진다. 그 둘은 그 경로가 무엇을 내는가가 아니라 그 경로가 어디에 닿고 무엇을 포착하는가이며, 넣으면 측정의 결손과 적용 범위의 결손이 한 판정으로 접힌다.",
+   "for": "한 경로가 그 인도를 답하는지를 무엇으로 판정할지.",
+   "statement": "두 축의 논리합으로 두는 안을 기각한다",
+   "basis": "측정의 두 축의 논리곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.OutrightDeliveryChannel.answersOutrightDelivery",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3825",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로를 세우지 않고 어느 경로도 교역 주체에 닿지 않는 것으로 두는 안.",
+   "reason": "목록이 짧아지나 교역 주체에 닿는 경로가 실재하되 그것이 이전을 포착하지 않는 것과 닿는 경로가 아예 없는 것이 다른 사실이며, 접으면 해소 경로가 조달인 몫과 그렇지 않은 몫이 갈리지 않는다.",
+   "for": "교역 주체에 닿되 그 이전을 포착하지 않는 경로를 목록에 둘지.",
+   "statement": "이 경로를 세우지 않고 어느 경로도 교역 주체에 닿지 않는 것으로 두는 안을 기각한다",
+   "basis": "그 경로를 세워 범위와 포착이 어긋나는 자리를 칸으로 들기로 했다.",
+   "for_decl": "CrisisFramework.Observation.conveyanceInventoryNote",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3826",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로가 당사자나 종류의 축을 낸다고 두는 안.",
+   "reason": "그 공시는 부담을 진 자산의 총량을 내고 거래상대도 상품의 종류도 내지 않으므로, 낸다고 두면 사슬을 잇는 데 필요한 것이 공시에 있는 것으로 선다.",
+   "for": "그 이전을 포착하는 경로가 어느 축을 내는지.",
+   "statement": "이 경로가 당사자나 종류의 축을 낸다고 두는 안을 기각한다",
+   "basis": "당사자도 종류도 내지 않고 포착의 칸만 참으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.conveyanceEncumbranceReport",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3827",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "목록을 비우고 소스 없음을 바로 적는 안.",
+   "reason": "그러면 어느 경로가 어디에 닿고 무엇을 포착하는지가 사라지고, 두 축의 결손이 한 경로의 항목이 모자란 데서 오는지 두 경로의 범위가 갈린 데서 오는지가 구별되지 않는다.",
+   "for": "경로 목록을 둘지 소스 없음을 바로 적을지.",
+   "statement": "목록을 비우고 소스 없음을 바로 적는 안을 기각한다",
+   "basis": "경로 둘을 목록으로 두고 전량을 훑는 판정이 그 목록에 걸리게 하기로 했다.",
+   "for_decl": "CrisisFramework.Observation.outrightDeliveryChannels",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3828",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "읽을 자리가 없을 때 구조가 그 대상을 담지 않는다는 까닭을 내는 안. 판정 불가를 쓰지 않고 거짓을 내는 안.",
+   "reason": "그 까닭이 형식층의 결손을 드는 자리인데 이 페이즈가 그 인도를 정의층에 세우므로 담는 대상이 있으며, 그러면 조달로 풀리는 결손이 구조의 결손으로 적힌다. 거짓은 그 인도가 없었다는 관측인데 읽을 자리가 없는 것은 그 관측이 아니다.",
+   "for": "읽을 자리가 없을 때 어떤 까닭을 낼지.",
+   "statement": "읽을 자리가 없을 때 구조가 그 대상을 담지 않는다는 까닭을 내는 안을 기각한다",
+   "basis": "측정 소스 없음을 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.outrightDeliveryObserved",
+   "related": [
+    "CF-3808"
+   ]
+  },
+  {
+   "id": "CF-3829",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "요건 둘을 한 칸으로 접는 안. 그 요건을 문면으로 드는 칸을 두지 않는 안.",
+   "reason": "칸이 줄어드나 통상의 영업 과정인지는 분쟁이 서야 정해지고 대체 가능 물건을 매매하는 자인지는 영업의 성질이어서 해소 경로가 다른데, 접으면 그 가름이 사라진다. 규칙이 서 있는 것과 그 성립이 공시되는 것이 다른 사실인데, 빼면 이 결손이 규칙의 부재로 읽힌다.",
+   "for": "그 외생 신호를 내는 경로의 칸을 무엇으로 둘지.",
+   "statement": "요건 둘을 한 칸으로 접는 안을 기각한다",
+   "basis": "요건 둘을 축으로 가르고 그 요건을 문면으로 드는 칸을 따로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.PledgeDefeatChannel",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3830",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "요건을 문면으로 드는 칸을 이 논리곱에 함께 넣는 안.",
+   "reason": "그 칸은 그 경로가 무엇을 내는가가 아니라 그 규범이 무엇을 적는가이며, 넣으면 규칙이 서 있다는 사실이 그 사실이 관측된다는 것으로 세어진다.",
+   "for": "한 경로가 그 신호를 답하는지를 무엇으로 판정할지.",
+   "statement": "요건을 문면으로 드는 칸을 이 논리곱에 함께 넣는 안을 기각한다",
+   "basis": "요건 둘의 논리곱으로 두고 문면을 드는 칸을 그 논리곱에서 빼기로 했다.",
+   "for_decl": "CrisisFramework.Observation.PledgeDefeatChannel.answersPledgeDefeat",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3831",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로를 세우지 않고 어느 경로도 요건을 들지 않는 것으로 두는 안.",
+   "reason": "목록이 짧아지나 요건이 성문으로 서 있는 것과 어디에도 적히지 않은 것이 다른 사실이며, 접으면 이 결손이 규칙의 부재로 읽혀 해소 경로가 입법으로 간다.",
+   "for": "요건을 문면으로 드는 조문을 경로로 세울지.",
+   "statement": "이 경로를 세우지 않고 어느 경로도 요건을 들지 않는 것으로 두는 안을 기각한다",
+   "basis": "그 조문을 경로로 세워 규칙이 서 있음과 그 성립이 공시되지 않음을 가르기로 했다.",
+   "for_decl": "CrisisFramework.Observation.warehouseDispositionNorm",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3832",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "이 경로가 요건을 문면으로 드는 것으로 두는 안.",
+   "reason": "그 조문이 드는 것은 완성과 우선의 규칙이고 처분의 성격이나 영업의 성질이 아니므로, 두면 요건을 드는 자리가 둘로 세어져 그 요건이 어느 조문에서 오는지가 흐려진다.",
+   "for": "우선 규칙을 드는 조문이 요건을 드는지.",
+   "statement": "이 경로가 요건을 문면으로 드는 것으로 두는 안을 기각한다",
+   "basis": "그 조문은 완성과 우선의 규칙만 들고 요건을 들지 않는 것으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.negotiableDocumentPriorityNorm",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3833",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "목록을 비우고 소스 없음을 바로 적는 안.",
+   "reason": "그러면 규범이 요건을 문면으로 든다는 사실이 사라지고, 이 결손이 조달로 풀리는 몫인지 아닌지가 갈리지 않는다.",
+   "for": "경로 목록을 둘지 소스 없음을 바로 적을지.",
+   "statement": "목록을 비우고 소스 없음을 바로 적는 안을 기각한다",
+   "basis": "조문 둘을 목록으로 두고 전량을 훑는 판정이 그 목록에 걸리게 하기로 했다.",
+   "for_decl": "CrisisFramework.Observation.pledgeDefeatChannels",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3834",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "판정이 이 모형의 범위 밖이라는 까닭을 내는 안. 법 문면이 모호하다는 까닭을 내는 안.",
+   "reason": "그 까닭은 그 물음이 이 구조가 답할 것이 아니라는 뜻인데 이 페이즈가 그 신호를 정의층의 칸으로 세우므로 답할 자리가 있으며, 그러면 조달로 풀릴 수 있는 결손이 범위의 결손으로 적힌다. 그 조문은 요건을 분명히 들고 그 요건의 성립이 공시되지 않을 뿐이다.",
+   "for": "그 신호가 읽히지 않는 까닭을 무엇으로 낼지.",
+   "statement": "판정이 이 모형의 범위 밖이라는 까닭을 내는 안을 기각한다",
+   "basis": "측정 소스 없음을 내기로 했다.",
+   "for_decl": "CrisisFramework.Observation.pledgeDefeatObserved",
+   "related": [
+    "CF-3809"
+   ]
+  },
+  {
+   "id": "CF-3835",
+   "origin": {
+    "arc": "network",
+    "phase": "network-7",
+    "kind": "decision_session",
+    "date": "2026-11-15"
+   },
+   "candidate": "담보 제공의 필드를 선택으로 열어 돌려줄 의무가 없는 이전을 그 안에 담는 안. 제공의 분할에 셋째 칸을 더하는 안.",
+   "reason": "받은 구멍이 담보 제공이 아닌 이전을 구조가 받아야 하고 그것은 담보의 판별선 밖이라고 적으므로 그 문면과 부딪히며, 제공을 담보권형과 소유권 이전형의 둘로 분할하고 그 둘을 배타로 등록해 둔 이 목록의 자리도 함께 깨진다.",
+   "for": "그 이전을 용어집에서 어디에 둘지.",
+   "statement": "담보 제공의 필드를 여는 안과 그 분할에 셋째 칸을 더하는 안을 기각한다",
+   "basis": "확정 인도와 사슬의 고리를 따로 등재하고 정제 둘과 배타 하나로 짜기로 했다.",
+   "for_decl": "CrisisFramework.Glossary.registry",
+   "related": [
+    "CF-3807"
+   ]
   }
  ]
 }
