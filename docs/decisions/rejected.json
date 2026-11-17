@@ -8610,6 +8610,294 @@
    "related": [
     "CF-3936"
    ]
+  },
+  {
+   "id": "CF-3967",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "기존 접근 사상에 시점 인자를 더해 그 사상 자신을 족으로 바꾸는 안. 단계를 받지 않고 주체를 바로 받는 안.",
+   "reason": "그 사상의 기각 문단이 그 안을 이미 기각하고 그 기각에 대응하는 기각 레지스터의 항목이 서 있으므로, 그 길을 가면 그 문단을 걷고 그 항목을 폐기해야 하는데 원장이 수정 불가여서 그 비용이 새 구조를 세우는 것보다 크다. 원문이 접근을 단계의 성질로 들고 주체는 단계에 배정되므로, 주체를 바로 받으면 같은 단계의 두 주체가 다른 대응을 갖는 것을 구조가 허용하면서 그 차이의 근거를 아무 데서도 받지 않는다.",
+   "for": "시점마다의 단계·풋 대응을 어느 그릇에 담을지.",
+   "statement": "기존 접근 사상에 시점 인자를 더해 그 사상 자신을 족으로 바꾸는 안과 단계를 받지 않고 주체를 바로 받는 안을 기각한다",
+   "basis": "기존 접근 사상을 공황의 기준으로 남기고 그 위에 새 구조를 세우기로 했다.",
+   "for_decl": "CrisisFramework.Definition.TierPutReach",
+   "related": [
+    "CF-3957"
+   ]
+  },
+  {
+   "id": "CF-3968",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "대응을 시점과 무관한 하나로 두는 안. 시점을 구조의 칸으로 받는 안.",
+   "reason": "통화 백스톱의 발동이 시점에 걸린다는 것이 원문에 서 있으므로 시점을 받지 않으면 그 변화가 구조에 담기지 않는다. 같은 층의 앞선 대상들이 족을 축약으로 두고 구조에 시점 칸을 두지 않으므로, 칸으로 받으면 같은 요구가 두 꼴로 서고 그 둘이 갈릴 수 있다.",
+   "for": "그 대응의 시점 의존을 어느 꼴로 담을지.",
+   "statement": "대응을 시점과 무관한 하나로 두는 안과 시점을 구조의 칸으로 받는 안을 기각한다",
+   "basis": "시점에서 대응으로 가는 족을 축약으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.TierPutReachFamily",
+   "related": [
+    "CF-3957"
+   ]
+  },
+  {
+   "id": "CF-3969",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "열거 전량을 훑어 두 시점의 대응이 같은지를 내는 안. 단계를 인자로 받아 임의의 단계와 풋을 읽는 안.",
+   "reason": "두 열거의 곱이 열여섯이고 그 비교가 칸마다의 논리곱으로 서는데, 시점에 걸리는 칸이 원문에 하나뿐이므로 나머지 열다섯 칸을 비교에 넣으면 그 판정이 무엇을 재는지가 흐려진다. 그러면 이 판정이 구조의 칸을 그대로 되풀이하는 자리가 되어 족에 대해 아무것도 더하지 않는다.",
+   "for": "족의 값이 시점에 따라 달라지는 자리를 어느 판정으로 읽을지.",
+   "statement": "열거 전량을 훑어 두 시점의 대응이 같은지를 내는 안과 단계를 인자로 받아 임의의 단계와 풋을 읽는 안을 기각한다",
+   "basis": "주권의 통화 백스톱 칸만 읽는 판정을 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.TierPutReachFamily.backstopAt",
+   "related": [
+    "CF-3957"
+   ]
+  },
+  {
+   "id": "CF-3970",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "색인을 조달의 만기로 두는 안. 둘을 보유자 부문과 만기의 분할에 부류로 더하는 안.",
+   "reason": "만기는 그 조달이 언제 갈려야 하는지를 들고 두 꼴은 그 갈림이 막힌 자리와 애초에 서지 않은 자리를 가르므로, 만기로 색인하면 아직 부채로 서지 않은 조달이 만기를 갖지 않아 그 칸이 비게 된다. 그 분할의 색인이 조달의 출처이고 이 열거의 색인이 조달의 단계이므로, 더하면 한 분할이 두 색인을 함께 들어 어느 칸이 어느 축을 가르는지가 서지 않는다.",
+   "for": "조달 실패의 두 꼴을 어느 색인으로 가를지.",
+   "statement": "색인을 조달의 만기로 두는 안과 둘을 보유자 부문과 만기의 분할에 부류로 더하는 안을 기각한다",
+   "basis": "그 조달이 이미 부채로 섰는가를 색인으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind",
+   "related": [
+    "CF-3958"
+   ]
+  },
+  {
+   "id": "CF-3971",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "색인을 열거의 칸으로 두지 않고 명제로 두는 안. 색인을 두지 않고 두 꼴의 이름만 두는 안.",
+   "reason": "그 색인이 두 꼴에서 계산으로 정해지고 판정 술어에 `Decidable` 인스턴스를 요구하는 조항이 걸리므로, 명제로 두면 그 인스턴스를 따로 세워야 하는데 참거짓을 내는 함수가 그 인스턴스를 타입에서 받는다. 그러면 그 둘을 가른 축이 문서화 문면에만 서고 구조 안의 판정으로 재어지지 않는다.",
+   "for": "그 색인을 어느 꼴로 담을지.",
+   "statement": "색인을 열거의 칸으로 두지 않고 명제로 두는 안과 색인을 두지 않고 두 꼴의 이름만 두는 안을 기각한다",
+   "basis": "참거짓을 내는 계산 함수로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.onExistingLiability",
+   "related": [
+    "CF-3958"
+   ]
+  },
+  {
+   "id": "CF-3972",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "자산 증가의 금액을 함께 내는 안. 방향을 셋으로 두고 어느 쪽도 아닌 칸을 더하는 안.",
+   "reason": "아크 값 정본이 이 페이즈의 층을 정의층으로 들고 그 금액의 출처가 이 회차의 조달에 없으므로, 금액을 내면 그 값을 지어내게 된다. 두 꼴이 색인의 참과 거짓으로 갈리고 그 각각이 한 방향에 닿으므로 셋째 칸이 값을 갖는 자리가 없다.",
+   "for": "두 꼴이 대차대조표의 어느 쪽에 닿는지를 어느 꼴로 담을지.",
+   "statement": "자산 증가의 금액을 함께 내는 안과 방향을 셋으로 두고 어느 쪽도 아닌 칸을 더하는 안을 기각한다",
+   "basis": "방향을 판정 하나로 두고 금액을 받지 않기로 했다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.enlargesAssets",
+   "related": [
+    "CF-3958"
+   ]
+  },
+  {
+   "id": "CF-3973",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "노드에서 꼴로 가는 선택 사상으로 두는 안. 꼴에서 노드의 목록으로 가는 사상으로 두는 안.",
+   "reason": "그러면 한 노드가 한 시점에 한 꼴만 겪는 것이 되는데, 원문이 같은 기관에서 두 꼴을 함께 들므로 그 배치가 구조에서 표현되지 않는다. 목록으로 받으면 같은 노드가 한 목록에 여럿 드는 것을 구조가 허용하면서 그 중복의 뜻을 아무 데서도 받지 않는다.",
+   "for": "어느 노드에 어느 꼴의 실패가 섰는지를 어느 꼴로 담을지.",
+   "statement": "노드에서 꼴로 가는 선택 사상으로 두는 안과 꼴에서 노드의 목록으로 가는 사상으로 두는 안을 기각한다",
+   "basis": "노드와 꼴을 함께 받는 판정 칸으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureIncidence",
+   "related": [
+    "CF-3958"
+   ]
+  },
+  {
+   "id": "CF-3974",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "배치를 시점과 무관한 하나로 두는 안. 시점을 구조의 칸으로 받는 안.",
+   "reason": "L-13 이 정의층의 최상위 대상에 시점 인덱스를 요구하고 그 실패가 시점마다 서거나 서지 않으므로, 시점을 받지 않으면 그 흐름이 구조에 담기지 않는다. 같은 층의 앞선 대상들이 족을 축약으로 두고 구조에 시점 칸을 두지 않으므로, 칸으로 받으면 같은 요구가 두 꼴로 서고 그 둘이 갈릴 수 있다.",
+   "for": "그 배치의 시점 의존을 어느 꼴로 담을지.",
+   "statement": "배치를 시점과 무관한 하나로 두는 안과 시점을 구조의 칸으로 받는 안을 기각한다",
+   "basis": "시점에서 배치로 가는 족을 축약으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureIncidenceFamily",
+   "related": [
+    "CF-3958"
+   ]
+  },
+  {
+   "id": "CF-3975",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "읽는 칸을 둘로 두고 만기 축의 칸을 빼는 안. 두 물음마다 구조를 따로 세우는 안.",
+   "reason": "두 꼴의 가름이 만기 축 없이는 서지 않고 그 축의 부재가 이 회차의 조달에서 나온 사실이므로, 그 칸을 빼면 어느 경로가 왜 그 가름을 내지 못하는지가 구조에 남지 않는다. 두 구조가 받는 쪽과 값의 성질의 칸에서 같아 그 꼴이 되풀이되고, 앞 페이즈의 채널도 구조 하나에 인스턴스 둘이었다.",
+   "for": "두 물음의 공시 경로를 어느 그릇에 담을지.",
+   "statement": "읽는 칸을 둘로 두고 만기 축의 칸을 빼는 안과 두 물음마다 구조를 따로 세우는 안을 기각한다",
+   "basis": "구조를 하나로 두고 읽는 칸을 셋으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.FundingTimingChannel",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3976",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "만기 축의 칸을 곱에 넣는 안. 세 칸의 합으로 두는 안.",
+   "reason": "만기 축은 조달 실패의 두 꼴을 가르는 데 쓰이고 풋 대응의 시점과 색인이 다르므로, 곱에 넣으면 만기 축을 내지 않는 경로가 그 입력을 내더라도 이 판정이 거짓을 내게 된다. 합으로 두면 가름만 내는 경로가 그 입력을 답하는 것이 되어 그 결손이 사라진다.",
+   "for": "풋 대응의 시점 입력을 답하는 조건을 어느 꼴로 둘지.",
+   "statement": "만기 축의 칸을 곱에 넣는 안과 세 칸의 합으로 두는 안을 기각한다",
+   "basis": "그 입력을 내는 칸 하나를 그대로 읽기로 했다.",
+   "for_decl": "CrisisFramework.Observation.FundingTimingChannel.answersPutTiming",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3977",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "가름의 칸만 읽는 안. 세 칸의 곱으로 두는 안.",
+   "reason": "그 가름이 만기 축 없이는 공시에서 유도되지 않고 그 축의 부재가 이 회차의 조달에서 나온 사실이므로, 칸 하나만 읽으면 축을 내지 않는 경로가 그 가름을 답하는 것으로 읽힌다. 풋 대응의 시점 입력은 다른 물음에 속하고 그 칸을 곱에 넣으면 두 물음이 한 판정에 접힌다.",
+   "for": "조달 실패 꼴의 가름을 답하는 조건을 어느 꼴로 둘지.",
+   "statement": "가름의 칸만 읽는 안과 세 칸의 곱으로 두는 안을 기각한다",
+   "basis": "가름의 칸과 만기 축의 칸의 곱으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.FundingTimingChannel.answersFailureKind",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3978",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "만기 축의 칸을 참으로 두는 안. 받는 쪽을 공개 독자로 두는 안.",
+   "reason": "그 보고서가 단기와 중기의 균형된 혼합이라 적고 중기를 6개월 이상으로 정의하나 범주별 만기 구성을 내지 않으므로, 참으로 두면 서술로 남은 성격이 공시된 축으로 읽힌다. 연차보고서의 그 자리가 투자자에게 조달 구성을 알리는 공시이고 앞선 채널들이 같은 부류를 투자자로 두었다.",
+   "for": "연차보고서의 조달 구성 공시가 내는 것을 어느 칸으로 적을지.",
+   "statement": "만기 축의 칸을 참으로 두는 안과 받는 쪽을 공개 독자로 두는 안을 기각한다",
+   "basis": "세 칸을 전부 거짓으로 두고 받는 쪽을 투자자로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.annualReportFundingBreakdown",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3979",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "값의 성질을 공표된 보고로 두는 안. 풋 대응의 시점 입력 칸을 참으로 두는 안.",
+   "reason": "그 제도를 다룬 문면이 기각된 대안과 그 사유를 저자들의 판단으로 들고 그 저자들이 중앙은행 직원이므로, 그 경로가 내는 것은 직원의 추정이다. 그 조치가 단계의 풋 접근을 바꾼 것이 아니라 노드 집합을 바꾼 것이어서, 참으로 두면 이 회차가 가른 두 축이 한 칸에 접힌다.",
+   "for": "긴급 유동성 제도의 공표 조건이 내는 것을 어느 칸으로 적을지.",
+   "statement": "값의 성질을 공표된 보고로 두는 안과 풋 대응의 시점 입력 칸을 참으로 두는 안을 기각한다",
+   "basis": "세 칸을 전부 거짓으로 두고 값의 성질을 직원의 추정으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.emergencyFacilityTerms",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3980",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "전수라고 적는 안. 목록을 두지 않고 판정을 경로마다 따로 쓰는 안.",
+   "reason": "뭉치 밖의 경로를 이 회차가 조사하지 않았으므로 전수 주장을 세울 근거가 없다. 목록이 없으면 관측 결과를 내는 함수가 받을 변이 서지 않는다.",
+   "for": "이 회차가 든 경로를 어느 꼴로 묶을지.",
+   "statement": "전수라고 적는 안과 목록을 두지 않고 판정을 경로마다 따로 쓰는 안을 기각한다",
+   "basis": "목록으로 두고 전수라고 주장하지 않기로 했다.",
+   "for_decl": "CrisisFramework.Observation.fundingTimingChannels",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3981",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "거짓을 내는 안. 까닭을 구조의 부재로 두는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르고, 관측층이 그 둘을 가르는 열거를 이미 들고 있으므로 거짓을 내면 그 가름이 사라진다. 이 회차가 시점을 받는 족을 세웠으므로 구조에 대상이 있고, 없는 것은 그 족의 값을 정하는 입력이다.",
+   "for": "그 입력에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "거짓을 내는 안과 까닭을 구조의 부재로 두는 안을 기각한다",
+   "basis": "판정 불가를 내고 그 까닭을 측정 소스 없음으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.putTimingInputObserved",
+   "related": [
+    "CF-3960"
+   ]
+  },
+  {
+   "id": "CF-3982",
+   "origin": {
+    "arc": "network",
+    "phase": "network-11",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "한 경로가 가름을 내고 다른 경로가 만기 축을 낼 때 그 둘을 맞대어 관측을 세우는 안. 경로의 수를 받아 임계를 두는 안.",
+   "reason": "받는 쪽이 갈려 한쪽만 보는 관측자에게는 그 맞댐이 서지 않으므로, 이 판정은 한 경로를 단위로 두며 경로 사이의 맞댐을 받지 않는다. 하나가 답하면 가름이 서므로 임계가 하나보다 클 근거가 없다.",
+   "for": "그 가름에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "한 경로가 가름을 내고 다른 경로가 만기 축을 낼 때 그 둘을 맞대어 관측을 세우는 안과 경로의 수를 받아 임계를 두는 안을 기각한다",
+   "basis": "판정 불가를 내고 그 까닭을 측정 소스 없음으로 두기로 했다.",
+   "for_decl": "CrisisFramework.Observation.failureKindSplitObserved",
+   "related": [
+    "CF-3960"
+   ]
   }
  ]
 }
