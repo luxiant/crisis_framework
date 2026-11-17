@@ -8898,6 +8898,402 @@
    "related": [
     "CF-3960"
    ]
+  },
+  {
+   "id": "CF-3997",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "이 판정을 외생 확인 신호의 명목값으로 두는 안.",
+   "reason": "한 청구권이 외생 신호의 타입과 명목값의 타입을 하나씩 받으므로 서류의 쌍 위의 관계를 그 자리로 밀면 그 청구권의 다른 외생 신호가 전부 그 색인을 쓰게 되고, 그 색인이 계약 문서에 열거되지 않는다. 그리고 그 판정에는 순서가 없어 명목값 사이의 순서를 묻는 두 생성자가 뜻을 갖지 않는다.",
+   "for": "구조가 재지 못하는 판정을 조항 문법이 어느 자리로 받을지.",
+   "statement": "이 판정을 외생 확인 신호의 명목값으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AdjudicatedCondition",
+   "related": [
+    "CF-3983"
+   ]
+  },
+  {
+   "id": "CF-3998",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "판정을 시점 없는 상태로 두고 시점을 쓰는 자리마다 인자로 받는 안.",
+   "reason": "그러면 시점이 대상마다 따로 서고 한 시점의 판정을 통째로 드는 자리가 사라지며, 앞 페이즈들이 세운 족이 전부 시점에서 상태로 가는 꼴이라 선례와 갈린다.",
+   "for": "그 판정이 시점을 어느 꼴로 받을지.",
+   "statement": "판정을 시점 없는 상태로 두고 시점을 쓰는 자리마다 인자로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AdjudicatedConditionFamily",
+   "related": [
+    "CF-3983"
+   ]
+  },
+  {
+   "id": "CF-3999",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "판정을 선택 타입으로 두어 아직 내려지지 않음을 담는 안.",
+   "reason": "그 전파 규칙이 두 규범 어디에도 없으므로 제도가 갖지 않는 표현력을 구조가 갖게 되며, 내려지지 않음은 판정의 성질이 아니라 관측의 결손이므로 관측층이 소스 없음으로 등재하는 것이 그 거처다.",
+   "for": "그 판정의 값이 무엇을 담을지.",
+   "statement": "판정을 선택 타입으로 두어 아직 내려지지 않음을 담는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AdjudicatedCondition.holds",
+   "related": [
+    "CF-3983"
+   ]
+  },
+  {
+   "id": "CF-4000",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "판정의 칸만 두고 그것이 딛는 재료의 칸을 빼는 안. 세 물음마다 구조를 따로 세우는 안.",
+   "reason": "저촉의 판정이 제시된 서류의 색인 없이는 어느 쌍에 대한 것인지가 서지 않고 실권의 판정이 통지의 시점과 하자 적시의 완전성 없이는 유도되지 않으므로, 그 칸을 빼면 판정만 내는 경로가 그 물음을 답하는 것으로 읽힌다. 세 구조가 받는 쪽과 값의 성질의 칸에서 같아 그 꼴이 되풀이된다.",
+   "for": "이 회차의 판정들이 읽히는 경로를 어느 구조로 담을지.",
+   "statement": "판정의 칸만 두고 그것이 딛는 재료의 칸을 빼는 안과 세 물음마다 구조를 따로 세우는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicatedConditionChannel",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4001",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "판정의 칸만 읽는 안. 다섯 칸의 곱으로 두는 안.",
+   "reason": "그 판정이 어느 쌍에 대한 것인지가 제시된 서류의 색인 없이는 서지 않으므로, 칸 하나만 읽으면 색인을 내지 않는 경로가 그 물음을 답하는 것으로 읽힌다. 통지의 시점과 하자 적시는 다른 물음에 속하고 그 칸을 곱에 넣으면 두 물음이 한 판정에 접힌다.",
+   "for": "저촉의 판정을 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "판정의 칸만 읽는 안과 다섯 칸의 곱으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicatedConditionChannel.answersDocumentConflict",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4002",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "통지의 시점만 읽는 안. 그 둘을 합으로 두는 안.",
+   "reason": "시한 안에 통지했더라도 하자를 일부만 적었으면 실권이 서므로, 시점만 읽으면 그 자리가 재어지지 않는다. 합으로 두면 둘 가운데 하나만 내는 경로가 그 판정을 답하는 것이 되어 그 결손이 사라진다.",
+   "for": "실권의 판정을 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "통지의 시점만 읽는 안과 그 둘을 합으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicatedConditionChannel.answersExaminerPreclusion",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4003",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "점유의 칸을 곱에 넣는 안. 그 권리를 저촉의 판정과 한 칸으로 묶는 안.",
+   "reason": "점유는 앞 페이즈의 구조가 담는 상태이고 그 권리는 점유가 없는 자리에서 서는 것이므로, 곱에 넣으면 그 권리만 선 자리가 거짓으로 선다. 두 판정이 서로 다른 규범에서 오고 색인도 서류의 쌍과 인도로 갈린다.",
+   "for": "회수할 권리의 판정을 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "점유의 칸을 곱에 넣는 안과 그 권리를 저촉의 판정과 한 칸으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicatedConditionChannel.answersRecoveryRight",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4004",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "저촉 판정의 칸을 참으로 두는 안. 받는 쪽을 공개 독자로 두는 안.",
+   "reason": "그 문면이 개설 시점에 서고 저촉은 제시가 있어야 판정되므로, 참으로 두면 아직 일어나지 않은 판정을 그 문면이 내는 것으로 읽힌다. 그 문면이 수익자와 개설의뢰인에게 가고 공표되지 않는다.",
+   "for": "신용장이 공시하는 것을 어느 경로로 둘지.",
+   "statement": "저촉 판정의 칸을 참으로 두는 안과 받는 쪽을 공개 독자로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.issuedCreditTerms",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4005",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "회수할 권리의 칸을 참으로 두는 안. 값의 성질을 공표된 보고로 두는 안.",
+   "reason": "그 기록이 다툰 건에 대해서만 서고 끊김의 판정이 요구하는 것은 그 인도마다의 권리이므로, 참으로 두면 다투지 않은 인도의 권리가 그 기록에서 나오는 것으로 읽힌다. 그 기록이 법원의 판정이고 공시 주체가 내는 보고가 아니다.",
+   "for": "담보 분쟁의 기록을 어느 경로로 둘지.",
+   "statement": "회수할 권리의 칸을 참으로 두는 안과 값의 성질을 공표된 보고로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.collateralDisputeRecord",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4006",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "전수라고 적는 안. 목록을 두지 않고 판정을 경로마다 따로 쓰는 안.",
+   "reason": "뭉치 밖의 경로를 이 회차가 조사하지 않았으므로 전수 주장을 세울 근거가 없다. 목록이 없으면 관측 결과를 내는 함수가 받을 변이 서지 않는다.",
+   "for": "공시 경로의 목록에 무엇을 실을지.",
+   "statement": "전수라고 적는 안과 목록을 두지 않고 판정을 경로마다 따로 쓰는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.adjudicatedConditionChannels",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4007",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "거짓을 내는 안. 까닭을 구조의 부재로 두는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르고, 관측층이 그 둘을 가르는 열거를 이미 들고 있으므로 거짓을 내면 그 가름이 사라진다. 이 회차가 그 판정을 받는 구조를 세웠으므로 구조에 대상이 있고, 없는 것은 그 판정을 내는 경로다.",
+   "for": "저촉의 판정에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "거짓을 내는 안과 까닭을 구조의 부재로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.documentConflictObserved",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4008",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "그 통지를 경로로 세우는 안. 거짓을 내는 안.",
+   "reason": "공시 경로는 관측자가 밖에서 읽는 자리이고 그 통지는 당사자 사이의 문면 이므로, 경로로 세우면 관측자가 갖지 않는 것을 가진 것으로 읽힌다. 소스가 없다는 것과 그 명제가 거짓이라는 것이 다르다.",
+   "for": "실권의 판정에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "그 통지를 경로로 세우는 안과 거짓을 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.examinerPreclusionObserved",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4009",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "점유의 관측으로 그것을 대신하는 안. 다툼의 기록이 그 판정을 낸다고 두는 안.",
+   "reason": "그 권리가 점유가 없는 자리에서 서는 것이므로 점유의 관측으로는 그 자리가 재어지지 않는다. 그 기록이 다툰 건에 대해서만 서고 끊김의 판정이 요구하는 것은 인도마다의 권리다.",
+   "for": "회수할 권리의 판정에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "점유의 관측으로 그것을 대신하는 안과 다툼의 기록이 그 판정을 낸다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.recoveryRightObserved",
+   "related": [
+    "CF-3988"
+   ]
+  },
+  {
+   "id": "CF-4010",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "그 권리를 인도 구조의 외생 확인 신호에 더해 그 신호가 받는 몫을 셋으로 넓히는 안. 그 권리를 점유 상태의 필드로 두는 안.",
+   "reason": "앞 페이즈의 결정이 그 몫을 선의와 통상의 과정 둘로 못박았고 그 항목이 원장에 살아 있어 셋째를 더하면 그 결정이 뒤집히며, 원장이 수정 불가여서 폐기 레코드가 유일한 길이 된다. 점유는 물건을 쥔 상태이고 그 권리는 쥐지 못한 자리에서 서는 것이어서 한 필드가 두 뜻을 들게 된다.",
+   "for": "매수인의 자격을 무엇의 논리 결합으로 둘지.",
+   "statement": "그 권리를 인도 구조의 외생 확인 신호에 더해 그 신호가 받는 몫을 셋으로 넓히는 안과 그 권리를 점유 상태의 필드로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.OutrightDelivery.takerQualifies",
+   "related": [
+    "CF-3986"
+   ]
+  },
+  {
+   "id": "CF-4011",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "앞 페이즈의 끊김 술어를 고쳐 그 인자를 자격으로 바꾸는 안. 내놓는 쪽의 두 경로를 한 조건으로 접는 안.",
+   "reason": "그 술어를 딛는 정리 셋과 그것을 읽는 자리가 함께 움직이고 앞 페이즈가 세운 진술의 뜻이 소급해 바뀌므로, 새 술어를 세우고 두 술어가 갈리는 배치를 정리가 드는 쪽을 골랐다. 같은 규범이 두 경로가 요구하는 것이 다르다고 적으므로 접으면 요건이 섞인다.",
+   "for": "회수할 권리로 끊기는 자리를 기존 끊김 판정과 어떻게 가를지.",
+   "statement": "앞 페이즈의 끊김 술어를 고쳐 그 인자를 자격으로 바꾸는 안과 내놓는 쪽의 두 경로를 한 조건으로 접는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.PledgeSet.rightDefeatedByQualification",
+   "related": [
+    "CF-3986"
+   ]
+  },
+  {
+   "id": "CF-4012",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "서류의 문언을 칸으로 들어 구조가 그것을 맞대는 안. 제시를 서류의 열로 두어 순서를 담는 안.",
+   "reason": "조문이 서류상의 정보가 반드시 일치할 필요는 없다고 정하므로 맞댈 기준이 같음이 아니고, 그 기준의 일부가 계약 문면 밖의 관행에 있어 구조가 그것을 재지 못한다. 그 규범이 심사를 서류만에 의하여 한다고 정할 뿐 제시의 순서에 효과를 두지 않으므로, 열로 두면 제도가 갖지 않는 구별이 구조에 선다.",
+   "for": "제시된 서류를 무엇으로 담을지.",
+   "statement": "서류의 문언을 칸으로 들어 구조가 그것을 맞대는 안과 제시를 서류의 열로 두어 순서를 담는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.Presentation",
+   "related": [
+    "CF-3984"
+   ]
+  },
+  {
+   "id": "CF-4013",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "두 색인 집합이 같을 것을 요구하는 안.",
+   "reason": "요구되지 않은 서류를 함께 내는 것이 그 규범에서 제시를 깨뜨리지 않으므로, 같음을 요구하면 실제로 통과하는 제시가 거짓으로 선다.",
+   "for": "요구된 서류가 전부 제시됐는지를 어느 꼴로 잴지.",
+   "statement": "두 색인 집합이 같을 것을 요구하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.Presentation.allRequiredPresented",
+   "related": [
+    "CF-3984"
+   ]
+  },
+  {
+   "id": "CF-4014",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "저촉을 서류 하나 위의 술어로 두는 안.",
+   "reason": "그 관계가 두 서류 사이에 서고 한 서류만 보아서는 어긋남이 재어지지 않으므로, 한 서류 위의 술어로 두면 그 관계가 구조에서 사라진다.",
+   "for": "서류 사이의 무저촉을 어느 자리에서 잴지.",
+   "statement": "저촉을 서류 하나 위의 술어로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.Presentation.noConflict",
+   "related": [
+    "CF-3984"
+   ]
+  },
+  {
+   "id": "CF-4015",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "준거 셋을 인자 셋으로 벌려 두는 안.",
+   "reason": "그 규범의 규정과 그 관행이 둘 다 저촉의 판정에 흡수되고 그 둘을 가르는 경로가 어느 기록에도 없으므로, 벌려 두면 어느 인자가 무엇을 받는지가 구조에서 서지 않고 그 가름이 지어낸 것이 된다.",
+   "for": "일치하는 제시를 무엇의 논리 결합으로 둘지.",
+   "statement": "준거 셋을 인자 셋으로 벌려 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.Presentation.complying",
+   "related": [
+    "CF-3984"
+   ]
+  },
+  {
+   "id": "CF-4016",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "절차를 상태 집합과 전이 함수로 두는 안. 통지의 시점을 받지 않고 시한 준수를 불린 하나로 두는 안.",
+   "reason": "그 설계가 관계의 상태를 축으로 삼아 절차 이력을 담되 지급과 금액을 담지 않아 회계층과 이어지지 않으므로, 채택하면 층의 의존 방향이 깨진다. 그러면 그 시한이 어느 시점인지가 구조에서 사라지고 조항의 족과 맞댈 자리가 없어진다.",
+   "for": "판정자가 한 절차를 무엇으로 담을지.",
+   "statement": "절차를 상태 집합과 전이 함수로 두는 안과 통지의 시점을 받지 않고 시한 준수를 불린 하나로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.ExaminerConduct",
+   "related": [
+    "CF-3985"
+   ]
+  },
+  {
+   "id": "CF-4017",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "시한을 은행영업일의 계수로 두고 구조가 그 시점을 계산하는 안.",
+   "reason": "은행영업일이 달력과 휴일에 걸리고 그 환산이 계약 문서에 없으므로, 그 계수를 구조에 두면 구조가 재지 못하는 것을 재는 것으로 적힌다. 그 계산을 위임된 하위 체계의 몫으로 둔 선행 설계가 같은 선택을 한다.",
+   "for": "실권을 밖에서 받을지 이력에서 계산할지.",
+   "statement": "시한을 은행영업일의 계수로 두고 구조가 그 시점을 계산하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.ExaminerConduct.precluded",
+   "related": [
+    "CF-3985"
+   ]
+  },
+  {
+   "id": "CF-4018",
+   "origin": {
+    "arc": "network",
+    "phase": "network-12",
+    "kind": "decision_session",
+    "date": "2026-11-17"
+   },
+   "candidate": "실권을 발동조건 문법의 생성자로 더해 이 의무를 발동 여부 하나로 두는 안. 조건을 지급의 부속으로 두는 선행 설계를 그 자리에 쓰는 안.",
+   "reason": "그 문법의 평가 함수가 조항과 환경만 받고 절차의 이력을 받지 않으므로 생성자를 더해도 그 이력이 들어갈 자리가 없으며, 그 함수를 고치면 그것을 딛는 청구권 타입과 그 아래의 정리 전량이 함께 움직인다. 조건이 따로 서야 그것이 표현되지 않을 때 막힘이 드러난다.",
+   "for": "결제 의무를 무엇의 논리 결합으로 둘지.",
+   "statement": "실권을 발동조건 문법의 생성자로 더해 이 의무를 발동 여부 하나로 두는 안과 조건을 지급의 부속으로 두는 선행 설계를 그 자리에 쓰는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.settlementOwed",
+   "related": [
+    "CF-3985"
+   ]
   }
  ]
 }
