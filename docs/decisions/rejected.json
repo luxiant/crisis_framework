@@ -9294,6 +9294,348 @@
    "related": [
     "CF-3985"
    ]
+  },
+  {
+   "id": "CF-4035",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "층을 수로 매기고 그 수의 순서로 서열을 두는 안.",
+   "reason": "위층이 아래층을 덮는 것만이면 그 꼴로 접히는데, 예비 고찰이 그 규칙의 정의가 뜻밖의 결과를 내며 환적 금지를 세우려면 한 하위 조항을 배제해야 한다고 적어 **아래층의 정의가 위층의 평문을 다시 읽게 만드는 자리**를 든다. 그 자리는 한 방향의 수 순서로 서지 않으므로 열거만 두고 순서를 구조에 박지 않는다.",
+   "for": "신용장의 준거를 이루는 층을 무엇으로 담을지.",
+   "statement": "층을 수로 매기고 그 수의 순서로 서열을 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.CreditAuthority",
+   "related": [
+    "CF-4023"
+   ]
+  },
+  {
+   "id": "CF-4036",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "다스리는가를 구조가 계산하게 두는 안.",
+   "reason": "신용장이 어느 조항을 배제했는지는 그 문면을 읽어야 서고 구조가 그 읽기를 하지 않으므로, 계산으로 두면 제도가 갖지 않는 표현력을 문법이 갖게 된다.",
+   "for": "층별 판정과 그 층이 다스리는가를 무엇으로 담을지.",
+   "statement": "다스리는가를 구조가 계산하게 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AuthorityVerdict",
+   "related": [
+    "CF-4023"
+   ]
+  },
+  {
+   "id": "CF-4037",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "시간 의존을 회계층에서만 처리하고 정의층은 판정 하나를 고정으로 두는 안.",
+   "reason": "재유입처가 시계열 시뮬레이션을 수행하므로 재유입 시 정의층에 시점이 필요하다.",
+   "for": "그 판정이 시점을 어느 꼴로 받을지.",
+   "statement": "시간 의존을 회계층에서만 처리하고 정의층은 판정 하나를 고정으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AuthorityVerdictFamily",
+   "related": [
+    "CF-4023"
+   ]
+  },
+  {
+   "id": "CF-4038",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "어느 층도 다스리지 않을 때 판정을 없음으로 내는 안.",
+   "reason": "그러면 반환 타입이 선택 타입이 되고 그 없음을 전파하는 규칙이 계약 문서에 없으므로, 제도가 갖지 않는 표현력을 문법이 갖게 된다. 관행이 최종 해석자로 남는 것이 그 규범의 꼴이므로 마지막 층을 바닥으로 둔다.",
+   "for": "세 층의 판정을 어느 꼴로 해소할지.",
+   "statement": "어느 층도 다스리지 않을 때 판정을 없음으로 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AuthorityVerdict.resolve",
+   "related": [
+    "CF-4023"
+   ]
+  },
+  {
+   "id": "CF-4039",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "기초 계약의 판정을 세 층 옆의 넷째 층으로 두고 같은 해소를 돌리는 안.",
+   "reason": "그러면 한 묶음 안의 덮음이 두 묶음 사이에도 서는 것으로 읽혀, 그 규범이 독립이라고 적은 것을 구조가 서열로 바꾼다.",
+   "for": "기초 계약의 준거법 아래의 판정과의 갈림을 어느 자리에서 잴지.",
+   "statement": "기초 계약의 판정을 세 층 옆의 넷째 층으로 두고 같은 해소를 돌리는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.verdictsDiverge",
+   "related": [
+    "CF-4023"
+   ]
+  },
+  {
+   "id": "CF-4040",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "변경 뒤의 조항을 시점에서 조항으로 가는 족 하나로 두고 그 족의 값이 자기 값의 충족에 의존한다고 적는 안.",
+   "reason": "그러면 그 족이 잘 정의되지 않고, 그 의존이 실은 문면과 효력을 가르면 사라지는 것이므로 표현되지 않는 것이 아니라 잘못 쪼갠 것이 된다.",
+   "for": "조건변경을 무엇으로 담을지.",
+   "statement": "변경 뒤의 조항을 시점에서 조항으로 가는 족 하나로 두고 그 족의 값이 자기 값의 충족에 의존한다고 적는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AmendmentRecord",
+   "related": [
+    "CF-4024"
+   ]
+  },
+  {
+   "id": "CF-4041",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "효력을 그 시점의 부합만으로 두는 안.",
+   "reason": "그러면 부합하는 제시가 한 번 섰다가 뒤 시점에 서지 않을 때 효력이 되돌아가는데, 그 조문은 그 순간부터 변경된 것으로 본다고 적으므로 효력이 한 번 서면 유지된다.",
+   "for": "조건변경의 효력을 무엇의 논리 결합으로 둘지.",
+   "statement": "효력을 그 시점의 부합만으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AmendmentRecord.accepted",
+   "related": [
+    "CF-4024"
+   ]
+  },
+  {
+   "id": "CF-4042",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "두 조항을 함께 두고 둘 다 평가한 뒤 논리합으로 묶는 안.",
+   "reason": "그러면 변경 전의 조항이 변경 뒤에도 살아 남아 그 조문이 바꾼 것을 구조가 되돌린다.",
+   "for": "그 시점에 서 있는 조항을 어느 꼴로 낼지.",
+   "statement": "두 조항을 함께 두고 둘 다 평가한 뒤 논리합으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AmendmentRecord.clauseInForce",
+   "related": [
+    "CF-4024"
+   ]
+  },
+  {
+   "id": "CF-4043",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "족을 새로 세우지 않고 기존 족의 생성자를 늘리는 안.",
+   "reason": "그 족은 시점에서 조항으로 가는 함수의 이름일 뿐이어서 늘릴 생성자가 없고, 늘리면 그 족을 딛는 앞 페이즈들의 진술이 함께 움직인다.",
+   "for": "그 조항이 시점을 어느 꼴로 받을지.",
+   "statement": "족을 새로 세우지 않고 기존 족의 생성자를 늘리는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Definition.AmendmentRecord.family",
+   "related": [
+    "CF-4024"
+   ]
+  },
+  {
+   "id": "CF-4044",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안.",
+   "reason": "그러면 소스 없음이 무엇에 대한 없음인지가 서지 않아 관측층에 등재되는 소스 없음이 산출로 읽히지 않는다.",
+   "for": "이 회차의 세 판정이 읽히는 경로를 어느 구조로 담을지.",
+   "statement": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicationAuthorityChannel",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4045",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답함을 세 칸의 논리합으로 두는 안.",
+   "reason": "그러면 다른 물음에 답하는 경로가 이 물음에도 답하는 것으로 세어진다.",
+   "for": "조항의 명시한 배제를 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "답함을 세 칸의 논리합으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicationAuthorityChannel.answersAuthorityExclusion",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4046",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "그 판정을 신용장의 세 층 옆의 넷째 층으로 두고 같은 경로가 내게 하는 안.",
+   "reason": "그러면 두 묶음 사이에 서열이 서는 것으로 읽혀 그 규범이 독립이라고 적은 것을 구조가 바꾼다.",
+   "for": "기초 계약의 준거법 아래의 판정을 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "그 판정을 신용장의 세 층 옆의 넷째 층으로 두고 같은 경로가 내게 하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicationAuthorityChannel.answersContractLawVerdict",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4047",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "부합을 서류의 심사 결과와 같은 칸으로 두는 안.",
+   "reason": "심사 결과는 신용장의 그때 조항에 대한 것이고 이 물음은 변경의 조항에 대한 것이어서 두 칸이 같은 것을 묻지 않는다.",
+   "for": "조건변경에 대한 부합을 답하는 경로의 요건을 무엇으로 둘지.",
+   "statement": "부합을 서류의 심사 결과와 같은 칸으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.AdjudicationAuthorityChannel.answersAmendmentConformity",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4048",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "조건변경에 대한 부합의 칸을 참으로 두는 안. 이 경로를 목록에서 빼는 안.",
+   "reason": "그 통지문이 변경의 내용을 담고 그 뒤의 제시가 부합했는지는 담지 않으므로, 참으로 두면 아직 일어나지 않은 판정을 그 문면이 내는 것으로 읽힌다. 칸이 전부 거짓인 경로가 목록에 서는 것이 그 물음에 답하는 자리가 없다는 관측을 드는 유일한 꼴이다.",
+   "for": "조건변경의 통지문을 어느 경로로 둘지.",
+   "statement": "조건변경에 대한 부합의 칸을 참으로 두는 안과 이 경로를 목록에서 빼는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.advisedAmendmentNotice",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4049",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "세 칸을 전부 참으로 두는 안. 이 경로를 목록에서 빼는 안.",
+   "reason": "그 기록이 다툰 건에 대해서만 서고 조항의 배제와 조건변경의 부합은 다툼이 없는 건에서도 물어지므로, 참으로 두면 다투지 않은 건의 판정이 그 기록에서 나오는 것으로 읽힌다. 그 기록이 기초 계약의 준거법 아래의 판정을 실제로 내므로 빼면 세 물음이 전부 소스 없음으로 접히고 그 가름이 사라진다.",
+   "for": "분쟁의 판정 기록을 어느 경로로 둘지.",
+   "statement": "세 칸을 전부 참으로 두는 안과 이 경로를 목록에서 빼는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.arbitralAwardRecord",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4050",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "목록을 판정마다 따로 두는 안.",
+   "reason": "그러면 한 경로가 여러 목록에 들고 그 중복이 관측 결과의 계산에서 되풀이되며, 경로를 더하는 회차가 어느 목록에 더할지를 매번 고르게 된다.",
+   "for": "공시 경로의 목록을 어느 꼴로 둘지.",
+   "statement": "목록을 판정마다 따로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.adjudicationAuthorityChannels",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4051",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "참거짓을 내는 안. 그 까닭을 측정 소스의 부재가 아닌 쪽으로 세분해 드는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르므로 판정 불가의 칸이 따로 필요하며, 삼분을 드는 열거가 그 칸을 받는다. 이 자리의 결손이 전부 그 부재이고 다른 까닭이 서지 않는다.",
+   "for": "조항의 배제에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "참거짓을 내는 안과 그 까닭을 측정 소스의 부재가 아닌 쪽으로 세분해 드는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.authorityExclusionObserved",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4052",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "참거짓을 내는 안. 이 판정도 소스 없음으로 두는 안.",
+   "reason": "한 파일의 세 판정이 한 꼴을 써야 그 결손이 한 기준에서 읽히고, 이 판정만 참거짓으로 두면 소스가 있는 자리와 없는 자리가 다른 타입으로 갈린다. 분쟁의 판정 기록이 그것을 들므로 소스가 없는 것이 아니라 집계되지 않는 것이다.",
+   "for": "기초 계약의 준거법 아래의 판정의 관측 결과를 어느 값으로 둘지.",
+   "statement": "참거짓을 내는 안과 이 판정도 소스 없음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.contractLawVerdictObserved",
+   "related": [
+    "CF-4026"
+   ]
+  },
+  {
+   "id": "CF-4053",
+   "origin": {
+    "arc": "network",
+    "phase": "network-13",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "참거짓을 내는 안. 그 까닭을 구조가 그 대상을 담지 않는 쪽으로 두는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르다. 이 회차가 그 부합을 구조의 칸으로 담았으므로 결손이 구조의 결손이 아니라 소스의 결손이다.",
+   "for": "조건변경에 대한 부합에 소스가 없는 자리의 관측 결과를 어느 값으로 둘지.",
+   "statement": "참거짓을 내는 안과 그 까닭을 구조가 그 대상을 담지 않는 쪽으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다.",
+   "for_decl": "CrisisFramework.Observation.amendmentConformityObserved",
+   "related": [
+    "CF-4026"
+   ]
   }
  ]
 }

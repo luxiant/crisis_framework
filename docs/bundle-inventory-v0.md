@@ -85,7 +85,7 @@
 
 ---
 
-## 교역 금융과 결제 방식 (19편 · 그중 zip 밖 2편)
+## 교역 금융과 결제 방식 (20편 · 그중 zip 밖 2편)
 
 `claim-5` 가 CQ-fin-1 의 결제 방식을 세우려고 들였고, `claim-6` 이 CQ-fin-2 의 교역 금융 통화를
 세우려고 여섯을 더 들였다. 실무 안내서 하나를 빼고 모두 추출 기록을 가진다.
@@ -116,6 +116,7 @@
 | The Dominant Currency Financing Channel of External Adjustment | Casas·Meleshchuk·Timmer 2022 (Federal Reserve IFDP 1343) | 묶음 안 `기타/The Dominant Currency Financing Channel of External Adjustment.pdf` | E-40. **대응이 기업 × 분기에서 멈춘다는 것.** 신용등록부의 외화·자국통화 가름, 헤지 셋, 만기 위치가 충격 종류를 가른다는 것 |
 | Cross-Border Currency Exposures. New evidence based on an enhanced and updated dataset | Bénétrix·Gautam·Juvenal·Schmitz 2019 (IMF WP 19/299) | 묶음 안 `기타/Cross-Border Currency Exposures.pdf` | E-41. E-31 이 쓴 대리 변수의 원전. 나라 × 연도 입도, 부문 분해 없음, 실측과 합성이 섞인다는 것. **덩어리 배정은 내용이 아니라 쓰임을 따랐다.** 내용으로는 통화 구성 자료다 |
 | Category 7 — Documentary Credits and Guarantees, Message Reference Guide | SWIFT, Standards MT November 2019 (전 331쪽) | 묶음 안 `기타/SWIFT.pdf` | E-42. **MT 700 의 32B 가 필수이고 ISO 4217 통화 코드를 강제한다.** 품목(45A)은 선택이고 자유 서술이다. 상업 간행물이므로 문언을 옮기지 않고 필드 번호로 지목한다 |
+| ISBP 821 국제표준은행관행 | ICC 간행물 제821호 (2023) | 묶음 안 `기타/ISBP_821.md` (필사본이며 읽은 쪽이다) · `기타/ISBP_821.pdf` (원편) | E-67. **준거의 서열이 성문으로 서고 신용장과 기초 계약이 독립이다.** 저촉이 아닌 차이의 갈래가 열거되고 잔여가 명시로 열려 있으며 비서류적 조건이 두 지위를 갖는다. 상업 간행물이므로 문언을 옮기지 않고 글자와 문단 번호로 지목한다 |
 
 ---
 
@@ -298,7 +299,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | O-2 | 11 | — |
 | O-2 보조 | 1 | — |
 | O-3 | 20 | — |
-| 교역 금융과 결제 방식 | 19 | 2 |
+| 교역 금융과 결제 방식 | 20 | 2 |
 | 계약 표현 | 14 | — |
 | 증거금과 담보의 규범 | 3 | — |
 | 다른 CQ 덩어리의 재료 | 7 | — |
@@ -310,7 +311,7 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 | 유동성 규제와 중앙은행 담보 정책 | 4 | — |
 | 담보 속도와 재담보의 계량 | 2 | — |
 | 상품 담보 금융 | 2 | — |
-| **구성원 합계** | **147** | **2** |
+| **구성원 합계** | **148** | **2** |
 
 zip 안 구성원은 145편이다. 이 값은 합계 행의 구성원 합계에서 zip 밖 칸을 뺀 것이다.
 
