@@ -36,9 +36,9 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `network-10` (2026-11-16, `c332945`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-13` (2026-11-17, `d49126c`) |
-| 관측층 | 무차원 | `[]` | `network-13` (2026-11-17, `d49126c`) |
-| 용어집 | 없음 | `[]` | `network-13` (2026-11-17, `d49126c`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `network-14` (2026-11-18, `1ed488a`) |
+| 관측층 | 무차원 | `[]` | `network-14` (2026-11-18, `1ed488a`) |
+| 용어집 | 없음 | `[]` | `network-14` (2026-11-18, `1ed488a`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -657,7 +657,7 @@ QUEUEMARK_SPENT=소진
 더하는 조작이 처방 없이 적발된다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=39219
+RULEDOC_OVER_BYTES_SI=35548
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
 RULEDOC_REASON_BYTES_SI=1916
