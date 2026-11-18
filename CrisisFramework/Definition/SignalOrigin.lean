@@ -30,6 +30,7 @@
 -/
 
 import CrisisFramework.Definition.Trigger
+import CrisisFramework.Definition.NodeEvent
 
 namespace CrisisFramework.Definition
 
@@ -371,5 +372,87 @@ theorem exists_coupled_without_shared_read :
       fun c => cond c (.le (.const ()) (.const ())) (.check (.eq () ())),
       fun c _ => c⟩,
     true, false, rfl, rfl⟩
+
+/--
+그 신호가 움직이는가.
+
+**대응 비형식 개념:** 그 체제가 다루는 청구권 가운데 그 신호를 움직이는 것이 몇이나 발동했을 때 그
+신호가 실제로 움직이는가. 교차 디폴트 조항이 어느 하나라도 디폴트하면 서는 꼴과 둘 이상이어야 서는
+꼴을 구별하므로 그 가름이 문턱으로 담긴다.
+
+**이 정의가 배제하는 사례:**
+그 집합에 드는 것만으로 신호가 움직인다는 읽기. 원 문헌이 계약이 인지하는 입력을 유한한 사건 집합으로
+두고 그 사건을 다른 계약의 출력으로 받으므로 걸림과 발동이 다른 사실이며, 걸림만으로 움직인다고 두면
+발동하지 않은 청구권이 그 신호를 움직이는 것으로 세어진다.
+조달처: E-22 §2-3 「한 계약의 출력 사건이 다른 계약의 입력 사건이 된다」
+
+**기각한 대체 정의:**
+문턱을 이 체제의 필드로 받는 안. 그 체제가 이미 착지해 문서화 문면이 영구히 남았으므로 필드를 더하면
+그것을 받는 선언이 전부 값을 채워야 하고 그 표지가 가리키는 결정과 문면이 어긋난다. 어느 하나라도
+발동하면 서는 꼴만 두는 안도 기각했다. 그 조항이 둘 이상을 요구하는 꼴을 함께 쓰므로 하나로 박으면 그
+가름이 구조에서 사라진다.
+
+**셈을 따로 두지 않는다.** 노드별 사건의 집계와 같은 셈을 쓰므로 그 함수를 불러 두 자리가 어긋날
+자리를 없앤다.
+-/
+-- DD:CF-4123
+def SignalOrigin.signalMoves {Num Obs Ext Lvl Cl : Type}
+    (S : SignalOrigin Num Obs Ext Lvl Cl) (fired : Cl → Bool) (e : Ext) (threshold : ℕ) : Bool :=
+  countAtLeast S.claims (fun c => S.drives c e && fired c) threshold
+
+/--
+그 움직임의 판정이 두 인자에서 홀로 값을 가른다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+걸림만 있고 발동이 없는 체제나 발동만 있고 걸림이 없는 체제에서 그 신호가 움직여야 한다. 그 관측은 그
+판정이 곱이 아니라 합이라는 뜻이며, 그러면 그 신호를 움직이지 않는 청구권의 발동이 그 신호를 움직인다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+인자마다 그 하나만 참인 배치를 들어야 보인다. 임의의 체제에서 그 곱이 합과 갈리는 것이 아니라 나머지가
+거짓인 자리에서만 그 가름이 보이기 때문이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 보조 보정이다. 판정의 값을 전개하면 증명이 닫히므로 기여 목록에 들지 않는다. 논리
+결합마다 각 인자가 홀로 값을 가르는 경로를 증거로 들라는 A-8 의 요구가 이 자리에 걸린다.
+-/
+-- DD:CF-4123
+theorem signalMoves_pins_each_conjunct :
+    ∃ (S : SignalOrigin Unit Unit Unit Unit Bool) (firedA firedB : Bool → Bool),
+      S.drives true () = true ∧ firedA true = false ∧
+        S.signalMoves firedA () 1 = false ∧
+      S.drives false () = false ∧ firedB false = true ∧
+        S.signalMoves firedB () 1 = false := by
+  -- 참인 청구권만 그 신호를 움직이는 체제를 두고, 어느 청구권도 발동하지 않은 배치와 거짓인
+  -- 청구권만 발동한 배치를 든다. 앞 배치는 걸림만 있고 발동이 없으며 뒤 배치는 발동만 있고 걸림이
+  -- 없어 어느 쪽에서도 세는 청구권이 없으므로, 칸마다 계산하면 값이 나와 `rfl` 로 닫힌다.
+  exact ⟨⟨[true, false], fun _ => .check (.eq () ()), fun c _ => c⟩,
+    fun _ => false, fun c => !c, rfl, rfl, rfl, rfl, rfl, rfl⟩
+
+/--
+문턱이 다른 두 값이 같은 발동 배치에서 갈린다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+같은 체제와 같은 발동 배치에서 문턱을 바꾸어도 그 판정이 늘 같아야 한다. 그 관측은 어느 하나라도
+발동하면 서는 꼴과 둘 이상이어야 서는 꼴이 같다는 뜻이며, 그러면 그 조항이 가르는 두 꼴이 이 구조에서
+접힌다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+문턱이 가르는 것은 발동한 청구권의 수가 두 문턱 사이에 드는 배치를 들어야 보인다. 임의의 배치에서 두
+값이 갈리는 것이 아니라 갈리는 배치가 실재하는 것이 이 정리가 드는 것이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 그 집합에서 그 신호의 움직임으로 가는 사상이 서지 않는다는 구멍을 처분하는
+자리이고, 그 사상이 두 꼴을 실제로 가른다는 것을 드는 유일한 자리다.
+-/
+-- DD:CF-4123
+theorem exists_signalMoves_threshold_splits :
+    ∃ (S : SignalOrigin Unit Unit Unit Unit Bool) (fired : Bool → Bool),
+      S.signalMoves fired () 1 = true ∧ S.signalMoves fired () 2 = false := by
+  -- 참인 청구권만 그 신호를 움직이는 체제에서 모든 청구권이 발동한 배치를 든다. 그 신호를 움직이며
+  -- 발동한 청구권이 하나여서 문턱 하나에서는 서고 문턱 둘에서는 서지 않으므로, 칸마다 계산하면
+  -- 값이 나와 `rfl` 로 닫힌다.
+  exact ⟨⟨[true, false], fun _ => .check (.eq () ()), fun c _ => c⟩, fun _ => true, rfl, rfl⟩
 
 end CrisisFramework.Definition

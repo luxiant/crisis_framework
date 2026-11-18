@@ -10356,6 +10356,348 @@
    "related": [
     "CF-4058"
    ]
+  },
+  {
+   "id": "CF-4132",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "실패만 둘로 가르고 실패하지 않은 경우를 한 칸에 두는 안. 실패를 셋 이상으로 가르는 안.",
+   "reason": "초석 명제가 위계 상단의 노드는 디폴트하지 않고 조정한다고 들고 회계층에 상단이 조정하고 하단이 실패하는 배치의 존재 정리가 이미 서 있으므로, 한 칸에 두면 그 절이 가르는 두 상태가 구조에서 접힌다. 상환 실패의 판정이 그 분할을 측정 대응이 다르지 않다는 사유로 이미 기각했으므로 같은 자리를 늘리면 그 기각이 무효가 된다.",
+   "for": "노드에 일어난 일. 그 자리를 어느 꼴로 둘지.",
+   "statement": "실패만 둘로 가르고 실패하지 않은 경우를 한 칸에 두는 안과 실패를 셋 이상으로 가르는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.NodeEvent",
+   "related": [
+    "CF-4111"
+   ]
+  },
+  {
+   "id": "CF-4133",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "문턱을 비로 받는 안.",
+   "reason": "비는 나눗셈을 부르고 정의층이 무차원이어서 그 나눗셈이 설 자리가 없으며, 세는 노드가 없는 자리에서 그 비가 정의되지 않아 판정이 전 영역에서 서지 않는다.",
+   "for": "열에서 세어 문턱과 맞대는 셈. 그 자리를 어느 꼴로 둘지.",
+   "statement": "문턱을 비로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.countAtLeast",
+   "related": [
+    "CF-4123"
+   ]
+  },
+  {
+   "id": "CF-4134",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "세는 노드를 유한 집합으로 두는 안. 어느 하나라도 서는 꼴과 둘 이상이어야 서는 꼴을 생성자로 가르는 안.",
+   "reason": "그러면 노드 타입에 중복 없음의 판정이 따라붙고 그 판정이 정의층 기준선에 공리를 더하는데, 이 체제가 재는 것은 수뿐이어서 그 비용이 값을 내지 않는다. 그 가름이 세는 방식의 다름이 아니라 같은 셈의 다른 문턱이므로 생성자로 가르면 같은 셈이 두 자리에 서고 그 둘이 어긋날 수 있다.",
+   "for": "사건의 집계 체제. 그 자리를 어느 꼴로 둘지.",
+   "statement": "세는 노드를 유한 집합으로 두는 안과 어느 하나라도 서는 꼴과 둘 이상이어야 서는 꼴을 생성자로 가르는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.EventAggregation",
+   "related": [
+    "CF-4112"
+   ]
+  },
+  {
+   "id": "CF-4135",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "판정을 참거짓이 아니라 계수로 내는 안.",
+   "reason": "계수를 내면 그 수를 쓰는 쪽이 문턱을 다시 들어야 하고 문턱이 체제의 재료인데 그 재료가 판정 밖에 서게 되며, 체제마다 문턱이 다른 것이 이 구조가 담는 것이다.",
+   "for": "그 사건 배치에서 그 집계가 서는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "판정을 참거짓이 아니라 계수로 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.EventAggregation.fires",
+   "related": [
+    "CF-4112"
+   ]
+  },
+  {
+   "id": "CF-4136",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "시간 의존을 동학층에서만 처리하고 정의층은 체제 하나를 고정으로 두는 안.",
+   "reason": "재유입처가 시계열 시뮬레이션을 수행하므로 재유입 시 정의층에 시점이 필요하다.",
+   "for": "그 체제가 내는 집계 족 (L-13). 그 자리를 어느 꼴로 둘지.",
+   "statement": "시간 의존을 동학층에서만 처리하고 정의층은 체제 하나를 고정으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.EventAggregationFamily",
+   "related": [
+    "CF-4112"
+   ]
+  },
+  {
+   "id": "CF-4137",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "문턱을 이 체제의 필드로 받는 안. 어느 하나라도 발동하면 서는 꼴만 두는 안.",
+   "reason": "그 체제가 이미 착지해 문서화 문면이 영구히 남았으므로 필드를 더하면 그것을 받는 선언이 전부 값을 채워야 하고 그 표지가 가리키는 결정과 문면이 어긋난다. 그 조항이 둘 이상을 요구하는 꼴을 함께 쓰므로 하나로 박으면 그 가름이 구조에서 사라진다.",
+   "for": "그 신호가 움직이는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "문턱을 신호의 출처 체제의 필드로 받는 안과 어느 하나라도 발동하면 서는 꼴만 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.SignalOrigin.signalMoves",
+   "related": [
+    "CF-4123"
+   ]
+  },
+  {
+   "id": "CF-4138",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "대차대조표의 감소를 자산 총액의 두 시점 값에서 계산하는 안. 지급능력의 판정을 상환 실패의 판정 안에서 부르는 안.",
+   "reason": "뭉치의 편마다 조정이 줄이는 대상이 갈리고 한 편이 자기자본과 예금을 고정으로 두고 비핵심 부채만 움직이는 모형을 세우므로, 자산 쪽에서만 계산하면 그 편의 조정이 무변동으로 세어진다. 두 판정이 읽는 값이 다르고 서로를 함의하지 않으므로 부르면 네 인자가 한 판정의 서명에 섞인다.",
+   "for": "회계값에서 노드의 사건으로 가는 사상. 그 자리를 어느 꼴로 둘지.",
+   "statement": "대차대조표의 감소를 자산 총액의 두 시점 값에서 계산하는 안과 지급능력의 판정을 상환 실패의 판정 안에서 부르는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.eventOf",
+   "related": [
+    "CF-4125"
+   ]
+  },
+  {
+   "id": "CF-4139",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안.",
+   "reason": "그러면 소스 없음이 무엇에 대한 없음인지가 서지 않아 관측층에 등재되는 소스 없음이 산출로 읽히지 않는다.",
+   "for": "노드의 사건과 그 집계와 위계의 동급의 네 물음의 공시 경로. 그 자리를 어느 꼴로 둘지.",
+   "statement": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.EventAggregationChannel",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4140",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답함을 네 칸의 논리합으로 두는 안.",
+   "reason": "그러면 다른 물음에 답하는 경로가 이 물음에도 답하는 것으로 세어진다.",
+   "for": "그 경로가 실패의 발생을 내는가에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "답함을 네 칸의 논리합으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.EventAggregationChannel.answersFailureEvent",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4141",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답함을 실패의 발생과 같은 칸으로 두는 안.",
+   "reason": "발생은 공표되고 갈래는 공표되지 않으므로 한 칸에 두면 있는 소스가 없는 소스를 가린다.",
+   "for": "그 경로가 실패의 갈래를 내는가에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "답함을 실패의 발생과 같은 칸으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.EventAggregationChannel.answersEventKind",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4142",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답함을 실패의 갈래와 같은 칸으로 두는 안.",
+   "reason": "갈래는 재야 할 대상이 실현되지 않아 막히고 문턱은 재야 할 대상이 정해졌는데 그것을 내는 자리가 없어 막히므로, 한 칸에 두면 풀리지 않는 막힘과 조달로 풀리는 막힘이 접힌다.",
+   "for": "그 경로가 집계의 문턱을 내는가에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "답함을 실패의 갈래와 같은 칸으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.EventAggregationChannel.answersThreshold",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4143",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답함을 집계의 문턱과 같은 칸으로 두는 안.",
+   "reason": "문턱은 재야 할 것을 담는 대상이 형식층에 있고 그것을 내는 공표가 없어 막히는데 동급은 그 대상 자체가 형식층에 없어 막히므로, 한 칸에 두면 조달로 풀리는 막힘과 구조를 더해야 풀리는 막힘이 접힌다.",
+   "for": "그 경로가 위계의 동급을 가르는 것을 내는가에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "답함을 집계의 문턱과 같은 칸으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.EventAggregationChannel.answersHierarchyTie",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4144",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "갈래의 칸을 참으로 두는 안. 이 경로를 목록에서 빼는 안.",
+   "reason": "그 기록이 실패의 날짜와 규모를 담고 그 기관이 지급능력을 잃었는지는 담지 않으므로, 참으로 두면 공표되지 않은 판정이 그 기록에서 나오는 것으로 읽힌다. 그 기록이 실패의 발생을 실제로 내므로 빼면 네 물음이 전부 결손으로 접히고 그 가름이 사라진다.",
+   "for": "감독 당국의 실패 기록. 그 자리를 어느 꼴로 둘지.",
+   "statement": "갈래의 칸을 참으로 두는 안과 감독 당국의 실패 기록을 목록에서 빼는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.supervisoryFailureRecord",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4145",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "동급의 칸을 참으로 두는 안. 이 경로를 목록에서 빼는 안.",
+   "reason": "그 가름을 알려면 발행자를 한 겹 더 유도해야 하고 그 사상이 구조에 없으므로, 참으로 두면 관측층이 받을 구조의 결손이 해소된 것으로 읽힌다. 칸이 전부 거짓인 경로가 목록에 서는 것이 그 물음에 답하는 자리가 없다는 관측을 드는 유일한 꼴이다.",
+   "for": "원문의 화폐 매트릭스 표. 그 자리를 어느 꼴로 둘지.",
+   "statement": "동급의 칸을 참으로 두는 안과 원문의 화폐 매트릭스 표를 목록에서 빼는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.moneyMatrixTable",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4146",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "목록을 물음마다 따로 두는 안.",
+   "reason": "그러면 한 경로가 여러 목록에 들고 그 중복이 관측 결과의 계산에서 되풀이되며, 경로를 더하는 회차가 어느 목록에 더할지를 매번 고르게 된다.",
+   "for": "이 회차가 든 경로의 목록. 그 자리를 어느 꼴로 둘지.",
+   "statement": "목록을 물음마다 따로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.eventAggregationChannels",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4147",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "참거짓을 내는 안.",
+   "reason": "한 파일의 네 판정이 한 꼴을 써야 그 결손이 한 기준에서 읽히고, 이 판정만 참거짓으로 두면 소스가 있는 자리와 없는 자리가 다른 타입으로 갈린다.",
+   "for": "실패의 발생이 한 경로에서 관측된다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "참거짓을 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.failureEventObserved",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4148",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "까닭을 측정 소스 없음으로 두는 안.",
+   "reason": "소스가 없는 것이 아니라 재야 할 대상이 실현되지 않은 세계의 값이므로 소스 없음으로 적으면 뜻이 달라지고, 사후에 풀릴 수 있는 막힘과 풀리지 않는 막힘이 한 칸으로 접힌다.",
+   "for": "실패의 갈래가 어느 경로에서도 관측되지 않으며 그 까닭이 반사실 미평가다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "까닭을 측정 소스 없음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.eventKindObserved",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4149",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "까닭을 구조가 그 대상을 담지 않음으로 두는 안.",
+   "reason": "문턱을 담는 대상이 이 회차에 정의층으로 섰으므로 구조의 결손이 아니라 그 값을 내는 공표의 결손이며, 구조 쪽으로 적으면 조달로 풀릴 수 있는 막힘이 풀리지 않는 것으로 읽힌다.",
+   "for": "집계의 문턱이 어느 경로에서도 관측되지 않는다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "까닭을 구조가 위계의 동급을 가르는 대상을 담지 않음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.aggregationThresholdObserved",
+   "related": [
+    "CF-4118"
+   ]
+  },
+  {
+   "id": "CF-4150",
+   "origin": {
+    "arc": "network",
+    "phase": "network-15",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "까닭을 측정 소스 없음으로 두는 안.",
+   "reason": "소스를 더해도 그 가름이 서지 않고 보유 사상에 발행자의 자리가 서야 풀리므로, 소스 없음으로 적으면 조달로 풀리는 막힘으로 읽혀 그 결손의 성격이 바뀐다.",
+   "for": "위계의 동급을 가르는 것이 어느 경로에서도 관측되지 않으며 그 까닭이 구조의 결손이다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "까닭을 측정 소스 없음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.hierarchyTieObserved",
+   "related": [
+    "CF-4118"
+   ]
   }
  ]
 }

@@ -769,10 +769,10 @@ lake env lean Scratch/Foo.lean
 
 | 레지스터 | entry |
 |---|---|
-| decisions | 3132 |
+| decisions | 3148 |
 | deferred | 207 |
-| rejected | 589 |
-| retirements | 182 |
+| rejected | 608 |
+| retirements | 187 |
 
 `← R-6, §5.6`
 

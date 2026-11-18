@@ -203,4 +203,65 @@ example :
 
 end Witness
 
+/--
+두 원소 집합에서 집계 오차가 제약 차와 규모 차의 곱이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+서로 다른 두 노드로 이루어진 집합에서 그 오차가 두 차의 곱과 다른 값을 내는 것. 쌍마다의 항등식이 그
+합을 네 항으로 펼치고 대각의 두 항이 영이며 나머지 둘이 같으므로, 다른 값이 관측되면 그 항등식이
+거짓이다.
+
+**가정과 그 배제 사례(T-4·T-5):** 두 색인이 다르다는 것을 진술문의 인자로 둔다. 그 가정이 배제하는
+것은 같은 색인을 두 번 든 집합이며 거기서는 그 집합이 한 원소로 접혀 오차가 영이다.
+
+**T-3 분류:** 보조 보정이다. 쌍마다의 항등식에 두 원소의 합을 먹이면 증명이 닫히므로 기여 목록에 들지
+않는다.
+
+**수 체계를 받지 않는다.** 두 함수가 `ℤ` 를 내며 회계층의 기본 수 체계다.
+-/
+-- DD:CF-4126
+theorem aggregationError_pair {ι : Type} [DecidableEq ι] (i j : ι) (h : i ≠ j)
+    (cap equity : ι → ℤ) :
+    aggregationError ({i, j} : Finset ι) cap equity
+      = (cap i - cap j) * (equity i - equity j) := by
+  -- 두 색인이 다르므로 그 집합을 뒤 색인의 단원소 집합 앞에 앞 색인을 붙인 꼴로 바꿀 수 있고,
+  -- 그러면 원소 수가 둘이고 세 합이 두 항으로 펼쳐진다. 남는 식이 정수 위의 다항 등식이므로
+  -- `ring` 이 닫는다. 두 원소 집합의 원소 수를 바로 세는 보조정리는 핀된 판에서
+  -- `Classical.choice` 를 끌어오므로 쓰지 않는다.
+  unfold aggregationError
+  rw [← Finset.cons_eq_insert i {j} (Finset.notMem_singleton.mpr h), Finset.card_cons,
+    Finset.card_singleton, Finset.sum_cons, Finset.sum_cons, Finset.sum_cons,
+    Finset.sum_singleton, Finset.sum_singleton, Finset.sum_singleton, Nat.cast_add, Nat.cast_one]
+  ring
+
+/--
+제약과 규모가 둘 다 다른 두 노드에서 집계 오차가 영이 아니다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+제약이 서로 다르고 규모도 서로 다른 두 노드로 이루어진 집합에서 집계 신용공급이 개별 신용공급의 합과
+일치하는 것. 주 정리의 따름 둘이 한쪽이 같을 때 오차가 영임을 드는데, 이 진술은 그 역방향이 두 원소
+집합에서 성립함을 든다.
+
+**가정과 그 배제 사례(T-4·T-5):** 두 색인이 다르다는 것과 제약이 다르다는 것과 규모가 다르다는 것을
+진술문의 세 인자로 둔다. 뒤의 둘이 배제하는 것은 한쪽이 같은 쌍이며 거기서는 그 따름 둘이 오차를 영으로
+낸다.
+
+**두 원소 집합으로 좁히는 까닭.** 쌍이 셋 이상이면 쌍마다의 곱이 서로 상쇄되는 배치가 서므로 그
+역방향이 성립하지 않는다. 좁힌 꼴이 참인 가장 넓은 꼴이다.
+
+**T-3 분류:** 기여다. 노드를 쪼개야 하는 조건이 제약이 다르고 규모도 다를 때라는 것을 양방향으로 닫는
+자리이고, 따름 둘이 한 방향만 들었다.
+
+**수 체계를 받지 않는다.** 두 함수가 `ℤ` 를 내며 회계층의 기본 수 체계다.
+-/
+-- DD:CF-4126
+theorem aggregationError_ne_zero_of_pair_differs {ι : Type} [DecidableEq ι] (i j : ι) (h : i ≠ j)
+    (cap equity : ι → ℤ) (hc : cap i ≠ cap j) (he : equity i ≠ equity j) :
+    aggregationError ({i, j} : Finset ι) cap equity ≠ 0 := by
+  -- 앞 정리로 오차를 두 차의 곱으로 바꾼다. 두 값이 다르면 그 차가 영이 아니라는 것을 `omega` 가
+  -- 내고, 영이 아닌 두 정수의 곱이 영이 아니라는 것을 `Int.mul_ne_zero` 가 받는다. 일반 환의
+  -- `mul_ne_zero` 는 `ℤ` 에서 영인자 없음 인스턴스를 거쳐 `Classical.choice` 를 끌어오므로 쓰지 않는다.
+  rw [aggregationError_pair i j h]
+  exact Int.mul_ne_zero (by omega) (by omega)
+
 end CrisisFramework.Accounting

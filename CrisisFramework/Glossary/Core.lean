@@ -315,6 +315,10 @@ inductive Concept where
       충족을 어느 서류로도 보일 필요가 없다고 적고 이어서 정해진 서류의 자료가 그 조건과 어긋나서는
       안 된다고 적는다. -/
   | nondocumentaryCondition
+  /-- 노드에 일어난 일. -/
+  | nodeEvent
+  /-- 사건의 집계 체제. -/
+  | eventAggregation
   deriving DecidableEq, Repr
 
 /--
@@ -403,6 +407,20 @@ inductive ConceptRel where
 **결제 방식 분할의 V-4 사례.** 2008-09년 위기에 한 미국 수출기업에서 선지급 고객의 매입 감소와
 이탈이 후지급 고객보다 컸고, 신규 고객은 선지급으로 더 많이 들어왔다(Antràs · Foley 2015). 같은
 교역 감소가 결제 방식마다 다르게 나타났다.
+
+**노드에 일어난 일을 개념으로 등재하고 상환 실패를 그 정제로 둔다.** 사건의 집계 체제가 필드 셋을
+갖는 구조이므로 성질을 갖는 정의가 작성 전에 용어집에 등록되어 있어야 한다는 요구가 걸리고, 그 체제가
+세는 대상이 노드에 일어난 일이므로 둘이 함께 등재된다. 상환 실패가 이미 개념으로 서 있고 그것이 노드에
+일어난 일의 특수한 사례이므로 정제 관계가 그 둘을 잇는다.
+
+**지급능력을 잃은 실패와 잃지 않은 실패를 분할로 등재하지 않는다.** 두 사건을 가르는 상태 변수가
+미관측이어서 둘 다 값을 내지 못하고 판정 불가의 까닭에서만 갈리므로, 측정 대응이 다르지 않은 두 개념을
+분할하지 않는다는 조항이 그 등재를 막는다. 그 까닭의 가름은 관측층의 까닭 열거가 담는다. 상환 실패의
+판정이 그 분할을 같은 사유로 이미 기각한 것도 같은 자리에 선다.
+
+**위기를 등재하지 않는다.** 초석 명제가 그 개념을 드나 그것은 이 프로젝트 자신의 문면이고 등재 근거가
+실제 문면이어야 한다는 요구에 걸리며, 뭉치의 편들은 런과 실패와 증폭을 자기 문면으로 세우고 위기를
+세우지 않는다. 등재하지 않는 것과 관계를 비우는 것이 갈린다.
 
 **결제 방식에는 `measuredBy` 를 붙인다.** 관측 명세가 공시 경로로 색인되어 관측자 상대성의 걸림이
 풀렸기 때문이다. 방식마다 측정 대응의 집합이 서로 달라 V-5 를 통과한다. 신호에 붙이지 않는다는 앞
@@ -1048,6 +1066,7 @@ def registry : List ConceptRel :=
   , .partitions .fundingFailure [.rolloverFailure, .pipelineFailure]
   , .excludes .rolloverFailure .pipelineFailure
   , .refines .complyingPresentation .documentaryPresentation
+  , .refines .repaymentFailure .nodeEvent
   ]
 
 end CrisisFramework.Glossary

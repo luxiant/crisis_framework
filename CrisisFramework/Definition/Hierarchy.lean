@@ -416,4 +416,65 @@ theorem aboveOrEqual_not_antisymm :
   exact absurd (h .governmentDesk .governmentOnlyFund (by decide) (by decide))
     (by decide)
 
+/--
+보유 강도가 같으면 두 방향의 판정이 참이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 사상이 두 주체에게 같은 값을 내는데 한 방향의 판정이 거짓이어야 한다. 그 관측은 그 판정이 그 값 밖의
+것을 읽는다는 뜻이며, 그러면 순서가 보유로 유도된다는 전제가 무너진다.
+
+**가정과 그 배제 사례(T-4·T-5):** 두 주체의 보유 강도가 같다는 것을 진술문의 인자로 둔다. 그 가정이
+배제하는 것은 강도가 다른 쌍이며 거기서는 한 방향만 참이거나 둘 다 참일 수 있다.
+
+**T-3 분류:** 보조 보정이다. 판정의 갈래를 전개하면 증명이 닫히므로 기여 목록에 들지 않는다.
+-/
+-- DD:CF-4122
+theorem MoneyAsset.aboveOrEqual_both_of_heldStrength_eq {Entity : Type}
+    (M : MoneyAsset Entity) (m n : Entity) (h : M.heldStrength m = M.heldStrength n) :
+    M.aboveOrEqual m n = true ∧ M.aboveOrEqual n m = true := by
+  -- 판정을 펼치고 두 주체의 보유 강도를 하나로 바꾸면 두 방향이 같은 값의 비교가 된다. 보유하는
+  -- 것이 없으면 그 비교가 참이고, 있으면 강도 위의 비교의 반사성이 두 방향을 받는다.
+  unfold MoneyAsset.aboveOrEqual
+  rw [h]
+  cases M.heldStrength n with
+  | none => exact ⟨rfl, rfl⟩
+  | some a => exact ⟨ParStrength.atLeastAsStrong_refl a, ParStrength.atLeastAsStrong_refl a⟩
+
+/--
+두 방향의 판정이 참이면 보유 강도가 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+두 방향이 참인데 그 사상이 두 주체에게 다른 값을 내야 한다. 그 관측은 그 동급이 그 사상의 값보다 넓다는
+뜻이며, 그러면 그 동급을 가르는 것이 그 사상 안에 있을 여지가 남는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 두 방향의 판정이 참이라는 것을 진술문의 두 인자로 둔다. 그 가정이
+배제하는 것은 한 방향만 참인 쌍이며 거기서는 두 주체가 엄격히 갈려 강도가 다르다.
+
+**앞 정리와 함께 그 동급의 입도를 든다.** 둘이 함께 서면 그 동급이 그 사상의 값으로 정확히
+특징지어지므로, 같은 강도를 드는 두 주체를 가르려면 그 사상 밖의 것이 있어야 한다. 원문의 표가 발행자를
+들지 않으므로 그 밖의 것이 이 구조에 없고, 그 없음이 위계의 순서를 묻는 역량 질문의 남은 칸의 성격이다.
+
+**T-3 분류:** 기여다. 그 동급이 무엇으로 특징지어지는지를 드는 유일한 자리이고, 앞 아크의 반증 정리가
+그 쌍의 실재만 들고 이 자리를 들지 않았다.
+-/
+-- DD:CF-4122
+theorem MoneyAsset.heldStrength_eq_of_aboveOrEqual_both {Entity : Type}
+    (M : MoneyAsset Entity) (m n : Entity)
+    (h₁ : M.aboveOrEqual m n = true) (h₂ : M.aboveOrEqual n m = true) :
+    M.heldStrength m = M.heldStrength n := by
+  -- 두 주체의 보유 강도를 갈래마다 나눈다. 둘 다 보유하는 것이 없으면 두 값이 이미 같다. 한쪽만
+  -- 보유하는 것이 없으면 한 방향의 판정이 거짓이어서 `Bool.noConfusion` 이 그 갈래를 받고, 둘 다
+  -- 보유하면 강도 위의 비교의 반대칭성이 두 강도를 같게 한다.
+  revert h₁ h₂
+  unfold MoneyAsset.aboveOrEqual
+  cases hm : M.heldStrength m with
+  | none =>
+    cases hn : M.heldStrength n with
+    | none => intro _ _; rfl
+    | some _ => intro _ h; exact Bool.noConfusion h
+  | some a =>
+    cases hn : M.heldStrength n with
+    | none => intro h _; exact Bool.noConfusion h
+    | some b => intro h₁ h₂; rw [ParStrength.atLeastAsStrong_antisymm a b h₁ h₂]
+
 end CrisisFramework.Definition
