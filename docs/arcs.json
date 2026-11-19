@@ -735,12 +735,60 @@
     {
       "name": "sanction",
       "discriminator": "제재는 무엇을 언제 어느 층에서 끊는가",
-      "phases": [],
-      "status": "reserved",
-      "opened": null,
+      "phases": [
+        {
+          "name": "sanction-1",
+          "builds": "아크를 열고 개막 결정의 카드를 싣는다. 조달된 제재 문면의 추출 기록 둘을 세우고 뭉치 인벤토리의 구성원 행과 읽기 대기열의 그 행을 고친다",
+          "holes": [
+            "CF-4164"
+          ]
+        },
+        {
+          "name": "sanction-2",
+          "builds": "지정을 구조로 세우고 사유마다 갈린 부와 당국의 재량이 주체의 자리를 움직이는 것을 담는다",
+          "holes": [
+            "CF-1182"
+          ]
+        },
+        {
+          "name": "sanction-3",
+          "builds": "지정된 주체의 지분이 일정 몫을 넘는 주체로 금지가 번지는 고리를 소유의 망 위에 세우고 대체 식별이 한 주체에 여럿을 내는 것을 담는다",
+          "holes": []
+        },
+        {
+          "name": "sanction-4",
+          "builds": "조문 읽기를 시점의 족으로 올리고 발행 주체마다 갈린 발효 시점과 계약의 체결 시점을 담는다",
+          "holes": [
+            "CF-3701"
+          ]
+        },
+        {
+          "name": "sanction-5",
+          "builds": "금융 전문을 주고받는 망의 구조를 세우고 망 종류의 열거에 그 원소를 더한다",
+          "holes": []
+        },
+        {
+          "name": "sanction-6",
+          "builds": "금지되는 거래의 갈래를 망 종류로 사상하고 절단의 술어가 제약식을 바꾸는 자리를 세워 내리는 항을 그 자리에서 내린다",
+          "holes": []
+        },
+        {
+          "name": "sanction-7",
+          "builds": "앞 페이즈의 미전사분을 처분하고 아크를 닫는다",
+          "holes": []
+        }
+      ],
+      "status": "open",
+      "opened": "2026-11-19",
       "closed": null,
-      "holes": [],
-      "cq": []
+      "holes": [
+        "CF-4164",
+        "CF-1182",
+        "CF-3701"
+      ],
+      "cq": [
+        "CQ-fin-3"
+      ]
     },
     {
       "name": "funding",
