@@ -10698,6 +10698,168 @@
    "related": [
     "CF-4118"
    ]
+  },
+  {
+   "id": "CF-4182",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "문턱의 값과 걸림의 사실을 한 칸으로 묶는 안.",
+   "reason": "감독 공시가 걸림의 사실을 드는 자리와 문턱의 값을 드는 자리가 갈리므로 그 둘이 다른 소스를 가질 수 있고, 묶으면 어느 쪽이 없어서 답이 서지 않는지가 그 칸에서 읽히지 않는다.",
+   "for": "포트폴리오 한도가 공표 수치에서 어떻게 관측되는가. 그 경로의 칸을 어느 꼴로 둘지.",
+   "statement": "문턱의 값과 걸림의 사실을 한 칸으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.PortfolioLimitChannel",
+   "related": [
+    "CF-4151"
+   ]
+  },
+  {
+   "id": "CF-4183",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "경로마다 관할을 색인으로 받는 안.",
+   "reason": "관할은 정의층이 그 한도에 이미 붙이는 성질이고 경로의 성질이 아니므로, 경로에 다시 붙이면 같은 축이 두 층에 선다.",
+   "for": "포트폴리오 한도가 공표 수치에서 어떻게 관측되는가. 그 경로의 칸을 어느 꼴로 둘지.",
+   "statement": "경로마다 관할을 색인으로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.PortfolioLimitChannel",
+   "related": [
+    "CF-4151"
+   ]
+  },
+  {
+   "id": "CF-4184",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "값을 내는 것만 묻고 주체별로 가르는지는 묻지 않는 안.",
+   "reason": "그러면 범주별 공시가 이 물음에 답하는 것으로 서고, 어느 주체의 한도가 누르는지를 가리는 데 복무한다는 이 물음의 쓰임이 사라진다.",
+   "for": "한 경로가 문턱의 값을 묻는 물음에 답하는가. 그 판정을 어느 꼴로 둘지.",
+   "statement": "값을 내는 것만 묻고 주체별로 가르는지는 묻지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.PortfolioLimitChannel.answersThreshold",
+   "related": [
+    "CF-4152"
+   ]
+  },
+  {
+   "id": "CF-4185",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "걸림을 문턱의 값과 보유량에서 유도하는 안.",
+   "reason": "그 유도가 회계층의 판정이고 이 층은 그 두 입력이 읽히는지만 묻는데, 유도를 이 층에 두면 값을 담지 않는다는 요구가 깨진다.",
+   "for": "한 경로가 걸림의 사실을 묻는 물음에 답하는가. 그 판정을 어느 꼴로 둘지.",
+   "statement": "걸림을 문턱의 값과 보유량에서 유도하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.PortfolioLimitChannel.answersBinding",
+   "related": [
+    "CF-4152"
+   ]
+  },
+  {
+   "id": "CF-4186",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "그 기준이 자기 불완전성을 적는다고 두는 안.",
+   "reason": "그 유보를 적는 것은 중앙은행의 담보 정책 문서이고 이 기준은 그 유보를 적지 않으므로, 그렇게 두면 두 경로가 같은 성질을 가진 것으로 서서 이 파일의 가름이 사라진다.",
+   "for": "감독 유동성 기준을 경로로 둘 때 그 넷 칸을 어떻게 채울지.",
+   "statement": "그 기준이 자기 불완전성을 적는다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.supervisoryLiquidityStandard",
+   "related": [
+    "CF-4153"
+   ]
+  },
+  {
+   "id": "CF-4187",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "그 문서를 경로로 두지 않는 안.",
+   "reason": "그러면 자기 불완전성을 명시하는 경로가 이 목록에서 사라지고, 두 물음의 답이 자료의 결손으로 읽혀 규범의 성질이라는 이 파일의 산출이 서지 않는다.",
+   "for": "중앙은행 담보 정책 문서를 경로로 둘지.",
+   "statement": "그 문서를 경로로 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.centralBankCollateralPolicy",
+   "related": [
+    "CF-4153"
+   ]
+  },
+  {
+   "id": "CF-4188",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "관할권마다 열을 따로 두는 안.",
+   "reason": "두 경로가 같은 네 칸으로 서술되고 그 칸이 관할을 받지 않으므로, 열을 가르면 어느 열에도 없는 경로가 생길 때 그 자리가 어디인지가 서지 않는다.",
+   "for": "실재하는 경로를 담는 열을 어느 꼴로 둘지.",
+   "statement": "관할권마다 열을 따로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.portfolioLimitChannels",
+   "related": [
+    "CF-4153"
+   ]
+  },
+  {
+   "id": "CF-4189",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "답하는 경로의 수를 내는 안.",
+   "reason": "이 층이 담는 것은 사상의 명세이고 계수가 아니므로, 수를 내면 값을 담지 않는다는 요구가 깨진다.",
+   "for": "문턱의 값이 관측되는가. 그 답을 어느 꼴로 낼지.",
+   "statement": "답하는 경로의 수를 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.thresholdValueObserved",
+   "related": [
+    "CF-4154"
+   ]
+  },
+  {
+   "id": "CF-4190",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "candidate": "문턱이 관측되지 않으면 걸림도 관측되지 않는다고 유도하는 안.",
+   "reason": "걸림의 사실을 직접 공표하는 경로가 서면 문턱 없이도 이 물음이 성립하므로, 유도로 두면 그 경로가 설 자리가 사라진다.",
+   "for": "걸림의 사실이 관측되는가. 그 답을 어느 꼴로 낼지.",
+   "statement": "문턱이 관측되지 않으면 걸림도 관측되지 않는다고 유도하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.bindingHeldObserved",
+   "related": [
+    "CF-4154"
+   ]
   }
  ]
 }

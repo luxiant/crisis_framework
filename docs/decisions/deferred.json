@@ -3832,6 +3832,144 @@
    "related": [
     "CF-4054"
    ]
+  },
+  {
+   "id": "CF-4164",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "한 시점에 효력이 있는 제재의 문면이 어느 주체를 어느 망에서 자르는지를 읽는 경로가 서지 않았다",
+   "basis": "이 아크가 내리는 역량 질문이 그 물음을 묻고 그 답이 주체와 시점과 그 시점의 망 종류를 받아 잘렸는지를 내는데, 뭉치 인벤토리에 제재 문면이 하나도 없어 그 경로가 무엇을 내는지를 재지 못했다. 읽지 않은 편의 성질을 근거로 쓰지 말라는 조항이 그 답을 정하는 길을 막으므로 이 항이 적는 것은 그 문면의 성질이 아니라 열지 못했다는 사실이다. 읽기 대기열의 지목 참조 대기 표에 그 문면을 드는 행을 이 회차가 더했고 그 조달이 서면 이 항이 깨어난다",
+   "layer": "observation",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "제재의 문면"
+   },
+   "related": [
+    "CF-4157"
+   ]
+  },
+  {
+   "id": "CF-4165",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "FX 스왑의 총액을 공표 수치에서 복원하는 자리가 남으며 그 복원 방법을 드는 편이 뭉치에 없다",
+   "basis": "확정 결정이 그 스왑의 총액 기재로 회계 폐쇄성이 유지되고 남는 문제가 공표 수치로부터의 총액 복원이며 그것이 관측층 과제라고 적는다. 읽기 대기열의 지목 참조 대기 표가 그 복원 방법을 드는 편을 대기 표지로 들고 이 아크가 받는다고 적으나 뭉치 인벤토리에 그 편이 없으며, 그 편을 열지 않고 그 경로가 무엇을 내는지를 정할 수 없다. 그 조달이 서면 이 항이 깨어난다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "Borio·McCauley·McGuire"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4166",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "조달 실패 두 꼴의 금액을 잇는 회계층 항등식이 서지 않으며 되돌아온 발행분의 금액을 내는 공표가 뭉치에 없다",
+   "basis": "그 항등식이 기존 부채에 걸리는 실패와 자산을 늘리는 실패를 금액으로 잇는 것을 요구하는데 되돌아온 발행분의 금액에 출처가 없다. 그 출처가 공표 수치여야 하고 그것이 뭉치에 있는지가 아직 재어지지 않았으므로 그 자료가 조달되는 회차가 이 항을 받는다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "되돌아온 발행분의 금액을 내는 공표"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4167",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "실권으로 선 결제 의무의 금액을 잇는 회계층 항등식이 서지 않으며 그 금액을 내는 공표가 뭉치에 없다",
+   "basis": "그 항등식이 실권으로 선 결제 의무의 금액을 요구하는데 그 금액의 출처가 그 기록에 없다. 그 출처가 공표 수치여야 하고 그것이 뭉치에 있는지가 아직 재어지지 않았으므로 그 자료가 조달되는 회차가 이 항을 받는다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "extraction",
+    "ref": "실권으로 선 결제 의무의 금액을 내는 공표"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4168",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "순자산 보존의 청구권 아닌 자산이 드는 몫을 담는 자리가 회계층에 서지 않았다",
+   "basis": "당사자 전량의 순포지션 합이 영이라는 항등식이 청구권 축에서 서로 마주보는 값이 상쇄된다는 뜻이고 순자산이 보존된다는 뜻이 아니다. 자산에 청구권 아닌 것이 들어가므로 그 남는 몫을 담는 자리가 있어야 그 보존이 진술되며, 그 자리를 세우는 것이 회계층 구조이고 이 페이즈의 몫이 관측층 명세와 수취인의 처분이다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Accounting/NetAssetPreservation.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4169",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "측정된 위험이 부채 측 한도를 정하는 사상이 회계층에 서지 않았다",
+   "basis": "제약이 읽는 것이 실현된 손실이 아니므로 측정된 위험에서 한도로 가는 사상이 있어야 그 제약이 구조에서 선다. 그 사상을 세우는 것이 회계층 구조이고 이 페이즈의 몫이 관측층 명세와 수취인의 처분이다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Accounting/MeasuredRiskLimit.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4170",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "노드 집합이 시점에 따라 바뀌는 것을 담으려면 노드 타입이 시점에 딸려야 하는데 그 조작이 노드를 받는 선언 전량의 서명을 바꾼다",
+   "basis": "정의층 대상에 시점 인덱스를 요구하는 조항이 이미 서고 망의 종류가 시점을 받는 타입으로 선 선례가 있으나, 그 결손이 묻는 것은 한 대상의 족이 아니라 노드 집합 자체의 변화이므로 노드를 받는 선언 전량의 서명이 바뀐다. 성격 확정으로 닫으면 담을 수 있는 것을 담지 못한다고 적는 셈이 되므로 그 길을 쓰지 않는다",
+   "layer": "definition",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Definition/TimeVaryingNodeSet.lean"
+   },
+   "related": []
+  },
+  {
+   "id": "CF-4171",
+   "origin": {
+    "arc": "network",
+    "phase": "network-16",
+    "kind": "decision_session",
+    "date": "2026-11-18"
+   },
+   "statement": "청구권 여럿을 한 망에서 합성하는 진술이 서지 않아 그 진술이 준거의 불일치로 막히는 자리를 담을 수 없다",
+   "basis": "앞 페이즈가 저촉 범위의 구조를 정의층에 세워 준거가 다른 두 청구권이 같은 사건을 달리 판정하는 자리를 담았으나, 그 결손이 묻는 것은 그 합성의 진술이 그 불일치로 막히는 자리이고 그 합성의 진술 자체가 아직 서지 않았다. 그 진술이 이 아크의 판별선이 묻는 것의 끝이고 그것을 세우려면 망 위의 합성이 먼저 서야 한다",
+   "layer": "accounting",
+   "reopen_when": {
+    "kind": "artifact",
+    "ref": "CrisisFramework/Accounting/NetworkComposition.lean"
+   },
+   "related": []
   }
  ]
 }

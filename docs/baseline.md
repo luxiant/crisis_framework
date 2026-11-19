@@ -105,14 +105,23 @@ C-8이 정하며 세 가지다. 분류의 판정은 결정 세션이 하고 Clau
 실측 사례에서 `mul_eq_zero` 자체는 무의존이었고 오염은 그것이 요구하는 `NoZeroDivisors ℤ`
 인스턴스에 있었다. 기준선 차분으로만 드러난다.
 
-**기준선을 넘기는 것이 확인된 Mathlib 보조정리.** 핀된 커밋에서 실측한 값이며, 핀을 갱신하면
-§2-3 에 따라 다시 잰다.
+**기준선을 넘기는 것이 확인된 Mathlib 보조정리와 전술.** 핀된 커밋에서 실측한 값이며, 핀을
+갱신하면 §2-3 에 따라 다시 잰다. **전술을 함께 드는 까닭은 그 의존이 보조정리에만 있지 않다는
+것이다.** 판정을 계산으로 닫는 전술이 그 계산의 정당성을 명제 외연성에 기대므로 보조정리를 하나씩
+감사해도 그 자리가 보이지 않는다.
 
-| 보조정리 | 실측 | 잰 회차 |
+| 보조정리와 전술 | 실측 | 잰 회차 |
 |---|---|---|
 | `Finset.sum_le_sum` | `[propext, Classical.choice, Quot.sound]` | `collateral-4` |
 | `Finset.sum_nonneg` | `[propext, Classical.choice, Quot.sound]` | `collateral-4` |
 | `Finset.sum_le_sum_of_subset_of_nonneg` | `[propext, Classical.choice, Quot.sound]` | `collateral-4` |
+| `Finset.card_pair` | `[propext, Classical.choice, Quot.sound]` | `network-15` |
+| `Finset.card_insert_of_notMem` | `[propext, Classical.choice, Quot.sound]` | `network-15` |
+| `mul_ne_zero` (`ℤ` 에 적용) | `[propext, Classical.choice, Quot.sound]` | `network-16` |
+| `decide` (열의 멤버십) | `[propext]` | `network-16` |
+
+**마지막 행의 회피가 전술 교체가 아니라 증거의 꼴을 바꾸는 것이다.** 그 멤버십을 목록의 생성자로
+직접 들면 공리 의존이 사라지며, 관측층의 기준선이 공리 없음이므로 그 층에서는 그 꼴만 선다.
 
 **분류는 둘째 종류다.** 수학적 내용이 요구하지 않는다는 것이 실측으로 섰다. 같은 부분합 부등식을
 `Finset.cons_induction` 으로 세우니 쓰는 부품 다섯이 전부 기준선 이하였고, 그 길에서 쓴 것이
