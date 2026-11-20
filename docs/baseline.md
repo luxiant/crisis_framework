@@ -458,6 +458,7 @@ EXCL=fundingFailure
 OVERLAP=ultimateCreditorClaim|retailOutflowEquivalentClaim
 OVERLAP=currencyPositionMismatch|currencyFundingLinkMismatch
 OVERLAP=selfCollateralization|rehypothecation
+OVERLAP=ownershipReach|conductReach
 <!-- OVERLAP:END -->
 
 블록에 분할을 더하면 그 분할의 배타성 문단을 함께 세운다. 문단만 쓰고 블록에 더하지 않으면 검사가
