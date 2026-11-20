@@ -427,7 +427,8 @@ theorem designation_ground_observed_holds :
 
 **가정을 두지 않는다.**
 
-**T-3 분류:** 보조 보정이다. 답함의 정의를 전개하면 증명이 닫히므로 기여 목록에 들지 않는다.
+**T-3 분류:** 기여다. 네 답함이 각각 자기 칸만 읽는다는 것을 구조 안의 명제로 드는 유일한
+자리이고, 그 증거가 없으면 물음을 넷으로 가른 것이 이름만 다른 넷인지 재어지지 않는다.
 -/
 -- DD:CF-4255
 theorem designation_channel_answers_pin_each_field :
