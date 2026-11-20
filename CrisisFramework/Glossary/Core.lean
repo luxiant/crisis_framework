@@ -319,6 +319,13 @@ inductive Concept where
   | nodeEvent
   /-- 사건의 집계 체제. -/
   | eventAggregation
+  /-- 지정. 제재를 부과하는 당국이 어느 주체를 자기 목록의 어느 부에 열거한 것이며, 그 조문이
+      지정의 기준을 본문에 여럿 들면서 그 결과를 부속서의 열거로 닫으므로 읽는 쪽이 재는 것이
+      기준의 성립이 아니라 그 열거의 구성원임이다. -/
+  | designation
+  /-- 당국의 재량. 성문의 기준이 정하는 자리를 당국의 조작이 덮는 것이며, 그 조작이 읽는 쪽의
+      계산으로 판정되지 않으므로 구조가 그 결과를 주어진 것으로 받는다. -/
+  | authorityDiscretion
   deriving DecidableEq, Repr
 
 /--
@@ -359,6 +366,9 @@ inductive SourceTag where
   /-- 금속 거래소 창고의 재고 공표. 등록분과 등록되지 않은 보관분을 일별로 들되 보유자를
       식별하지 않으며, 거래소에 등록된 창고의 밖은 범위에 들지 않는다. -/
   | exchangeWarehouseReport
+  /-- 제재를 부과하는 당국이 공표하는 지정 목록. 주체를 고유 식별자로 식별하고 공표 꼴마다
+      시점과 사유를 들거나 들지 않으며, 개별 허가를 드는 칸을 어느 꼴도 두지 않는다. -/
+  | sanctionsListPublication
   deriving DecidableEq, Repr
 
 /--
@@ -1067,6 +1077,8 @@ def registry : List ConceptRel :=
   , .excludes .rolloverFailure .pipelineFailure
   , .refines .complyingPresentation .documentaryPresentation
   , .refines .repaymentFailure .nodeEvent
+  , .refines .designation .authorityDiscretion
+  , .measuredBy .designation .sanctionsListPublication
   ]
 
 end CrisisFramework.Glossary

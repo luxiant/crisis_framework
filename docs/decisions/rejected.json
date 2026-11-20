@@ -10860,6 +10860,456 @@
    "related": [
     "CF-4154"
    ]
+  },
+  {
+   "id": "CF-4267",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "사유를 용어집의 분할로 등록하는 안.",
+   "reason": "세 사유의 이름이 한 부속서의 부 표제에서 그대로 오고 세 사유가 같은 칼럼에서 읽혀 측정 대응이 다르지 않으므로, 측정 대응이 다르지 않은 두 개념을 분할하지 말라는 요구가 그 분할을 막는다. 사유를 자유 문자열로 받는 안도 기각했다. 그러면 부의 수가 바뀔 때 구조가 조용히 넓어지고 판정이 열거 위의 계산으로 닫히지 않는다.",
+   "for": "지정의 사유. 그 자리를 어느 꼴로 둘지.",
+   "statement": "사유를 용어집의 분할로 등록하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DesignationGround",
+   "related": [
+    "CF-4250"
+   ]
+  },
+  {
+   "id": "CF-4268",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "구성원임을 사유 없이 참거짓 하나로 두는 안.",
+   "reason": "그러면 사유별로 갈린 부가 그 값에서 사라지고 해제와 이의의 경로가 사유마다 다른 것이 담기지 않는다. 허가를 이 구조 밖의 다른 구조로 두는 안도 기각했다. 허가가 열거된 주체에만 서므로 그 정의역이 이 구조의 첫 칸에 매여 있고, 따로 두면 두 구조 사이에 그 매임을 드는 자리가 더 필요해진다.",
+   "for": "한 시점의 지정 상태. 그 자리를 어느 꼴로 둘지.",
+   "statement": "구성원임을 사유 없이 참거짓 하나로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.Designation",
+   "related": [
+    "CF-4248"
+   ]
+  },
+  {
+   "id": "CF-4269",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "시점을 구조의 칸으로 받는 안.",
+   "reason": "그러면 한 지정 상태가 여러 시점을 함께 들어 그 칸의 값이 어느 시점의 것인지가 서지 않으며, 정의층 대상을 시점 인덱스를 갖는 족으로 정의하라는 요구와도 갈린다.",
+   "for": "지정 상태의 시점 족. 그 자리를 어느 꼴로 둘지.",
+   "statement": "시점을 구조의 칸으로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DesignationFamily",
+   "related": [
+    "CF-4248"
+   ]
+  },
+  {
+   "id": "CF-4270",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "사유의 목록을 내고 목록이 비어 있지 않음으로 두는 안.",
+   "reason": "그러면 판정이 목록 위의 계산을 지나 `Decidable` 인스턴스가 목록의 상등에 걸리고, 판정을 `Bool` 로 두어 그 인스턴스가 `Bool` 에서 나오게 하는 꼴과 갈린다.",
+   "for": "그 주체가 어느 사유로든 열거되어 있는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "사유의 목록을 내고 목록이 비어 있지 않음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.Designation.listedAnywhere",
+   "related": [
+    "CF-4248"
+   ]
+  },
+  {
+   "id": "CF-4271",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "허가를 사유별로 받는 안.",
+   "reason": "허가가 그 주체와의 거래에 걸리고 그 주체가 어느 부에 들었는지에 걸리지 않으므로, 사유별로 받으면 한 주체에 사유마다 다른 허가가 서는 구조가 되어 그 문면이 드는 것보다 넓어진다. 허가를 절단의 부정으로 두는 안도 기각했다. 허가받지 않았다는 것과 목록에 없다는 것이 다르므로 그 둘을 한 칸으로 접으면 목록 밖의 주체가 허가받은 것으로 읽힌다.",
+   "for": "그 주체가 그 시점에 잘렸는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "허가를 사유별로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.Designation.cut",
+   "related": [
+    "CF-4253"
+   ]
+  },
+  {
+   "id": "CF-4272",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "두 칸을 다 필수로 두는 안.",
+   "reason": "그러면 재량이 놓이지 않은 주체에 값이 둘 서고 어느 것이 그 주체의 자리인지가 구조에서 서지 않는다. 자리를 참거짓으로 박는 안도 기각했다. 이 구멍이 묻는 것이 액면가 약속의 강도이고 그 강도가 참거짓이 아니므로, 박으면 그 자리에 쓸 수 없다.",
+   "for": "당국의 재량이 움직이는 자리. 그 자리를 어느 꼴로 둘지.",
+   "statement": "두 칸을 다 필수로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DiscretionaryStanding",
+   "related": [
+    "CF-4251"
+   ]
+  },
+  {
+   "id": "CF-4273",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "성문의 자리만 시점 족으로 두고 재량의 자리를 시점 없이 두는 안.",
+   "reason": "그러면 재량이 놓인 시점과 풀린 시점이 갈리지 않아 해제가 담기지 않는다.",
+   "for": "재량이 움직이는 자리의 시점 족. 그 자리를 어느 꼴로 둘지.",
+   "statement": "성문의 자리만 시점 족으로 두고 재량의 자리를 시점 없이 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DiscretionaryStandingFamily",
+   "related": [
+    "CF-4251"
+   ]
+  },
+  {
+   "id": "CF-4274",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "재량이 놓이지 않은 자리를 판정 불가로 내는 안.",
+   "reason": "그 자리에 성문의 기준이 실제로 서 있으므로 판정이 불가한 것이 아니며, 판정 불가로 내면 재량이 아직 쓰이지 않은 주체가 자리를 갖지 않는 것으로 읽힌다.",
+   "for": "그 주체의 자리. 그 자리를 어느 꼴로 둘지.",
+   "statement": "재량이 놓이지 않은 자리를 판정 불가로 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DiscretionaryStanding.resolve",
+   "related": [
+    "CF-4251"
+   ]
+  },
+  {
+   "id": "CF-4275",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "자리의 타입에 상등 판정을 요구하는 안.",
+   "reason": "그러면 이 선언이 그 인스턴스를 받는 자리가 되고 자리의 타입을 매개변수로 받는 꼴이 좁아진다.",
+   "for": "그 주체에 재량이 놓였는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "자리의 타입에 상등 판정을 요구하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DiscretionaryStanding.isDetermined",
+   "related": [
+    "CF-4251"
+   ]
+  },
+  {
+   "id": "CF-4276",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "성문의 기준을 지정 구조의 칸으로 받는 안.",
+   "reason": "그 기준이 읽는 쪽의 계산으로 판정되지 않으므로 그 구조의 칸으로 두면 구조가 계산할 수 없는 값을 자기 칸으로 들게 된다. 당국이 손대지 않은 주체의 자리를 성문의 기준이 정하게 두는 안도 기각했다. 액면가 약속의 강도를 넣은 자리에서는 그 꼴이 서지만, 지정에서는 그 열거에 들지 않은 주체가 금지의 밖에 서므로 그 꼴로 두면 그 주체가 금지의 안으로 들어온다.",
+   "for": "지정을 재량이 움직이는 자리로 내려 보낸 것. 그 자리를 어느 꼴로 둘지.",
+   "statement": "성문의 기준을 지정 구조의 칸으로 받는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.Designation.asStanding",
+   "related": [
+    "CF-4249"
+   ]
+  },
+  {
+   "id": "CF-4277",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "증거를 `Unit` 위에서만 드는 안.",
+   "reason": "사유마다 홀로 참인 자리와 허가가 선 자리와 어느 부에도 들지 않은 자리를 함께 들려면 주체가 다섯 필요하므로, `Unit` 로 두면 그 증거가 한 주체에 접힌다.",
+   "for": "증거를 드는 주체의 열거. 그 자리를 어느 꼴로 둘지.",
+   "statement": "증거를 `Unit` 위에서만 드는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.DesignationWitnessEntity",
+   "related": [
+    "CF-4259"
+   ]
+  },
+  {
+   "id": "CF-4278",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안.",
+   "reason": "그러면 소스 없음이 무엇에 대한 없음인지가 서지 않아 관측층에 등재되는 소스 없음이 산출로 읽히지 않는다. 칸의 열거를 고정으로 두고 경로마다 그 칸을 복제하는 안도 기각했다. 그 명세가 자료 구조의 형식 변경을 미리 알리는 것이 늘 가능하지는 않다고 적으므로 칸을 고정으로 두면 그 명세가 발행 주체의 조작으로 조용히 낡는다.",
+   "for": "지정을 읽는 경로. 그 자리를 어느 꼴로 둘지.",
+   "statement": "경로의 이름만 담고 무엇에 답하는지를 담지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.DesignationChannel",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4279",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "답함을 다섯 칸의 논리합으로 두는 안.",
+   "reason": "그러면 다른 물음에 답하는 경로가 이 물음에도 답하는 것으로 세어진다.",
+   "for": "그 경로가 지정된 주체의 식별에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "답함을 다섯 칸의 논리합으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.DesignationChannel.answersSubject",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4280",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "시점을 발행 주체마다 하나로 두는 안.",
+   "reason": "같은 발행 주체의 한 꼴이 시점을 내고 다른 꼴이 내지 않으므로 발행 주체로 접으면 그 갈림이 사라진다.",
+   "for": "그 경로가 지정의 시점에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "시점을 발행 주체마다 하나로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.DesignationChannel.answersTime",
+   "related": [
+    "CF-4257"
+   ]
+  },
+  {
+   "id": "CF-4281",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "사유를 시점과 한 칸으로 묶는 안.",
+   "reason": "사유를 내는 경로와 시점을 내는 경로가 같지 않으므로 묶으면 한 경로가 둘 가운데 하나만 낼 때 그 칸의 값이 서지 않는다.",
+   "for": "그 경로가 지정의 사유에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "사유를 시점과 한 칸으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.DesignationChannel.answersGround",
+   "related": [
+    "CF-4257"
+   ]
+  },
+  {
+   "id": "CF-4282",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "허가를 절단의 판정에서 빼고 허가의 물음을 세우지 않는 안.",
+   "reason": "그러면 구성원임이 금지의 성립과 같지 않다는 구조가 정의층에 서 있는데 그 차이를 내는 값의 소스가 어디에도 묻히지 않아 그 결손이 산출로 서지 않는다.",
+   "for": "그 경로가 개별 허가에 답하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "허가를 절단의 판정에서 빼고 허가의 물음을 세우지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.DesignationChannel.answersRelief",
+   "related": [
+    "CF-4256"
+   ]
+  },
+  {
+   "id": "CF-4283",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "쉼표로 구분한 꼴을 고정 길이의 꼴과 한 항으로 묶는 안.",
+   "reason": "두 꼴이 같은 칸을 들어 답이 같으므로 묶으면 계수가 줄어 편하나, 꼴마다 답이 갈리는지를 묻는 것이 이 파일의 축이어서 묶으면 그 축이 꼴을 세지 않는 것이 된다.",
+   "for": "고정 길이의 주 표. 그 자리를 어느 꼴로 둘지.",
+   "statement": "쉼표로 구분한 꼴을 고정 길이의 꼴과 한 항으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.fixedWidthPrimaryTable",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4284",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "쉼표로 구분한 주 표를 목록에서 빼는 안.",
+   "reason": "같은 발행 주체의 네 꼴 가운데 둘이 같은 답을 내고 둘이 다른 답을 내는 것이 이 파일의 관측이므로, 빼면 그 둘이 같다는 사실이 사라진다.",
+   "for": "쉼표로 구분한 주 표. 그 자리를 어느 꼴로 둘지.",
+   "statement": "쉼표로 구분한 주 표를 목록에서 빼는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.delimitedPrimaryTable",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4285",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "기본 표지 언어의 꼴을 진보된 꼴과 묶는 안.",
+   "reason": "그 명세가 표지 언어를 기본과 진보된 것의 둘로 가르고 이 파일이 연 것이 뒤의 것이므로, 묶으면 읽지 않은 편의 성질을 근거로 쓰는 것이 된다.",
+   "for": "진보된 표지 언어의 꼴. 그 자리를 어느 꼴로 둘지.",
+   "statement": "기본 표지 언어의 꼴을 진보된 꼴과 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.advancedMarkupForm",
+   "related": [
+    "CF-4257"
+   ]
+  },
+  {
+   "id": "CF-4286",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "통합본의 부속서 표를 관보의 경로와 한 항으로 묶는 안.",
+   "reason": "이 파일이 연 것이 통합본이고 관보는 열지 않았으므로, 묶으면 열지 않은 편의 성질이 이 항의 칸으로 선다.",
+   "for": "통합본의 부속서 표. 그 자리를 어느 꼴로 둘지.",
+   "statement": "통합본의 부속서 표를 관보의 경로와 한 항으로 묶는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.consolidatedAnnexTable",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4287",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "목록을 물음마다 따로 두는 안.",
+   "reason": "그러면 한 경로가 여러 목록에 들고 그 중복이 관측 결과의 계산에서 되풀이되며, 경로를 더하는 회차가 어느 목록에 더할지를 매번 고르게 된다.",
+   "for": "이 회차가 든 경로의 목록. 그 자리를 어느 꼴로 둘지.",
+   "statement": "목록을 물음마다 따로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.designationChannels",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4288",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "참거짓을 내는 안.",
+   "reason": "소스가 없다는 것과 그 명제가 거짓이라는 것이 다르므로 판정 불가의 칸이 따로 필요하며, 삼분을 드는 열거가 그 칸을 받는다.",
+   "for": "지정된 주체의 식별이 어느 경로에서 관측되는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "참거짓을 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.designatedSubjectObserved",
+   "related": [
+    "CF-4255"
+   ]
+  },
+  {
+   "id": "CF-4289",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "시점을 소스 없음으로 두는 안.",
+   "reason": "진보된 표지 언어의 꼴과 통합본의 부속서가 시점을 내므로 소스가 없는 것이 아니라 꼴마다 갈리는 것이다.",
+   "for": "지정의 시점이 어느 경로에서 관측되는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "시점을 소스 없음으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.designationTimeObserved",
+   "related": [
+    "CF-4257"
+   ]
+  },
+  {
+   "id": "CF-4290",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "사유를 내는 경로의 수를 내는 안.",
+   "reason": "이 층이 담는 것이 사상의 명세이고 계수가 아니므로 수를 내면 값을 담지 않는다는 요구가 깨진다.",
+   "for": "지정의 사유가 어느 경로에서 관측되는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "사유를 내는 경로의 수를 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.designationGroundObserved",
+   "related": [
+    "CF-4257"
+   ]
+  },
+  {
+   "id": "CF-4291",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-2",
+    "kind": "decision_session",
+    "date": "2026-11-20"
+   },
+   "candidate": "판정 불가의 까닭을 구조가 대상을 담지 않는 쪽으로 두는 안.",
+   "reason": "이 회차가 허가를 정의층 구조의 칸으로 담았으므로 결손이 구조의 결손이 아니라 소스의 결손이다. 참거짓을 내는 안도 기각했다. 소스가 없다는 것과 그 명제가 거짓이라는 것이 다르다.",
+   "for": "개별 허가가 어느 경로에서도 관측되지 않는다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "판정 불가의 까닭을 구조가 대상을 담지 않는 쪽으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.designationReliefObserved",
+   "related": [
+    "CF-4256"
+   ]
   }
  ]
 }
