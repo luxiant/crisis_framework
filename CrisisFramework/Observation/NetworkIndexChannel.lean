@@ -107,6 +107,7 @@ def issuerCounterpartyTable : NetworkIndexChannel Unit where
     | NetworkKind.centralBankSwap => true
     | NetworkKind.currencyMismatchTransmission => false
     | NetworkKind.tradeFinanceLink => false
+    | NetworkKind.financialMessaging => false
   readsMembership := true
   readsCompleteness := false
   coversOwnPairsOnly := true
@@ -141,6 +142,7 @@ def thirdPartyNetworkStudy : NetworkIndexChannel Unit where
     | NetworkKind.centralBankSwap => true
     | NetworkKind.currencyMismatchTransmission => false
     | NetworkKind.tradeFinanceLink => false
+    | NetworkKind.financialMessaging => false
   readsMembership := true
   readsCompleteness := true
   coversOwnPairsOnly := false
@@ -176,6 +178,43 @@ def tradeFinanceRegistry : NetworkIndexChannel Unit where
     | NetworkKind.centralBankSwap => false
     | NetworkKind.currencyMismatchTransmission => false
     | NetworkKind.tradeFinanceLink => true
+    | NetworkKind.financialMessaging => false
+  readsMembership := false
+  readsCompleteness := false
+  coversOwnPairsOnly := false
+  readsVintage := false
+  recipient := DisclosureRecipient.publicReader
+  provenance := MeasurementProvenance.officialReport
+
+/--
+국제 기구가 환거래 관계의 집계를 공표하는 경로.
+
+**대응 비형식 개념:** 금융 전문이 오가는 망의 크기를 나라의 묶음 단위로 내는 공표. 그 공표가 계열
+넷을 들고 그 가운데 둘이 활성 환거래 은행의 수와 회랑의 수다.
+
+**이 정의가 배제하는 사례:**
+그 집계가 어느 쌍이 이어지는지를 낸다고 보는 읽기. 그 공표의 각주가 여러 회랑에서 활성인 환거래
+은행을 여러 번 센다고 적으므로 한 주체가 여러 번 세어져 그 값이 쌍의 집합으로 되돌려지지 않는다.
+조달처: E-71 §3-2 「그 집계는 한 주체를 여러 번 세므로 쌍의 집합으로 되돌려지지 않으며」
+
+**기각한 대체 정의:**
+공표 집계를 쌍을 내는 경로로 두고 집계의 거침만 값의 성질로 적는 안. 종류와 쌍의 칸이 함께 서나 그
+공표가 나라의 묶음을 단위로 두어 쌍이 애초에 그 단위가 아니므로 거친 쌍이 아니라 쌍이 아닌 것이다.
+경로를 계열마다 넷으로 가르는 안도 기각했다. 한 공표가 넷을 함께 내므로 수취인과 값의 성질이 넷에
+중복으로 서고 그 넷이 같은 각주를 받는다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-4403
+def correspondentBankingStatistics : NetworkIndexChannel Unit where
+  readsKind := fun k =>
+    match k with
+    | NetworkKind.collateralPledge => false
+    | NetworkKind.ownershipShare => false
+    | NetworkKind.centralBankSwap => false
+    | NetworkKind.currencyMismatchTransmission => false
+    | NetworkKind.tradeFinanceLink => false
+    | NetworkKind.financialMessaging => true
   readsMembership := false
   readsCompleteness := false
   coversOwnPairsOnly := false
@@ -196,7 +235,7 @@ def tradeFinanceRegistry : NetworkIndexChannel Unit where
 조달처: E-24 §3-3 「관측 명세를 원천, 곧 공시 경로로 색인하는 근거다」
 
 **기각한 대체 정의:**
-경로를 수취인으로 걸러 공표되는 것만 목록에 두는 안. 이 목록의 세 경로가 전부 일반 관측자를
+경로를 수취인으로 걸러 공표되는 것만 목록에 두는 안. 이 목록의 경로가 전량 일반 관측자를
 수취인으로 두어 그 거르기가 지금은 아무것도 걸러 내지 않으나, 걸러 내는 자리를 매번 다시 세우면
 목록 전량을 훑는 판정이 그 거르기의 결과에 걸려 한 자리에 고정되지 않는다.
 
@@ -204,7 +243,8 @@ def tradeFinanceRegistry : NetworkIndexChannel Unit where
 -/
 -- DD:CF-3743
 def networkIndexChannels : List (NetworkIndexChannel Unit) :=
-  [issuerCounterpartyTable, thirdPartyNetworkStudy, tradeFinanceRegistry]
+  [issuerCounterpartyTable, thirdPartyNetworkStudy, tradeFinanceRegistry,
+   correspondentBankingStatistics]
 
 /--
 그 경로 목록이 그 종류의 망에서 쌍의 이어짐을 내는가.
@@ -441,6 +481,26 @@ theorem sanction_answer_splits_on_kind :
         = (sanctionTextCutVia networkIndexChannels noSanctionCut).answer ()
             () NetworkKind.tradeFinanceLink) = false := by
   rfl
+
+/--
+금융 전문의 망에서 쌍의 이어짐을 내는 경로가 없다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 종류를 내면서 쌍을 함께 내는 경로가 그 목록에 서야 한다. 그 관측은 그 망의 구성을 외부에서 읽을
+수 있다는 뜻이며, 그러면 제재가 끊는 변이 공표에서 식별되고 그 절단의 효과가 쌍별로 재어진다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 제재가 끊는 바로 그 망에서 쌍을 읽는 공표 경로가 없다는 것이 이 아크의 산출
+이며, 그 결손이 종류를 내는 경로가 아예 없는 것과 다른 사실임을 함께 보이므로 기여 목록에 든다.
+-/
+-- DD:CF-4404
+theorem messaging_cut_unread_though_kind_read :
+    networkIndexChannels.any (fun c => c.readsKind NetworkKind.financialMessaging) = true
+      ∧ readsNetworkCut networkIndexChannels NetworkKind.financialMessaging = false
+      ∧ readsNetworkCompleteness networkIndexChannels NetworkKind.financialMessaging = false := by
+  -- 경로 목록과 각 경로의 칸이 상수이므로 세 접기가 계산으로 값이 나와 `rfl` 로 닫힌다.
+  exact ⟨rfl, rfl, rfl⟩
 
 /-- witness (A-3). **무엇을 증거하는가.** 공시 경로 구조체가 비어 있지 않다. 어느 종류도 어느
 축도 내지 않는 경로 하나를 든다. -/

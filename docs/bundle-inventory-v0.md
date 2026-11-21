@@ -271,7 +271,14 @@ Vulnerable Growth (Adrian·Boyarchenko·Giannone 2016/17), The Term Structure of
 
 ## 제외 권고 (Tier C, 11편) — 메커니즘과 무관
 
-A Comment on a Model of Vertical Product Differentiation (1992), An approach to AML compliance for cryptoassets (2025), Next generation correspondent banking (2024), BigTech and the changing structure of financial intermediation (2019), Central bank digital currencies (2021), Mapping the realignment of global value chains (2023), Mapping the space of central bankers' ideas (2025), Introducing BISTRO (2026), Tokenomics and blockchain fragmentation (2026), Shifting currents in FX and IR derivatives (McGuire·Schrimpf·von Peter — Shin 비저자), Monetary responses to external shocks in EMEs (Juselius·Xia — Shin 비저자)
+A Comment on a Model of Vertical Product Differentiation (1992), An approach to AML compliance for cryptoassets (2025), Next generation correspondent banking (2024, E-71), BigTech and the changing structure of financial intermediation (2019), Central bank digital currencies (2021), Mapping the realignment of global value chains (2023), Mapping the space of central bankers' ideas (2025), Introducing BISTRO (2026), Tokenomics and blockchain fragmentation (2026), Shifting currents in FX and IR derivatives (McGuire·Schrimpf·von Peter — Shin 비저자), Monetary responses to external shocks in EMEs (Juselius·Xia — Shin 비저자)
+
+**이 무리의 한 편이 지목 참조로 열렸다.** 환거래 은행 업무를 다루는 편을 `sanction` 아크가 금융
+전문을 주고받는 망의 구조를 세우려고 열었고 추출 기록 E-71 이 섰다. **제외 권고는 읽기 순서의
+권고이지 읽기의 금지가 아니므로** 그 지목 참조가 이 무리의 배정을 어기지 않으며, 구성원의 자격이
+바뀌지 않으므로 그 편이 이 무리에 그대로 선다. 다만 **메커니즘과 무관하다는 머리말의 사유가 그 편에
+대해 더 이상 서지 않는다.** 그 편이 그 망의 노드와 변을 직접 드는 자리이고 같은 사슬 위에 성질이 다른
+층 셋이 겹친다는 것을 드는 유일한 자리다.
 
 ## 중복 (3쌍)
 

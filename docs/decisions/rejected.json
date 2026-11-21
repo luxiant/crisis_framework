@@ -12138,6 +12138,114 @@
    "related": [
     "CF-4348"
    ]
+  },
+  {
+   "id": "CF-4409",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "체계를 망 종류의 열거에 원소로 더하는 안.",
+   "reason": "선언이 하나 줄어드나 그 열거가 노드 집합 위의 그래프를 색인하는데 체계는 그래프가 아니라 그 그래프가 타는 기반이므로 그 대응이 깨진다. 접속을 주체의 필드로 두는 안도 기각했다. 한 주체가 체계 여럿에 접속하므로 필드가 체계마다 서야 하고 그러면 체계의 열거가 타입에 박혀 그 집합이 넓어질 때 거짓이 된다.",
+   "for": "주체가 금융 전문 체계에 접속하는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "체계를 망 종류의 열거에 원소로 더하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.MessagingSystemAccess",
+   "related": [
+    "CF-4398"
+   ]
+  },
+  {
+   "id": "CF-4410",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "접속 구조체 안에 시점을 받는 필드를 더하는 안.",
+   "reason": "필드를 더하면 그 구조체를 받는 선언이 전부 그 필드를 채워야 하고 시점을 쓰지 않는 자리까지 값을 지어 넣게 되며, 족으로 올리면 기존 구조체가 그대로 서고 시점을 쓰지 않는 자리가 상수 축약으로 닫힌다.",
+   "for": "시점마다의 접속 (L-13). 그 자리를 어느 꼴로 둘지.",
+   "statement": "접속 구조체 안에 시점을 받는 필드를 더하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.MessagingSystemAccessFamily",
+   "related": [
+    "CF-4398"
+   ]
+  },
+  {
+   "id": "CF-4411",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "두 주체의 접속을 합으로 접는 안.",
+   "reason": "한쪽만 접속해도 변이 서나 전문이 오가려면 양쪽이 같은 체계에 서야 하므로 그 꼴이 끊긴 쌍을 이어진 것으로 낸다. 접속을 쌍에 바로 붙이는 안도 기각했다. 체계가 어느 것인지가 사라져 한 체계가 끊길 때 남는 체계를 가릴 수 없다.",
+   "for": "두 주체가 그 체계를 함께 쓰는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "두 주체의 접속을 합으로 접는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.MessagingSystemAccess.sharedBy",
+   "related": [
+    "CF-4399"
+   ]
+  },
+  {
+   "id": "CF-4412",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "임의의 체계 타입 위의 존재 진술로 두는 안.",
+   "reason": "목록을 받지 않아 짧으나 그 진술이 `Prop` 이어서 판정 가능성이 서지 않고 C-3 이 요구하는 자리가 비며, 임의의 타입에 그 인스턴스를 줄 수단이 없다. 목록을 전량 접는 안도 기각했다. 빈 목록에서 참을 내어 체계가 하나도 없는 자리가 모든 쌍이 이어지는 것으로 서며, 이 자리의 접기는 빈 목록에서 거짓을 내는 것이 옳다.",
+   "for": "두 주체가 그 체계 목록의 어느 하나에서 전문을 주고받을 수 있는가. 그 자리를 어느 꼴로 둘지.",
+   "statement": "임의의 체계 타입 위의 존재 진술로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.MessagingSystemAccess.linkedVia",
+   "related": [
+    "CF-4399"
+   ]
+  },
+  {
+   "id": "CF-4413",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "전문의 고리를 다른 종류의 자리에도 함께 내는 안.",
+   "reason": "선언이 짧아지나 교역 금융의 다리나 담보의 사슬에 전문의 값이 서서 그 종류의 이어짐이 거짓이 된다. 종류를 받지 않고 이어짐만 내는 안도 기각했다. 앞 아크가 세운 구조체가 종류를 받으므로 그 자리를 채우지 못한다.",
+   "for": "전문의 고리를 망 종류 위의 이어짐으로 잇는다. 그 자리를 어느 꼴로 둘지.",
+   "statement": "전문의 고리를 다른 종류의 자리에도 함께 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.MessagingSystemAccess.asMembership",
+   "related": [
+    "CF-4401"
+   ]
+  },
+  {
+   "id": "CF-4414",
+   "origin": {
+    "arc": "sanction",
+    "phase": "sanction-5",
+    "kind": "decision_session",
+    "date": "2026-11-21"
+   },
+   "candidate": "공표 집계를 쌍을 내는 경로로 두고 집계의 거침만 값의 성질로 적는 안.",
+   "reason": "종류와 쌍의 칸이 함께 서나 그 공표가 나라의 묶음을 단위로 두어 쌍이 애초에 그 단위가 아니므로 거친 쌍이 아니라 쌍이 아닌 것이다. 경로를 계열마다 넷으로 가르는 안도 기각했다. 한 공표가 넷을 함께 내므로 수취인과 값의 성질이 넷에 중복으로 서고 그 넷이 같은 각주를 받는다.",
+   "for": "국제 기구가 환거래 관계의 집계를 공표하는 경로. 그 자리를 어느 꼴로 둘지.",
+   "statement": "공표 집계를 쌍을 내는 경로로 두고 집계의 거침만 값의 성질로 적는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.correspondentBankingStatistics",
+   "related": [
+    "CF-4403"
+   ]
   }
  ]
 }

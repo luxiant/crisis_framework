@@ -344,6 +344,12 @@ inductive Concept where
   /-- 계약의 체결 시점. 이미 맺은 계약에 금지가 미치지 않는 유예를 가르는 축이며, 제재를 공표하는
       어느 경로도 사인 사이의 계약이 언제 맺어졌는지를 내지 않는다. -/
   | contractConclusionTiming
+  /-- 금융 전문 체계. 주체들이 지급의 지시와 확인을 주고받는 기반이며, 제재를 부과하는 조문이 그
+      체계에 연결하는 것을 금지의 대상으로 들면서 동시에 그 체계를 쓰는 것을 지정의 기준으로 든다. -/
+  | financialMessagingSystem
+  /-- 금융 전문 체계에의 접속. 한 주체가 그 체계의 참가자인가이며, 두 주체가 같은 체계에 접속해야
+      그 둘 사이에 전문의 고리가 선다. -/
+  | financialMessagingAccess
   deriving DecidableEq, Repr
 
 /--
@@ -1170,6 +1176,7 @@ def registry : List ConceptRel :=
   , .refines .conductReach .prohibitionScope
   , .measuredBy .alternativeIdentification .sanctionsListPublication
   , .measuredBy .prohibitionEffectiveTiming .sanctionsListPublication
+  , .measuredBy .financialMessagingSystem .sanctionsListPublication
   ]
 
 end CrisisFramework.Glossary
