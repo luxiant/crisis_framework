@@ -350,6 +350,12 @@ inductive Concept where
   /-- 금융 전문 체계에의 접속. 한 주체가 그 체계의 참가자인가이며, 두 주체가 같은 체계에 접속해야
       그 둘 사이에 전문의 고리가 선다. -/
   | financialMessagingAccess
+  /-- 금지되는 거래의 갈래. 한 조치가 어느 종류의 망에서 오가는 거래를 금지하는가이며, 제재를
+      부과하는 조문이 그 갈래를 조마다 자기 본문에 들고 그것을 조마다 모아 내는 공표가 없다. -/
+  | prohibitedDealKind
+  /-- 제재에 따른 절단. 법이 한 주체의 어느 변을 어느 시점에 금지하는가이며, 주체의 번짐과 금지의
+      구간과 금지되는 거래의 갈래와 절단의 대상이 함께 서야 그 변이 잘린다. -/
+  | sanctionedCut
   deriving DecidableEq, Repr
 
 /--
@@ -1177,6 +1183,7 @@ def registry : List ConceptRel :=
   , .measuredBy .alternativeIdentification .sanctionsListPublication
   , .measuredBy .prohibitionEffectiveTiming .sanctionsListPublication
   , .measuredBy .financialMessagingSystem .sanctionsListPublication
+  , .measuredBy .sanctionedCut .sanctionsListPublication
   ]
 
 end CrisisFramework.Glossary
