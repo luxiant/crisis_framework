@@ -12624,6 +12624,114 @@
    "related": [
     "CF-4440"
    ]
+  },
+  {
+   "id": "CF-4509",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "두 잔액의 차나 작은 쪽을 내는 안.",
+   "reason": "한 수로 서므로 주체 사이의 비교가 쉬우나 두 성분이 서로 다른 통화의 합이고 통화 간 환산을 금지하는 요구가 색인 없는 합과 차를 막으므로, 그 연산이 그 금지에 걸린다. 연결의 존재를 가드에 두지 않고 두 잔액을 그대로 내는 안도 기각했다. 그러면 그 값이 조달 연결과 무관해져 순노출형을 재는 것과 구별되지 않고, 정의층이 두 개념을 가른 근거가 회계층에서 사라진다.",
+   "for": "회계층의 `fundingLinkMismatchSize` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "두 잔액의 차나 작은 쪽을 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.fundingLinkMismatchSize",
+   "related": [
+    "CF-4503"
+   ]
+  },
+  {
+   "id": "CF-4510",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "가정의 문면을 문서화 문면에만 적고 구조에 두지 않는 안.",
+   "reason": "선언이 줄고 읽기 쉬우나 그 문면이 판정에 걸리지 않아 복원값을 쓰는 자리가 그 가정을 보지 않고 쓸 수 있으며, 복원된 값과 실측된 값이 같은 타입으로 서서 둘이 갈리지 않는다는 결손이 그대로 남는다. 가정과 그 사슬의 입력을 한 구조체에 담는 안도 기각했다. 한 정의가 둘 이상의 비형식 개념에 대응하면 분할하라는 요구가 걸리고, 담으면 가정이 전부 서는지를 묻는 판정이 수치 칸을 함께 받아 그 판정의 유니버스가 흐려진다.",
+   "for": "회계층의 `GrossReconstructionAssumptions` 가 드는 자리. 그 구조체를 어느 꼴로 둘지.",
+   "statement": "가정의 문면을 문서화 문면에만 적고 구조에 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.GrossReconstructionAssumptions",
+   "related": [
+    "CF-4503"
+   ]
+  },
+  {
+   "id": "CF-4511",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "서는 가정의 수를 내는 안.",
+   "reason": "어느 가정이 비는지를 세밀하게 읽으나 그 수가 금액이 아닌 계수여서 회계층의 수 체계가 그것을 받을 자리가 없고, 그 수로는 어느 칸이 비었는지가 서지 않는다. 칸마다 판정을 따로 내고 합성하지 않는 안도 기각했다. 복원값이 그 사슬 그대로 선 것인지를 한 명제로 세울 자리가 없어지며, 축을 다섯으로 가른 관측 채널이 합성 술어를 둔 선례가 그 자리를 합성에 둔다.",
+   "for": "회계층의 `GrossReconstructionAssumptions.allHold` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "서는 가정의 수를 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.GrossReconstructionAssumptions.allHold",
+   "related": [
+    "CF-4503"
+   ]
+  },
+  {
+   "id": "CF-4512",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "은행 부문의 순 차입액을 받지 않고 고객 잔액에서 이미 빠진 값으로 두는 안.",
+   "reason": "칸이 하나 줄지만 그 편의 셋째 단계가 은행이 전체로서 그 통화의 순 차입자이면 그 금액을 총계에서 뺀 뒤에 나눈다고 적어 그 빼기가 조건에 걸리므로, 빠진 값으로 두면 그 조건이 거짓인 자리와 참인 자리가 입력에서 같아 보인다. 그 조건을 가정의 묶음에 넣는 안도 기각했다. 그 값이 거짓인 자리에서도 복원이 적법하게 서므로 그 묶음의 뜻이 흐려진다.",
+   "for": "회계층의 `GrossReconstructionInputs` 가 드는 자리. 그 구조체를 어느 꼴로 둘지.",
+   "statement": "은행 부문의 순 차입액을 받지 않고 고객 잔액에서 이미 빠진 값으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.GrossReconstructionInputs",
+   "related": [
+    "CF-4503"
+   ]
+  },
+  {
+   "id": "CF-4513",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "복원된 총액을 몫으로 내고 스케일을 두지 않는 안.",
+   "reason": "값이 하나여서 쓰기 쉬우나 그 몫이 정수 나눗셈이어서 버림이 생기고 둘째 단계의 이분과 넷째 단계의 비중이 각각 나눗셈을 부르므로, 비율을 스케일된 정수로 표현하라는 요구가 그 꼴을 막는다. 가정을 이 구조체에 두지 않고 부르는 쪽이 따로 들게 하는 안도 기각했다. 그 값과 가정이 떨어져 서면 그 값을 넘겨받은 자리가 가정을 잃고, 복원값이 가정에 매인다는 것이 타입에서 사라진다.",
+   "for": "회계층의 `ReconstructedGross` 가 드는 자리. 그 구조체를 어느 꼴로 둘지.",
+   "statement": "복원된 총액을 몫으로 내고 스케일을 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.ReconstructedGross",
+   "related": [
+    "CF-4503"
+   ]
+  },
+  {
+   "id": "CF-4514",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-2",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "단계마다 중간 값을 내는 사상을 따로 두고 그 사상 넷을 이어 붙이는 안.",
+   "reason": "단계가 하나씩 보이므로 읽기 쉬우나 중간 값이 금액 타입으로 서서 그 자리에서 복원값과 실측값이 섞이고, 이 파일이 그 섞임을 막으려고 타입을 가른 것이 그 설계의 요지다. 가정을 받지 않고 값만 내는 안도 기각했다. 그러면 복원값이 가정에 매인다는 것이 그 사상의 치역에서 사라지고, 그 가정을 구조가 담지 않는다는 결손이 그대로 남는다.",
+   "for": "회계층의 `reconstructGross` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "단계마다 중간 값을 내는 사상을 따로 두고 그 사상 넷을 이어 붙이는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.reconstructGross",
+   "related": [
+    "CF-4503"
+   ]
   }
  ]
 }
