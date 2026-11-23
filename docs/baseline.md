@@ -34,7 +34,7 @@
 
 | 층 | 수 체계 | 기준선 | 측정 시점 |
 |---|---|---|---|
-| 회계층 | `ℤ` | `[propext, Quot.sound]` | `sanction-6` (2026-11-21, `59b0a5f`) |
+| 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-2` (2026-11-22, `a3b7605`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
 | 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `sanction-6` (2026-11-21, `59b0a5f`) |
 | 관측층 | 무차원 | `[]` | `sanction-6` (2026-11-21, `59b0a5f`) |
