@@ -12732,6 +12732,186 @@
    "related": [
     "CF-4503"
    ]
+  },
+  {
+   "id": "CF-4523",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "방식을 참거짓 한 칸으로 두어 총액인가만 묻는 안.",
+   "reason": "칸이 짧아지나 그 편이 임시 조사를 셋째 소스로 들면서 그 입도가 조사마다 다르다고 적어 방식이 서지 않는 경로가 실재하므로, 참거짓으로 두면 방식이 알려지지 않은 경로가 순액으로 접힌다. 방식을 경로가 아니라 축마다 두는 안도 기각했다. 그 편이 방식을 기재 관례에 붙이고 축에 붙이지 않으므로 그 세분이 공시에서 유도되지 않는다.",
+   "for": "관측층의 `MeasurementBasis` 가 드는 자리. 그 열거를 어느 꼴로 둘지.",
+   "statement": "방식을 참거짓 한 칸으로 두어 총액인가만 묻는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.MeasurementBasis",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4524",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "통화 불일치의 축을 드는 기존 구조체에 칸을 더하는 안.",
+   "reason": "선언이 줄고 축이 한자리에 모이나 그 구조체가 어느 부채가 어느 통화의 자산을 조달했는지를 읽는가를 묻고 이 구조체가 그 크기를 내는가를 물어 두 비형식 개념이 갈리므로, 한 정의가 둘 이상의 개념에 대응하면 분할하라는 요구가 걸린다. 두 성분을 한 칸으로 접는 안도 기각했다. 회계층이 그 크기를 두 통화의 잔액 쌍으로 내고 그 둘을 더하거나 빼지 않으므로, 접으면 한 성분만 내는 경로가 그 쌍을 내는 것으로 세어진다.",
+   "for": "관측층의 `FundingSizeChannel` 가 드는 자리. 그 구조체를 어느 꼴로 둘지.",
+   "statement": "통화 불일치의 축을 드는 기존 구조체에 칸을 더하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingSizeChannel",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4525",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "논리합으로 두어 한 성분만 내도 답하는 것으로 보는 안.",
+   "reason": "답하는 경로가 늘어나나 그 쌍이 두 통화의 잔액이고 한쪽이 비면 그 크기가 서지 않으므로, 논리합으로 두면 비어 있는 쪽이 영으로 접혀 불일치가 없는 것과 구별되지 않는다.",
+   "for": "관측층의 `FundingSizeChannel.answersSize` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "논리합으로 두어 한 성분만 내도 답하는 것으로 보는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingSizeChannel.answersSize",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4526",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "딜러가 보고하는 파생상품 잔액 통계를 경로로 두지 않는 안.",
+   "reason": "첫째 소스가 실재한다는 사실이 사라지고, 그 쌍이 서지 않는 것이 소스의 부재인지 재료의 결손인지가 갈리지 않는다.",
+   "for": "관측층의 `derivativeStatisticsChannel` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "딜러가 보고하는 파생상품 잔액 통계를 경로로 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.derivativeStatisticsChannel",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4527",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "외견상 불일치를 거꾸로 읽어 유추하는 집계의 기재 방식을 총액으로 두는 안.",
+   "reason": "보고 모집단이 첫째 소스보다 넓으므로 그 값이 더 넓은 집계로 읽히나, 그 편이 그 유추가 외견상 불일치에서 온다고 적어 그 값이 순액에서 유도됨을 밝히므로 총액으로 두면 그 유도가 사라진다.",
+   "for": "관측층의 `inferredFromApparentMismatchChannel` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "외견상 불일치를 거꾸로 읽어 유추하는 집계의 기재 방식을 총액으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.inferredFromApparentMismatchChannel",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4528",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "대외 포지션의 통화 구성을 내는 계열의 성질을 추정으로 두는 안.",
+   "reason": "합성으로 메운 몫이 있다는 사실은 서나 당국이 보고한 실측도 같은 계열에 들어 있으므로, 추정으로 두면 그 실측이 사라지고 그 계열과 유추로만 선 계열이 같은 칸에 든다.",
+   "for": "관측층의 `externalPositionCurrencyCompositionChannel` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "대외 포지션의 통화 구성을 내는 계열의 성질을 추정으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.externalPositionCurrencyCompositionChannel",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4529",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "소스 없음 witness 를 후보 경로의 목록에 넣는 안.",
+   "reason": "목록이 비지 않음을 그 자리에서 보이나 그 witness 가 어느 축도 내지 않는 경로여서 관측 결과를 바꾸지 않고, 넣으면 실재하는 경로와 증거용 경로가 같은 목록에 섞인다.",
+   "for": "관측층의 `fundingSizeChannels` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "소스 없음 witness 를 후보 경로의 목록에 넣는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.fundingSizeChannels",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4530",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "방식이 읽히지 않는 경로를 총액으로 보아 답하게 하는 안.",
+   "reason": "답하는 경로가 늘어나나 그 편이 임시 조사의 입도가 조사마다 다르다고 적어 방식이 서지 않는 자리가 실재하므로, 총액으로 접으면 재어지지 않은 것이 재어진 것으로 선다.",
+   "for": "관측층의 `FundingSizeChannel.answersGrossSize` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "방식이 읽히지 않는 경로를 총액으로 보아 답하게 하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingSizeChannel.answersGrossSize",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4531",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "판정 불가의 까닭을 귀속이 유일하지 않다로 두는 안.",
+   "reason": "대체 가능한 수단이 어느 자금이 어느 자산을 조달했는지의 사슬을 끊는다는 까닭이 이 자리에도 걸리나, 이 파일이 묻는 것은 그 쌍을 총액으로 내는 경로의 존재이고 그 경로가 아예 없으므로 측정 소스의 부재가 그 까닭이다.",
+   "for": "관측층의 `fundingSizeObserved` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "판정 불가의 까닭을 귀속이 유일하지 않다로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.fundingSizeObserved",
+   "related": [
+    "CF-4515"
+   ]
+  },
+  {
+   "id": "CF-4532",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-3",
+    "kind": "decision_session",
+    "date": "2026-11-22"
+   },
+   "candidate": "순액 표시에 묶이는가의 판정을 두지 않고 두 축이 독립이라고 적는 안.",
+   "reason": "선언이 줄어드나 그 독립이 문서화 문면에만 서면 판정에 걸리지 않아 두 축을 함께 쓰는 자리가 그 묶임을 보지 않고 쓸 수 있으며, 관측층이 두 축을 따로 둔 것이 흔들린다는 결손이 그대로 남는다.",
+   "for": "관측층의 `FundingSizeChannel.tiesToNetPresentation` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "순액 표시에 묶이는가의 판정을 두지 않고 두 축이 독립이라고 적는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingSizeChannel.tiesToNetPresentation",
+   "related": [
+    "CF-4515"
+   ]
   }
  ]
 }

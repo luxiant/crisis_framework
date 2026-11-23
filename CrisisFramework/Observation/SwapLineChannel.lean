@@ -94,6 +94,8 @@ inductive MeasurementProvenance where
   | officialReport
   /-- 공표 자료에서 읽는 쪽이 유도한 추정. -/
   | staffEstimate
+  /-- 당국이 보고한 실측과 합성으로 메운 값이 한 계열에 이어 붙어 있다. -/
+  | mixedSeries
   deriving DecidableEq, Repr
 
 /--
