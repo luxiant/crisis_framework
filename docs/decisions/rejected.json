@@ -12912,6 +12912,42 @@
    "related": [
     "CF-4515"
    ]
+  },
+  {
+   "id": "CF-4542",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-4",
+    "kind": "decision_session",
+    "date": "2026-11-23"
+   },
+   "candidate": "값의 성질을 묻지 않고 주체의 덮임과 두 성분의 총액만 묻는 안.",
+   "reason": "크기가 관측되는가를 내는 판정과 같은 축이어서 선언이 줄어드나, 공표 자료에서 읽는 쪽이 유도한 추정이 답의 값으로 서고 그 값이 실측된 금액과 갈리지 않는다. 실측과 합성이 섞인 계열을 그 실측 몫 때문에 받는 안도 기각했다. 그 계열의 한 칸이 실측인지 합성인지가 공시에서 가려지지 않으므로 받으면 합성으로 메운 칸이 실측으로 선다.",
+   "for": "관측층의 `FundingSizeChannel.answersReportedSizeFor` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "값의 성질을 묻지 않고 주체의 덮임과 두 성분의 총액만 묻는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingSizeChannel.answersReportedSizeFor",
+   "related": [
+    "CF-4533"
+   ]
+  },
+  {
+   "id": "CF-4543",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-4",
+    "kind": "decision_session",
+    "date": "2026-11-23"
+   },
+   "candidate": "성분마다 따로 판정하여 한 경로가 한 성분만 내도 그 성분의 값을 내는 안.",
+   "reason": "답 타입이 두 값을 따로 받으므로 그 꼴이 설 수 있으나, 그 쌍을 답한다는 판정이 두 성분을 함께 내는 경로를 요구한다고 크기의 공시 경로 명세가 이미 정했고, 성분마다 가르면 딜러가 보고하는 파생상품 잔액처럼 한 변의 명목 잔액만 내는 경로가 그 주체의 부채 잔액을 낸 것으로 선다. 두 잔액을 한 수로 접어 주체 사이의 순서를 세우는 안도 기각했다. 두 성분이 서로 다른 통화의 잔액이어서 접으려면 환율이 필요하고, 그 환율을 외생으로 두면 자료여서 이 산출이 낼 것이 없고 내생화하면 동학층이어서 재유입의 범위에서 빠진다.",
+   "for": "관측층의 `debtAssetCurrencyPairingVia` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "성분마다 따로 판정하여 한 경로가 한 성분만 내도 그 성분의 값을 내는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.debtAssetCurrencyPairingVia",
+   "related": [
+    "CF-4533"
+   ]
   }
  ]
 }
