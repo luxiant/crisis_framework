@@ -12948,6 +12948,78 @@
    "related": [
     "CF-4533"
    ]
+  },
+  {
+   "id": "CF-4551",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-5",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "하위 꼴을 따로 열거하지 않고 조달 실패의 꼴에 셋째 생성자를 더해 세 꼴을 나란히 두는 안.",
+   "reason": "그러면 두 하위 꼴이 아직 부채로 서지 않은 조달에 걸린다는 공통이 열거의 구조에서 사라져 이미 부채로 섰는가의 색인이 두 생성자를 따로 받아야 하고, 그 색인과 인수 약정의 색인이 한 단계에 섞인다. 약정의 유무를 조건부 청구권의 발동에서 유도하는 안도 기각했다. 조달 실패의 배치가 노드와 꼴만 받고 청구권의 그래프를 들지 않으므로, 유도하면 그 배치가 그 그래프를 함께 받아야 하고 하위 꼴의 판정이 열거 안에서 서지 않는다.",
+   "for": "정의층의 `PipelineFailureKind` 가 드는 자리. 그 열거를 어느 꼴로 둘지.",
+   "statement": "하위 꼴을 따로 열거하지 않고 조달 실패의 꼴에 셋째 생성자를 더해 세 꼴을 나란히 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.PipelineFailureKind",
+   "related": [
+    "CF-4544"
+   ]
+  },
+  {
+   "id": "CF-4552",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-5",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "색인을 두지 않고 두 하위 꼴의 이름만 두는 안.",
+   "reason": "그러면 그 둘을 가른 축이 문서화 문면에만 서고 구조 안의 판정으로 재어지지 않는다. 색인을 그 약정이 덮은 몫의 비율로 두는 안도 기각했다. 비율은 수를 요구하여 정의층에 서지 않고, 약정이 일부만 덮은 발행은 덮인 몫과 덮이지 않은 몫이 각각 한 하위 꼴의 사건을 내는 배치로 받으면 비율 없이 담긴다.",
+   "for": "정의층의 `PipelineFailureKind.underwritten` 이 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "색인을 두지 않고 두 하위 꼴의 이름만 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.PipelineFailureKind.underwritten",
+   "related": [
+    "CF-4544"
+   ]
+  },
+  {
+   "id": "CF-4553",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-5",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "둘째 꼴을 인자 없이 두고 인수 약정의 유무를 조달 실패의 배치에 칸으로 더하는 안.",
+   "reason": "그 유무가 꼴의 성질인데 배치의 칸으로 두면 롤오버 실패에도 그 칸이 서서 약정이 무엇을 가리키는지가 정해지지 않고, 한 노드가 두 하위 꼴을 함께 겪는 배치를 그 칸이 하나의 참거짓으로 받지 못한다.",
+   "for": "정의층의 `FundingFailureKind` 가 드는 자리. 그 열거를 어느 꼴로 둘지.",
+   "statement": "둘째 꼴을 인자 없이 두고 인수 약정의 유무를 조달 실패의 배치에 칸으로 더하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind",
+   "related": [
+    "CF-4544"
+   ]
+  },
+  {
+   "id": "CF-4554",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-5",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "방향을 셋으로 두고 어느 쪽도 아닌 칸을 더하는 안.",
+   "reason": "약정이 그 몫을 떠안은 꼴에서 그 칸이 값을 갖게 되었으나, 그 값이 이미 부채로 섰는가의 색인과 이 판정이 둘 다 거짓인 자리와 같으므로 셋째 칸을 두면 같은 사실이 두 자리에 서고 둘이 갈릴 수 있다. 두 판정이 함께 참인 꼴이 없다는 것을 정리가 들어 남는 세 조합이 세 방향을 그대로 받는다. 자산 증가의 금액을 함께 내는 안도 기각했다. 이 판정이 정의층에 서고 그 금액의 출처가 이 회차의 조달에 없으므로, 금액을 내면 그 값을 지어내게 된다.",
+   "for": "정의층의 `FundingFailureKind.enlargesAssets` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "방향을 셋으로 두고 어느 쪽도 아닌 칸을 더하는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.enlargesAssets",
+   "related": [
+    "CF-4544"
+   ]
   }
  ]
 }
