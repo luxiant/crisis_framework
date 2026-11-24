@@ -245,11 +245,33 @@ def _excl_paras(root: Path):
 
 
 def inj_38_para(root):
-    """`EXCL` 블록의 분할에서 배타성 문단을 지운다. 그 분할의 문단이 없으면 실패해야 한다."""
-    _led, decl, _parts, _excl, paras = _excl_paras(root)
+    """`EXCL` 블록의 분할에서 배타성 문단을 지운다. 그 분할의 문단이 없으면 실패해야 한다.
+
+    지울 문단을 그 블록이 든 분할의 것에서 고른다. 선언의 첫 배타성 문단을 고르면 그 블록 밖의
+    분할의 문단이 앞에 설 때 주입이 검사의 유니버스 밖에 떨어져 실패가 서지 않으며, 그 어긋남이
+    음성 대조에서 기대와 어긋난 항으로만 드러난다. 고르는 꼴은 모든 쌍이 배타적이라 적은 분할의
+    한 쌍을 지우는 주입과 같고 그 판별을 검증기의 함수로 한다.
+    """
+    led, decl, _parts, _excl, paras = _excl_paras(root)
     if not paras:
         raise SystemExit("배타성 문단이 없어 주입 대상이 없다")
-    para = paras[0][0]
+    labels = wiki_formal.concept_labels(led, decl.rel)
+    forms = wiki_common.heading_rules(led)[1][wiki_formal.EXCLUSIVITY_WORD]
+    para = None
+    for name in _excl_block(root):
+        label = labels.get(name)
+        if not label:
+            continue
+        for p, _is_all in paras:
+            head = wiki_common.para_heading(p) or ""
+            if any((fill := wiki_formal.heading_fill(f, head)) is not None and fill.startswith(label)
+                   for f in forms):
+                para = p
+                break
+        if para is not None:
+            break
+    if para is None:
+        raise SystemExit("EXCL 블록이 든 분할의 배타성 문단이 없어 주입 대상이 없다")
     f = root / decl.rel
     text = f.read_text(encoding="utf-8")
     if text.count(para + "\n\n") != 1:
