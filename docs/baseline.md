@@ -34,11 +34,11 @@
 
 | 층 | 수 체계 | 기준선 | 측정 시점 |
 |---|---|---|---|
-| 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-2` (2026-11-22, `a3b7605`) |
+| 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-6` (2026-11-24, `5c4e332`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `funding-5` (2026-11-24, `bf23596`) |
-| 관측층 | 무차원 | `[]` | `funding-4` (2026-11-23, `6198057`) |
-| 용어집 | 없음 | `[]` | `funding-5` (2026-11-24, `bf23596`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `funding-6` (2026-11-24, `b197493`) |
+| 관측층 | 무차원 | `[]` | `funding-6` (2026-11-24, `2118b36`) |
+| 용어집 | 없음 | `[]` | `funding-6` (2026-11-24, `b197493`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -663,7 +663,7 @@ QUEUEMARK_SPENT=소진
 더하는 조작이 처방 없이 적발된다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=33949
+RULEDOC_OVER_BYTES_SI=32730
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
 RULEDOC_REASON_BYTES_SI=1413
