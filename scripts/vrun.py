@@ -12,13 +12,13 @@
   step4-baseline   olean 기준 공리 의존 출력 + docs/baseline.md 기준선 차분
                    감사 대상 선언은 매 실행마다 훑어 잡아 임시 프로브 파일로 찍는다
                    공리 출력이 비어 있지 않은 선언의 목록과 계수를 층별로 보고에 낸다 (실패시키지 않는다)
-  step8-layertype  층별 수 타입 정적 검사 (CLAUDE.md §2 의 층별 금지 표)
+  step8-layertype  층별 수 타입 정적 검사 (docs/baseline.md §10 의 층별 금지 표)
   step9-propfree   정의층 structure 필드와 inductive 생성자의 Prop 금지
   step5-mutation   변이 검사 — 최상위 theorem 과 example 의 결론 전체를 ¬ ( ) 로 감싸 반드시 실패함을 확인
                    대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는다
   step10-clausemut 논리 결합 변이 — 정의층과 관측층의 판정 반환 함수 본문에서 결합 하나를 뒤집은
                    사본이 통과하는 자리를 세어 docs/baseline.md 의 블록과 맞댄다 (늘면 실패)
-  step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 예순셋)
+  step6-ledger     원장 검증기 check_wiki.py 호출 (SPEC.md §2 의 검사 예순둘)
                    아크 종료 검사 셋은 첫 인자로 아크 이름을 주면 함께 돌고
                    주지 않으면 돌지 않는다 (`bash scripts/verify.sh <아크>`)
   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)

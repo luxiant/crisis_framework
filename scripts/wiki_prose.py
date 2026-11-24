@@ -442,52 +442,8 @@ def check_36(led: Ledger) -> Report:
     return r
 
 
-# 검사 37 이 읽는 집행 문면의 원장 계수 표. 좌변이 그 표의 행이고 우변이 레지스터 배열의
-# 길이다. 그 문면이 「계수는 손으로 세지 않고 검증기의 출력에서 읽는다」를 관례로만 들고
-# 있어서, 병합하는 회차가 그 표를 고치지 않아도 아무것도 걸리지 않았다(SPEC §2.1).
-LEDGER_COUNT_DOC = "CLAUDE.md"
-
-
-LEDGER_COUNT_HEAD = "| 레지스터 | entry |"
-
-
-LEDGER_COUNT_ROW = re.compile(r"^\|\s*(\w+)\s*\|\s*(\d+)\s*\|$")
-
-
-def check_37(led: Ledger) -> Report:
-    r = Report("37", "wiki37-claude-ledger-count",
-               "집행 문면의 원장 계수 표가 레지스터 넷을 전부 들고 행마다 적힌 수가 그 "
-               "레지스터의 배열 길이와 같은가", "fail")
-    path = led.root / LEDGER_COUNT_DOC
-    if not path.is_file():
-        r.bad(f"{LEDGER_COUNT_DOC} 이 없다")
-        return r
-    lines = path.read_text(encoding="utf-8").splitlines()
-    head = [i for i, ln in enumerate(lines) if ln.strip() == LEDGER_COUNT_HEAD]
-    # 표가 없으면 통과가 아니라 실패다. 검사 28 과 34 와 35 가 같은 요구를 둔다.
-    if len(head) != 1:
-        r.bad(f"{LEDGER_COUNT_DOC} 에 원장 계수 표의 머리 `{LEDGER_COUNT_HEAD}` 가 "
-              f"{len(head)}개다")
-        return r
-    said: dict[str, int] = {}
-    for ln in lines[head[0] + 2:]:
-        m = LEDGER_COUNT_ROW.match(ln.strip())
-        if not m:
-            break
-        said[m.group(1)] = int(m.group(2))
-    # 우변을 새로 세지 않고 검증기의 수집기를 부른다. 출력의 머리가 싣는 계수와 같은 자리다.
-    real = {name: len(led.reg[name]) for name in REGISTERS}
-    for name in sorted(set(said) | set(real)):
-        if name not in said:
-            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 레지스터 `{name}` 의 행을 들지 않는다")
-        elif name not in real:
-            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 레지스터가 아닌 `{name}` 의 행을 든다")
-        elif said[name] != real[name]:
-            r.bad(f"{LEDGER_COUNT_DOC} 의 원장 계수 표가 `{name}` 을 {said[name]} 로 드는데 "
-                  f"그 배열의 길이가 {real[name]} 이다")
-    r.note("표의 행 " + (" · ".join(f"{k} {said[k]}" for k in sorted(said)) or "없다"))
-    r.note("배열의 길이 " + " · ".join(f"{k} {real[k]}" for k in sorted(real)))
-    return r
+# 검사 37 은 걷혔다. 그 검사가 맞대던 원장 계수 표가 `CLAUDE.md` 를 안내로 줄이면서 사라졌고,
+# 번호는 불변 앵커이므로 `docs/decisions/SPEC.md` 의 행을 지우지 않고 그 행이 걷혔음을 적는다.
 
 
 def check_41(led: Ledger) -> Report:
@@ -1256,7 +1212,6 @@ CHECKS = (
     check_32,
     check_35,
     check_36,
-    check_37,
     check_41,
     check_43,
     check_49,

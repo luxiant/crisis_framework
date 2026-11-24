@@ -67,7 +67,7 @@ def run(ctx) -> None:
             ctx.ok(f"코드에 없음: {name}")
 
     # `ℝ` 금지는 층별로 갈린다. 동학층은 허용이고 나머지 넷은 금지다 (L-4).
-    # CLAUDE.md §2 의 표가 정본이며 디렉터리가 층을 결정한다.
+    # docs/baseline.md §10 의 표가 정본이며 디렉터리가 층을 결정한다.
     real_rx = re.compile("ℝ")
     real_hits = 0
     for t in ctx.targets:

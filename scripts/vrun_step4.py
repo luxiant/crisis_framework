@@ -95,7 +95,7 @@ def run(ctx) -> None:
             ctx.ok(f"{a}: {b} (기준선 이하)")
         elif kind == "DECL_EXCESS":
             ctx.bad(f"{a}: 기준선 초과 — {b} / 기준선 {c} / 초과분 {d}."
-                    " 어느 보조정리에서 유입됐는지 추적할 것 (CLAUDE.md §5-2)")
+                    " 어느 보조정리에서 유입됐는지 추적할 것 (docs/baseline.md §2-2)")
         elif kind == "NONEMPTY":
             ctx.rep(f"{a} 공리 출력이 비어 있지 않은 선언 {b} / {c}")
         elif kind == "NONEMPTY_ITEM":

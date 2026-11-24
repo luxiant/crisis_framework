@@ -134,24 +134,6 @@ def inj_36_ghost(root):
     return ghost
 
 
-def inj_37_count(root):
-    """사본의 원장 계수 표에서 한 행의 수를 하나 틀리게 적는다."""
-    f = root / wiki_prose.LEDGER_COUNT_DOC
-    lines = f.read_text(encoding="utf-8").splitlines()
-    head = [i for i, ln in enumerate(lines)
-            if ln.strip() == wiki_prose.LEDGER_COUNT_HEAD]
-    if len(head) != 1:
-        raise SystemExit("원장 계수 표의 머리를 찾지 못했다")
-    for i in range(head[0] + 2, len(lines)):
-        m = wiki_prose.LEDGER_COUNT_ROW.match(lines[i].strip())
-        if not m:
-            break
-        lines[i] = f"| {m.group(1)} | {int(m.group(2)) + 1} |"
-        f.write_text("\n".join(lines) + "\n", encoding="utf-8")
-        return f"{m.group(1)} {m.group(2)}→{int(m.group(2)) + 1}"
-    raise SystemExit("원장 계수 표의 행을 찾지 못했다")
-
-
 def inj_41_pointer(root):
     """면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다.
 
@@ -637,7 +619,6 @@ CASES = [
     ("35", "wiki35-doc-form", "원장 디렉터리에 새 파일을 둔다", inj_35_ledger, None),
     ("36", "wiki36-root-surface", "무시 파일에서 /* 줄을 지운다", inj_36_open, None),
     ("36", "wiki36-root-surface", "없는 이름으로 되살림 줄을 더한다", inj_36_ghost, None),
-    ("37", "wiki37-claude-ledger-count", "원장 계수 표의 한 행의 수를 하나 틀리게 적는다", inj_37_count, None),
     ("41", "wiki41-pointer-scope", "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None),
     ("35", "wiki35-doc-form", "같은 번호를 가진 추출 기록을 둔다", inj_35_dupnum, None),
     ("35", "wiki35-doc-form", "중간 번호의 추출 기록을 옮겨 결번을 만든다", inj_35_gapnum, None, "nocatch"),

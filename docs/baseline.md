@@ -1,9 +1,9 @@
 # baseline.md
 
-이 파일은 **값의 정본**이다. 층별 공리 기준선(A-6)과 툴체인 핀과 오염 어간 목록이 여기에 산다.
+이 파일은 **값의 정본**이다. 층별 공리 기준선(A-6)과 툴체인 핀과 오염 어간 목록과 층별 금지 표가 여기에 산다.
 
-행동을 정하는 문면은 `CLAUDE.md`가 들고, 판단을 정하는 문면은 세션 지시가 든다. 이 파일은 그
-둘이 지목하는 값만 담으며 규율을 새로 세우지 않는다.
+절차를 정하는 문면은 리포 밖의 부록이 들고, 판단을 정하는 문면은 리포 밖의 세션 지시가 든다. 이
+파일은 그 둘이 지목하는 값만 담으며 규율을 새로 세우지 않는다.
 
 **검증 설비와 CI는 이 파일의 §5 기계 판독 블록을 읽는다.** 값을 스크립트에 전사하지
 않는 이유는 전사가 이루어지면 문서를 고쳐도 검사가 낡은 값으로 돌기 때문이다. 값을 고칠 때는
@@ -501,8 +501,8 @@ SESSIONCLAUSE=D-7
 SESSIONCLAUSE=D-8
 SESSIONCLAUSE=F-1
 SESSIONCLAUSE=F-2
-SESSIONCLAUSE=F-4
 SESSIONCLAUSE=F-5
+SESSIONCLAUSE=F-6
 SESSIONCLAUSE=G-1
 SESSIONCLAUSE=G-2
 SESSIONCLAUSE=G-3
@@ -524,13 +524,10 @@ SESSIONCLAUSE=J-14
 SESSIONCLAUSE=J-15
 SESSIONCLAUSE=J-16
 SESSIONCLAUSE=J-18
-SESSIONCLAUSE=J-19
 SESSIONCLAUSE=J-20
 SESSIONCLAUSE=J-21
 SESSIONCLAUSE=J-22
 SESSIONCLAUSE=J-24
-SESSIONCLAUSE=J-26
-SESSIONCLAUSE=J-27
 SESSIONCLAUSE=J-28
 SESSIONCLAUSE=J-29
 SESSIONCLAUSE=J-30
@@ -540,6 +537,7 @@ SESSIONCLAUSE=J-33
 SESSIONCLAUSE=J-34
 SESSIONCLAUSE=J-36
 SESSIONCLAUSE=J-37
+SESSIONCLAUSE=J-38
 SESSIONCLAUSE=L-4
 SESSIONCLAUSE=L-5
 SESSIONCLAUSE=L-8
@@ -594,24 +592,20 @@ SESSIONCLAUSE=V-6
 SESSIONCLAUSE=V-7
 SESSIONCLAUSE=V-8
 SESSIONCLAUSE=V-9
-SESSIONCLAUSE=W-1
 SESSIONCLAUSE=W-3
-SESSIONCLAUSE=W-4
 SESSIONCLAUSE=W-5
 SESSIONCLAUSE=W-6
-SESSIONCLAUSE=W-7
 SESSIONCLAUSE=W-8
-SESSIONCLAUSE=W-9
-SESSIONCLAUSE=W-10
 SESSIONCLAUSE=W-11
 SESSIONCLAUSE=W-12
+SESSIONCLAUSE=W-13
 <!-- SESSIONCLAUSE:END -->
 
 `SESSIONCLAUSE` 블록은 세션 지시가 드는 규율 조항의 목록을 값으로 고정하고, 그 목록이 원장에서
 유도되는 살아 있는 조항과 양방향으로 맞는지 보는 검사가 읽는다. `SESSIONCLAUSE_SERIES` 는
 유니버스에 드는 계열이며, 구멍과 미결의 ID 가 같은 꼴을 쓰므로 그 둘을 빼는 자리가 그것이다.
 세션 지시는 리포에 없어 검사의 대상이 아니고, 이 블록이 그 문서의 거울이 되는 것은 사람이 지킨다.
-**전문을 고치는 회차의 카드가 이 블록도 함께 고치므로 둘이 한 카드에 들어 따로 서지 않는다.**
+**전문을 고치는 회차의 커밋이 이 블록과 그 이름을 드는 원장 항목을 함께 고치므로 둘이 따로 서지 않는다.**
 
 **이 블록이 §5 가 아니라 파일 말미에 서는 것은 블록을 말미에 덧붙이는 관례의 결과다.** §7 의
 예약 낱말과 무관하며 `EXCL` 블록이 §7-2-1 에 서는 것과 같은 형이다. §5 머리말이 드는 것은
@@ -655,10 +649,10 @@ QUEUEMARK_SPENT=소진
 요구하지 않고 줄어드는 방향으로만 움직일 것을 요구하며, 지표는 요구 단위의 계수가 아니라 그
 바이트다.** 요구의 단위를 세우는 조작이 단위의 수를 늘리므로 계수로 재면 그 조작이 적발된다.
 
-**그 유니버스가 리포 밖에 있으므로 검증 설비가 이 값을 쓰지 않는다.** 세션 지시와
-부록이 프로젝트 디렉터리에 살고 리포에 들어가지 않으므로 그 대조는 결정 세션의 사전 검사가
-돌리고 그 결과를 그 회차의 종료 문서가 적는다. **이 블록은 그 대조의 좌변을 리포 안에 남기는
-자리이고 검사의 입력이 아니다.**
+**그 유니버스가 리포 밖에 있으므로 검증 설비가 이 값을 쓰지 않는다.** 세션 지시와 부록이 프로젝트
+디렉터리에 살고 리포에 들어가지 않으므로 그 대조는 결정 세션이 `scripts/ruledoc.py` 로 돌리고 그
+결과를 그 회차의 종료 문서가 적는다. **이 블록은 그 대조의 좌변을 리포 안에 남기는 자리이고 검사의
+입력이 아니다.**
 
 **요구 단위의 상한을 재는 탐지의 유니버스에서 열거를 드는 절을 뺀다.** 판별선은 그 절이 요구를
 드는가 열거를 드는가이며, 그 가름을 그 절의 항이 식별자를 머리로 두는지로 유도한다. 확정 결정과
@@ -668,36 +662,30 @@ QUEUEMARK_SPENT=소진
 더하는 조작이 처방 없이 적발된다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=35548
+RULEDOC_OVER_BYTES_SI=33949
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
-RULEDOC_REASON_BYTES_SI=1916
-RULEDOC_REINFORCE_BYTES_SI=11342
+RULEDOC_REASON_BYTES_SI=1413
+RULEDOC_REINFORCE_BYTES_SI=4394
 RULEDOC_IMPL_BYTES_APPENDIX=0
-RULEDOC_REASON_BYTES_APPENDIX=859
-RULEDOC_REINFORCE_BYTES_APPENDIX=34271
+RULEDOC_REASON_BYTES_APPENDIX=0
+RULEDOC_REINFORCE_BYTES_APPENDIX=4074
 <!-- RULEDOC:END -->
 
-**이 절을 고칠 때.** 그 값을 손으로 적지 않고 그 탐지를 돌려 받으며, 탐지의 꼴을 바꾸는 회차가
-이 블록을 함께 고쳐 그 변경이 의식적 결정으로 서게 한다. **값이 늘면 그 회차가 그 사유를
-종료 문서에 적는다.** **이 블록을 고치는 조작을 집행 증분으로 두지 않고 별지가 그 값을 든다.**
-그 유니버스가 리포 밖에 있어 집행이 그 문서를 손에 쥐지 않으므로, 집행 증분으로 두면 집행이 그
-값을 재지 못하고 비우거나 지어내게 된다. **움직이지 않는 칸도 별지가 함께 들어 움직인 칸과
-움직이지 않은 칸이 그 자리에서 갈린다.**
+**이 절을 고칠 때.** 그 값을 손으로 적지 않고 그 탐지를 돌려 받으며, 탐지의 꼴을 바꾸는 회차가 이
+블록을 함께 고쳐 그 변경이 의식적 결정으로 서게 한다. **값이 늘면 그 회차가 그 사유를 종료 문서에
+적는다.** **규율 문서의 전문을 고치는 회차의 커밋이 이 블록을 그 측정기가 낸 값으로 고친다.**
+움직이지 않는 칸도 그 출력에서 함께 옮겨 움직인 칸과 움직이지 않은 칸이 그 자리에서 갈린다.
 
-**그 측정기의 소스가 `scripts/ruledoc.py` 에 서고 결정 세션이 그것을 불러 돌린다.** 꼴을 규율
-문서의 산문으로 적어 두는 길을 먼저 썼으나 **그 산문만으로 세운 측정기가 이 블록의 값과 세 회차에
-걸쳐 갈렸으므로** 그 길이 다음 회차가 같은 것을 재게 하지 못한다는 것이 실측으로 섰다. 사전 검사
-스크립트가 리포에 남지 않는다는 요구는 그 회차에만 사는 임시 설비를 가리키고 회차를 건너 승계되어야
-하는 상주 설비를 가리키지 않으므로, 그 설비가 추적 파일로 서는 것이 그 요구와 부딪히지 않는다.
+**그 측정기의 소스가 `scripts/ruledoc.py` 에 서고 결정 세션이 그것을 불러 돌린다.** 꼴을 규율 문서의
+산문으로 적어 두는 길을 먼저 썼으나 **그 산문만으로 세운 측정기가 이 블록의 값과 세 회차에 걸쳐
+갈렸으므로** 그 길이 다음 회차가 같은 것을 재게 하지 못한다는 것이 실측으로 섰다. 회차를 건너 쓰는
+결정 세션의 설비를 리포의 `scripts/` 에 두는 길의 선례가 이 측정기이며, 회의록을 읽는 설비와 작업
+파일을 고치는 설비와 전사의 대조가 그 뒤에 같은 자리에 섰다.
 
 **그 모듈을 검증 설비가 부르지 않는다.** 유니버스가 리포 밖에 있어 선언된 단계로 세울 수 없으므로
 결정 세션이 그 두 문서의 경로를 인자로 주어 직접 부르며, 첫 인자가 세션 지시의 경로이고 둘째
 인자가 부록의 경로다.
-
-**이 판의 값은 그 모듈이 낸 것이고 앞 판과의 단조 감소 맞댐이 아니라 재설정이다.** 꼴이 갈린 두
-회차의 값을 맞대면 재어지는 것이 문서의 팽창이 아니라 측정기의 다름이므로, 그 맞댐은 이 판을
-기준점으로 삼는 다음 회차부터 선다.
 
 ## 9. 모듈 탐색 환경의 변수 이름
 
@@ -736,3 +724,20 @@ LEANENV_VAR=PATH
 <!-- LEANENV:END -->
 
 블록에 이름을 더하거나 뺄 때는 그 변수가 Lean 의 동작에 걸리는지를 함께 본다.
+
+## 10. 층별 금지
+
+**층별 금지 표의 정본이 이 절이다.** `scripts/vrun.py` 의 `step8-layertype` 과 `step3-forbidden` 이
+이 표를 집행하며 디렉터리가 층을 결정한다.
+
+| 층 | 금지 |
+|---|---|
+| `Glossary/` | 성질을 갖는 정의, 수치 타입 |
+| `Definition/` | `ℚ` `ℤ` `ℝ` 등 구체 수 타입 (`ℕ` 시점 인덱스만 예외) |
+| `Accounting/` | `ℝ`. `ℚ` 는 사유를 docstring 에 적지 않고 도입 금지 |
+| `Observation/` | 수치 리터럴, 수 타입 |
+
+정의층의 `ℕ` 은 L-13 의 명시적 예외이므로 잡지 않고, 회계층의 `ℚ` 는 L-15 의 판정이 docstring 의
+사유를 읽어야 서므로 실패가 아니라 보고로 낸다. `ℝ` 기호는 `step3-forbidden` 이 동학층 밖의 네 자리
+전부에서 보고 영문명 `Real` 은 `step8-layertype` 이 잡는다. 회계층 아래의 `Accounting/Rat/` 는 `ℚ` 를
+쓰는 파일의 자리이며 그 공리 기준선을 정수 기준선과 차분하지 않는다. 동학층은 이 표에 들지 않는다.
