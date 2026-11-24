@@ -13238,6 +13238,168 @@
    "related": [
     "CF-4597"
    ]
+  },
+  {
+   "id": "CF-4604",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "경로에 값의 성질 칸을 두어 그 곱을 읽는 쪽이 유도한 추정으로 두는 안.",
+   "reason": "그 곱은 수량과 발행가가 공표된 자리에서 계산으로 정확히 서서 추정과 갈리므로, 추정으로 두면 정확한 계산이 편향을 품는 값과 같은 칸에 든다. 값의 성질을 드는 열거에 관측자의 계산을 생성자로 더하는 안도 기각했다. 이 파일이 그 곱으로 값을 내는 답 함수를 세우지 않아 그 생성자를 받는 자리가 서지 않는다.",
+   "for": "관측층의 `FundingShortfallChannel` 이 드는 자리. 그 구조를 어느 꼴로 둘지.",
+   "statement": "경로에 값의 성질 칸을 두어 그 곱을 읽는 쪽이 유도한 추정으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingShortfallChannel",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4605",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "금액 칸의 유무만 보는 안.",
+   "reason": "청약과 배정 현황 표의 기타 행이 인수회사의 실권주 인수를 다른 것과 함께 받는데도 그 금액을 내는 것으로 세어져, 그 몫만의 금액이 공표되지 않는다는 결손이 판정에서 사라진다.",
+   "for": "관측층의 `FundingShortfallChannel.answersAmountByPublication` 이 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "금액 칸의 유무만 보는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingShortfallChannel.answersAmountByPublication",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4606",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "그 경로가 그 꼴을 받는가만 보는 안.",
+   "reason": "사건이 있을 때에만 기재되는 경로의 빔이 사건의 부재와 보고의 결손을 가르지 않는데도 그 빔을 부재로 센다.",
+   "for": "관측층의 `FundingShortfallChannel.readsAbsenceOf` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "그 경로가 그 꼴을 받는가만 보는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.FundingShortfallChannel.readsAbsenceOf",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4607",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "그 기타 행이 채워지지 않은 몫만 받는다고 두는 안.",
+   "reason": "그 열거가 등으로 열려 있어 그 칸의 값에서 실권주 인수분만 가려지지 않으므로, 그렇게 두면 그 몫의 금액이 공표의 칸으로 서는 것으로 세어진다.",
+   "for": "관측층의 `allotmentTableChannel` 이 드는 자리. 그 경로를 어느 꼴로 둘지.",
+   "statement": "그 기타 행이 채워지지 않은 몫만 받는다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.allotmentTableChannel",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4608",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "제3자배정과 실권주 공모의 표를 경로 둘로 가르는 안.",
+   "reason": "그 표들이 한 절에서 같은 조건으로 기재되고 둘 다 수량만 들어 칸이 갈리지 않으므로, 가르면 같은 칸의 경로가 둘 선다.",
+   "for": "관측층의 `forfeitedShareDispositionChannel` 이 드는 자리. 그 경로를 어느 꼴로 둘지.",
+   "statement": "제3자배정과 실권주 공모의 표를 경로 둘로 가르는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.forfeitedShareDispositionChannel",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4609",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "그 절이 수량을 낸다고 두는 안.",
+   "reason": "그 조가 표를 두지 않고 계약이 체결되지 않은 내용과 향후 처리계획을 적는 산문이어서 수량의 칸이 서지 않으므로, 수량을 낸다고 두면 산문에 적힌 수가 칸으로 세어진다.",
+   "for": "관측층의 `uncontractedDispositionChannel` 이 드는 자리. 그 경로를 어느 꼴로 둘지.",
+   "statement": "그 절이 수량을 낸다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.uncontractedDispositionChannel",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4610",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "발행가를 드는 절을 경로로 두지 않는 안.",
+   "reason": "그 곱의 한 인자가 그 절에 서므로, 두지 않으면 그 몫의 금액이 수량과 발행가의 곱으로 선다는 것이 경로의 목록에서 유도되지 않는다.",
+   "for": "관측층의 `issuePriceChannel` 이 드는 자리. 그 경로를 어느 꼴로 둘지.",
+   "statement": "발행가를 드는 절을 경로로 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.issuePriceChannel",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4611",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "소스 없음 증인을 목록에 넣는 안.",
+   "reason": "목록이 비지 않음을 그 자리에서 보이나 그 증인이 어느 칸도 내지 않아 판정을 바꾸지 않고, 넣으면 실재하는 경로와 증거용 경로가 같은 목록에 섞인다.",
+   "for": "관측층의 `fundingShortfallChannels` 가 드는 자리. 그 목록을 어느 꼴로 둘지.",
+   "statement": "소스 없음 증인을 목록에 넣는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.fundingShortfallChannels",
+   "related": [
+    "CF-4602"
+   ]
+  },
+  {
+   "id": "CF-4612",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "판정 불가의 까닭을 새로 세우는 안.",
+   "reason": "사건의 부재를 내는 자리가 없다는 것이 측정 소스가 없다는 까닭의 문면과 같으므로, 새 까닭을 세우면 같은 사실이 두 까닭으로 갈린다.",
+   "for": "관측층의 `emptyReportShowsAbsence` 가 드는 자리. 그 판정을 어느 꼴로 둘지.",
+   "statement": "판정 불가의 까닭을 새로 세우는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.emptyReportShowsAbsence",
+   "related": [
+    "CF-4602"
+   ]
   }
  ]
 }

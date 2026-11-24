@@ -52165,6 +52165,23 @@
    "related": [
     "CF-4578"
    ]
+  },
+  {
+   "id": "CF-4602",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "statement": "채워지지 않은 몫의 공시 경로와 그 판정과 정리가 관측층의 한 표지 묶음을 이루고 그 묶음의 결정 항이 그 설계를 받는다",
+   "basis": "그 묶음은 관측층 새 파일의 선언 전량이다. 재는 자리는 그 파일의 선언과 표지다.",
+   "tier": "policy",
+   "layer": "observation",
+   "related": [
+    "CF-4578",
+    "CF-4597"
+   ]
   }
  ]
 }
