@@ -36,9 +36,9 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-2` (2026-11-22, `a3b7605`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `sanction-6` (2026-11-21, `59b0a5f`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `funding-5` (2026-11-24, `bf23596`) |
 | 관측층 | 무차원 | `[]` | `funding-4` (2026-11-23, `6198057`) |
-| 용어집 | 없음 | `[]` | `sanction-6` (2026-11-21, `59b0a5f`) |
+| 용어집 | 없음 | `[]` | `funding-5` (2026-11-24, `bf23596`) |
 | 동학층 | `ℝ` | **미측정** | |
 
 **미측정 칸에 값을 채우지 않는다.** 재지 않았음을 적는 것과 재지 않은 값을 적는 것은 다른
@@ -450,6 +450,7 @@ EXCL=pledge
 EXCL=assetPartitionRegime
 EXCL=lossBearer
 EXCL=fundingFailure
+EXCL=pipelineFailure
 <!-- EXCL:END -->
 
 **겹치는 정제 쌍.** 검사 62 가 읽는다. 상위 개념의 정제로 둘 다 등록된 쌍 가운데 어느 쪽도 다른 쪽을 포함하지 않으면서 겹치는 것을 든다. 블록에 들지 않은 쌍은 소급되지 않고 미정리분의 크기만 보고된다.
