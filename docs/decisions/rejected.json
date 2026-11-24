@@ -13220,6 +13220,24 @@
    "related": [
     "CF-4578"
    ]
+  },
+  {
+   "id": "CF-4599",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-6",
+    "kind": "decision_session",
+    "date": "2026-11-24"
+   },
+   "candidate": "그 금액을 약정한 노드의 부채로 세는 총계로 두는 안.",
+   "reason": "공시 서식을 읽은 기록이 그 금액을 인수회사가 대금을 지급하는 의무로 적었으나 그 의무는 대금이 지급되면 사라지고 남는 것이 그 노드가 그 증권을 보유하는 것이어서, 부채로 세면 결제 뒤의 집합에서 그 금액이 서지 않는다.",
+   "for": "회계층의 `shortfallTotal` 이 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "그 금액을 약정한 노드의 부채로 세는 총계로 두는 안을 기각한다",
+   "basis": "그 자리를 이 회차가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.shortfallTotal",
+   "related": [
+    "CF-4597"
+   ]
   }
  ]
 }
