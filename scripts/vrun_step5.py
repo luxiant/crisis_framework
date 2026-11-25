@@ -4,7 +4,9 @@
 대상은 CrisisFramework 아래 .lean 전량에서 훑어 잡는 최상위 theorem 과 example 이며 계수를
 박지 않는다. 목록을 박아 두면 새 진술이 그물 밖에 남는다 (CF-595). 결론의 모양을 가리지 않고
 결론 전체를 ¬ ( ) 로 감싼 사본을 만든다 (CF-675). 변이 사본은 파일별로 임시 디렉터리에 만들어
-원본을 건드리지 않고 돌린 뒤 지운다.
+원본을 건드리지 않고 돌린 뒤 지운다. 거부로 세는 것은 Lean 이 그 사본에서 오류 줄을 낸 자리뿐이며,
+구문 오류로 깨진 사본과 오류 줄 없이 0 이 아닌 종료 코드로 끝난 사본은 그 결론을 재지 못한 것이므로 실패로
+센다.
 """
 
 import re
@@ -58,6 +60,12 @@ def run(ctx) -> None:
                     f" 그 진술의 검사가 수행되지 않았다 ({head.group(0)}): {m_concl}")
         else:
             n = sum(1 for ln in out.split("\n") if _ERROR.search(ln))
-            ctx.ok(f"{m_file}:{m_line} 변이 거부됨 ({n} error) — 실검사 확인")
+            if n == 0:
+                # 오류 줄 없이 끝난 사본도 같다. Lean 을 부르지 못했거나 오류를 내기 전에 죽은
+                # 사본이어서 그 결론을 재지 못했는데, 거부로 세면 통과로 보고된다.
+                ctx.bad(f"{m_file}:{m_line} 변이 사본이 오류 줄 없이 종료 코드 {rc} 로 끝나"
+                        f" 그 진술의 검사가 수행되지 않았다: {m_concl}")
+            else:
+                ctx.ok(f"{m_file}:{m_line} 변이 거부됨 ({n} error) — 실검사 확인")
 
     shutil.rmtree(mut_dir, ignore_errors=True)

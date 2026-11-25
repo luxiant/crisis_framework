@@ -270,7 +270,12 @@ def detect(g, decls, text, ghosts=()):
                     continue
             if any(p.search(sent) for p in DECL_PATTERNS.values()):
                 continue
-            tgt = (int(nums[0][0]), int(nums[0][1]))
+            # 대상은 선언이 고치거나 걷거나 폐기하거나 보강하는 낙착이다. 보강의 꼴은 그 선언을 쓴
+            # 낙착이 먼저 서고 대상이 보강의 낱말 바로 앞에 서므로 그 자리의 번호를 대상으로 읽는다.
+            # 첫 번호로 읽으면 꼴에 맞게 다시 쓴 보강 선언이 어긋난 줄을 걸러 내지 못한다.
+            rf = re.search(NUM + r'\s*[을를]?\s*보강', sent)
+            tn = rf.groups() if rf else nums[0]
+            tgt = (int(tn[0]), int(tn[1]))
             if tgt in retired or any(tgt == t for t, _ in ok_pairs):
                 continue
             out['near_decl'].append(sent)
@@ -566,6 +571,15 @@ def selftest():
     ret_fired = r2 != {(1, 6)}
     rows.append(('폐기 대상의 읽기', 'retired', len(r0), len(r2), '발화' if ret_fired else '미발화'))
     ok = ok and ret_ok and ret_fired
+    # 꼴을 벗어난 보강 선언 아래에 꼴에 맞는 선언을 다시 쓴 판은 적발이 서지 않고, 다시 쓰지 않은
+    # 판은 선다. 보강의 대상을 첫 번호로 읽던 판은 앞의 판에서도 적발을 냈다
+    one = '**`낙착-1-(4)` 가 `낙착-1-(3)` 을 보강한다.**'
+    bad = '**`낙착-1-(4)` 가 `낙착-1-(3)` 를 보강한다.**'
+    n_fix = len(_run(base.replace(one, bad + ' 꼴에 맞게 다시 쓴다. ' + one))[0]['near_decl'])
+    n_bad = len(_run(base.replace(one, bad))[0]['near_decl'])
+    fix_ok = n_fix == len(d0['near_decl']) and n_bad > len(d0['near_decl'])
+    rows.append(('보강 선언을 다시 쓴 판', 'near_decl', n_bad, n_fix, '발화' if fix_ok else '미발화'))
+    ok = ok and fix_ok
     # 화두 번호의 겹침
     tp = parse(base.replace('## `화두-1` 시험 화두', '## `화두-1` 시험 화두\n\n## `화두-1` 겹친 화두'))[0]
     dup_fired = bool(topic_numbers(tp)['duplicate'])

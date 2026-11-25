@@ -16,7 +16,8 @@
 그 파일은 원본의 olean 을 읽으므로 그 정리는 이 단계의 증거가 아니다. 사본이 통과한 자리는
 실패시키지 않고 보고하며, 그 계수를 docs/baseline.md 의 블록과 맞대어 늘었을 때만 실패시킨다.
 뒤집은 함수 자신의 범위에서 오류가 나거나 구문 오류로 깨지면 그 사본은 결합을 재지 못한 것이므로
-거부로 세지 않고 실패로 센다. 사본은 임시 디렉터리에 만들고 돈 뒤에 지운다.
+거부로 세지 않고 실패로 센다. 오류 줄 없이 0 이 아닌 종료 코드로 끝난 사본도 같으며, Lean 을 부르지
+못했거나 오류를 내기 전에 죽은 사본이 그 부류다. 사본은 임시 디렉터리에 만들고 돈 뒤에 지운다.
 """
 
 import re
@@ -74,7 +75,10 @@ def run(ctx) -> None:
             ctx.bad(f"{where} 사본이 그 함수 자신에서 깨져 그 결합이 재어지지 않았다")
         else:
             n = sum(1 for ln in out.split("\n") if _ERROR.search(ln))
-            ctx.ok(f"{where} 변이 거부됨 ({n} error) — 증거가 그 결합을 가린다")
+            if n == 0:
+                ctx.bad(f"{where} 사본이 오류 줄 없이 종료 코드 {rc} 로 끝나 그 결합이 재어지지 않았다")
+            else:
+                ctx.ok(f"{where} 변이 거부됨 ({n} error) — 증거가 그 결합을 가린다")
 
     if cap is not None:
         if uncovered > cap:
