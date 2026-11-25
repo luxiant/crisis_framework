@@ -14,7 +14,9 @@
   python3 scripts/blueprint.py --minutes <회의록> --arc <아크> --phase <페이즈> \
       --goals <목표 표 JSON> --prev <앞 판 청사진> --out <산출 경로> [--dry]
 
-목표 표 JSON 은 {"goals": [{"name", "axis", "question", "phases"}], "exit": [종료 조건]} 이다.
+목표 표 JSON 은 {"goals": [{"name", "axis", "question", "phases"}], "exit": [종료 조건]} 이고, 목표를
+가른 사유를 "axis_basis" 로 함께 들 수 있다. 그 사유는 아크마다 다르고 개막 결정에서 옮기므로 이
+생성기가 상수로 들지 않는다.
 """
 import argparse
 import hashlib
@@ -120,7 +122,8 @@ def prev_parts(html):
         body = sm.group(2)
         rows = len(re.findall(r'<tr>', body)) - len(re.findall(r'<thead><tr>', body))
         secs[sm.group(1)] = rows
-    am = re.search(r'<p class="asof"><code>([a-z]+-\d+)</code>', html)
+    # 아크 이름은 영문 소문자로 시작하고 그 뒤에 숫자를 들 수 있다
+    am = re.search(r'<p class="asof"><code>([a-z][a-z0-9]*-\d+)</code>', html)
     assert am, '앞 판의 머리에서 페이즈를 읽지 못했다'
     return {'head': hm.group(1), 'style': hm.group(2), 'sections': secs, 'phase': am.group(1)}
 
@@ -188,9 +191,12 @@ def sec_status(g):
       p('이 판이 드는 값의 출처가 셋이다. <strong>리포 실물에서 유도한 것</strong>과 '
         '<strong>회의록의 작업 정본에서 유도한 것</strong>과 <strong>개막 결정에서 옮겨 유도될 '
         '상대가 없는 것</strong>이며, 값마다 그것을 내는 명령과 그 명령이 매긴 유니버스를 같은 '
-        '자리에 둔다. 셋째 부류는 목표 표의 축 열과 그 목표를 받는 페이즈 열과 종료 조건뿐이고 '
-        '그 논증은 개막 결정이 든다. 페이즈의 세울 것 열과 받는 구멍 열은 아크 값 정본에서 '
-        '유도한다. 이 문서는 리포 밖에 있어 리포 검사의 유니버스에 들지 않는다.'),
+        '자리에 둔다. 셋째 부류는 %s뿐이고 그 논증은 개막 결정이 든다. 페이즈의 세울 것 열과 받는 '
+        '구멍 열은 아크 값 정본에서 유도한다. 이 문서는 리포 밖에 있어 리포 검사의 유니버스에 '
+        '들지 않는다.' % morph.join(
+            ['목표 표의 축 열', '그 목표를 받는 페이즈 열']
+            + (['목표를 가른 사유'] if g['a'].goals_doc.get('axis_basis') else [])
+            + ['종료 조건'], '과')),
       p('양식과 머리는 앞 판에서 그대로 떼어 썼다. 그것이 계수도 식별자도 아니어서 실측에서 '
         '유도될 상대가 없기 때문이며, 그 옮김을 생성기가 하므로 결정 세션의 옮겨 적기를 '
         '지나지 않는다.', 'note'),
@@ -214,16 +220,22 @@ def sec_asks(g):
     heads = [('목표', ''), ('무엇을 묻는가', 'nw'), ('그 물음이 묻는 것', 'wrap'),
              ('그 목표를 받는 페이즈', 'wrap')]
     cq = g['arc']['cq']
+    # 목표를 가른 사유는 아크마다 다르므로 개막 결정에서 옮긴 목표 표가 든다. 들지 않으면 그
+    # 문단을 두지 않는다
+    basis = g['a'].goals_doc.get('axis_basis')
+    if cq:
+        cq_p = p('이 아크가 내리려는 항은 %s 이다. 그 항의 문면과 답 타입의 정본은 관측층의 선언이고 '
+                 '이 문서가 그것을 옮겨 적지 않는다.' % ' · '.join(code(x) for x in cq))
+    else:
+        cq_p = p('<strong>이 아크가 내리려는 항이 없다.</strong> 아크 값 정본의 그 레코드가 답할 항의 '
+                 '배열을 비워 두며, 그 사유는 개막 결정이 든다.')
     return section('이 아크가 무엇을 묻는가',
       p('<strong>판별선은 「%s」 하나다.</strong> 이 값은 아크 값 정본에서 읽었다.' % esc(disc)),
       '  <h3>세부 목표 %s</h3>' % morph.native(len(goals)),
-      p('초석 명제가 위기의 경로를 절로 들고 그 등뼈의 조달 절이 불일치가 조달에서 서는 자리로 '
-        '서므로, 그 경로를 축으로 목표를 갈랐다. <strong>내리는 항의 서명을 축으로 쓰는 안은 그 '
-        '서명이 조달이 끊기는 자리를 받지 않아 기각했다.</strong>'),
+      p(bold(basis)) if basis else None,
       table(heads, rows),
       '  <h3>내리는 항</h3>',
-      p('이 아크가 내리려는 항은 %s 이다. 그 항의 문면과 답 타입의 정본은 관측층의 선언이고 이 '
-        '문서가 그것을 옮겨 적지 않는다.' % ' · '.join(code(x) for x in cq)),
+      cq_p,
       '  <h3>종료 조건 %s</h3>' % morph.native(len(exits)),
       '  <ul>%s</ul>' % ''.join('<li>%s</li>' % esc(x) for x in exits))
 
@@ -249,40 +261,65 @@ def sec_phases(g):
     heads = [('페이즈', ''), ('국면', 'nw'), ('목표', 'nw'),
              ('세울 것', 'wrap'), ('받는 구멍', 'wrap')]
     nc, nt = len(closed), len(ph)
+    # 닫힌 페이즈가 없는 판에서는 닫힌 것의 목록이 비므로 그 국면의 문장을 따로 둔다. 같은 문장에
+    # 빈 목록을 넣으면 보간이 빈 채로 사용자가 읽는 문서에 선다
+    if nc:
+        state_s = ('%s 섰으므로, 닫힌 것은 %s 이고 나머지 %s 아직 닫히지 않았다.'
+                   % (morph.digits(nc, '이'), ' · '.join(code(x) for x in sorted(closed)),
+                      morph.digits(nt - nc, '은')))
+    else:
+        state_s = ('하나도 서지 않았으므로 닫힌 페이즈가 없고, 선언된 페이즈 %s 전량이 아직 닫히지 '
+                   '않았다.' % morph.digits(nt))
     return section('페이즈 %s' % morph.native(nt),
       p('<strong>분할은 개막 시에 전량 정해지고 그 뒤의 이동은 패치가 받는다.</strong> 국면 열을 '
-        '각 페이즈의 종료 문서가 이 판의 트리에 서는지에서 유도했고 %s 섰으므로, 닫힌 것은 %s '
-        '이고 나머지 %s 아직 닫히지 않았다. <strong>걷힌 페이즈는 아크 값 정본의 페이즈 배열에서 '
-        '빠지므로 이 표에도 서지 않고, 그 걷음은 패치 레코드가 든다.</strong>'
-        % (morph.digits(nc, '이'), ' · '.join(code(x) for x in sorted(closed)),
-           morph.digits(nt - nc, '은'))),
+        '각 페이즈의 종료 문서가 이 판의 트리에 서는지에서 유도했고 %s <strong>걷힌 페이즈는 '
+        '아크 값 정본의 페이즈 배열에서 빠지므로 이 표에도 서지 않고, 그 걷음은 패치 레코드가 '
+        '든다.</strong>' % state_s),
       table(heads, rows),
       p('받는 구멍 열이 아크 값 정본의 그 페이즈 레코드에서 유도된다. <strong>그 배정이 비어 '
         '있으면 그 사실이 그 칸에 서고, 이 회차가 발행한 구멍의 배정도 그 자리가 든다.</strong>',
         'note'))
 
 
+ROUTE_ISSUED, ROUTE_TRIGGER, ROUTE_DISC = '이 아크가 발행', '트리거', '판별선'
+
+
+def hole_route(r, arc):
+    """그 구멍이 이 아크에 든 경로. 트리거의 갈래와 다른 축이므로 다른 칸에 둔다."""
+    if r.get('origin_arc') == arc:
+        return ROUTE_ISSUED
+    if r.get('ref') == arc:
+        return ROUTE_TRIGGER
+    return ROUTE_DISC
+
+
 def sec_holes(g):
     """이 아크에 걸린 구멍."""
-    rows = []
+    arc = g['a'].arc
+    rows, routes = [], []
     for r in g['holes']:
         state = ('<span class="done">폐기됐다</span>' if r['retired'] else '살아 있다')
+        rt = hole_route(r, arc)
+        routes.append(rt)
         rows.append((code(r['id']), esc(r['layer']),
-                     code(r['trigger']) if r['trigger'] else '판별선',
-                     esc(r['what']),
+                     code(r['trigger']) if r['trigger'] else '없음',
+                     rt, esc(r['what']),
                      ' · '.join(code(x) for x in r['phases']) if r['phases'] else '없음',
                      state))
-    heads = [('구멍', ''), ('층', 'nw'), ('트리거', 'nw'), ('무엇', 'wrap'),
+    heads = [('구멍', ''), ('층', 'nw'), ('트리거', 'nw'), ('조달', 'nw'), ('무엇', 'wrap'),
              ('푸는 페이즈', 'nw'), ('국면', 'nw')]
     n = len(g['holes'])
     nret = len([r for r in g['holes'] if r['retired']])
+    nt, nd, ni = (routes.count(x) for x in (ROUTE_TRIGGER, ROUTE_DISC, ROUTE_ISSUED))
     return section('이 아크에 걸린 구멍',
       p('이 아크가 받는 구멍이 %s 이 절의 표가 드는 살아 있음을 폐기 레코드가 그 번호를 '
-        '가리키는지에서 유도했으며 그 가운데 %s 폐기되고 %s 살아 있다. <strong>전수 조달의 '
-        '유니버스를 트리거가 닫고 그것으로 뽑히지 않는 항을 개막이 판별선으로 가려 그 위에 '
-        '더했으며, 이 아크의 읽기가 낸 구멍이 그 위에 다시 더해졌다.</strong>'
+        '가리키는지에서 유도했으며 그 가운데 %s 폐기되고 %s 살아 있다. <strong>조달 칸은 그 '
+        '구멍이 이 아크에 든 경로이며, 재개 트리거가 이 아크를 지목해 기계로 뽑힌 것이 %s 개막이 '
+        '판별선으로 가려 넣은 것이 %s 이 아크가 발행한 것이 %s.</strong> 트리거 칸은 그 구멍의 '
+        '재개 트리거의 갈래이고 조달의 경로와 다른 축이다.'
         % (morph.cop_conj(morph.digits(n), '이고'), morph.digits(nret, '이'),
-           morph.digits(n - nret, '이'))),
+           morph.digits(n - nret, '이'), morph.cop_conj(morph.digits(nt), '이고'),
+           morph.cop_conj(morph.digits(nd), '이며'), morph.cop_end(morph.digits(ni)))),
       table(heads, rows),
       p('<strong>무엇 칸은 이연 레지스터의 산문을 그대로 옮긴 인용이다.</strong> 이 배정은 아크의 '
         '구멍 배열과 각 페이즈의 구멍 배열에 함께 실려야 하며, 한쪽에만 실으면 그 구멍이 어느 '
@@ -466,12 +503,18 @@ def sec_untrans(g):
     nman = len(led['manual'])
     pend = g['pending']
     nreg = nrec + len(led['pending']) + nman
+    # 기각 갈래의 낙착이 없는 판에서는 그 가름을 드는 문장이 설 자리가 없으므로 따로 둔다
+    if nman:
+        rej_s = ('기각 갈래의 낙착 %s 진술이 요지에서 유도되지 않으므로 이 페이즈가 기각 레지스터에 '
+                 '항을 하나라도 실었는지로 갈랐고, 선언마다의 대응은 기각 문단과 기각 항을 맞대는 '
+                 '검사가 받는다.' % morph.w(morph.native(nman), '은'))
+    else:
+        rej_s = ('기각 갈래의 낙착은 없으며, 선언마다의 대응은 기각 문단과 기각 항을 맞대는 검사가 '
+                 '받는다.')
     head = p('이 회의록에서 갈래가 원장 레지스터를 드는 살아 있는 낙착이 %s 그 가운데 진술이 '
-             '원장에 이미 선 것이 %s. 기각 갈래의 낙착 %s 진술이 요지에서 유도되지 않으므로 이 '
-             '페이즈가 기각 레지스터에 항을 하나라도 실었는지로 갈랐고, 선언마다의 대응은 기각 '
-             '문단과 기각 항을 맞대는 검사가 받는다. 이 페이즈가 실은 기각 항이 %s.'
+             '원장에 이미 선 것이 %s. %s 이 페이즈가 실은 기각 항이 %s.'
              % (morph.cop_conj(morph.native(nreg), '이고'),
-                morph.cop_end(morph.native(nrec)), morph.w(morph.native(nman), '은'),
+                morph.cop_end(morph.native(nrec)), rej_s,
                 morph.cop_end(morph.digits(g['rej_this']))))
     if not pend:
         body = [flag(p('<strong>이 판에서 원장으로 갈 항이 영이다.</strong>'), head),
@@ -536,11 +579,23 @@ SECTIONS = [sec_status, sec_asks, sec_phases, sec_holes, sec_measure, sec_artifa
             sec_outside, sec_inherited, sec_untrans]
 
 
+def retitle(head, arc):
+    """앞 판의 머리에서 제목 요소만 이 아크의 이름으로 다시 세운다.
+
+    머리는 앞 판에서 그대로 떼어 쓰나 제목이 아크 이름을 들므로, 새 아크의 첫 판에서 그대로 두면
+    앞 아크의 이름이 제목에 선다. 제목 요소가 하나가 아니면 터뜨린다.
+    """
+    pat = re.compile(r'<title>[^<]*</title>')
+    assert len(pat.findall(head)) == 1, '앞 판의 머리에 제목 요소가 하나가 아니다'
+    return pat.sub('<title>청사진 · %s</title>' % esc(arc), head)
+
+
 def build(g, axes):
     secs = [f(g) for f in SECTIONS] + [sec_checks(g, axes)]
     html = ('<!doctype html>\n<html lang="ko">\n<head>\n%s<style>\n%s\n</style>\n'
             '</head>\n\n<body>\n<div class="sheet">\n\n%s\n%s\n\n</div>\n</body>\n</html>\n'
-            % (g['prev']['head'], g['prev']['style'], header(g), '\n'.join(secs)))
+            % (retitle(g['prev']['head'], g['a'].arc), g['prev']['style'], header(g),
+               '\n'.join(secs)))
     # 앞 판이 든 절을 빠뜨리지 않는다. 걷은 절은 그 사상에 든 것만 받는다
     new = {title_key(t) for t in re.findall(r'<section>\n  <h2>(.*?)</h2>', html)}
     old = {title_key(t) for t in g['prev']['sections']}
@@ -561,7 +616,8 @@ def main(argv=None):
     ap.add_argument('--dry', action='store_true')
     a = ap.parse_args(argv)
     a.goals_doc = json.loads(io.open(a.goals, encoding='utf-8').read())
-    assert set(a.goals_doc) == {'goals', 'exit'}, '목표 표의 꼴이 다르다'
+    assert {'goals', 'exit'} <= set(a.goals_doc) <= {'goals', 'exit', 'axis_basis'}, \
+        '목표 표의 꼴이 다르다'
     a.prior_doc = json.loads(io.open(a.prior, encoding='utf-8').read()) if a.prior else None
     prev = prev_parts(io.open(a.prev, encoding='utf-8').read())
 

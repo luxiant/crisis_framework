@@ -641,7 +641,7 @@ def check_31(led: Ledger) -> Report:
         r.bad(f"{e.get('id')}: 발화한({kind}) 이연 항목이 어느 아크의 holes 에도 없다")
     # 면제가 영구적이므로 그 계수를 값 정본과 맞댄다. 맞대지 않으면 새로 발화하는 첫 적재 항이
     # 그 면제 안으로 조용히 들어오고, 이 검사가 그것을 배정 없음으로 잡을 자리를 잃는다.
-    # 값은 줄어들 수 있고 늘어날 수 없다. 줄어드는 것은 그 항이 처분된 것이다(SPEC §2.1).
+    # 값은 줄어들 수 있고 늘어날 수 없다. 줄어드는 것은 그 항이 처분되거나 아크에 걸린 것이다(SPEC §2.1).
     want = fired_exempt_count(led)
     if want is None:
         r.bad("docs/baseline.md 의 FIRED 블록에 FIRED_FIRSTLOAD_EXEMPT 가 없다")

@@ -340,7 +340,9 @@ def detect(g, decls, text, ghosts=()):
     return out
 
 # ---- 회의록 하나를 읽는다 ----
-PHASE_HEAD = re.compile(r'^# 회의록 — `([a-z]+-\d+)`', re.M)
+# 아크 이름은 영문 소문자로 시작하고 그 뒤에 숫자를 들 수 있다. 같은 성격의 아크를 이름 끝의
+# 숫자로 잇는 꼴이 서 있으므로 소문자만 받으면 그 아크의 회의록 머리가 읽히지 않는다
+PHASE_HEAD = re.compile(r'^# 회의록 — `([a-z][a-z0-9]*-\d+)`', re.M)
 SELFNUM = re.compile(r'^`낙착-\d+-\(\d+\)`\s*')
 # 영을 요구하는 적발. 요지의 계수와 결정 레지스터 하나뿐인 거처는 사람이 읽는 목록이다
 ZERO_AXES = ('near_decl', 'kind_none_in_repo', 'reinforce_in_first', 'reinforce_gist_refs',
@@ -585,6 +587,15 @@ def selftest():
     dup_fired = bool(topic_numbers(tp)['duplicate'])
     rows.append(('화두 번호의 겹침', 'topics', 0, 1 if dup_fired else 0, '발화' if dup_fired else '미발화'))
     ok = ok and dup_fired
+    # 회의록의 머리. 이름 끝에 숫자를 든 아크의 머리를 읽고 대문자로 시작하는 이름은 받지 않으며,
+    # 소문자만 받던 패턴은 그 머리를 읽지 못한다
+    hd = '# 회의록 — `housekeeper1-1`\n'
+    old_head = re.compile(r'^# 회의록 — `([a-z]+-\d+)`', re.M)
+    mh = PHASE_HEAD.search(hd)
+    ph_ok = (mh is not None and mh.group(1) == 'housekeeper1-1' and old_head.search(hd) is None
+             and PHASE_HEAD.search('# 회의록 — `Funding-1`\n') is None)
+    rows.append(('머리의 아크 이름', 'phase_head', 0, 1 if ph_ok else 0, '발화' if ph_ok else '미발화'))
+    ok = ok and ph_ok
     # 역방향: 가드를 뜻하지 않는 문면만 더했을 때 적발이 줄지 않는다
     pad = base + '\n\n보강과 고침과 걷기와 폐기를 논의한 산문이다. 조달처와 거처와 갈래를 든다.\n'
     d2, _ = _run(pad)

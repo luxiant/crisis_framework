@@ -116,6 +116,10 @@ def hole_rows(repo, arc):
             'layer': (e.get('origin') or {}).get('layer') or e.get('layer') or '—',
             'trigger': ((e.get('reopen_when') or {}).get('kind')
                         if e.get('reopen_when') else None),
+            # 조달의 경로를 가르는 재료. 트리거가 이 아크를 지목하면 기계로 뽑힌 것이고, 그 이연이
+            # 이 아크에서 섰으면 이 아크가 발행한 것이며, 둘 다 아니면 판별선으로 가려 넣은 것이다
+            'ref': (e.get('reopen_when') or {}).get('ref') if e.get('reopen_when') else None,
+            'origin_arc': (e.get('origin') or {}).get('arc'),
             'what': e.get('statement') or '',
             'phases': phase_of.get(hid) or [],
             'retired': bool(tgt.get(hid)),

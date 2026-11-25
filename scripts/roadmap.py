@@ -46,12 +46,15 @@ REPO = HERE.parent
 
 # 아크 이름의 읽기. 아크 이름 뒤의 조사를 이 읽기의 받침에서 고른다. 형태소 설비의 받침 판정이 라틴
 # 글자를 글자 이름으로 읽으므로 그것으로 고르면 낱말의 읽기와 갈리는 자리가 선다. 아크 값 정본의 아크
-# 전량이 이 사상에 드는지를 생성이 단언하므로 아크가 늘면 그 자리에서 터진다
+# 전량이 이 사상에 드는지를 생성이 단언하므로 아크가 늘면 그 자리에서 터진다. 이름 끝의 숫자는 그
+# 설비가 숫자를 읽는 꼴과 같이 한자어 수사로 읽어, 청사진과 항해도가 같은 이름 뒤에 다른 조사를 고르지
+# 않게 한다
 READING = {
     'primary': '프라이머리', 'charter': '차터', 'claim': '클레임', 'collateral': '콜래터럴',
     'hierarchy': '하이어라키', 'propagation': '프로퍼게이션', 'holder': '홀더',
     'currency': '커런시', 'harness': '하네스', 'orchestration': '오케스트레이션',
     'network': '네트워크', 'sanction': '생크션', 'funding': '펀딩',
+    'housekeeper1': '하우스키퍼일',
 }
 
 # 앞 판이 들었으나 이 판이 걷는 절과 그 사유. 키는 절 제목의 비교 키다. 앞 판의 절을 빠뜨리지 않는지
@@ -156,7 +159,7 @@ def arc_josa_bad(text):
     v = re.sub(r'<code>([^<`]*)</code>', r'`\1`', text)
     v = re.sub(r'<[^>]+>', '', v)
     bad = []
-    for m in re.finditer(r'`([a-z]+)` (이|가|은|는|을|를|과|와|으로|로)(?![가-힣])', v):
+    for m in re.finditer(r'`([a-z][a-z0-9]*)` (이|가|은|는|을|를|과|와|으로|로)(?![가-힣])', v):
         name, j = m.group(1), m.group(2)
         if name in READING and arc_jo(name, j) != j:
             bad.append(m.group(0))
@@ -476,7 +479,7 @@ def prev_parts(html, appendix):
         anchors = []
         for rm in re.finditer(r'(?s)<tr>(.*?)</tr>', body.split('<tbody>')[1]):
             cells = re.findall(r'(?s)<td[^>]*>(.*?)</td>', rm.group(1))
-            arc = re.search(r'<code>([a-z]+)</code>', cells[3])
+            arc = re.search(r'<code>([a-z][a-z0-9]*)</code>', cells[3])
             assert arc, '등뼈 표의 상태 칸에서 아크를 읽지 못했다'
             anchors.append({'struct': re.sub(r'<[^>]+>', '', cells[0]).strip(),
                             'clause': re.sub(r'<[^>]+>', '', cells[1]).strip(),
@@ -513,11 +516,11 @@ def _prev_rows(body, ncol, keys):
 
 def title_key(t):
     """절 제목의 비교 키. 계수와 아크 이름이 판마다 바뀌는 제목은 그 자리를 걷는다."""
-    for pat, key in ((r'^<code>[a-z]+</code> [이가] 낸 것$', '아크가 낸 것'),
+    for pat, key in ((r'^<code>[a-z][a-z0-9]*</code> [이가] 낸 것$', '아크가 낸 것'),
                      (r'^현 위치 — 내리는 항 \S+$', '현 위치'),
                      (r'^열려 있는 아크.*$', '열려 있는 아크'),
                      (r'^트리거를 쓸 수 없는 \S+$', '트리거를 쓸 수 없는 것'),
-                     (r'^<code>[a-z]+</code> — \S+$', '아크별 재고'),
+                     (r'^<code>[a-z][a-z0-9]*</code> — \S+$', '아크별 재고'),
                      (r'^조달 대기 — .*$', '조달 대기'),
                      (r'^이 프로젝트 밖으로 넘어가는 과제 — .*$', '독자 연구')):
         if re.match(pat, t):
