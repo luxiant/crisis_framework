@@ -1,4 +1,4 @@
-"""청사진의 산출을 재는 축 여덟과 축마다의 음성 대조.
+"""사람이 읽는 산출을 재는 축과 축마다의 음성 대조. 청사진과 항해도의 생성기가 함께 부른다.
 
 축마다 유니버스를 가린다. 문법 표지를 재는 축이 양식 블록을 걷지 않으면 그
 중괄호가 적발로 서고, 조사를 재는 축의 유니버스를 보간이 서는 자리로 좁히지
@@ -59,6 +59,19 @@ def ax_syntax(t):
     for pat, nm in ((r'\{[a-z_]+\}', '중괄호 보간'), (r'%\([a-z_]+\)', '이름 보간'),
                     (r'\bNone\b', 'None'), (r"\['", '리스트 표기'),
                     (r'\bdict_|\bodict', '사전 표기')):
+        for m in re.finditer(pat, v):
+            bad.append((nm, v[max(0, m.start()-25):m.end()+25].replace('\n', ' ')))
+    return bad
+
+
+def ax_escape(t):
+    """이스케이프의 잔여. 두 번 옮긴 개체와 글자로 선 표지 태그와 문자열 표기의 역빗금."""
+    v = _nostyle(t)
+    bad = []
+    for pat, nm in ((r'&amp;(?:amp|lt|gt|quot|#[0-9]+);', '두 번 옮긴 개체'),
+                    (r'&lt;/?(?:code|strong|span|td|th|tr|p|li|ul|br|h[1-6]|section|div)\b',
+                     '글자로 선 표지 태그'),
+                    (r'\\[ntr"\'\\]|\\u[0-9a-fA-F]{4}', '문자열 표기의 역빗금')):
         for m in re.finditer(pat, v):
             bad.append((nm, v[max(0, m.start()-25):m.end()+25].replace('\n', ' ')))
     return bad
@@ -156,12 +169,13 @@ def prev_verbs(kinds=None):
 # ── 축의 목록과 그 이름 ──────────────────────────────────────────────────
 
 # 축의 이름과 그것을 재는 함수. 확인 절이 이 목록에서 이름을 유도하고 run 이 같은
-# 목록에서 함수를 부르므로 둘이 갈릴 수 없다. 앞의 여덟은 문면을 읽어 재고
-# 마지막 하나는 머리 없는 브라우저로 띄워야 선다
+# 목록에서 함수를 부르므로 둘이 갈릴 수 없다. 마지막 하나만 머리 없는 브라우저로
+# 띄워야 서고 그 앞은 전부 문면을 읽어 잰다
 AXES = [
     ('표의 칸', lambda t, kinds, path: ax_cells(t)),
     ('굵은 표지의 짝', lambda t, kinds, path: ax_bold(t)),
     ('생성 수단의 문법 표지', lambda t, kinds, path: ax_syntax(t)),
+    ('이스케이프의 잔여', lambda t, kinds, path: ax_escape(t)),
     ('빈 보간', lambda t, kinds, path: ax_blank(t)),
     ('양식의 괄호 짝', lambda t, kinds, path: ax_paren(t)),
     ('보간 뒤의 조사', lambda t, kinds, path: ax_josa(t)),
@@ -260,6 +274,8 @@ INJECT = [
                         '<tr><td class="x">군더더기</td><td')),
     ('굵은 표지의 짝', lambda t: ('<strong>', '<strong><strong>')),
     ('생성 수단의 문법 표지', lambda t: ('</div>\n</body>', '{gist}</div>\n</body>')),
+    ('이스케이프의 잔여',
+     lambda t: ('</div>\n</body>', '<p>&amp;lt;code&amp;gt;</p></div>\n</body>')),
     ('빈 보간', lambda t: ('</div>\n</body>', '<p><strong></strong></p></div>\n</body>')),
     ('양식의 괄호 짝', lambda t: ('</style>', '.x { color: red;\n</style>')),
     ('보간 뒤의 조사', lambda t: ('</div>\n</body>', '<p>축 열하나을 재었다</p></div>\n</body>')),
