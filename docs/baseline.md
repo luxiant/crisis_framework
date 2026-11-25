@@ -349,7 +349,7 @@ MIRROR_GHOST=3
 고쳐 통과시키지 않는다.** 그 값은 이 검사가 처음 설 때 이 검사 자신이 낸 것이다.
 
 <!-- CLAUSEMUT:BEGIN -->
-CLAUSEMUT_UNCOVERED=42
+CLAUSEMUT_UNCOVERED=41
 <!-- CLAUSEMUT:END -->
 
 `CLAUSEMUT` 블록은 정의층과 관측층의 판정 반환 함수 본문에서 논리 결합을 하나씩 뒤집은 사본의

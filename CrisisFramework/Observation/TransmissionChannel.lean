@@ -9,19 +9,18 @@
 이 파일은 수를 한 번도 쓰지 않는다. 각 경로가 어느 축을 내는가만 `Bool` 로 들고 입도는 열거다.
 
 **이 파일이 세우는 것은 통화 불일치의 전달이 공표 수치에서 어떻게 관측되는가 또는 관측되지
-않는가다.** 축을 여섯으로 가르고 입도와 수신자를 함께 받으며, 그 여섯 가운데 다섯이 엣지의 자리를
-가르고 여섯째가 그 전달의 세기를 내는 경로가 있는가다.
+않는가다.** 축마다 칸을 두고 입도와 수신자를 함께 받으며, 세기의 칸이 그 전달의 값을 내는 경로가
+있는가를 들고 나머지 칸이 엣지의 자리를 가른다.
 
 **세기의 칸을 두는 사유는 정의층이 그 갈림을 접었다는 데 있다.** 전달의 판정이 작다는 것과 서지
 않는다는 것을 한 값으로 접으므로 그 갈림의 결손을 드는 자리가 관측층뿐이다.
 
+**좌변의 불일치 축을 칸으로 둔다.** 정의층의 전달이 좌변 주체의 불일치가 선 축을 색인으로 받으므로
+그 축을 내는 경로가 있는가를 드는 자리가 이 파일에 서야 하며, 불일치를 읽는 경로의 명세는 그 경로가
+전달의 청구권을 내는지를 받지 않아 그 자리를 갈음하지 못한다.
+
 **입도와 수신자 열거를 새로 세우지 않고 같은 층에서 재사용한다.** 같은 가름을 두 열거로 두면
 어느 것이 정본인지가 서지 않는다.
-
-**정리의 증명은 집행 증분이다.** 정리마다 미완 표지를 두고 그 자리를 집행이 채운다. 그 진술이
-증명 가능함을 결정 세션의 사전 검사가 확인했고 결론을 부정한 사본이 컴파일에 실패하는 것도 함께
-확인했으나, 쓴 전술은 싣지 않는다. 전술을 싣으면 집행이 그것을 옮겨 쓰게 되어 절단면을 넘으며,
-사전 검사가 통과한 사실은 증거가 아니라 필터다.
 
 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
@@ -38,7 +37,7 @@ open CrisisFramework.Definition
 통화 불일치의 전달을 읽는 공시 경로.
 
 **대응 비형식 개념:** 관측층은 각 아크에서 병행하므로 정의층 대상을 세울 때 그 측정 사상 명세를
-함께 쓰는 자리가 이 구조체다. 축 여섯 가운데 다섯이 엣지의 자리를 가르고 여섯째가 그 값을 가른다.
+함께 쓰는 자리가 이 구조체다. 세기의 칸이 그 엣지의 값을 가르고 나머지 칸이 엣지의 자리를 가른다.
 
 **이 정의가 배제하는 사례:**
 한 경로가 전달의 축 전량을 낸다고 보는 자리. 지목 참조로 연 편의 자료가 은행이 보유한 대출만 담고
@@ -48,17 +47,23 @@ open CrisisFramework.Definition
 조달처: E-65 §3-2 「은행이 보유한 대출만 담고 기업의 대차대조표를 담지 않는다」
 
 **기각한 대체 정의:**
-축을 다섯으로 두어 전달의 세기를 내는 칸을 두지 않는 안. 다섯은 엣지의 자리를 가르는 축이고 세기는 그
-엣지의 값이어서 성질이 다르므로 칸을 더하지 않는 것이 깔끔해 보이나, 정의층이 작다는 것과 서지 않는다는
-것을 한 판정으로 접었으므로 그 갈림의 결손을 드는 자리가 관측층뿐이고 칸이 없으면 그 결손이 어디에도
-등재되지 않는다.
+전달의 세기를 내는 칸을 두지 않는 안. 나머지 칸은 엣지의 자리를 가르는 축이고 세기는 그 엣지의 값이어서
+성질이 다르므로 칸을 더하지 않는 것이 깔끔해 보이나, 정의층이 작다는 것과 서지 않는다는 것을 한 판정으로
+접었으므로 그 갈림의 결손을 드는 자리가 관측층뿐이고 칸이 없으면 그 결손이 어디에도 등재되지 않는다.
+좌변의 불일치 축을 칸으로 두지 않고 불일치를 읽는 경로의 명세에 맡기는 안도 기각했다. 그 명세가 그
+경로가 전달의 청구권을 내는지를 받지 않아, 한 공시가 그 청구권과 그 축을 함께 내는지가 어느 파일에도
+서지 않는다. 그 칸을 순노출 축과 조달 연결 축의 둘로 가르는 안도 기각했다. 조달 연결은 원리적으로
+재어지지 않아 그 칸이 어느 경로에서도 거짓으로 서고, 그 축이 불일치를 읽는 경로 전량에서 빈다는 것을 그
+명세가 이미 정리로 든다.
 
 **값을 담지 않는다.**
 -/
--- DD:CF-2831
+-- DD:CF-4619
 structure TransmissionChannel (Node : Type) where
   /-- 그 경로가 전달의 좌변 주체를 덮는가. -/
   coversSource : Node → Bool
+  /-- 그 경로가 전달이 지나는 좌변 주체의 불일치 축을 내는가. -/
+  readsSourceAxis : Bool
   /-- 그 경로가 전달의 우변 주체를 덮는가. -/
   coversHolder : Node → Bool
   /-- 그 경로가 그 둘을 잇는 청구권을 내는가. -/
@@ -94,9 +99,10 @@ structure TransmissionChannel (Node : Type) where
 
 **값을 담지 않는다.**
 -/
--- DD:CF-2831
+-- DD:CF-4619
 def TransmissionChannel.noSource {Node : Type} : TransmissionChannel Node where
   coversSource := fun _ => false
+  readsSourceAxis := false
   coversHolder := fun _ => false
   readsClaim := false
   readsRepaymentFailure := false
@@ -106,10 +112,10 @@ def TransmissionChannel.noSource {Node : Type} : TransmissionChannel Node where
   recipient := DisclosureRecipient.publicReader
 
 /--
-그 경로가 전달의 축 여섯을 모두 내는가.
+그 경로가 전달의 축을 모두 내는가.
 
-**대응 비형식 개념:** 축 여섯 전량을 내는 경로가 하나도 없다는 것을 한 명제로 세우려면 그 합성
-술어가 필요하다.
+**대응 비형식 개념:** 축 전량을 내는 경로가 하나도 없다는 것을 한 명제로 세우려면 그 합성 술어가
+필요하다.
 
 **이 정의가 배제하는 사례:**
 축 하나가 서면 전달이 관측된다고 보는 자리. 지목 참조로 연 편이 한 은행에서 외화로 빌렸는가를 그 기업의
@@ -118,22 +124,22 @@ def TransmissionChannel.noSource {Node : Type} : TransmissionChannel Node where
 조달처: E-65 §3-2 「한 은행에서 외화로 빌렸는가가 그 기업의 전체 부채 통화 구성의 대리변수일 뿐이며」
 
 **기각한 대체 정의:**
-축마다 따로 판정을 내고 합성하지 않는 안. 어느 축이 서는지를 각각 읽으므로 세밀하나 축 여섯 전량을
-내는 경로가 하나도 없다는 것을 한 명제로 세울 수 없고, 앞 페이즈가 같은 자리에서 합성 술어를 두고
+축마다 따로 판정을 내고 합성하지 않는 안. 어느 축이 서는지를 각각 읽으므로 세밀하나 축 전량을 내는
+경로가 하나도 없다는 것을 한 명제로 세울 수 없고, 앞 페이즈가 같은 자리에서 합성 술어를 두고
 그것이 전량 거짓임을 정리로 보인 선례가 섰다.
 
 **값을 담지 않는다.**
 -/
--- DD:CF-2831
+-- DD:CF-4619
 def TransmissionChannel.answersAllAxes {Node : Type}
     (C : TransmissionChannel Node) (src holder : Node) : Bool :=
-  C.coversSource src && C.coversHolder holder && C.readsClaim
+  C.coversSource src && C.readsSourceAxis && C.coversHolder holder && C.readsClaim
     && C.readsRepaymentFailure && C.readsConstraintInput && C.readsStrength
 
 /--
 감독 당국에 제출되는 스트레스 시험 보고를 전달의 경로로 읽은 것.
 
-**대응 비형식 개념:** 지목 참조로 연 편이 그 보고로 전달의 네 축을 갈랐으므로 실재하는 경로가 어디까지
+**대응 비형식 개념:** 지목 참조로 연 편이 그 보고로 전달의 축을 갈랐으므로 실재하는 경로가 어디까지
 내는지를 드는 자리가 이 선언이다.
 
 **이 정의가 배제하는 사례:**
@@ -147,13 +153,16 @@ def TransmissionChannel.answersAllAxes {Node : Type}
 다른 사실이며, 앞 페이즈가 감독 당국의 신용등록부를 받는 경로를 세우면서 같은 가름을 이미 두었다. 그
 경로가 전달의 세기를 낸다고 두는 안도 기각했다. 그 편이 결론에서 그 성분의 크기를 말할 때 쓰는 근거가
 외화 대출의 비중과 연체의 절대 비중이고 그 둘이 전달의 세기 자체가 아니므로, 그 칸을 참으로 두면 세기를
-내는 경로가 실재한다는 거짓이 선다.
+내는 경로가 실재한다는 거짓이 선다. 그 경로가 좌변의 불일치 축을 낸다고 두는 안도 기각했다. 그 보고가
+은행이 보유한 대출만 담아 한 은행에서 외화로 빌렸는가가 그 기업의 부채 통화 구성의 대리변수일 뿐이고,
+그 기업의 자산과 수익의 통화가 그 보고에 서지 않는다.
 
 **값을 담지 않는다.**
 -/
--- DD:CF-2831
+-- DD:CF-4619
 def supervisoryStressTestChannel {Node : Type} : TransmissionChannel Node where
   coversSource := fun _ => true
+  readsSourceAxis := false
   coversHolder := fun _ => true
   readsClaim := true
   readsRepaymentFailure := true
@@ -182,9 +191,10 @@ def supervisoryStressTestChannel {Node : Type} : TransmissionChannel Node where
 
 **값을 담지 않는다.**
 -/
--- DD:CF-2831
+-- DD:CF-4619
 def publicDisclosureTransmissionChannel {Node : Type} : TransmissionChannel Node where
   coversSource := fun _ => false
+  readsSourceAxis := false
   coversHolder := fun _ => true
   readsClaim := false
   readsRepaymentFailure := false
@@ -218,16 +228,16 @@ def transmissionChannels {Node : Type} : List (TransmissionChannel Node) :=
    TransmissionChannel.noSource]
 
 /--
-그 경로들 가운데 전달의 축 여섯을 모두 내는 것이 하나도 없다.
+그 경로들 가운데 전달의 축을 모두 내는 것이 하나도 없다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
-이 명제가 거짓이려면 목록의 어느 경로가 좌변 주체와 우변 주체를 모두 덮으면서 청구권과
-상환 실패와 제약 인자와 세기를 모두 내야 한다. 그러려면 한 공시가 차입자의 대차대조표와 은행의 규제
+이 명제가 거짓이려면 목록의 어느 경로가 좌변 주체와 우변 주체를 모두 덮으면서 좌변의 불일치 축과
+청구권과 상환 실패와 제약 인자와 세기를 모두 내야 한다. 그러려면 한 공시가 차입자의 대차대조표와 은행의 규제
 보고와 그 전달의 크기를 함께 담아야 하고, 그 공시가 실재한다는 것이 이 명제의 반증이다.
 
-**T-3 분류:** 보조 보정이다. 세 경로의 칸을 전개하고 논리곱을 분기하면 증명이 닫히므로 이 명제는 기여
-목록에 들지 않는다. 축을 여섯으로 가른 사유를 받치는 자리이며, 한 칸으로 접으면 어느 축이 어디서 비는지가
-서지 않는다.
+**T-3 분류:** 보조 보정이다. 목록의 경로마다 칸을 전개하고 논리곱을 분기하면 증명이 닫히므로 이 명제는
+기여 목록에 들지 않는다. 축마다 칸을 둔 사유를 받치는 자리이며, 한 칸으로 접으면 어느 축이 어디서
+비는지가 서지 않는다.
 
 **가정을 두지 않는다.** 목록에 든 경로 전량을 전칭으로 받으므로 경로가 늘면 그 정리가
 새 경로까지 함께 받는다.
@@ -256,10 +266,10 @@ theorem no_channel_answers_all_transmission_axes {Node : Type} (src holder : Nod
 그 전달의 크기를 재는 공시가 실재해야 하고, 지목 참조로 연 편이 그 성분의 크기를 말할 때 쓰는 근거가
 외화 대출의 비중과 연체의 절대 비중이어서 그 둘은 전달의 세기가 아니다.
 
-**T-3 분류:** 보조 보정이 아니다. **축 여섯 가운데 이 축만 전량이 비는 것이 이 명제의 요지다.**
-다른 다섯은 경로마다 참인 자리가 있어 어느 공시가 그것을 내는지를 적을 수 있는데, 세기는 어느 경로에서도
-서지 않으므로 정의층이 작다는 것과 서지 않는다는 것을 한 판정으로 접은 자리가 관측에서도 메워지지
-않는다. 그 비어 있음이 이 파일의 산출이다.
+**T-3 분류:** 보조 보정이 아니다. **엣지의 값을 내는 칸이 어느 경로에서도 서지 않는 것이 이 명제의
+요지다.** 세기가 어느 경로에서도 서지 않으므로 정의층이 작다는 것과 서지 않는다는 것을 한 판정으로 접은
+자리가 관측에서도 메워지지 않는다. 그 비어 있음이 이 파일의 산출이다. 엣지의 자리를 가르는 칸 가운데
+좌변의 불일치 축도 어느 경로에서도 서지 않으며, 그 자리는 따로 선 정리가 든다.
 
 **가정을 두지 않는다.** 목록에 든 경로 전량을 전칭으로 받는다.
 -/
@@ -278,5 +288,83 @@ theorem strength_unread_by_every_channel {Node : Type} :
       · rfl
       · rename_i hC
         cases hC
+
+/--
+좌변 주체의 불일치 축을 내는 칸이 어느 경로에서도 서지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+이 명제가 거짓이려면 목록의 어느 경로가 좌변의 불일치 축을 내는 칸을 참으로 들어야 한다. 그러려면
+전달의 청구권을 내는 공시가 그 차입자의 통화별 자산과 부채나 그 부채가 조달한 자산의 통화를 함께 담아야
+하고, 지목 참조로 연 편의 보고는 은행이 보유한 대출만 담는다.
+
+**T-3 분류:** 보조 보정이 아니다. **정의층의 전달이 불일치 축을 색인으로 받게 되었는데 그 축을 내는
+경로가 전달의 명세에 하나도 없다는 것이 이 명제의 요지다.** 조달 연결 축은 불일치를 읽는 경로 전량에서도
+비므로, 조달형 축 위의 전달은 그 축을 내는 경로가 두 명세 어디에도 없다. 그 소스 없음이 관측층에
+등재되는 자리가 이 명제다.
+
+**가정을 두지 않는다.** 목록에 든 경로 전량을 전칭으로 받는다.
+-/
+-- DD:CF-4619
+theorem source_axis_unread_by_every_channel {Node : Type} :
+    ∀ C ∈ (transmissionChannels : List (TransmissionChannel Node)),
+      C.readsSourceAxis = false := by
+  intro C hC
+  cases hC
+  · rfl
+  · rename_i hC
+    cases hC
+    · rfl
+    · rename_i hC
+      cases hC
+      · rfl
+      · rename_i hC
+        cases hC
+
+/--
+그 판정의 칸이 각각 홀로 값을 가른다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+칸을 전부 참으로 둔 경로에서 어느 한 칸만 거짓으로 바꾸었는데 그 판정이 참으로 남아야 한다. 그러면 그
+칸이 그 논리곱에서 값을 가르지 않으므로, 축 전량을 요구한 판정이 실은 그보다 적은 칸을 요구하는 것이
+되고 그 칸을 구조에 둔 까닭이 사라진다.
+
+**가정을 두지 않는다.** 증인을 리터럴로 들고 등식이 전부 결정 가능하므로 가정이 설 자리가 없다.
+
+**T-3 분류:** 기여다. 판정 반환 함수의 논리 결합마다 홀로 값을 가르는 경로를 증거로 드는 정리를 같은
+파일에 두라는 A-8 의 요구를 이 명제가 받는다. 목록의 경로가 모두 그 판정에서 거짓이어서 목록을 전칭으로
+받는 정리만으로는 어느 결합을 뒤집어도 값이 갈리지 않으므로, 칸을 전부 참으로 둔 경로를 갱신 문법으로
+세우고 각 칸이 홀로 값을 가르는 자리를 이 명제가 든다.
+-/
+-- DD:CF-4619
+theorem answersAllAxes_each_axis_decides {Node : Type} (src holder : Node) :
+    ({ supervisoryStressTestChannel with
+        readsSourceAxis := true, readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = true
+    ∧ ({ supervisoryStressTestChannel with
+        coversSource := fun _ => false,
+        readsSourceAxis := true, readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        coversHolder := fun _ => false,
+        readsSourceAxis := true, readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        readsClaim := false,
+        readsSourceAxis := true, readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        readsRepaymentFailure := false,
+        readsSourceAxis := true, readsConstraintInput := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        readsSourceAxis := true, readsStrength := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false
+    ∧ ({ supervisoryStressTestChannel with
+        readsSourceAxis := true, readsConstraintInput := true } :
+        TransmissionChannel Node).answersAllAxes src holder = false := by
+  exact ⟨rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl⟩
 
 end CrisisFramework.Observation
