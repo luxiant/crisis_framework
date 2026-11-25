@@ -858,9 +858,9 @@
           ]
         }
       ],
-      "status": "open",
+      "status": "closed",
       "opened": "2026-11-22",
-      "closed": null,
+      "closed": "2026-11-25",
       "holes": [
         "CF-4165",
         "CF-4498",
