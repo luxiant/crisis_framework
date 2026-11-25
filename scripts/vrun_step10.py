@@ -54,9 +54,9 @@ def run(ctx) -> None:
         return
 
     ctx.ok(f"변이 대상 {len(rows)} ({ctx.per_file(r[0] for r in rows)})")
-    # 사본마다 elaborate 를 따로 돌린다. 판정은 아래에서 원래 순서대로 하므로 병렬이 출력을
-    # 바꾸지 않는다.
-    ctx.elaborate_all(r[7] for r in rows)
+    # 사본을 그 원본과 짝지어 넘긴다. 오케스트레이터가 수입이 같은 원본끼리 묶어 일괄 처리기로 재고,
+    # 판정은 아래에서 원래 순서대로 하므로 묶음과 병렬이 출력을 바꾸지 않는다.
+    ctx.elaborate_all((r[0], r[7]) for r in rows)
 
     uncovered = 0
     for row in rows:

@@ -288,13 +288,19 @@ def sec_phases(g):
         'note'))
 
 
-ROUTE_ISSUED, ROUTE_TRIGGER, ROUTE_DISC = '이 아크가 발행', '트리거', '판별선'
+ROUTE_ISSUED, ROUTE_PATCH, ROUTE_TRIGGER, ROUTE_DISC = '이 아크가 발행', '패치', '트리거', '판별선'
 
 
 def hole_route(r, arc):
-    """그 구멍이 이 아크에 든 경로. 트리거의 갈래와 다른 축이므로 다른 칸에 둔다."""
+    """그 구멍이 이 아크에 든 경로. 트리거의 갈래와 다른 축이므로 다른 칸에 둔다.
+
+    개막이 넣은 것인지는 그 아크가 처음 선 커밋의 구멍 배열에서 유도한다. 패치 레코드가 구멍의
+    식별자를 들지 않아, 그 유도가 없으면 패치로 든 구멍이 개막이 판별선으로 가려 넣은 것으로 세어진다.
+    """
     if r.get('origin_arc') == arc:
         return ROUTE_ISSUED
+    if not r.get('opening'):
+        return ROUTE_PATCH
     if r.get('ref') == arc:
         return ROUTE_TRIGGER
     return ROUTE_DISC
@@ -317,16 +323,19 @@ def sec_holes(g):
              ('푸는 페이즈', 'nw'), ('국면', 'nw')]
     n = len(g['holes'])
     nret = len([r for r in g['holes'] if r['retired']])
-    nt, nd, ni = (routes.count(x) for x in (ROUTE_TRIGGER, ROUTE_DISC, ROUTE_ISSUED))
+    nt, nd, npt, ni = (routes.count(x) for x in (ROUTE_TRIGGER, ROUTE_DISC, ROUTE_PATCH, ROUTE_ISSUED))
+    assert nt + nd + npt + ni == n, '구멍의 경로가 전량을 덮지 않는다'
     return section('이 아크에 걸린 구멍',
       p('이 아크가 받는 구멍이 %s 이 절의 표가 드는 살아 있음을 폐기 레코드가 그 번호를 '
         '가리키는지에서 유도했으며 그 가운데 %s 폐기되고 %s 살아 있다. <strong>조달 칸은 그 '
         '구멍이 이 아크에 든 경로이며, 재개 트리거가 이 아크를 지목해 기계로 뽑힌 것이 %s 개막이 '
-        '판별선으로 가려 넣은 것이 %s 이 아크가 발행한 것이 %s.</strong> 트리거 칸은 그 구멍의 '
+        '판별선으로 가려 넣은 것이 %s 개막 뒤에 패치로 든 것이 %s 이 아크가 발행한 것이 %s.</strong> '
+        '개막이 넣은 것은 이 아크가 처음 선 커밋의 구멍 배열에서 유도했다. 트리거 칸은 그 구멍의 '
         '재개 트리거의 갈래이고 조달의 경로와 다른 축이다.'
         % (morph.cop_conj(morph.digits(n), '이고'), morph.digits(nret, '이'),
            morph.digits(n - nret, '이'), morph.cop_conj(morph.digits(nt), '이고'),
-           morph.cop_conj(morph.digits(nd), '이며'), morph.cop_end(morph.digits(ni)))),
+           morph.cop_conj(morph.digits(nd), '이며'), morph.cop_conj(morph.digits(npt), '이고'),
+           morph.cop_end(morph.digits(ni)))),
       table(heads, rows),
       p('<strong>무엇 칸은 이연 레지스터의 산문을 그대로 옮긴 인용이다.</strong> 이 배정은 아크의 '
         '구멍 배열과 각 페이즈의 구멍 배열에 함께 실려야 하며, 한쪽에만 실으면 그 구멍이 어느 '
@@ -627,6 +636,9 @@ def main(argv=None):
         '목표 표의 꼴이 다르다'
     a.prior_doc = json.loads(io.open(a.prior, encoding='utf-8').read()) if a.prior else None
     prev = prev_parts(io.open(a.prev, encoding='utf-8').read())
+    # 앞 판은 앞 페이즈의 판이어야 한다. 같은 페이즈의 중도 판을 넘기면 앞 페이즈에서 받아 남는 항의
+    # 절이 이 페이즈를 앞 페이즈로 적는데, 그 거짓이 다른 단언에 걸리지 않고 산출에 선다
+    assert prev['phase'] != a.phase, '앞 판의 머리가 이 페이즈를 든다. 앞 페이즈의 판을 넘겨라: %s' % a.phase
 
     g = gather(a, prev)
     html = build(g, A.names())

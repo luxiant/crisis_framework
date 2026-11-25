@@ -96,9 +96,26 @@ def lean_files(repo):
     return out
 
 
+def opening_holes(repo, arc):
+    """그 아크가 처음 선 커밋의 아크 값 정본이 든 그 아크의 구멍 배열.
+
+    패치 레코드가 구멍의 식별자를 필드로 들지 않으므로, 개막이 넣은 구멍을 그 아크의 이름이 아크 값
+    정본에 처음 선 커밋에서 읽고 그 뒤에 아크의 구멍 배열에 든 것을 패치로 든 것으로 센다. 그 커밋을
+    찾지 못하면 그 자리에서 터뜨린다.
+    """
+    shas = _git(repo, 'log', '--reverse', '--format=%H', '-S', '"name": "%s"' % arc,
+                '--', 'docs/arcs.json').split('\n')
+    assert shas and shas[0], '아크 %r 가 처음 선 커밋을 찾지 못했다' % arc
+    a = json.loads(_git(repo, 'show', '%s:docs/arcs.json' % shas[0]))
+    rec = [x for x in a.get('arcs', []) if x.get('name') == arc]
+    assert len(rec) == 1, '아크 %r 가 처음 선 커밋의 아크 값 정본에 하나로 서지 않는다' % arc
+    return set(rec[0].get('holes') or [])
+
+
 def hole_rows(repo, arc):
     """그 아크의 구멍 배열을 이연과 폐기에서 유도한 뷰로 낸다."""
     st = arc_stats(repo, arc)
+    opening = opening_holes(repo, arc)
     defd = {e['id']: e for e in entries(repo, 'deferred')}
     tgt = {}
     for e in entries(repo, 'retirements'):
@@ -116,10 +133,12 @@ def hole_rows(repo, arc):
             'layer': (e.get('origin') or {}).get('layer') or e.get('layer') or '—',
             'trigger': ((e.get('reopen_when') or {}).get('kind')
                         if e.get('reopen_when') else None),
-            # 조달의 경로를 가르는 재료. 트리거가 이 아크를 지목하면 기계로 뽑힌 것이고, 그 이연이
-            # 이 아크에서 섰으면 이 아크가 발행한 것이며, 둘 다 아니면 판별선으로 가려 넣은 것이다
+            # 조달의 경로를 가르는 재료. 그 이연이 이 아크에서 섰으면 이 아크가 발행한 것이고, 개막이
+            # 넣지 않았으면 패치로 든 것이며, 개막이 넣은 것 가운데 트리거가 이 아크를 지목하면 기계로
+            # 뽑힌 것이고 나머지가 판별선으로 가려 넣은 것이다
             'ref': (e.get('reopen_when') or {}).get('ref') if e.get('reopen_when') else None,
             'origin_arc': (e.get('origin') or {}).get('arc'),
+            'opening': hid in opening,
             'what': e.get('statement') or '',
             'phases': phase_of.get(hid) or [],
             'retired': bool(tgt.get(hid)),

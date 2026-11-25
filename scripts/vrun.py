@@ -23,6 +23,12 @@
                    주지 않으면 돌지 않는다 (`bash scripts/verify.sh <아크>`)
   step7-cqfin      CQ 고정 절 대조 check_cqfin.py 호출 (docs/baseline.md §6)
 
+변이 검사와 논리 결합 변이는 사본을 `scripts/MutationBatch.lean` 의 일괄 처리기로 잰다. 수입이
+같은 원본끼리 묶어 한 프로세스가 수입을 한 번 세우고 원본과 사본을 차례로 처리하며, 그 처리기를
+세우지 못하거나 대조군인 원본이 깨지거나 표지가 어긋나면 그 사본을 명령줄의 `lean` 으로 잰다.
+환경 변수 `VERIFY_MUTATION_BATCH` 를 `cli` 로 주면 처리기를 쓰지 않으므로, 두 길의 출력 해시를 같은
+환경에서 맞대어 처리기가 판정을 바꾸지 않았는지를 잰다.
+
 각 단계는 선언된 단계 id 를 [step:<id>] 로 출력에 낸다. 원장의 tier: invariant
 항목이 그 id 를 check 필드로 들고 검사 7 이 둘을 대조한다. 그 선언이 이 모듈의 STEPS 에 서고
 검사 7 이 이 모듈을 읽는다.
@@ -30,11 +36,14 @@
 실행: bash scripts/verify.sh
 """
 
+import atexit
 import hashlib
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -45,11 +54,24 @@ ROOT = Path(__file__).resolve().parent.parent
 # docs/baseline.md 의 기계 판독 블록이 든다. 그 경로를 여러 단계가 함께 읽으므로 한 번 정한다.
 BASELINE_DOC = "docs/baseline.md"
 
-# Lean 사본을 병렬로 부르는 자리의 동시 호출 수. 변이 검사와 논리 결합 변이가 이 값을 함께 쓴다.
-# 두 자리에 박으면 한쪽만 고쳐져 갈리므로 한 자리에 둔다. 값을 넷으로 두는 것은 받은 판의 논리
-# 결합 변이가 그 값으로 돌아 러너에서 통과한 선례가 있기 때문이며, 사본 하나가 의존 묶음의 빌드
-# 산출을 읽어 메모리를 쓰므로 코어 수에서 유도하지 않는다.
+# 변이 사본을 재는 프로세스의 동시 수. 변이 검사와 논리 결합 변이가 이 값을 함께 쓰고, 일괄 처리기의
+# 프로세스와 명령줄의 `lean` 이 같은 값을 따른다. 두 자리에 박으면 한쪽만 고쳐져 갈리므로 한 자리에
+# 둔다. 값을 넷으로 두는 것은 받은 판의 논리 결합 변이가 그 값으로 돌아 러너에서 통과한 선례가 있기
+# 때문이며, 프로세스 하나가 의존 묶음의 빌드 산출을 읽어 메모리를 쓰므로 코어 수에서 유도하지 않는다.
 LEAN_JOBS = 4
+
+# 변이 사본을 재는 일괄 처리기의 소스와 그 처리기를 끄는 환경 변수와 처리기가 내는 표지. 처리기는
+# 검증마다 임시 디렉터리에 한 번 빌드하고 변이 검사와 논리 결합 변이가 함께 쓴다.
+BATCH_SRC = "scripts/MutationBatch.lean"
+BATCH_ENV = "VERIFY_MUTATION_BATCH"
+_B_BEGIN = "@@mutation-batch:begin"
+_B_END = "@@mutation-batch:end "
+_B_SKIP = "@@mutation-batch:skip"
+
+# 원본의 수입 목록. 처리기 하나가 수입이 같은 원본을 함께 받으므로 그 묶음을 이 목록으로 가른다.
+# 이 목록이 머리를 잘못 읽어도 처리기가 머리를 다시 맞대어 다른 입력을 건너뛰므로 판정이 바뀌지
+# 않고, 묶음이 잘게 갈려 수입이 더 서는 것에 그친다.
+_IMPORT = re.compile(r"^import\s+(\S+)\s*$", re.M)
 
 # 자기 출력의 정규화가 지우는 넷. 판 사이에 달라지는 것만 지운다. 터미널 색 코드와 절대 경로와
 # 소요 시간 표기와 빌드 진행 표시이며 그 밖은 한 글자도 바꾸지 않는다. 같은 환경의 두 판에서
@@ -131,6 +153,9 @@ class Ctx:
         self.stripped: str | None = None
 
         self._elab: dict[str, tuple[int, str]] = {}
+        # 일괄 처리기의 실행 파일과 툴체인의 뿌리. 세우지 못하면 그 사유를 문자열로 들고, 아직
+        # 세우지 않았으면 비어 있다.
+        self._batch: tuple[str, str] | str | None = None
         self._chunks: list[str] = []
         self._step_id = ""
         self._step_t0 = 0.0
@@ -221,19 +246,138 @@ class Ctx:
         """Lean 바이너리의 경로. 받은 판의 `${LEAN:-lean}` 과 같은 꼴이다."""
         return self.env.get("LEAN") or "lean"
 
-    def elaborate_all(self, copies) -> None:
-        """변이 사본마다 elaborate 를 따로 돌린다.
+    def _batch_tool(self) -> tuple[str, str] | str:
+        """일괄 처리기의 실행 파일과 툴체인의 뿌리. 세우지 못하면 그 사유를 문자열로 낸다.
 
-        받은 판이 `xargs -P` 로 돌리고 사본 옆의 파일에 종료 코드와 출력을 적었고, 판정은 그
-        뒤에 원래 순서대로 했다. 이 자리가 그 값을 사전에 담아 같은 꼴로 세운다. 파일을 두지
-        않는 것은 그 파일이 판정 밖의 어느 자리도 읽지 않고 사본의 임시 디렉터리와 함께
-        지워지기 때문이다.
+        한 번 세우고 그 값을 든다. 툴체인의 C 번역과 그 툴체인에 딸린 링커를 쓰고, 공유 라이브러리의
+        자리를 실행 파일에 새겨 실행할 때 환경 변수를 요구하지 않는다. 임시 디렉터리는 검증이 끝날
+        때 지운다.
         """
+        if self._batch is not None:
+            return self._batch
         lean = self.lean_bin()
-        paths = [c for c in copies]
+        p = self.run([lean, "--print-prefix"])
+        prefix = p.out.strip()
+        if p.rc != 0 or not prefix:
+            self._batch = "툴체인의 뿌리를 읽지 못했다"
+            return self._batch
+        d = tempfile.mkdtemp()
+        atexit.register(shutil.rmtree, d, True)
+        c_src, exe = os.path.join(d, "batch.c"), os.path.join(d, "batch")
+        lib = os.path.join(prefix, "lib", "lean")
+        if self.run([lean, "-c", c_src, str(self.root / BATCH_SRC)], merge=True).rc != 0:
+            self._batch = "처리기의 소스를 C 로 옮기지 못했다"
+        elif self.run([os.path.join(prefix, "bin", "leanc"), "-o", exe, c_src, "-L" + lib,
+                       "-lleanshared", "-Wl,-rpath," + lib], merge=True).rc != 0:
+            self._batch = "처리기를 링크하지 못했다"
+        else:
+            self._batch = (exe, prefix)
+        return self._batch
+
+    def _batch_group(self, tool: tuple[str, str], originals: list[str],
+                     by_orig: dict[str, list[str]]) -> tuple[dict[str, tuple[int, str]], int]:
+        """수입이 같은 원본 묶음 하나를 처리기로 잰다.
+
+        쓸 수 있는 사본의 결과와, 대조군인 원본이 오류를 내어 결과를 쓰지 않은 사본의 수를 낸다.
+        처리기가 0 이 아닌 코드로 끝나거나 표준 오류에 무엇이든 내거나 표지의 차례가 입력과 맞지
+        않으면 그 묶음의 결과를 하나도 쓰지 않는다. 명령줄의 `lean` 은 표준 오류를 출력에 합쳐 받으므로,
+        처리기가 표준 오류에 낸 것을 버리면 그 사본의 출력이 명령줄과 갈린다.
+        """
+        exe, prefix = tool
+        lines = "".join("\t".join([str(self.root / o)] + by_orig[o]) + "\n" for o in originals)
+        try:
+            p = subprocess.run([exe, prefix], cwd=str(self.root), env=self.env,
+                               input=lines.encode("utf-8"), stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE, check=False)
+        except OSError:
+            return {}, 0
+        if p.returncode != 0 or p.stderr:
+            return {}, 0
+        seq: list[tuple[int, str] | None] = []
+        cur: list[str] | None = None
+        for ln in p.stdout.decode("utf-8", "replace").split("\n"):
+            if cur is None:
+                if ln == _B_BEGIN:
+                    cur = []
+                elif ln == _B_SKIP:
+                    seq.append(None)
+                elif ln != "":
+                    return {}, 0
+            elif ln.startswith(_B_END) and ln[len(_B_END):] in ("0", "1"):
+                seq.append((int(ln[len(_B_END):]), "".join(x + "\n" for x in cur)))
+                cur = None
+            elif ln in (_B_BEGIN, _B_SKIP):
+                return {}, 0
+            else:
+                cur.append(ln)
+        if cur is not None:
+            return {}, 0
+        got: dict[str, tuple[int, str]] = {}
+        broken, k = 0, 0
+        for o in originals:
+            if k >= len(seq):
+                return {}, 0
+            head = seq[k]
+            k += 1
+            if head is None:
+                # 원본을 건너뛰면 처리기가 그 사본도 표지 없이 건너뛴다
+                continue
+            copies = by_orig[o]
+            if k + len(copies) > len(seq):
+                return {}, 0
+            if head[0] != 0:
+                broken += len(copies)
+            else:
+                for c, r in zip(copies, seq[k:k + len(copies)]):
+                    if r is not None:
+                        got[c] = r
+            k += len(copies)
+        if k != len(seq):
+            return {}, 0
+        return got, broken
+
+    def elaborate_all(self, pairs) -> None:
+        """변이 사본마다 종료 코드와 출력을 담는다. 받는 것은 (원본, 사본) 의 쌍이다.
+
+        사본을 일괄 처리기로 재고, 처리기가 재지 못한 사본만 명령줄의 `lean` 으로 잰다. 담은 값의
+        꼴은 명령줄의 `lean` 의 종료 코드와 표준 출력과 표준 오류를 합친 출력이며, 판정은 그 값을
+        받아 원래 순서대로 하므로 묶음과 병렬이 출력을 바꾸지 않는다. 처리기를 세우지 못했거나 명령줄로
+        잰 사본이 있으면 그 계수를 보고로 내고, 처리기가 사본 전량을 잰 판에서는 줄을 더하지 않는다.
+        """
+        pairs = list(pairs)
+        by_orig: dict[str, list[str]] = {}
+        for o, c in pairs:
+            by_orig.setdefault(o, []).append(c)
+        todo = [c for _, c in pairs]
+        if todo and os.environ.get(BATCH_ENV) != "cli":
+            tool = self._batch_tool()
+            if isinstance(tool, str):
+                self.rep(f"일괄 처리기를 세우지 못해({tool}) 사본 {len(todo)} 개를 명령줄의 lean 으로 잰다")
+            else:
+                groups: dict[tuple[str, ...], list[str]] = {}
+                for o in by_orig:
+                    key = tuple(_IMPORT.findall((self.root / o).read_text(encoding="utf-8")))
+                    groups.setdefault(key, []).append(o)
+
+                def cost(key) -> int:
+                    return sum((len(by_orig[o]) + 1) * (self.root / o).stat().st_size
+                               for o in groups[key])
+
+                # 무거운 묶음을 먼저 띄워 마지막에 홀로 도는 묶음이 길어지지 않게 한다
+                keys = sorted(groups, key=cost, reverse=True)
+                broken = 0
+                with ThreadPoolExecutor(max_workers=self.lean_jobs) as ex:
+                    for got, b in ex.map(lambda key: self._batch_group(tool, groups[key], by_orig),
+                                         keys):
+                        self._elab.update(got)
+                        broken += b
+                todo = [c for c in todo if c not in self._elab]
+                if todo:
+                    self.rep(f"일괄 처리기가 재지 못한 사본 {len(todo)} 개를 명령줄의 lean 으로 잰다"
+                             f" (대조군인 원본이 오류를 내어 쓰지 않은 사본 {broken})")
+        lean = self.lean_bin()
         with ThreadPoolExecutor(max_workers=self.lean_jobs) as ex:
-            for c, p in zip(paths, ex.map(
-                    lambda x: self.run([lean, x], merge=True), paths)):
+            for c, p in zip(todo, ex.map(lambda x: self.run([lean, x], merge=True), todo)):
                 self._elab[c] = (p.rc, p.out)
 
     def elaborated(self, copy: str) -> tuple[int, str]:
