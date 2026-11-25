@@ -488,3 +488,318 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 문단도 이 조작이 고치지 않는다.** 그 문단이 드는 파일 수가 앞 판의 압축을 잰 값인데 이 회차에 올라온
 압축이 그보다 크고, 그 갈림을 전량 처분하려면 파일마다 열어 무리에 배정해야 하므로 이 조작의 범위를
 넘는다. **그 결손은 이연으로 이미 등재되어 살아 있다.**
+
+---
+
+## 무역과 만기 보고의 서식 (9편)
+
+`housekeeper1-1` 이 조달해 뭉치에 들인 문면 가운데 무역의 서식과 만기 보고의 서식을 읽는 페이즈가 받을 것이며,
+전량 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 세관 신고의 칸과 결제 방식의 부호와 수출 대금의 반입을
+드는 튀르키예 당국의 문면과 유럽연합의 관세 서식 규정과 둘 이상 관할권의 만기 보고 서식이 그 묶음이다. **아직
+읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을 세우면서 그 표지를 기록 번호로
+바꾼다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 세관 신고서 사용 지침 | 튀르키예 세관 규칙의 부속서 14. 2013-02-07 관보 제28552호에서 이어진 문면 | 미추출 |
+| 수출 대금 반입 회람 | 튀르키예 재무부. 판의 날짜는 확인하지 않았다 | 미추출 |
+| 결제 방식 부호표 | 튀르키예 상무부의 EDI·XML 참조 메시지. 파일에 발행 주체와 날짜가 없다 | 미추출 |
+| EDI·XML 참조 메시지 메뉴 페이지 | 튀르키예 상무부. 결제 방식 부호표의 발행 주체를 드는 자리 | 미추출 |
+| 연합 관세법 경과 규정의 위임규칙 | 유럽연합 집행위원회. 2016/341, 2015-12-17 | 미추출 |
+| 만기 사다리 서식 C 66.01 | 유럽은행감독청. 부속서 XXII, 2021년 12월 | 미추출 |
+| 만기 사다리 서식의 작성 지침 | 같은 주체. 부속서 XXIII, 2021년 12월 | 미추출 |
+| 복합 기관 유동성 감시 보고서의 작성 지침 | 연방준비제도이사회. 서식 FR 2052a, 승인 기한이 2028-02-29 인 판 | 미추출 |
+| 콜 리포트의 작성 지침 | 연방금융기관검사협의회. 서식 FFIEC 031·041, 2007년 판 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 중앙은행 운영과 자금순환과 증권화와 담보 규범 (10편)
+
+`housekeeper1-1` 이 조달해 뭉치에 들인 문면 가운데 중앙은행 운영과 자금순환과 증권화와 담보 규범을 읽는 페이즈가
+받을 것이며, 전량 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 중앙은행 운영 약관과 준비자산 템플릿과
+통화 교환 약정을 다룬 편과 한국은행의 통화금융통계와 자금순환표와 증권화 보고서와 담보권 조문의 공식 주석이 그
+묶음이다. **위험 이전 없는 증권화를 다룬 논문은 앞 압축에 있었으나 어느 무리에도 행이 없었으므로 이 무리가
+받는다.** 금융거래표 판은 뭉치에 들었으나 그 판을 기다리는 항이 없다. 아직 읽지 않았으므로 행마다 미추출 표지를
+둔다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 스털링 통화 체계의 운영 참가 약관 | 영란은행. 2026년 3월판 | 미추출 |
+| 준비자산과 외화 유동성 템플릿 지침 | 국제통화기금 통계국. 2013년 판 | 미추출 |
+| Evolution of Bilateral Swap Lines | Perks·Rao·Shin·Tokuoka 2021 (IMF WP/21/210) | 미추출 |
+| 통화금융통계 보도자료 | 한국은행. 2026-11-13 공보 2026-11-05호 | 미추출 |
+| 금융자산부채잔액표 요약 | 한국은행. 2026년 2분기 표 둘 | 미추출 |
+| 금융자산부채잔액표 세부 부문 판 | 한국은행 경제통계시스템. 열은 2023년 2분기부터 2026년 2분기까지다 | 미추출 |
+| 금융거래표 세부 부문 판 | 같은 주체. 부문과 항목과 열이 잔액표의 판과 같고, 살아 있는 이연 가운데 이 판을 기다리는 항이 없다 | 미추출 |
+| 유럽 증권화 보고서 2021년 2분기 | 유럽금융시장협회(AFME) | 미추출 |
+| 사우스캐롤라이나 법안 4161 의 웹 페이지 | 사우스캐롤라이나 주의회. 제113회기(1999~2000) 개정 제9편과 공식 주석 | 미추출 |
+| Securitization without risk transfer | Acharya·Schnabl·Suarez 2013 (JFE 107). 앞 판의 압축에 있었으나 인벤토리에 행이 없었다 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 제재와 식별과 법령 문면 (13편)
+
+`housekeeper1-1` 이 조달해 뭉치에 들인 문면 가운데 제재와 식별과 법령 문면을 읽는 페이즈가 받을 것이며, 전량
+뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 제재 목록과 그 형식 안내와 진보된 XML 자료와 회피를 막는
+실사 지침과 유럽연합 사법재판소의 판결 둘과 법인식별기호의 관계 기록 형식과 미국 감독 당국의 자료 사전과
+유럽연합의 입법 문면 작성 규칙과 법령 문면의 명명 규약이 그 묶음이다. 아직 읽지 않았으므로 행마다 미추출 표지를
+둔다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 영국 제재 목록 | 영국 정부. 2026-11-24 갱신분 | 미추출 |
+| 영국 제재 목록의 형식 안내 | 같은 주체 | 미추출 |
+| 특별지정국민 목록의 진보된 XML 자료 | 미국 재무부 해외자산통제실. 2026-11-23 발행분 | 미추출 |
+| 러시아 제재 회피를 막는 강화된 실사의 지침 | 유럽연합 집행위원회. 2023년 판 | 미추출 |
+| 아프라시아비 외 사건의 판결 | 유럽연합 사법재판소. 사건 72/11, 2011-12-21 | 미추출 |
+| EM 시스템 사건의 판결 | 같은 주체. 사건 84/24, 2026-03-12 | 미추출 |
+| 관계 기록 형식 2.1 | 글로벌 법인식별기호 재단. 웹 문서 | 미추출 |
+| 관계 기록 형식 2.1 의 기술 문서 | 같은 주체 | 미추출 |
+| 관계 기록 형식 2.1 의 스키마 파일 | 같은 주체. 문서화 갱신 2021-03-04 | 미추출 |
+| 일괄 내려받기 자료 사전 | 연방준비제도이사회 국가정보센터. 2.0 판, 2025년 4월 개정 | 미추출 |
+| 공동 편람 | 유럽의회·이사회·집행위원회. 2025년 11월 영어판 | 미추출 |
+| 공동 실무 지침 | 같은 세 기관. 2015년 판 | 미추출 |
+| Akoma Ntoso 명명 규약 1.0 | OASIS. 2019-02-21 표준 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 압축의 파일 목록
+
+뭉치의 압축 `macro_models_1.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
+열두 자리와 그 파일이 속한 무리와 편을 세로 막대로 가른다. 무리는 이 문서의 `##` 절 제목에서 괄호를 걷은 꼴이고,
+편은 그 무리의 표의 행이나 나열 문단이 드는 제목을 그대로 옮긴 꼴이다. 해시가 같은 사본의 왼쪽은 무리를 「중복」으로
+들고 편이 그 짝의 편이다. **압축이 아니라 이 목록이 뭉치의 정본이다.** 뒤에 압축이 올라오는 회차는
+`scripts/bundle.py` 로 그 압축의 파일마다 해시를 재어 이 블록과 양방향으로 맞대고, 갈린 파일만 열어 무리와 편을
+배정한다. 경로가 규율 ID 의 꼴을 이루는 붙임표는 U+2011 로 적는다. 상주 문서의 그 꼴을 규율 지목으로 읽는 검사가
+사건 번호를 미실재 규율로 세기 때문이며, 그 설비가 맞댈 때 그 문자를 붙임표로 되돌린다.
+
+**집계 절의 압축 대조 문단은 앞 압축의 실측이다.** 새 무리를 더할 때 그 문단을 고치지 않는다는 결정이 살아 있으므로
+그대로 두며, 이 판의 대조는 이 블록과 그 설비의 출력이 든다. 이 판에서 그 대조가 양쪽으로 닫혔다. 압축의 파일마다
+무리와 편이 섰고, 이 문서의 구성원 가운데 압축에 파일이 없는 것은 그 무리의 절 제목이 zip 밖으로 든 행뿐이다.
+
+<!-- BUNDLEFILES:BEGIN -->
+```text
+BUNDLEFILE=Christopher Clack/Design discussion on the isda common domain model.pdf|347260|1816949a5aa7|계약 표현 — 청구권 타입의 설계 대안|Design Discussion on the ISDA Common Domain Model
+BUNDLEFILE=Christopher Clack/Simulating an object-oriented financial system in a functional language.pdf|117948|ec3b6fbe54e4|계약 표현 — 청구권 타입의 설계 대안|Simulating an Object-Oriented Financial System in a Functional Language
+BUNDLEFILE=Christopher Clack/Smart Confirmation Contracts An Architecture for ISDA Smart Contracts.pdf|6504905|6e6d24ed92db|계약 표현 — 청구권 타입의 설계 대안|Smart Confirmation Contracts: An Architecture for ISDA Smart Contracts
+BUNDLEFILE=Christopher Clack/Smart contract templates essential requirements and design options.pdf|385061|54ea8300881c|계약 표현 — 청구권 타입의 설계 대안|Smart Contract Templates: Essential Requirements and Design Options
+BUNDLEFILE=Christopher Clack/Smart contract templates foundations, design landscape and research directions.pdf|742543|b4e9234fc4dc|계약 표현 — 청구권 타입의 설계 대안|Smart Contract Templates: Foundations, Design Landscape and Research Directions
+BUNDLEFILE=Christopher Clack/Smart contract templates Legal semantics and code validation.pdf|271256|dfb79a9c23a2|계약 표현 — 청구권 타입의 설계 대안|Smart Contract Templates: Legal Semantics and Code Validation
+BUNDLEFILE=Christopher Clack/Smart contract templates the semantics of smart legal agreements.pdf|742543|b4e9234fc4dc|중복|Smart Contract Templates: Foundations, Design Landscape and Research Directions
+BUNDLEFILE=Christopher Clack/Smart Derivatives Contracts the ISDA Master Agreement and the automation of payments and deliveries.pdf|611412|b4834f9237bb|계약 표현 — 청구권 타입의 설계 대안|Smart Derivatives Contracts: the ISDA Master Agreement and the Automation of Payments and Deliveries
+BUNDLEFILE=Friederike Niepmann/Banking across borders.pdf|1444973|b83699a06229|다른 CQ 덩어리의 재료|Banking across Borders
+BUNDLEFILE=Friederike Niepmann/Geopolitical risk and global banking.pdf|1457353|19e2476738c6|다른 CQ 덩어리의 재료|Geopolitical Risk and Global Banking
+BUNDLEFILE=Friederike Niepmann/International banking and cross-border effects of regulation Lessons from the United States.pdf|394647|74a8017681a1|다른 CQ 덩어리의 재료|International Banking and Cross-Border Effects of Regulation
+BUNDLEFILE=Hyun Song Shin/A Comment on a Model of Vertical Product Differentiation.pdf|120258|40f9c4615587|제외 권고 — 메커니즘과 무관|A Comment on a Model of Vertical Product Differentiation
+BUNDLEFILE=Hyun Song Shin/An academic response to Basel II.pdf|70317|5a9b4f327680|보조 — 필요 시 참조|An academic response to Basel II
+BUNDLEFILE=Hyun Song Shin/An approach to anti-money laundering compliance for cryptoassets.pdf|747055|9d4b9dfbaba5|제외 권고 — 메커니즘과 무관|An approach to AML compliance for cryptoassets
+BUNDLEFILE=Hyun Song Shin/Beauty contests and iterated expectations in asset markets.pdf|245117|df83162c4246|보조 — 필요 시 참조|Beauty contests
+BUNDLEFILE=Hyun Song Shin/BigTech and the changing structure of financial intermediation.pdf|1459396|f19d0169b030|제외 권고 — 메커니즘과 무관|BigTech and the changing structure of financial intermediation
+BUNDLEFILE=Hyun Song Shin/BIS Bulletin.pdf|343671|f7f405ef984e|중복|Next generation correspondent banking
+BUNDLEFILE=Hyun Song Shin/Bond Risk Premia and The Exchange Rate.pdf|2516351|97a2a8fabeb9|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Bond risk premia and the exchange rate
+BUNDLEFILE=Hyun Song Shin/Breaking Free of the Triple Coincidence.pdf|2001605|36b38740bdc2|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Breaking free of the triple coincidence in international finance
+BUNDLEFILE=Hyun Song Shin/Capital Flows and the Risk-Taking Channel of Monetary Policy.pdf|435725|4bb4ff113870|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Capital Flows and the Risk-Taking Channel of Monetary Policy
+BUNDLEFILE=Hyun Song Shin/Catalytic finance When does it work.pdf|288714|56f00cff627d|보조 — 필요 시 참조|Catalytic finance
+BUNDLEFILE=Hyun Song Shin/Central bank balance sheets and financial stability.pdf|4182298|b673b875e9fa|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Central bank balance sheets and financial stability (편집본 내 Shin 챕터)
+BUNDLEFILE=Hyun Song Shin/Central bank digital currencies motives, economic implications, and the research frontier.pdf|583057|791299d6d1c7|제외 권고 — 메커니즘과 무관|Central bank digital currencies
+BUNDLEFILE=Hyun Song Shin/Communication and monetary policy.pdf|196056|97d35e1e17ff|보조 — 필요 시 참조|Communication and monetary policy
+BUNDLEFILE=Hyun Song Shin/Comparative assessment of macroprudential policies.pdf|350449|f5e9097497fc|보조 — 필요 시 참조|Comparative assessment of macroprudential policies
+BUNDLEFILE=Hyun Song Shin/Coordination risk and the price of debt.pdf|210810|6f9fee108d2d|보조 — 필요 시 참조|Coordination risk and the price of debt
+BUNDLEFILE=Hyun Song Shin/Crisis resolution and bank liquidity.pdf|655702|51d3986ad6a7|보조 — 필요 시 참조|Crisis resolution and bank liquidity
+BUNDLEFILE=Hyun Song Shin/Cross-Border Banking and Global Liquidity.pdf|481572|3e1a055c8711|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Cross-Border Banking and Global Liquidity
+BUNDLEFILE=Hyun Song Shin/Currency depreciation and emerging market corporate distress.pdf|449178|77751dc1c78d|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Currency depreciation and EM corporate distress
+BUNDLEFILE=Hyun Song Shin/Disclosures and asset returns.pdf|355658|2a4e63716bc1|보조 — 필요 시 참조|Disclosures and asset returns
+BUNDLEFILE=Hyun Song Shin/Dividends and bank capital in the global financial crisis of 2007–2009.pdf|1740196|7b0ee76148ac|보조 — 필요 시 참조|Dividends and bank capital in the GFC
+BUNDLEFILE=Hyun Song Shin/Does one Soros make a difference A theory of currency crises with large and small traders.pdf|951655|c91d90ab7110|보조 — 필요 시 참조|Does one Soros make a difference?
+BUNDLEFILE=Hyun Song Shin/Dollar and exports.pdf|530855|1a65ab1bb5ee|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Dollar and exports
+BUNDLEFILE=Hyun Song Shin/Dollar beta and stock returns.pdf|421041|ff6367254361|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Dollar beta and stock returns
+BUNDLEFILE=Hyun Song Shin/Elasticity of money in production networks, working capital, credit lines and financial conditions.pdf|962340|867718b47ee3|보조 — 필요 시 참조|Elasticity of money in production networks
+BUNDLEFILE=Hyun Song Shin/Exchange Rates and the Working Capital Channel of Trade Fluctuations.pdf|330503|f3da2ce3bd71|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Exchange rates and the working capital channel of trade fluctuations
+BUNDLEFILE=Hyun Song Shin/Financial intermediaries and monetary economics.pdf|573024|21d500ca39bb|O-1 핵심 루프 — 제약·레버리지 순환|Financial intermediaries and monetary economics
+BUNDLEFILE=Hyun Song Shin/Financial intermediaries, financial stability, and monetary policy.pdf|311974|bb03df53b173|O-1 핵심 루프 — 제약·레버리지 순환|Financial intermediaries, financial stability, and monetary policy
+BUNDLEFILE=Hyun Song Shin/Financial regulation in a system context.pdf|446773|9d5ef7d7f5af|보조 — 필요 시 참조|Financial regulation in a system context
+BUNDLEFILE=Hyun Song Shin/Following the imprint of the ECB's asset purchase programme on global bond and deposit flows.pdf|184648|f93ebd14aaa8|보조 — 필요 시 참조|Following the imprint of ECB APP
+BUNDLEFILE=Hyun Song Shin/Global Banking Glut and Loan Risk Premium.pdf|1343024|b3df94268c4a|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Global Banking Glut and Loan Risk Premium
+BUNDLEFILE=Hyun Song Shin/Global dollar credit and carry trades a firm-level analysis.pdf|396907|3b35cca6cfdd|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Global dollar credit and carry trades
+BUNDLEFILE=Hyun Song Shin/Global FX markets when hedging takes centre stage.pdf|405428|98b06ea04a1c|배제 사례와 관측 과제의 보조|Global FX markets when hedging takes centre stage
+BUNDLEFILE=Hyun Song Shin/Global games theory and applications.pdf|501871|36e0b7674323|보조 — 필요 시 참조|Global games
+BUNDLEFILE=Hyun Song Shin/Illiquidity component of credit risk–the 2015 Lawrence R. Klein lecture.pdf|349006|6e272fb72da7|O-1 핵심 루프 — 제약·레버리지 순환|Illiquidity component of credit risk
+BUNDLEFILE=Hyun Song Shin/International portfolio frictions.pdf|2165411|fe2ddffe794b|O-3 통화 확장 — 달러·국경 간 청구권·CIP|International portfolio frictions
+BUNDLEFILE=Hyun Song Shin/Introducing BISTRO a foundational model for unconditional and conditional forecasting of macroeconomic time series.pdf|5084537|f1095c1af7ac|제외 권고 — 메커니즘과 무관|Introducing BISTRO
+BUNDLEFILE=Hyun Song Shin/Leveraged losses lessons from the mortgage market meltdown.pdf|1567158|cc0dad0b2dfb|O-1 핵심 루프 — 제약·레버리지 순환|Leveraged losses
+BUNDLEFILE=Hyun Song Shin/Liquidity and Financial Contagion.pdf|3115958|e5f460a0e9f3|O-1 핵심 루프 — 제약·레버리지 순환|Liquidity and financial contagion (FSR 특집 내 챕터)
+BUNDLEFILE=Hyun Song Shin/Liquidity and leverage.pdf|414025|1b9ac66c7d65|O-1 핵심 루프 — 제약·레버리지 순환|Liquidity and leverage
+BUNDLEFILE=Hyun Song Shin/Liquidity black holes.pdf|320523|bd63727d8d3a|보조 — 필요 시 참조|Liquidity black holes
+BUNDLEFILE=Hyun Song Shin/Liquidity management and asset sales by bond funds in the face of investor redemptions in March 2020.pdf|676446|de41847bd3ef|보조 — 필요 시 참조|Liquidity management by bond funds March 2020
+BUNDLEFILE=Hyun Song Shin/Liquidity risk and contagion.pdf|198547|a2d1d9787b5c|전파 아크의 재료 — 현 아크의 판별선 밖, 보관|Liquidity risk and contagion
+BUNDLEFILE=Hyun Song Shin/Macroprudential Policies in Open Emerging Economies.pdf|578063|3bd618b146bd|O-3 통화 확장 — 달러·국경 간 청구권·CIP|개방 신흥국의 거시건전성 정책
+BUNDLEFILE=Hyun Song Shin/Mapping the realignment of global value chains.pdf|2274908|9099d9c6ec05|제외 권고 — 메커니즘과 무관|Mapping the realignment of global value chains
+BUNDLEFILE=Hyun Song Shin/Mapping the space of central bankers' ideas.pdf|1051528|19158b81d72a|제외 권고 — 메커니즘과 무관|Mapping the space of central bankers' ideas
+BUNDLEFILE=Hyun Song Shin/Margins, debt capacity, and systemic risk.pdf|797543|9b5cb7ba6a5e|O-1 핵심 루프 — 제약·레버리지 순환|Margins, debt capacity, and systemic risk
+BUNDLEFILE=Hyun Song Shin/Market Tantrums and Monetary Policy.pdf|1565755|de531ab498b6|보조 — 필요 시 참조|Market tantrums and monetary policy
+BUNDLEFILE=Hyun Song Shin/Marking‐to‐market panacea or Pandora's box.pdf|887257|7ec6ab921ecd|O-1 핵심 루프 — 제약·레버리지 순환|Marking-to-market: panacea or Pandora's box
+BUNDLEFILE=Hyun Song Shin/Monetary responses to external shocks in emerging market economies the role of financial vulnerabilities.pdf|359753|201feeaedf1f|제외 권고 — 메커니즘과 무관|Monetary responses to external shocks in EMEs
+BUNDLEFILE=Hyun Song Shin/Money, liquidity, and monetary policy.pdf|242047|2d8f4aafd9f1|O-1 핵심 루프 — 제약·레버리지 순환|Money, liquidity, and monetary policy
+BUNDLEFILE=Hyun Song Shin/Next generation correspondent banking.pdf|343671|f7f405ef984e|제외 권고 — 메커니즘과 무관|Next generation correspondent banking
+BUNDLEFILE=Hyun Song Shin/Non-bank financial intermediaries and financial stability.pdf|1467406|8e3597f0ea66|O-1 핵심 루프 — 제약·레버리지 순환|Non-bank financial intermediaries and financial stability
+BUNDLEFILE=Hyun Song Shin/Non-core bank liabilities and financial vulnerability.pdf|330172|19281455cfce|O-1 핵심 루프 — 제약·레버리지 순환|Non-core bank liabilities and financial vulnerability
+BUNDLEFILE=Hyun Song Shin/Original sin redux role of duration risk.pdf|1182212|0ee2a4a61a38|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Original sin redux: role of duration risk
+BUNDLEFILE=Hyun Song Shin/Overcoming original sin insights from a new dataset.pdf|1036648|88a864ef04cd|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Overcoming original sin
+BUNDLEFILE=Hyun Song Shin/Procyclical leverage and endogenous risk.pdf|505149|a9d01f6f4e7b|O-1 핵심 루프 — 제약·레버리지 순환|Procyclical leverage and endogenous risk
+BUNDLEFILE=Hyun Song Shin/Procyclical leverage and value-at-risk.pdf|473777|3108a1ffffc8|O-1 핵심 루프 — 제약·레버리지 순환|Procyclical leverage and value-at-risk
+BUNDLEFILE=Hyun Song Shin/Procyclicality and Monetary Aggregates.pdf|284841|ed1c4238e9f4|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Procyclicality and Monetary Aggregates
+BUNDLEFILE=Hyun Song Shin/Reflections on Northern Rock The bank run that heralded the global financial crisis.pdf|181526|24e27a46d04f|O-1 핵심 루프 — 제약·레버리지 순환|Reflections on Northern Rock
+BUNDLEFILE=Hyun Song Shin/Rethinking multiple equilibria in macroeconomic modeling.pdf|2350114|23235a9b7de9|보조 — 필요 시 참조|Rethinking multiple equilibria
+BUNDLEFILE=Hyun Song Shin/Second Phase of Global Liquidity and Its Impact on Emerging Economies.pdf|8358201|4a160cf08285|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Second Phase of Global Liquidity (편집본 내 Shin 챕터)
+BUNDLEFILE=Hyun Song Shin/Securitisation and Financial Stability.pdf|1128079|c82316b28f2b|O-1 핵심 루프 — 제약·레버리지 순환|Securitisation and financial stability
+BUNDLEFILE=Hyun Song Shin/Shifting currents in FX and interest rate derivatives highlights from the 2025 Triennial Survey.pdf|156335|a234847cd4c0|제외 권고 — 메커니즘과 무관|Shifting currents in FX and IR derivatives
+BUNDLEFILE=Hyun Song Shin/The changing nature of financial intermediation and the financial crisis of 2007-09.pdf|797522|446184c0de75|O-1 핵심 루프 — 제약·레버리지 순환|The changing nature of financial intermediation and the crisis
+BUNDLEFILE=Hyun Song Shin/The dollar, bank leverage and the deviation from covered interest parity.pdf|1191433|930607b5576d|O-3 통화 확장 — 달러·국경 간 청구권·CIP|The dollar, bank leverage and the deviation from CIP
+BUNDLEFILE=Hyun Song Shin/The dollar, bank leverage, and real economic activity An evolving relationship.pdf|628860|9f624171e439|O-3 통화 확장 — 달러·국경 간 청구권·CIP|The dollar, bank leverage, and real economic activity
+BUNDLEFILE=Hyun Song Shin/The fundamental principles of financial regulation.pdf|583858|1a583310e53f|보조 — 필요 시 참조|Fundamental principles of financial regulation
+BUNDLEFILE=Hyun Song Shin/The impact of risk regulation on price dynamics.pdf|935339|e61c97cb7da0|O-1 핵심 루프 — 제약·레버리지 순환|The impact of risk regulation on price dynamics
+BUNDLEFILE=Hyun Song Shin/The shadow banking system implications for financial regulation.pdf|367635|b04e57863477|중복|Shadow Banking System: Implications for Financial Regulation (Adrian 폴더)
+BUNDLEFILE=Hyun Song Shin/The Squam Lake Report Fixing the Financial System.pdf|377466|e8ead0bbb1e2|보조 — 필요 시 참조|Squam Lake Report
+BUNDLEFILE=Hyun Song Shin/Theory of supply chains a working capital approach.pdf|400844|89e33126beac|보조 — 필요 시 참조|Theory of supply chains: a working capital approach
+BUNDLEFILE=Hyun Song Shin/Tokenomics and blockchain fragmentation.pdf|798753|30beb99b855d|제외 권고 — 메커니즘과 무관|Tokenomics and blockchain fragmentation
+BUNDLEFILE=Hyun Song Shin/Uncovering FX settlement risk new measures from the 2025 BIS Triennial Survey.pdf|302113|51e52654133e|배제 사례와 관측 과제의 보조|Uncovering FX settlement risk
+BUNDLEFILE=Hyun Song Shin/Unique equilibrium in a model of self-fulfilling currency attacks.pdf|1759680|94f17727ace9|보조 — 필요 시 참조|Unique equilibrium in self-fulfilling currency attacks
+BUNDLEFILE=Hyun Song Shin/US dollar's slide in April 2025 the role of FX hedging.pdf|334387|6b8622a16624|보조 — 필요 시 참조|US dollar's slide April 2025
+BUNDLEFILE=Hyun Song Shin/Which Exchange Rate Matters to Global Investors.pdf|809439|e1777186be59|O-3 통화 확장 — 달러·국경 간 청구권·CIP|Which exchange rate matters to global investors
+BUNDLEFILE=Hyun Song Shin/Which Financial Frictions Parsing the Evidence from the Financial Crisis of 2007-9.pdf|878142|7e343fca3727|O-1 핵심 루프 — 제약·레버리지 순환|Which financial frictions?
+BUNDLEFILE=Hyun Song Shin/Why bank capital matters for monetary policy.pdf|348715|c9189f946e53|보조 — 필요 시 참조|Why bank capital matters for monetary policy
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Bank Bailouts, International Linkages, and Cooperation.pdf|668726|1bfd5e6ca6db|다른 CQ 덩어리의 재료|Bank Bailouts, International Linkages, and Cooperation
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Foreign currency loans and credit risk Evidence from US banks.pdf|1879833|982437f069af|다른 CQ 덩어리의 재료|Foreign Currency Loans and Credit Risk: Evidence from U.S. Banks
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Institutional investors, the dollar, and US credit conditions.pdf|554920|8e6739822950|다른 CQ 덩어리의 재료|Institutional Investors, the Dollar, and U.S. Credit Conditions
+BUNDLEFILE=Tim Schmidt-Eisenlohr/International trade, risk and the role of banks.pdf|1335308|fa0222b84266|교역 금융과 결제 방식|International Trade, Risk and the Role of Banks
+BUNDLEFILE=Tim Schmidt-Eisenlohr/No Guarantees, No Trade How Banks Affect Export Patterns.pdf|681238|321b9475333b|교역 금융과 결제 방식|No Guarantees, No Trade: How Banks Affect Export Patterns
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Payment choice in international trade Theory and evidence from cross‐country firm‐level data.pdf|396218|c20ad49ddc8c|교역 금융과 결제 방식|Payment Choice in International Trade
+BUNDLEFILE=Tim Schmidt-Eisenlohr/The dollar and corporate borrowing costs.pdf|1356224|3572d7ae697e|다른 CQ 덩어리의 재료|The Dollar and Corporate Borrowing Costs
+BUNDLEFILE=Tim Schmidt-Eisenlohr/The financial channel of the exchange rate and global trade.pdf|428760|1d1ee1108766|교역 금융과 결제 방식|The Financial Channel of the Exchange Rate and Global Trade
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Towards a theory of trade finance.pdf|453128|e14996fe0eb6|교역 금융과 결제 방식|Towards a Theory of Trade Finance
+BUNDLEFILE=Tim Schmidt-Eisenlohr/Trade credit and markups.pdf|945451|cdf087642777|교역 금융과 결제 방식|Trade Credit and Markups
+BUNDLEFILE=Tobias Adrian/Financial Intermediaries and the Cross-section of Asset Returns.pdf|513120|e0df64ba4620|O-1 핵심 루프 — 제약·레버리지 순환|Financial intermediaries and the cross-section of asset returns
+BUNDLEFILE=Tobias Adrian/Intermediary Leverage Cycles and Financial Stability.pdf|1884402|85962da6592d|O-1 핵심 루프 — 제약·레버리지 순환|Intermediary leverage cycles and financial stability
+BUNDLEFILE=Tobias Adrian/Monetary policy, financial conditions, and financial stability.pdf|500724|20cc79807858|보조 — 필요 시 참조|Monetary policy, financial conditions, and financial stability
+BUNDLEFILE=Tobias Adrian/Shadow Banking System Implications for Financial Regulation.pdf|367635|b04e57863477|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Shadow Banking System: Implications for Financial Regulation (Adrian 폴더)
+BUNDLEFILE=Tobias Adrian/The Term Structure of Growth-at-Risk.pdf|3124592|4e5d1f4d4977|예측 — 재유입 범위 밖, 보관|The Term Structure of Growth-at-Risk
+BUNDLEFILE=Tobias Adrian/Vulnerable Growth.pdf|1879154|f2aa9cc7ba22|예측 — 재유입 범위 밖, 보관|Vulnerable Growth
+BUNDLEFILE=Willi Brammertz/From digital currencies to digital finance the case for a smart financial contract standard.pdf|434839|480684b5ae65|계약 표현 — 청구권 타입의 설계 대안|From Digital Currencies to Digital Finance: the Case for a Smart Financial Contract Standard
+BUNDLEFILE=Willi Brammertz/Improving Systemic Risk Monitoring and Financial Market Transparency Standardizing the Representation of Financial Instruments.pdf|428986|c71c014c55c4|계약 표현 — 청구권 타입의 설계 대안|Improving Systemic Risk Monitoring and Financial Market Transparency
+BUNDLEFILE=Willi Brammertz/Limits and Opportunities of Big Data For Macro-Prudential Modeling of Financial Systemic Risk.pdf|785550|2e60af539f00|계약 표현 — 청구권 타입의 설계 대안|Limits and Opportunities of Big Data for Macro-Prudential Modeling of Financial Systemic Risk
+BUNDLEFILE=Willi Brammertz/Smart Contracts Were Around Long Before Cryptocurrency.pdf|146925|b1e0ca1c9a6d|계약 표현 — 청구권 타입의 설계 대안|Smart Contracts Were Around Long Before Cryptocurrency
+BUNDLEFILE=Willi Brammertz/Smart Contracts, Distributed Ledgers, and the Need for an Algorithmic Financial Contract Standard.pdf|182505|3d4b5d061f83|계약 표현 — 청구권 타입의 설계 대안|Smart Financial Contracts Revisited
+BUNDLEFILE=Zoltan Pozsar/A Macro View of Shadow Banking Levered Betas and Wholesale Funding in the Context of Secular Stagnation.pdf|1068705|b6f6659496ac|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|A Macro View of Shadow Banking
+BUNDLEFILE=Zoltan Pozsar/A Model of Shadow Banking Crises, Central Banks and Regulation.pdf|454506|b37739401f97|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|A Model of Shadow Banking: Crises, Central Banks and Regulation
+BUNDLEFILE=Zoltan Pozsar/Bagehot was a Shadow Banker Shadow Banking, Central Banking, and the Future of Global Finance.pdf|225378|15233772404f|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Bagehot was a Shadow Banker
+BUNDLEFILE=Zoltan Pozsar/Crises in the modern financial ecosystem.pdf|557209|555294fed745|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Crises in the modern financial ecosystem
+BUNDLEFILE=Zoltan Pozsar/Federal Reserve Bank of New York Staff Reports on Shadow Banking.pdf|1135785|c7238f3bc35d|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Federal Reserve Bank of New York Staff Reports on Shadow Banking
+BUNDLEFILE=Zoltan Pozsar/Institutional Cash Pools and the Triffin Dilemma of the U.S. Banking System.pdf|6075317|f097a2257b6b|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Institutional Cash Pools and the Triffin Dilemma
+BUNDLEFILE=Zoltan Pozsar/Shadow Banking The Money View.pdf|1464241|f6caf5086a08|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Shadow Banking: The Money View
+BUNDLEFILE=Zoltan Pozsar/Shadow Banking.pdf|1099994|186729fa3f25|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|Shadow Banking: Economics and Policy
+BUNDLEFILE=Zoltan Pozsar/Subprime Lending and Real Estate Markets.pdf|790151|4bde29fc7437|보조 — 필요 시 참조|Subprime lending and real estate markets
+BUNDLEFILE=Zoltan Pozsar/The Federal Reserves Term Asset Backed Securities Loan Facility.pdf|479351|d0e5aa2173c2|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Federal Reserve's TALF
+BUNDLEFILE=Zoltan Pozsar/The Nonbank-Bank Nexus and the Shadow Banking System.pdf|1217831|17df60ebe0bc|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Nonbank-Bank Nexus and the Shadow Banking System
+BUNDLEFILE=Zoltan Pozsar/The Rise and Fall of the Shadow Banking System.pdf|222756|656ba4f3dc41|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Rise and Fall of the Shadow Banking System
+BUNDLEFILE=기타/ADDENDUM I bij Leidraad Financiële Sanctieregelgeving Veelgestelde vragen i.v.m. territoriale integriteit Oekraïne, Versie [6 maart] 2023.pdf|283342|a90048a7503b|소유와 지배의 판정 지침|금융 제재 규칙 지침의 부록 1
+BUNDLEFILE=기타/AFME Securisation Report 2021Q2.pdf|1314458|1712fcb6a1bf|중앙은행 운영과 자금순환과 증권화와 담보 규범|유럽 증권화 보고서 2021년 2분기
+BUNDLEFILE=기타/Akoma Ntoso Naming Convention Version 1.0 - OASIS Standard 21 February 2019.pdf|632091|104af3c07f48|제재와 식별과 법령 문면|Akoma Ntoso 명명 규약 1.0
+BUNDLEFILE=기타/Asset freeze and prohibition to make funds and economic resources available Related provision Council Regulation 269 2014 Frequently asked questions as of 25 September 2026.pdf|330522|d3bcaf252e71|소유와 지배의 판정 지침|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
+BUNDLEFILE=기타/commision consolidated faqs on the implementation of council regulation no 833 2014 and council regulation no 269 2014.pdf|3274855|915992d4001d|소유와 지배의 판정 지침|두 규정의 집행에 관한 통합 문항 묶음
+BUNDLEFILE=기타/Commission Delegated Regulation (EU) 2016 341 of 17 December 2015 - Union Customs Code Transitional Rules.pdf|23319706|371cc1a725a8|무역과 만기 보고의 서식|연합 관세법 경과 규정의 위임규칙
+BUNDLEFILE=기타/Commodities as Collateral.pdf|696048|09ca40a50527|상품 담보 금융|Commodities as Collateral
+BUNDLEFILE=기타/Composing contracts an adventure in financial engineering.pdf|386606|50678d86a7f8|계약 표현 — 청구권 타입의 설계 대안|Composing Contracts: An Adventure in Financial Engineering
+BUNDLEFILE=기타/Contract as automaton Representing a simple financial agreement in computational form.pdf|2617189|5b2628900838|계약 표현 — 청구권 타입의 설계 대안|Contract as Automaton
+BUNDLEFILE=기타/Council Regulation (EU) 2025 2037 of 23 October 2025.pdf|900293|a661748784df|소유와 지배의 판정 지침|제269/2014호 규정을 고치는 규정
+BUNDLEFILE=기타/Cross-Border Currency Exposures.pdf|1774711|201dc3b52da5|교역 금융과 결제 방식|Cross-Border Currency Exposures. New evidence based on an enhanced and updated dataset
+BUNDLEFILE=기타/Curia C‑72 11 Afrasiabi and Others 2011-12-21.pdf|180891|a0f7db5cc132|제재와 식별과 법령 문면|아프라시아비 외 사건의 판결
+BUNDLEFILE=기타/Curia C‑84 24 EM System Judgment 2026-03-12.html|99870|4c88e6324c35|제재와 식별과 법령 문면|EM 시스템 사건의 판결
+BUNDLEFILE=기타/D26110063.pdf|1023576|08134620fb68|중앙은행 운영과 자금순환과 증권화와 담보 규범|통화금융통계 보도자료
+BUNDLEFILE=기타/Don't Throw in the Towel, Throw in Trade Credit!.pdf|649529|52f06af44aa2|교역 금융과 결제 방식|Don't throw in the towel, throw in trade credit!
+BUNDLEFILE=기타/EBA C 66.01 Maturity Ladder Template - Annex XXII - December 2021.xlsx|39697|41947df4602b|무역과 만기 보고의 서식|만기 사다리 서식 C 66.01
+BUNDLEFILE=기타/EBA Instructions for Completing the Maturity Ladder Template - Annex XXIII - December 2021.pdf|333605|fa19cc89b27d|무역과 만기 보고의 서식|만기 사다리 서식의 작성 지침
+BUNDLEFILE=기타/ECB Guide to the Internal Capital Adequacy Assessment Process (ICAAP).pdf|879910|9475f095e612|부문 분류와 보유자 통계의 기준|내부자본적정성평가 지침
+BUNDLEFILE=기타/ECB Swap lines.pdf|389299|3008af710559|중앙은행 사이의 통화 공급 약정|스왑 라인 공시
+BUNDLEFILE=기타/Economic and Regulatory Capital in Banking What is the Difference.pdf|345760|942bda336ddc|부문 분류와 보유자 통계의 기준|경제적 자본과 규제자본의 차이를 다룬 문헌
+BUNDLEFILE=기타/ECOS 금융거래표 세부 부문 (2009~).csv|806851|fcef7976138a|중앙은행 운영과 자금순환과 증권화와 담보 규범|금융거래표 세부 부문 판
+BUNDLEFILE=기타/ECOS 금융자산부채잔액표 세부 부문 (2008~).csv|890664|17f0df2ccbe1|중앙은행 운영과 자금순환과 증권화와 담보 규범|금융자산부채잔액표 세부 부문 판
+BUNDLEFILE=기타/Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy Evidence from Letter-of-Credit Import Transactions in Colombia.pdf|618798|50fcd79de15d|교역 금융과 결제 방식|Estimating the Direct Impact of Bank Liquidity Shocks on the Real Economy: Evidence from Letter-of-Credit Import Transactions in Colombia
+BUNDLEFILE=기타/EU Joint Handbook En 2025 11.pdf|1524231|5620fa86310f|제재와 식별과 법령 문면|공동 편람
+BUNDLEFILE=기타/EU Joint Practical Guide 2015.pdf|643967|15432a87afa2|제재와 식별과 법령 문면|공동 실무 지침
+BUNDLEFILE=기타/EU Regulation 833 2014.pdf|8666177|86f5e45849bc|제재의 문면|러시아의 행위에 관한 제한 조치 규칙
+BUNDLEFILE=기타/European Commission Guidance for EU operators Implementing enhanced due diligence to shield against Russia sanctions circumvention.pdf|263512|3e7d48333086|제재와 식별과 법령 문면|러시아 제재 회피를 막는 강화된 실사의 지침
+BUNDLEFILE=기타/Evolution of Bilateral Swap Lines.pdf|1239442|58d2b1825540|중앙은행 운영과 자금순환과 증권화와 담보 규범|Evolution of Bilateral Swap Lines
+BUNDLEFILE=기타/Exporter Guide to Documentary Credits under UCP 600.pdf|406070|4c64ed5b069e|교역 금융과 결제 방식|Exporter Guide to Documentary Credits under UCP 600
+BUNDLEFILE=기타/Exports and Financial Shocks.pdf|249538|7803ab3e8e69|교역 금융과 결제 방식|Exports and Financial Shocks
+BUNDLEFILE=기타/FFIEC 031 041 Instruction 2007.pdf|3878586|8bdd42119a61|무역과 만기 보고의 서식|콜 리포트의 작성 지침
+BUNDLEFILE=기타/Format Guide for the UK Sanctions List.html|110399|816ea8731efd|제재와 식별과 법령 문면|영국 제재 목록의 형식 안내
+BUNDLEFILE=기타/FR 2052a Instrction.pdf|2739328|043d18456e5c|무역과 만기 보고의 서식|복합 기관 유동성 감시 보고서의 작성 지침
+BUNDLEFILE=기타/frb swap lines 2 faq.pdf|183573|528cb1ef8783|중앙은행 사이의 통화 공급 약정|중앙은행 유동성 스왑에 관한 공시 셋
+BUNDLEFILE=기타/frb swap lines 2.pdf|149614|73138a7662a2|중앙은행 사이의 통화 공급 약정|중앙은행 유동성 스왑에 관한 공시 셋
+BUNDLEFILE=기타/frb swap lines faq.pdf|195809|9df311d517ae|중앙은행 사이의 통화 공급 약정|중앙은행 유동성 스왑에 관한 공시 셋
+BUNDLEFILE=기타/frb swap lines.pdf|166837|30d9bcc90f42|중앙은행 사이의 통화 공급 약정|중앙은행 유동성 스왑에 관한 공시 셋
+BUNDLEFILE=기타/FX swaps and forwards missing global debt.pdf|242067|e072c6280182|조달의 공표와 복원 방법|FX 스왑과 선도: 사라진 글로벌 부채?
+BUNDLEFILE=기타/GLEIF RR-CDF 2.1 Technical Documentation.html|11437|147b93d652a5|제재와 식별과 법령 문면|관계 기록 형식 2.1 의 기술 문서
+BUNDLEFILE=기타/GLEIF RR-CDF 2.1.html|242138|326640ab84aa|제재와 식별과 법령 문면|관계 기록 형식 2.1
+BUNDLEFILE=기타/GLEIF schema.xsd|54365|a235a0632c11|제재와 식별과 법령 문면|관계 기록 형식 2.1 의 스키마 파일
+BUNDLEFILE=기타/Golden Fetters The Gold Standard and the Great Depression, 1919-1939 (Barry Eichengreen) (z-library.sk, 1lib.sk, z-lib.sk).pdf|4558056|ae953e406d88|배제 사례와 관측 과제의 보조|Golden Fetters
+BUNDLEFILE=기타/GUIDANCE FOR STAFF ON THE RECORDING OF CENTRAL BANK FX LIQUIDITY LINES IN IMF STAFF REPORTS.pdf|663518|609f47c2d07b|중앙은행 사이의 통화 공급 약정|중앙은행 외화 유동성 라인의 기재에 관한 직원 지침
+BUNDLEFILE=기타/Gümrük Beyannamesi Kullanma Talimatı.doc|1574400|9290224b9bc8|무역과 만기 보고의 서식|세관 신고서 사용 지침
+BUNDLEFILE=기타/Häufig gestellte Fragen zum Thema Finanzsanktionen, Stand Juni 2026.pdf|608353|db22a835fda4|소유와 지배의 판정 지침|금융 제재에 관한 자주 묻는 문항
+BUNDLEFILE=기타/Implications of the Qingdao metals scandal for commodity repurchase agreements.pdf|2016359|5f0a454a1cda|상품 담보 금융|Implications of the Qingdao Metals Scandal for Commodity Repurchase Agreements
+BUNDLEFILE=기타/International Reserves and Foreign Currency Liquidity Guidelines for a Data Template.pdf|3345635|9fefba2295d1|중앙은행 운영과 자금순환과 증권화와 담보 규범|준비자산과 외화 유동성 템플릿 지침
+BUNDLEFILE=기타/ISBP_821.md|204617|69f77282f5bd|교역 금융과 결제 방식|ISBP 821 국제표준은행관행
+BUNDLEFILE=기타/ISBP_821.pdf|88024203|62eebd35065d|교역 금융과 결제 방식|ISBP 821 국제표준은행관행
+BUNDLEFILE=기타/İhracat Genelgesi.pdf|287227|2bcd84617eb7|무역과 만기 보고의 서식|수출 대금 반입 회람
+BUNDLEFILE=기타/Lignes directrices conjointes de la Direction générale du Trésor et de l’Autorité de contrôle prudentiel et de résolution sur la mise en œuvre des mesures de gel des avoirs, version mise à jour le 16 mars 2026.pdf|1064630|de0a962ed5a8|소유와 지배의 판정 지침|자산 동결 조치의 집행에 관한 공동 지침
+BUNDLEFILE=기타/MMF Regulation (EU 2017 1131).pdf|641043|f3f5148f915b|부문 분류와 보유자 통계의 기준|머니마켓펀드 규정
+BUNDLEFILE=기타/NPW Data Dictionary.pdf|430649|6a5cb12a5651|제재와 식별과 법령 문면|일괄 내려받기 자료 사전
+BUNDLEFILE=기타/OFAC_data_specification.txt|15153|8fc7ea2019b5|제재의 문면|특별지정국민 및 차단대상자 목록의 자료 명세
+BUNDLEFILE=기타/OFAC_XML_Schema.xsd|85050|83c7addeee93|제재의 문면|그 목록의 진보된 XML 스키마
+BUNDLEFILE=기타/Poultry in Motion A Study of International Trade Finance Practices.pdf|1080136|6866a61f9577|교역 금융과 결제 방식|Poultry in Motion: A Study of International Trade Finance Practices
+BUNDLEFILE=기타/Reporting guidelines for the BIS international banking statistics.pdf|698728|bd6a22740031|부문 분류와 보유자 통계의 기준|국제은행통계 보고 지침
+BUNDLEFILE=기타/Restrictive measures (Sanctions) - Update of the EU Best Practices for the effective implementation of restrictive measures 10572 22.pdf|515311|efe897423315|소유와 지배의 판정 지침|같은 문면의 직전판
+BUNDLEFILE=기타/Restrictive measures (Sanctions) - Update of the EU Best Practices for the effective implementation of restrictive measures.pdf|484638|a56521b481f0|소유와 지배의 판정 지침|제한 조치의 실효적 집행을 위한 최선 관행
+BUNDLEFILE=기타/SC Legislature — Session 113 H 4161.html|1122029|68001c45792e|중앙은행 운영과 자금순환과 증권화와 담보 규범|사우스캐롤라이나 법안 4161 의 웹 페이지
+BUNDLEFILE=기타/sdn_advanced.xml|129071029|0d217ae9abb9|제재와 식별과 법령 문면|특별지정국민 목록의 진보된 XML 자료
+BUNDLEFILE=기타/SEC Rule 2a-7.html|157285|b1d0220288bd|부문 분류와 보유자 통계의 기준|머니마켓펀드 규칙
+BUNDLEFILE=기타/Securitization without risk transfer.pdf|984934|f8d12d4d6a28|중앙은행 운영과 자금순환과 증권화와 담보 규범|Securitization without risk transfer
+BUNDLEFILE=기타/State-owned enterprises — Related provision Article 5aa of Council Regulation 833 2014 Frequently asked questions as of 21 November 2025.pdf|77490|ae649fcd56da|소유와 지배의 판정 지침|국영기업에 관한 문항 묶음
+BUNDLEFILE=기타/SWIFT.pdf|1047566|1d3712be51bd|교역 금융과 결제 방식|Category 7 — Documentary Credits and Guarantees, Message Reference Guide
+BUNDLEFILE=기타/System of National Accounts.pdf|14478692|5778ffe0350e|부문 분류와 보유자 통계의 기준|국민계정체계
+BUNDLEFILE=기타/Terms and Conditions for Participation in the Bank of England's Operations Under the Sterling Monetary Framework.pdf|620033|846670dafd80|중앙은행 운영과 자금순환과 증권화와 담보 규범|스털링 통화 체계의 운영 참가 약관
+BUNDLEFILE=기타/The (sizable) Role of Rehypothecation in the Shadow Banking System.pdf|1060842|c0bb320fbd3a|담보 속도와 재담보의 계량|The (sizable) Role of Rehypothecation in the Shadow Banking System
+BUNDLEFILE=기타/The Basel Framework.pdf|8221405|0f532309acc7|부문 분류와 보유자 통계의 기준|통합 바젤 프레임워크
+BUNDLEFILE=기타/The Dominant Currency Financing Channel of External Adjustment.pdf|1266291|d5bc2470011a|교역 금융과 결제 방식|The Dominant Currency Financing Channel of External Adjustment
+BUNDLEFILE=기타/Ticaret EDI XML Referans Mesajlari.html|58592|5d67e86c2870|무역과 만기 보고의 서식|EDI·XML 참조 메시지 메뉴 페이지
+BUNDLEFILE=기타/Trade finance developments and issues.pdf|377515|0f0f4dd84c49|교역 금융과 결제 방식|Trade finance: developments and issues
+BUNDLEFILE=기타/tresor economics swap line.pdf|844310|d4254b0b7309|중앙은행 사이의 통화 공급 약정|중앙은행 스왑 라인의 전역 망
+BUNDLEFILE=기타/UCP600 An Exercise in International Private Sector Self Regulation.pdf|1873639|7a0c546c1277|교역 금융과 결제 방식|UCP600: An Exercise in International Private Sector Self Regulation
+BUNDLEFILE=기타/UK Sanctions List.pdf|22296218|572c6a364884|제재와 식별과 법령 문면|영국 제재 목록
+BUNDLEFILE=기타/Understanding Trade Finance Theory and Evidence from Transaction-Level Data.pdf|433121|5a76c72cc73f|교역 금융과 결제 방식|Understanding Trade Finance: Theory and Evidence from Transaction-level Data
+BUNDLEFILE=기타/Velocity of Pledged Collateral Analysis and Implications.pdf|773007|070fd7d979ef|담보 속도와 재담보의 계량|Velocity of Pledged Collateral: Analysis and Implications
+BUNDLEFILE=기타/Ödeme Şekli Kodları.xlsx|15897|eba8c8b9c88d|무역과 만기 보고의 서식|결제 방식 부호표
+BUNDLEFILE=기타/기업공시 서식 별지 1.pdf|21031723|a67d36a7735c|조달의 공표와 복원 방법|별지 제24호 서식 증권발행실적보고서
+BUNDLEFILE=기타/기업공시 서식 별지 2.pdf|4634451|dacba90090f1|조달의 공표와 복원 방법|별지 제24호 서식 증권발행실적보고서
+BUNDLEFILE=기타/기업공시 작성기준 본문.pdf|3023200|69b8d7a8d69c|조달의 공표와 복원 방법|기업공시서식 작성기준
+BUNDLEFILE=기타/한국은행 금융자산부채잔액표.pdf|390957|e7f2a2a14f43|중앙은행 운영과 자금순환과 증권화와 담보 규범|금융자산부채잔액표 요약
+BUNDLEFILE=증거금과 담보의 규범/Bank of England Level B Collateral Set.pdf|238455|6667d653beab|유동성 규제와 중앙은행 담보 정책|Bank of England Level B Collateral Set
+BUNDLEFILE=증거금과 담보의 규범/Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations.pdf|169296|a351b8105472|유동성 규제와 중앙은행 담보 정책|Bank of England Summary of Haircuts for Securities Eligible for The Bank's Lending Operations
+BUNDLEFILE=증거금과 담보의 규범/Basel III The Liquidity Coverage Ratio and liquidity risk monitoring tools.pdf|441806|cb2d45abd8a0|유동성 규제와 중앙은행 담보 정책|Basel III The Liquidity Coverage Ratio and liquidity risk monitoring tools
+BUNDLEFILE=증거금과 담보의 규범/BCBS.pdf|392194|3ba9da23ae55|증거금과 담보의 규범|Margin requirements for non-centrally cleared derivatives
+BUNDLEFILE=증거금과 담보의 규범/Changes to collateral eligibility in the Sterling Monetary Framework - Market Notice 11 June 2026.pdf|81828|8c2449e75991|유동성 규제와 중앙은행 담보 정책|Changes to collateral eligibility in the Sterling Monetary Framework
+BUNDLEFILE=증거금과 담보의 규범/Circle Annual Report 2025.pdf|46808440|b31b502b0c43|보조 — 필요 시 참조|Circle Annual Report 2025
+BUNDLEFILE=증거금과 담보의 규범/IOSCO.pdf|371377|e09a65fa545b|증거금과 담보의 규범|Margin requirements for non-centrally cleared derivatives
+BUNDLEFILE=증거금과 담보의 규범/ISDA_barclays.pdf|702218|1d3f291937ca|증거금과 담보의 규범|Credit Support Annex (영국법 이전형)
+BUNDLEFILE=증거금과 담보의 규범/ISDA_new_york.pdf|901794|b511559f2d65|증거금과 담보의 규범|Credit Support Annex (뉴욕법 담보권형)
+```
+<!-- BUNDLEFILES:END -->
