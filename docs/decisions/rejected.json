@@ -13634,6 +13634,258 @@
    "related": [
     "CF-4619"
    ]
+  },
+  {
+   "id": "CF-4647",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "제약의 자산 측 적격성이 통화를 받게 하는 안.",
+   "reason": "그 적격성은 그 주체가 무엇을 보유할 수 있는가를 가르는데 여기서 갈리는 것은 그 자산의 기재값을 그 통화의 금액과 환산 없이 더할 수 있는가여서 축이 다르고, 정의층의 제약 구조체를 고치면 그것을 받는 선언 전량의 뜻이 함께 바뀐다.",
+   "for": "회계층의 `collateralCapacityAmountIn` 이 드는 자리. 그 금액을 어느 꼴로 둘지.",
+   "statement": "제약의 자산 측 적격성이 통화를 받게 하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.collateralCapacityAmountIn",
+   "related": [
+    "CF-4640"
+   ]
+  },
+  {
+   "id": "CF-4648",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "기재값이 통화마다 값을 내게 하는 안.",
+   "reason": "한 자산의 기재값을 여러 통화로 내는 것이 곧 환산이고 그 값의 결정이 동학층에 있다.",
+   "for": "회계층의 `collateralCapacityAmountIn` 이 드는 자리. 그 금액을 어느 꼴로 둘지.",
+   "statement": "기재값이 통화마다 값을 내게 하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.collateralCapacityAmountIn",
+   "related": [
+    "CF-4640"
+   ]
+  },
+  {
+   "id": "CF-4649",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "다른 통화의 담보를 가산 할인율로 줄여 세는 안.",
+   "reason": "그 몫이 환율을 지나야 서고, 같은 층의 금액 판본이 할인율을 받는 쪽이 매길 값으로 두어 세지 않는다.",
+   "for": "회계층의 `collateralCapacityAmountIn` 이 드는 자리. 그 금액을 어느 꼴로 둘지.",
+   "statement": "다른 통화의 담보를 가산 할인율로 줄여 세는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Accounting.collateralCapacityAmountIn",
+   "related": [
+    "CF-4640"
+   ]
+  },
+  {
+   "id": "CF-4650",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "그 몫을 새 색인의 청구권으로 더하고 원래 색인을 걷는 안.",
+   "reason": "새 색인을 쓰려면 색인 타입이 그 몫만큼 넓어져야 하고, 실현된 집합과 예정된 집합의 색인이 갈려 두 집합의 총계를 한 합 위에서 맞댈 수 없다.",
+   "for": "정의층의 `ClaimSet.replaceAt` 이 드는 자리. 그 연산을 어느 꼴로 둘지.",
+   "statement": "그 몫을 새 색인의 청구권으로 더하고 원래 색인을 걷는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.ClaimSet.replaceAt",
+   "related": [
+    "CF-4639"
+   ]
+  },
+  {
+   "id": "CF-4651",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "만기와 발동조건만 받아 바꾸는 안.",
+   "reason": "갈아 서는 청구권의 개시 시점과 행사 가능 시점도 다를 수 있으므로 청구권 전체를 받는 사상 하나가 그 몫을 함께 나르며, 무엇이 보존되어야 하는지는 이 연산을 쓰는 정리의 가정이 든다.",
+   "for": "정의층의 `ClaimSet.replaceAt` 이 드는 자리. 그 연산을 어느 꼴로 둘지.",
+   "statement": "만기와 발동조건만 받아 바꾸는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.ClaimSet.replaceAt",
+   "related": [
+    "CF-4639"
+   ]
+  },
+  {
+   "id": "CF-4652",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "같은 파일의 실현 연산의 서명에 그 사상을 더하는 안.",
+   "reason": "앞선 금액의 항등식들이 그 연산을 받으므로 그 서명을 고치면 그 선언 전량의 뜻이 함께 바뀌고, 인수회사가 같은 증권을 떠안는 자리에서는 그 사상이 항등 사상이어서 더할 것이 없다.",
+   "for": "정의층의 `FundingFailureKind.realizeDrawn` 이 드는 자리. 그 실현을 어느 꼴로 둘지.",
+   "statement": "같은 파일의 실현 연산의 서명에 그 사상을 더하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.realizeDrawn",
+   "related": [
+    "CF-4639"
+   ]
+  },
+  {
+   "id": "CF-4653",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "그 사상이 보유자까지 정하게 두는 안.",
+   "reason": "약정이 떠안는 꼴에서 그 몫의 보유자는 약정한 노드여야 하는데, 그 자리를 사상에 맡기면 약정한 노드가 아닌 쪽이 보유한 청구권이 그 꼴의 실현으로 선다.",
+   "for": "정의층의 `FundingFailureKind.realizeDrawn` 이 드는 자리. 그 실현을 어느 꼴로 둘지.",
+   "statement": "그 사상이 보유자까지 정하게 두는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.realizeDrawn",
+   "related": [
+    "CF-4639"
+   ]
+  },
+  {
+   "id": "CF-4654",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "같은 층의 자산 구성 경로에 통화의 칸을 더하는 안.",
+   "reason": "그 구조체가 같은 두 공시를 이미 경로로 들지만 그 축이 범주의 분할 체제이고 통화는 그 체제 넷에 들지 않으며, 칸을 더하면 그 구조체의 경로 전량의 뜻이 함께 바뀐다.",
+   "for": "관측층의 `CollateralCurrencyChannel` 이 드는 자리. 그 구조를 어느 꼴로 둘지.",
+   "statement": "같은 층의 자산 구성 경로에 통화의 칸을 더하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.CollateralCurrencyChannel",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4655",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "외부 자산의 몫을 보는 공시 경로에 통화의 칸을 더하는 안.",
+   "reason": "그 경로의 판정이 자산의 식별과 보유자별 몫을 함께 요구하는데 통화로 가르는 감독 지표는 금액과 유형과 소재를 보고하게 할 뿐 자산을 하나씩 식별하게 하지 않는다.",
+   "for": "관측층의 `CollateralCurrencyChannel` 이 드는 자리. 그 구조를 어느 꼴로 둘지.",
+   "statement": "외부 자산의 몫을 보는 공시 경로에 통화의 칸을 더하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.CollateralCurrencyChannel",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4656",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "수취인의 칸을 두지 않는 안.",
+   "reason": "통화의 가름이 감독 당국에게만 가므로 그 칸이 없으면 공시를 읽는 쪽이 그 가름에 닿지 못한다는 결손이 구조에서 사라지며, 같은 축을 보는 두 경로가 수취인에서 갈리는 자리를 같은 층의 자산 구성 경로가 이미 그 칸으로 받는다.",
+   "for": "관측층의 `CollateralCurrencyChannel` 이 드는 자리. 그 구조를 어느 꼴로 둘지.",
+   "statement": "수취인의 칸을 두지 않는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.CollateralCurrencyChannel",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4657",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "통화로 가르는가만 보는 안.",
+   "reason": "문턱을 넘는 통화만 가르는 경로가 통화별 담보 여력을 내는 것으로 세어져, 문턱 아래의 통화에서 그 값이 서지 않는다는 결손이 판정에서 사라진다.",
+   "for": "관측층의 `CollateralCurrencyChannel.answersEveryCurrency` 가 드는 자리. 그 판정을 어느 꼴로 둘지.",
+   "statement": "통화로 가르는가만 보는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.CollateralCurrencyChannel.answersEveryCurrency",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4658",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "수취인을 그 판정의 결합에 넣는 안.",
+   "reason": "무엇을 가르는가와 누가 받는가가 다른 축이어서, 결합에 넣으면 감독 당국이 전량을 받는 경로와 아무것도 가르지 않는 경로가 같은 값으로 접힌다.",
+   "for": "관측층의 `CollateralCurrencyChannel.answersEveryCurrency` 가 드는 자리. 그 판정을 어느 꼴로 둘지.",
+   "statement": "수취인을 그 판정의 결합에 넣는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.CollateralCurrencyChannel.answersEveryCurrency",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4659",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "그 지표가 통화 전량을 가른다고 두는 안.",
+   "reason": "유의성의 문턱을 넘는 통화만 따로 가르고 나머지는 총액에 섞으므로, 그렇게 두면 문턱 아래 통화의 담보 여력이 그 지표에서 읽히는 것으로 세어진다.",
+   "for": "관측층의 `unencumberedAssetCurrencyChannel` 이 드는 자리. 그 경로의 칸을 어느 값으로 둘지.",
+   "statement": "그 지표가 통화 전량을 가른다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.unencumberedAssetCurrencyChannel",
+   "related": [
+    "CF-4641"
+   ]
+  },
+  {
+   "id": "CF-4660",
+   "origin": {
+    "arc": "funding",
+    "phase": "funding-8",
+    "kind": "decision_session",
+    "date": "2026-11-25"
+   },
+   "candidate": "그 동반 서술이 통화로 가른다고 두는 안.",
+   "reason": "그 요건의 문면이 논의할 수 있는 것의 예시여서 은행마다 그 서술을 두지 않을 수 있으므로, 그렇게 두면 공시되지 않을 수 있는 가름이 공시되는 것으로 세어진다.",
+   "for": "관측층의 `liquidityRatioCurrencyChannel` 이 드는 자리. 그 경로의 칸을 어느 값으로 둘지.",
+   "statement": "그 동반 서술이 통화로 가른다고 두는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.liquidityRatioCurrencyChannel",
+   "related": [
+    "CF-4641"
+   ]
   }
  ]
 }

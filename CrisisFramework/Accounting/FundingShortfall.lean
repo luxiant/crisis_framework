@@ -433,4 +433,178 @@ theorem sum_claimTotalOfHolder_realize_add
         rw [hb', he', hs'] at h4
         exact Bool.false_ne_true h4
 
+/--
+약정이 떠안는 꼴에서 그 몫을 의무자와 통화와 금액을 보존하는 사상으로 갈아 세워도 노드마다의 부채 총계는
+예정과 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 계약상 크레딧 라인이 갱신되지 않은 몫을 떠안아 그 몫이
+기구가 은행에서 빌린 청구권으로 선 뒤에 어느 노드의 그 통화 부채 총계가 예정과 달라지는 것. 그러면 그
+갈아 섬이 만기와 발동조건만이 아니라 의무자나 금액을 바꾼 것이고, 약정이 떠안는 꼴에서 조달을 구한 노드의
+조달이 이어진다는 이 파일의 전제가 거짓이 된다.
+
+**가정과 그 배제 사례(T-4·T-5):** 가정이 둘이다. 그 꼴이 약정이 떠안는 꼴이라는 가정이 부담 잔류와 몫을
+걷는 꼴을 배제하고, 그 사상이 의무자와 통화와 금액을 보존한다는 가정이 약정한 쪽이 다른 통화나 다른 금액으로
+내준 자리를 배제한다. 뒤의 자리에서는 그 몫의 금액이 다른 통화의 부채로 옮겨 간다.
+
+**T-3 분류:** 기여다. 그 몫이 다른 조건의 청구권으로 갈아 서도 부채의 항등식이 움직이지 않고 갈리는 것이
+만기와 발동조건뿐이라는 것을 드는 유일한 자리이며, 보유자만 바꾸는 실현의 같은 항등식이 이 연산으로
+옮겨진다.
+-/
+-- DD:CF-4640
+theorem liabilityTotalOf_realizeDrawn_of_borneByCommitment
+    {ι Party Obs Ext Lvl Currency : Type}
+    [DecidableEq ι] [DecidableEq Party] [DecidableEq Currency]
+    (e : Env ℤ Obs Ext Lvl) (k : FundingFailureKind) (seeker bearer p : Party)
+    (c : Currency) (D : Finset ι)
+    (drawn : Claim Party ℤ Obs Ext Lvl Currency → Claim Party ℤ Obs Ext Lvl Currency)
+    (S : ClaimSet ι Party ℤ Obs Ext Lvl Currency)
+    (hk : k.borneByCommitment = true)
+    (hDrawn : ∀ x : Claim Party ℤ Obs Ext Lvl Currency, (drawn x).obligor = x.obligor
+        ∧ (drawn x).currency = x.currency ∧ (drawn x).amount = x.amount) :
+    liabilityTotalOf e (k.realizeDrawn seeker bearer D drawn S) p c
+      = liabilityTotalOf e S p c := by
+  have hr : k.realizeDrawn seeker bearer D drawn S
+      = S.replaceAt D (fun x => { drawn x with holder := bearer }) := if_pos hk
+  rw [hr]
+  unfold liabilityTotalOf
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  -- 갈아 세운 청구권은 사상의 가정으로 의무자와 통화와 금액이 그대로다.
+  by_cases hi : i ∈ D
+  · have ha : (S.replaceAt D (fun x => { drawn x with holder := bearer })).assign i
+        = { drawn (S.assign i) with holder := bearer } := if_pos hi
+    obtain ⟨ho, hc, hm⟩ := hDrawn (S.assign i)
+    rw [ha]
+    show (if (drawn (S.assign i)).obligor = p ∧ (drawn (S.assign i)).currency = c
+          then evalTerm e (drawn (S.assign i)).amount else 0) = _
+    rw [ho, hc, hm]
+  · have ha : (S.replaceAt D (fun x => { drawn x with holder := bearer })).assign i
+        = S.assign i := if_neg hi
+    rw [ha]
+
+/--
+약정이 떠안은 몫을 만기가 지평 밖인 청구권으로 갈아 세우면 조달을 구한 노드의 단기 부채가 보유자만
+바꾼 실현보다 작은 배치가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 약정이 떠안는 꼴의 두 실현에서 조달을 구한 노드의
+단기 부채 총계가 늘 같은 것. 그러면 실현된 집합이 갈아 선 청구권의 만기를 받든 받지 않든 상환 실패
+판정의 의무액이 같으므로, 그 만기를 실현된 집합에 세운 것이 판정에 닿지 않는다.
+
+**존재 형태로 진술하는 까닭(T-6):** 두 단기 부채가 갈리는지는 갈아 선 청구권의 만기가 지평 안에 드는지가
+정하고 그 만기가 구조에서 유도되지 않으므로, 전칭으로 세우면 거짓이다. 그 만기가 갚아진 증권과 같은
+자리에서는 둘이 같다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 조달 실패의 꼴이 상환 실패 판정의 의무액으로 들어가는 자리가 갈아 선 청구권의 만기에
+걸린다는 것을 드는 유일한 자리이며, 보유자만 바꾸는 실현이 그 만기를 받지 못하던 결손이 이 배치에서
+판정의 값으로 드러난다.
+-/
+-- DD:CF-4640
+theorem exists_shortTermLiabilityOf_realizeDrawn_lt_realize :
+    ∃ (e : Env ℤ Unit Unit Unit) (S : ClaimSet Unit Bool ℤ Unit Unit Unit Unit)
+      (drawn : Claim Bool ℤ Unit Unit Unit Unit → Claim Bool ℤ Unit Unit Unit Unit),
+      shortTermLiabilityOf e
+          ((FundingFailureKind.rolloverFailure RolloverFailureKind.shifted).realizeDrawn
+            true false {()} drawn S) true () 0 1
+        < shortTermLiabilityOf e
+          ((FundingFailureKind.rolloverFailure RolloverFailureKind.shifted).realize
+            true false {()} S) true () 0 1 := by
+  -- 증인은 조달을 구한 노드가 만기가 영인 청구권 하나를 진 배치이고, 그 몫을 만기가 열인 청구권으로
+  -- 갈아 세운다. 지평이 하나이므로 보유자만 바꾼 실현에서는 그 청구권이 단기 부채로 세어지고 갈아 세운
+  -- 실현에서는 세어지지 않는다. 구체 값이 계산되므로 `decide` 로 닫는다.
+  refine ⟨{ ops := { mul := fun a b => a * b
+                     add := fun a b => a + b
+                     le := fun a b => decide (a ≤ b)
+                     lt := fun a b => decide (a < b)
+                     lvlAtLeast := fun _ _ => true
+                     lvlEq := fun _ _ => true }
+            reading := { obs := fun _ => 0, extLvl := fun _ => () } },
+          { index := Finset.univ
+            assign := fun _ =>
+              { obligor := true
+                holder := false
+                currency := ()
+                amount := Term.const 1
+                trigger :=
+                  TriggerFamily.constant (Trigger.le (Term.const 0) (Term.const 1))
+                inception := 0
+                expiry := 0
+                exercisable := fun _ => true } },
+          fun x => { x with expiry := 10 }, ?_⟩
+  decide
+
+/--
+몫을 걷는 꼴의 실현에서 그 몫을 보유했던 노드의 보유 총계에 그 몫의 금액을 더하면 예정과 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 한 노드가 보유한 청구권의 갱신을 거두어 그 발행 주체의
+롤오버 실패가 선 뒤에 그 노드의 그 통화 보유 총계가 예정보다 그 몫의 금액과 다른 크기로 주는 것. 그러면
+발행 주체의 조달에서 빠진 금액과 보유자의 장부에서 빠진 금액이 갈리므로, 그 금액이 두 장부를 같은 크기로
+지난다는 이 파일의 전제가 거짓이 된다.
+
+**가정과 그 배제 사례(T-4·T-5):** 가정이 둘이다. 그 꼴이 조달 쪽을 줄이는 꼴이라는 가정이 약정이 떠안는
+꼴과 부담 잔류를 배제하고, 그 몫의 청구권이 전부 그 노드가 보유한 것이라는 가정이 다른 노드가 보유한
+청구권이 그 몫에 섞인 자리를 배제한다. 그 자리에서는 걷힌 금액의 일부가 다른 노드의 보유에서 빠진다.
+
+**T-3 분류:** 기여다. 몫을 걷는 꼴의 금액이 보유자 쪽 총계에서 빠지는 크기를 드는 유일한 자리이며, 발행
+주체의 부채 쪽 항등식과 짝을 이루어 그 금액이 두 장부에서 같은 크기로 빠짐을 든다.
+
+**이 진술이 조달형 불일치를 진 주체의 금융자산을 지나는 경로를 받는다.** 그 주체가 보유한 다른 주체의
+단기 청구권을 거두면 그 발행 주체에게는 롤오버 실패가 서고, 그 몫의 색인이 보유자의 그 청구권이다. 지목
+참조로 연 편이 비금융 기업의 현금이 은행 예금과 그림자금융 상품과 다른 기업이 발행한 단기 상품의 꼴로 서
+있다고 적고 그 기업의 금융자산을 불일치가 금융 부문으로 가는 경로에 둔다.
+조달처: E-64 §2-5 「그러므로 불일치가 금융 부문으로 가는 경로가 그 기업의 금융자산을 지난다」
+-/
+-- DD:CF-4640
+theorem claimTotalOfHolder_realize_add_of_shrinksFunding
+    {ι Party Obs Ext Lvl Currency : Type}
+    [DecidableEq ι] [DecidableEq Party] [DecidableEq Currency]
+    (e : Env ℤ Obs Ext Lvl) (k : FundingFailureKind) (seeker bearer p : Party)
+    (c : Currency) (D : Finset ι) (S : ClaimSet ι Party ℤ Obs Ext Lvl Currency)
+    (hk : k.shrinksFunding = true)
+    (hD : ∀ i ∈ S.index, i ∈ D → (S.assign i).holder = p) :
+    claimTotalOfHolder e (k.realize seeker bearer D S) p c + shortfallTotal e S D c
+      = claimTotalOfHolder e S p c := by
+  -- 판정이 꼴마다 정확히 하나만 참이므로 약정이 떠안는 꼴도 자산을 남기는 꼴도 아니다.
+  have hx := FundingFailureKind.landing_exclusive_and_exhaustive k
+  have hb : k.borneByCommitment = false := by
+    have h := hx.2.1
+    rw [hk, Bool.and_true] at h
+    exact h
+  have he : k.enlargesAssets = false := by
+    have h := hx.2.2.1
+    rw [hk, Bool.and_true] at h
+    exact h
+  have hr : k.realize seeker bearer D S = S.withoutIndices D := by
+    unfold FundingFailureKind.realize
+    rw [if_neg (by rw [hb]; exact Bool.false_ne_true),
+      if_neg (by rw [he]; exact Bool.false_ne_true)]
+  rw [hr]
+  unfold claimTotalOfHolder shortfallTotal
+  -- 걷은 색인 위의 합을 원래 색인 위의 조건합으로 펼친다.
+  have hfilter : ∀ (s : Finset ι) (g : ι → ℤ),
+      ∑ i ∈ s.filter (fun i => i ∉ D), g i = ∑ i ∈ s, (if i ∉ D then g i else 0) := by
+    intro s g
+    induction s using Finset.cons_induction with
+    | empty => rfl
+    | cons a s ha ih =>
+        rw [Finset.sum_cons]
+        by_cases haD : a ∉ D
+        · rw [Finset.filter_cons_of_pos (fun i => i ∉ D) a s ha haD, Finset.sum_cons, ih,
+            if_pos haD]
+        · rw [Finset.filter_cons_of_neg (fun i => i ∉ D) a s ha haD, ih, if_neg haD, zero_add]
+  rw [show (S.withoutIndices D).index = S.index.filter (fun i => i ∉ D) from rfl,
+    show (S.withoutIndices D).assign = S.assign from rfl, hfilter, ← Finset.sum_add_distrib]
+  refine Finset.sum_congr rfl ?_
+  intro i hi
+  by_cases hiD : i ∈ D
+  · have hh := hD i hi hiD
+    have n0 : ¬(i ∉ D) := fun h => h hiD
+    rw [if_neg n0, zero_add]
+    by_cases hc : (S.assign i).currency = c
+    · rw [if_pos ⟨hiD, hc⟩, if_pos ⟨hh, hc⟩]
+    · rw [if_neg (fun h => hc h.2), if_neg (fun h => hc h.2)]
+  · have n3 : ¬(i ∈ D ∧ (S.assign i).currency = c) := fun h => hiD h.1
+    rw [if_pos hiD, if_neg n3, add_zero]
+
 end CrisisFramework.Accounting

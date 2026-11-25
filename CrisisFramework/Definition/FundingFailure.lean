@@ -410,6 +410,100 @@ def FundingFailureKind.realize {ι Party Num Obs Ext Lvl Currency : Type} [Decid
   else S.withoutIndices D
 
 /--
+색인 집합에 든 청구권을 그 사상이 낸 청구권으로 갈아 세운다.
+
+**대응 비형식 개념:** 예정에 든 청구권의 몫이 다른 조건의 청구권으로 갈아 서는 것. 계약상 크레딧 라인이
+갱신되지 않은 몫을 떠안으면 그 몫의 증권이 갚아지고 기구가 은행에서 빌린 청구권이 그 자리에 서며, 그
+청구권의 만기와 발동조건이 갚아진 증권의 것과 다를 수 있다.
+
+**이 정의가 배제하는 사례:**
+한 몫을 여러 인수기관이 나누어 떠안아 그 몫이 여러 청구권으로 갈라 서는 배치. 증권발행실적보고서의
+인수기관별 표가 인수기관마다 인수수량과 인수금액을 따로 드는데(기업공시서식 작성기준 별지 제24호 서식), 이
+연산은 색인 하나의 청구권을 청구권 하나로 갈아 세우므로 그 배치는 몫을 인수기관마다의 색인으로 미리 갈라야
+받는다.
+조달처: E-73 §2-3 「그 표가 인수기관과 인수수량과 인수금액과 비율과 비고를 칸으로 든다」
+
+**기각한 대체 정의:**
+그 몫을 새 색인의 청구권으로 더하고 원래 색인을 걷는 안. 새 색인을 쓰려면 색인 타입이 그 몫만큼 넓어져야
+하고, 실현된 집합과 예정된 집합의 색인이 갈려 두 집합의 총계를 한 합 위에서 맞댈 수 없다. 같은 파일의
+보유자 교체 연산이 같은 사유로 같은 안을 기각했다. 만기와 발동조건만 받아 바꾸는 안도 기각했다. 갈아 서는
+청구권의 개시 시점과 행사 가능 시점도 다를 수 있으므로 청구권 전체를 받는 사상 하나가 그 몫을 함께
+나르며, 무엇이 보존되어야 하는지는 이 연산을 쓰는 정리의 가정이 든다.
+
+**배정만 바꾸고 색인은 건드리지 않는다.** 그래서 갈아 세운 집합과 예정된 집합이 같은 색인 위에 서고 두
+집합의 총계가 한 합 위에서 맞대어진다.
+
+**수 체계를 매개변수로 받는다.** 금액이 항이므로 그 수 체계를 청구권 집합에서 그대로 받는다.
+-/
+-- DD:CF-4639
+def ClaimSet.replaceAt {ι Party Num Obs Ext Lvl Currency : Type} [DecidableEq ι]
+    (S : ClaimSet ι Party Num Obs Ext Lvl Currency) (D : Finset ι)
+    (g : Claim Party Num Obs Ext Lvl Currency → Claim Party Num Obs Ext Lvl Currency) :
+    ClaimSet ι Party Num Obs Ext Lvl Currency where
+  index := S.index
+  assign := fun i => if i ∈ D then g (S.assign i) else S.assign i
+
+/--
+약정이 떠안는 꼴에서 그 몫을 약정한 노드가 내준 청구권으로 갈아 세운 집합.
+
+**대응 비형식 개념:** 계약상 크레딧 라인이 갱신되지 않은 몫을 떠안을 때 그 몫이 기구가 은행에서 빌린 다른
+조건의 청구권으로 서는 것. 약정이 떠안는 꼴이면 그 몫을 사상이 낸 청구권으로 갈아 세우고 그 보유자를
+약정한 노드로 두며, 그 밖의 꼴이면 같은 파일의 실현 연산과 같다.
+
+**이 정의가 배제하는 사례:**
+약정한 쪽이 그 인출에 내준 현금을 그 쪽의 유출로 세는 자리. 유동성 비율의 공시 서식이 부채 쪽의 유출 행
+가운데 신용·유동성 공여를 따로 두어 약정한 쪽의 유동성이 그 인출로 주는 것을 그 쪽의 유출로 세는데, 이
+연산은 그 몫을 약정한 노드가 보유한 청구권으로 세울 뿐이고 그 노드가 그 인출에 내준 현금을 받지
+않는다(바젤 통합 프레임워크).
+조달처: E-56 §2-1 「채무상품 조달 상실 관련 유출과 신용·유동성 공여와 그 밖의 계약상 조달 의무」
+
+**기각한 대체 정의:**
+같은 파일의 실현 연산의 서명에 그 사상을 더하는 안. 앞선 금액의 항등식들이 그 연산을 받으므로 그 서명을
+고치면 그 선언 전량의 뜻이 함께 바뀌고, 인수회사가 같은 증권을 떠안는 자리에서는 그 사상이 항등 사상이어서
+더할 것이 없다. 그래서 그 연산을 두고 이 연산이 항등 사상에서 그것과 같다는 것을 정리로 든다. 그 사상이
+보유자까지 정하게 두는 안도 기각했다. 약정이 떠안는 꼴에서 그 몫의 보유자는 약정한 노드여야 하는데, 그
+자리를 사상에 맡기면 약정한 노드가 아닌 쪽이 보유한 청구권이 그 꼴의 실현으로 선다.
+
+**약정한 노드를 하나만 받는다.** 한 발행을 여러 인수기관이 나누어 떠안은 배치는 같은 파일의 실현 연산처럼
+몫을 갈라 거듭 적용해야 받는다.
+
+**수 체계를 매개변수로 받는다.** 금액이 항이므로 그 수 체계를 청구권 집합에서 그대로 받는다.
+-/
+-- DD:CF-4639
+def FundingFailureKind.realizeDrawn {ι Party Num Obs Ext Lvl Currency : Type} [DecidableEq ι]
+    (k : FundingFailureKind) (seeker bearer : Party) (D : Finset ι)
+    (drawn : Claim Party Num Obs Ext Lvl Currency → Claim Party Num Obs Ext Lvl Currency)
+    (S : ClaimSet ι Party Num Obs Ext Lvl Currency) : ClaimSet ι Party Num Obs Ext Lvl Currency :=
+  if k.borneByCommitment then S.replaceAt D (fun x => { drawn x with holder := bearer })
+  else k.realize seeker bearer D S
+
+/--
+항등 사상으로 갈아 세운 실현은 같은 파일의 실현 연산과 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 그 몫을 같은 청구권으로 갈아 세우고 보유자만 약정한
+노드로 둔 집합이 보유자를 바꾸는 실현 연산의 집합과 다른 꼴. 그러면 이 연산이 앞선 연산을 넓힌 것이
+아니라 다른 것을 세운 것이 되어, 그 연산 위에 선 금액의 항등식이 이 연산으로 옮겨지지 않는다.
+
+**가정을 두지 않는다.** 꼴과 노드와 몫의 색인과 청구권 집합을 전칭으로 받고 그 어느 것도 명제가 아니다.
+
+**T-3 분류:** 보조 보정이다. 두 연산을 펼치고 꼴의 판정을 가르면 닫히므로 기여 목록에서 뺀다. 인수회사가
+같은 증권을 떠안는 자리를 이 연산이 항등 사상으로 받는다는 것의 근거가 이 명제다.
+-/
+-- DD:CF-4639
+theorem FundingFailureKind.realizeDrawn_id {ι Party Num Obs Ext Lvl Currency : Type}
+    [DecidableEq ι] (k : FundingFailureKind) (seeker bearer : Party) (D : Finset ι)
+    (S : ClaimSet ι Party Num Obs Ext Lvl Currency) :
+    k.realizeDrawn seeker bearer D id S = k.realize seeker bearer D S := by
+  -- 약정이 떠안는 꼴이면 두 연산이 같은 배정을 내고, 아니면 이 연산이 그 연산을 그대로 부른다.
+  unfold FundingFailureKind.realizeDrawn
+  by_cases hk : k.borneByCommitment = true
+  · rw [if_pos hk]
+    have hr : k.realize seeker bearer D S = S.reassignHolder D bearer := if_pos hk
+    rw [hr]
+    rfl
+  · rw [if_neg hk]
+
+/--
 어느 노드에 어느 통화의 조달에서 어느 꼴의 조달 실패가 섰는가.
 
 **대응 비형식 개념:** 한 시점에 각 노드가 어느 통화의 조달에서 어느 꼴의 조달 실패를 겪었는가. 한 노드가
