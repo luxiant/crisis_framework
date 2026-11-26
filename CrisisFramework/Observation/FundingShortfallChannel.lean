@@ -399,7 +399,7 @@ theorem empty_report_shifted_holds :
 **가정을 두지 않는다.**
 
 **T-3 분류:** 기여다. 롤오버 실패의 하위 꼴을 가르는 공표가 이 목록에 없다는 것을 구조 안의 명제로 드는
-유일한 자리이며, 그 공표를 기다리는 결손을 구멍 CF-4603 이 받는다.
+유일한 자리이며, 그 공표를 기다리는 결손을 구멍 CF-4731 이 받는다.
 -/
 -- DD:CF-4602
 theorem empty_report_rollover_undetermined (j : RolloverFailureKind) :

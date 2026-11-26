@@ -497,19 +497,19 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 전량 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 세관 신고의 칸과 결제 방식의 부호와 수출 대금의 반입을
 드는 튀르키예 당국의 문면과 유럽연합의 관세 서식 규정과 둘 이상 관할권의 만기 보고 서식이 그 묶음이다. **아직
 읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을 세우면서 그 표지를 기록 번호로
-바꾼다.
+바꾼다. `housekeeper1-4` 가 이 무리의 편을 전량 읽고 기록 넷을 세워 그 표지를 바꾸었다.
 
 | 편 | 발행 주체와 판 | 기록 |
 |---|---|---|
-| 세관 신고서 사용 지침 | 튀르키예 세관 규칙의 부속서 14. 2013-02-07 관보 제28552호에서 이어진 문면 | 미추출 |
-| 수출 대금 반입 회람 | 튀르키예 재무부. 판의 날짜는 확인하지 않았다 | 미추출 |
-| 결제 방식 부호표 | 튀르키예 상무부의 EDI·XML 참조 메시지. 파일에 발행 주체와 날짜가 없다 | 미추출 |
-| EDI·XML 참조 메시지 메뉴 페이지 | 튀르키예 상무부. 결제 방식 부호표의 발행 주체를 드는 자리 | 미추출 |
-| 연합 관세법 경과 규정의 위임규칙 | 유럽연합 집행위원회. 2016/341, 2015-12-17 | 미추출 |
-| 만기 사다리 서식 C 66.01 | 유럽은행감독청. 부속서 XXII, 2021년 12월 | 미추출 |
-| 만기 사다리 서식의 작성 지침 | 같은 주체. 부속서 XXIII, 2021년 12월 | 미추출 |
-| 복합 기관 유동성 감시 보고서의 작성 지침 | 연방준비제도이사회. 서식 FR 2052a, 승인 기한이 2028-02-29 인 판 | 미추출 |
-| 콜 리포트의 작성 지침 | 연방금융기관검사협의회. 서식 FFIEC 031·041, 2007년 판 | 미추출 |
+| 세관 신고서 사용 지침 | 튀르키예 세관 규칙의 부속서 14. 2013-02-07 관보 제28552호에서 이어진 문면 | E-74 |
+| 수출 대금 반입 회람 | 튀르키예 재무부. 판의 날짜는 확인하지 않았다 | E-74 |
+| 결제 방식 부호표 | 튀르키예 상무부의 EDI·XML 참조 메시지. 파일에 발행 주체와 날짜가 없다 | E-74 |
+| EDI·XML 참조 메시지 메뉴 페이지 | 튀르키예 상무부. 결제 방식 부호표의 발행 주체를 드는 자리 | E-74 |
+| 연합 관세법 경과 규정의 위임규칙 | 유럽연합 집행위원회. 2016/341, 2015-12-17 | E-75 |
+| 만기 사다리 서식 C 66.01 | 유럽은행감독청. 부속서 XXII, 2021년 12월 | E-76 |
+| 만기 사다리 서식의 작성 지침 | 같은 주체. 부속서 XXIII, 2021년 12월 | E-76 |
+| 복합 기관 유동성 감시 보고서의 작성 지침 | 연방준비제도이사회. 서식 FR 2052a, 승인 기한이 2028-02-29 인 판 | E-76 |
+| 콜 리포트의 작성 지침 | 연방금융기관검사협의회. 서식 FFIEC 031·041, 2007년 판 | E-77 |
 
 **구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
 압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
@@ -572,9 +572,31 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 
 ---
 
+## 금융 전문 체계의 식별 부호 (5편)
+
+`housekeeper1-4` 의 초입에 사용자가 갱신한 압축으로 뭉치에 들어온 문면이며, 금융 전문 체계에 접속한 주체를 주체마다
+드는 공표를 기다리는 이연의 재료다. 전량 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 은행 식별 부호의 공개
+명부와 그 부호의 국제 표준의 두 판을 다룬 문서와 그 부호의 운영자가 내는 정책과 등록 절차가 그 묶음이다. 나라별
+명부는 한 공개 리포의 폴더를 나라마다 가른 파일들이어서 한 편으로 세고, 압축의 파일 목록은 파일마다 줄을 둔다.
+**아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 식별 자료를 읽는 페이즈가 추출 기록을 세우면서 그 표지를 기록
+번호로 바꾼다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 은행 식별 부호의 나라별 공개 명부 | 개인이 공개 리포 SwiftCodes 로 낸 자료의 나라별 폴더. 그 리포의 마지막 커밋이 2019-08-09 이고 MIT 사용권이다 | 미추출 |
+| 은행 식별 부호 표준 2014년 판의 시행 백서 | SWIFT. 파일의 생성일이 2014-06-11 이다 | 미추출 |
+| 은행 식별 부호 표준 2022년 판의 미리보기 | 국제표준화기구. 최종 표준안 단계의 여섯 쪽 미리보기이며 파일의 생성일이 2025-01-04 이다 | 미추출 |
+| 은행 식별 부호 정책 | SWIFT. 2017-08-25 판 | 미추출 |
+| 은행 식별 부호의 등록 절차 | SWIFT. 2021-09-20 제2판 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
 ## 압축의 파일 목록
 
-뭉치의 압축 `macro_models_1.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
+뭉치의 압축 `macro_models_2.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
 열두 자리와 그 파일이 속한 무리와 편을 세로 막대로 가른다. 무리는 이 문서의 `##` 절 제목에서 괄호를 걷은 꼴이고,
 편은 그 무리의 표의 행이나 나열 문단이 드는 제목을 그대로 옮긴 꼴이다. 해시가 같은 사본의 왼쪽은 무리를 「중복」으로
 들고 편이 그 짝의 편이다. **압축이 아니라 이 목록이 뭉치의 정본이다.** 뒤에 압축이 올라오는 회차는
@@ -759,6 +781,240 @@ BUNDLEFILE=기타/Implications of the Qingdao metals scandal for commodity repur
 BUNDLEFILE=기타/International Reserves and Foreign Currency Liquidity Guidelines for a Data Template.pdf|3345635|9fefba2295d1|중앙은행 운영과 자금순환과 증권화와 담보 규범|준비자산과 외화 유동성 템플릿 지침
 BUNDLEFILE=기타/ISBP_821.md|204617|69f77282f5bd|교역 금융과 결제 방식|ISBP 821 국제표준은행관행
 BUNDLEFILE=기타/ISBP_821.pdf|88024203|62eebd35065d|교역 금융과 결제 방식|ISBP 821 국제표준은행관행
+BUNDLEFILE=기타/ISO 9362 2014.pdf|185822|5408cae4b5e0|금융 전문 체계의 식별 부호|은행 식별 부호 표준 2014년 판의 시행 백서
+BUNDLEFILE=기타/ISO 9362 2022.pdf|521833|c067004c329b|금융 전문 체계의 식별 부호|은행 식별 부호 표준 2022년 판의 미리보기
+BUNDLEFILE=기타/ISO BIC All Countries/AD.json|1804|d0c9c0dcbf3f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AE.json|86566|4dd4f3aa7ebd|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AF.json|3818|7ee0c3b815f5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AG.json|3369|1f2529b6da4b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AI.json|874|ed213c5e0789|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AL.json|9094|990796131055|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AM.json|3728|5c2a05872a8a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AO.json|7952|82e16cdd9b75|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AR.json|37378|2cceed18be6c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AS.json|469|4ac4bfb08562|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AT.json|241933|2e5dee0b32bb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AU.json|215041|ba74995b710f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AW.json|1804|d7b0f8fb4c59|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/AZ.json|9703|a51d5854072c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BA.json|6551|eacf4337e0e8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BB.json|5847|17c26a2984fb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BD.json|204744|945c1a532b76|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BE.json|130920|6e8851a9fd3d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BF.json|4173|523b98aefc48|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BG.json|24538|87ce5c3eab4a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BH.json|32766|1c8a56d4a396|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BI.json|3378|83af9a491145|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BJ.json|3809|15f214abe437|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BM.json|11261|41469f9d4a5f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BN.json|3178|e28e766150a9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BO.json|11729|6681000e6188|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BQ.json|1657|739899120eac|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BR.json|83179|afc1d0580f07|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BS.json|21113|c9497419335a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BT.json|1592|16ab0246df39|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BW.json|9311|d522431f35b6|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BY.json|22268|5d541a5725eb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/BZ.json|3793|122000dbf098|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CA.json|120712|2488dca2c4fe|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CD.json|5940|f9303f6d046c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CF.json|1087|7bc5145f6578|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CG.json|3927|be2e0919685e|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CH.json|374987|a5841877a237|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CI.json|16817|4ccdd866fafb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CK.json|1264|e1ad18ccd24d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CL.json|22107|4876df5689a2|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CM.json|8917|33a3a463dad6|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CN.json|562833|06af8e1737b0|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CO.json|39342|311f85d51474|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CR.json|7621|922e706cb09f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CU.json|2834|49d8d1c5fcb1|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CV.json|2656|a7f36769099a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CW.json|9452|8efc0218c795|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CY.json|42454|c64b55345693|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/CZ.json|28624|1b71bf4adafc|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DE.json|1713314|9c6e5a000f95|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DJ.json|2565|e2a9e56840e0|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DK.json|119590|9fa6214bd3d8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DM.json|2502|e1402623c4f9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DO.json|40720|4095957f6245|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/DZ.json|24961|e17fbdb76d89|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/EC.json|127267|ab79245884f3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/EE.json|8346|5f12ea52859d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/EG.json|265341|90f7c433330f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ER.json|635|c17c4034da1c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ES.json|188079|4c4857325c99|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ET.json|5424|865e1417c5b8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FI.json|114422|af8f7ef66aa4|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FJ.json|1960|e4f0750716cf|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FK.json|269|42854e1b17ba|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FM.json|278|c2708a5b0e17|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FO.json|1205|677cc6096212|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/FR.json|953879|18d208e2aff4|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GA.json|4688|0d9eb5ab4e71|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GB.json|4237008|ae38c7ec9bb1|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GD.json|1476|ab80e92fd923|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GE.json|12600|e45bd6a25642|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GF.json|1190|0178808cdd77|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GG.json|16488|e794158fae15|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GH.json|18388|0ea6a38787f8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GI.json|6035|08baa52116ac|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GL.json|267|720cf4f06fc9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GM.json|4523|5805a7adc251|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GN.json|3739|6c1a5c5ce960|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GP.json|3283|ff724da039cd|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GQ.json|2244|fe7baba943ae|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GR.json|43938|c9cec7c3abbf|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GT.json|12018|cea04b1d46d2|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GU.json|780|25e52f453d3f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GW.json|1216|690ae98f3b6d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/GY.json|1799|8a6524f7b57f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/HK.json|272762|8726c4b97b6f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/HN.json|10681|5802010984a7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/HR.json|14905|c692945349b2|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/HT.json|2870|96b9d68a9d49|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/HU.json|31899|114f0f3088fb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ID.json|157628|9b5353e71f7a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IE.json|215338|69a8c1a6ddb8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IL.json|15760|bd92b5f9cf18|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IM.json|15602|d6a86ef412ed|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IN.json|869837|e786feeef50d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IQ.json|18416|cb73531bdc07|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IR.json|178972|7383f129b060|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IS.json|6699|494b5730ec60|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/IT.json|5554374|04565251d437|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/JE.json|52878|b9e5389d4a56|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/JM.json|12818|62eeecc68a93|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/JO.json|32596|4d0b10b7ff6f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/JP.json|138368|0fb2a292f074|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KE.json|32850|609be3e3a552|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KG.json|5022|26739a8abd6b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KH.json|10534|f468eeb5dea9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KI.json|260|3388b37e9a85|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KM.json|3103|530d7995278f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KN.json|3407|91918b5058ca|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KP.json|2367|a560b8e7c6e3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KR.json|53028|660a5c3bd1f1|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KW.json|29792|ea461ac186fb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KY.json|38518|056d97bde87a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/KZ.json|15922|1a6f5f2ad126|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LA.json|7832|5a394804fbfd|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LB.json|23877|e387aca529d3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LC.json|2733|75c2578f6098|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LI.json|8082|f6005050a16a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LK.json|15897|23a1dd759063|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LR.json|3375|eabaa69f26f9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LS.json|1192|975e00a918c4|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LT.json|28267|052e38b8107a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LU.json|210806|703dd1d4c10d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LV.json|12392|77273e14eada|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/LY.json|44203|8889dae5557f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MA.json|20253|366a02c05b36|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MC.json|13552|1784d7024f4c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MD.json|5573|248cdc3ee0f8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ME.json|3528|c5aea77fe5ae|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MG.json|3150|9fc5bc73c01d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MH.json|811|1f7664f6c079|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MK.json|9300|4f16ce24db00|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ML.json|3957|09fdbcd0483a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MM.json|8367|8db8f59fdf94|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MN.json|3504|d4c5c654d3c3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MO.json|6589|d4f09d80d22f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MP.json|810|98e4768b497c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MQ.json|2488|5c1a6497e1b4|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MR.json|4299|5116139b105a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MS.json|829|886e4f5f17cc|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MT.json|20261|b9842d78b5b0|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MU.json|11848|d9d4806a6bc3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MV.json|1770|217d6efe5e07|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MW.json|6108|f18f532ebcf3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MX.json|36848|4a78e0193916|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MY.json|83784|aed07a14a422|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/MZ.json|6295|35cef0d834f7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NA.json|4381|1bf893c2f2e5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NC.json|3333|a489b785f171|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NE.json|3878|61fb20e94313|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NG.json|39268|ac420012fc89|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NI.json|3898|218612817ecb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NL.json|349612|456553d4abe8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NO.json|145429|45f62a440644|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NP.json|6941|ce74d2897d1a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NR.json|421|fc873a596f5c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/NZ.json|40766|1014d051082a|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/OM.json|12797|a1b94acc98bc|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PA.json|23456|d24b4d17e7c5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PE.json|7382|db88fc241331|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PF.json|2099|320578738302|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PG.json|1471|f938a9a5e6a2|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PH.json|89173|6707809ce49b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PK.json|96582|6b6415f0a112|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PL.json|81850|d9c44264d80f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PM.json|524|23d6905c56bb|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PR.json|6425|412ea8196ae8|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PS.json|11136|a0aa30771fcd|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PT.json|51300|22cfad16865d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PW.json|247|dfc9b12d7265|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/PY.json|8718|397d8280a72d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/QA.json|15433|894b0c3a95a0|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/RE.json|2279|f9ad3ca0ffb6|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/RO.json|51695|789d1b51ce0e|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/RS.json|15916|edc2bbea2f00|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/RU.json|326041|229477f30408|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/RW.json|4690|a1859a5c021b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SA.json|24292|8e52707c9359|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SB.json|1242|933d670bb452|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SC.json|2905|c78bf41a2bab|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SD.json|16258|1295e08e3947|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SE.json|101274|464d52c63299|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SG.json|180836|c492914db4e3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SH.json|262|22ea64c43824|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SI.json|12375|2acb6fd242da|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SK.json|25285|473bba140d3c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SL.json|3584|74cf4c49c87b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SM.json|11329|c4d0e3f528b7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SN.json|7235|b253b7e0acc9|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SO.json|1381|b964a35d7585|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SR.json|2585|a454bbd60941|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SS.json|4757|12afc69a681f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ST.json|1657|44ed3591ee33|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SV.json|5742|b8b79ae5ab93|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SX.json|1636|8cc9dc38ab55|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SY.json|17113|f5f763d610e0|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/SZ.json|1422|dea72a749d00|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TC.json|1334|6cc4b0e1111e|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TD.json|2506|e46565986ee1|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TG.json|5397|64254c88e6ac|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TH.json|57947|5ad17045fe9c|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TJ.json|5937|faa670fa4c1d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TL.json|1064|21d5387e2c8e|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TM.json|2369|0772695184cc|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TN.json|16387|7b36eb1d38ca|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TO.json|1195|33752128ad9f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TR.json|302411|5812dba37258|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TT.json|8259|0c9d36ea7cb3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TV.json|260|d7253c36855d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TW.json|388983|dfe7e8d5e23d|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/TZ.json|19329|983ebc808df7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/UA.json|59530|9af5b15dd924|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/UG.json|9733|db323da36ad6|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/US.json|1164754|1b59472afea4|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/UY.json|12698|21e7ceb7270b|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/UZ.json|13166|20b16cec5965|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VA.json|687|21f325706390|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VC.json|2419|e67d33e0dfbd|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VE.json|18741|ba0a22e8eb23|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VG.json|5400|8280bdd4f754|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VI.json|1283|3ecfaf43b17f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VN.json|170542|ede32fab3839|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/VU.json|3527|8f9287d508a5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/WF.json|848|77d56677edb7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/WS.json|1595|bc0f7d4a46c5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/XK.json|6429|de306ddd6e5f|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/YE.json|14193|2254a5a93b90|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/YT.json|285|a53fff7c8be7|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ZA.json|93386|cf0eb6d6b640|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ZM.json|10357|4974739bbaa5|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
+BUNDLEFILE=기타/ISO BIC All Countries/ZW.json|12230|e1710c191ac3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
 BUNDLEFILE=기타/İhracat Genelgesi.pdf|287227|2bcd84617eb7|무역과 만기 보고의 서식|수출 대금 반입 회람
 BUNDLEFILE=기타/Lignes directrices conjointes de la Direction générale du Trésor et de l’Autorité de contrôle prudentiel et de résolution sur la mise en œuvre des mesures de gel des avoirs, version mise à jour le 16 mars 2026.pdf|1064630|de0a962ed5a8|소유와 지배의 판정 지침|자산 동결 조치의 집행에 관한 공동 지침
 BUNDLEFILE=기타/MMF Regulation (EU 2017 1131).pdf|641043|f3f5148f915b|부문 분류와 보유자 통계의 기준|머니마켓펀드 규정
@@ -774,6 +1030,8 @@ BUNDLEFILE=기타/sdn_advanced.xml|129071029|0d217ae9abb9|제재와 식별과 �
 BUNDLEFILE=기타/SEC Rule 2a-7.html|157285|b1d0220288bd|부문 분류와 보유자 통계의 기준|머니마켓펀드 규칙
 BUNDLEFILE=기타/Securitization without risk transfer.pdf|984934|f8d12d4d6a28|중앙은행 운영과 자금순환과 증권화와 담보 규범|Securitization without risk transfer
 BUNDLEFILE=기타/State-owned enterprises — Related provision Article 5aa of Council Regulation 833 2014 Frequently asked questions as of 21 November 2025.pdf|77490|ae649fcd56da|소유와 지배의 판정 지침|국영기업에 관한 문항 묶음
+BUNDLEFILE=기타/SWIFT BIC Policy.pdf|75367|2c088fa3cc16|금융 전문 체계의 식별 부호|은행 식별 부호 정책
+BUNDLEFILE=기타/SWIFT BIC Registration Procedures.pdf|195594|6d1cffb45d06|금융 전문 체계의 식별 부호|은행 식별 부호의 등록 절차
 BUNDLEFILE=기타/SWIFT.pdf|1047566|1d3712be51bd|교역 금융과 결제 방식|Category 7 — Documentary Credits and Guarantees, Message Reference Guide
 BUNDLEFILE=기타/System of National Accounts.pdf|14478692|5778ffe0350e|부문 분류와 보유자 통계의 기준|국민계정체계
 BUNDLEFILE=기타/Terms and Conditions for Participation in the Bank of England's Operations Under the Sterling Monetary Framework.pdf|620033|846670dafd80|중앙은행 운영과 자금순환과 증권화와 담보 규범|스털링 통화 체계의 운영 참가 약관
