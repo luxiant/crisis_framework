@@ -54,7 +54,7 @@ READING = {
     'hierarchy': '하이어라키', 'propagation': '프로퍼게이션', 'holder': '홀더',
     'currency': '커런시', 'harness': '하네스', 'orchestration': '오케스트레이션',
     'network': '네트워크', 'sanction': '생크션', 'funding': '펀딩',
-    'housekeeper1': '하우스키퍼일',
+    'housekeeper1': '하우스키퍼일', 'housekeeper2': '하우스키퍼이',
 }
 
 # 앞 판이 들었으나 이 판이 걷는 절과 그 사유. 키는 절 제목의 비교 키다. 앞 판의 절을 빠뜨리지 않는지
@@ -789,8 +789,14 @@ def sec_arc_output(g):
                                               kind_w(ds[-1][2], '으로')))
         else:
             lines.append('%s 이 아크의 처분을 받지 않았다' % cw(c, '은'))
-    blocks.append(flag(p('<strong>이 아크가 내리려던 항의 처분.</strong> %s. 그 처분은 원장의 처분 '
-                         '필드에서 유도했고 폐기된 항목의 처분은 뺐다.' % ' · '.join(lines))))
+    # 답할 항을 들지 않는 아크는 처분할 항이 없으므로 빈 목록을 문단에 넣지 않고 그 사실을 적는다. 빈
+    # 목록을 넣으면 굵은 표지 뒤에 마침표만 남은 문단이 서며, 그 꼴을 빈 보간의 축이 잡는다
+    if lines:
+        blocks.append(flag(p('<strong>이 아크가 내리려던 항의 처분.</strong> %s. 그 처분은 원장의 처분 '
+                             '필드에서 유도했고 폐기된 항목의 처분은 뺐다.' % ' · '.join(lines))))
+    else:
+        blocks.append(p('<strong>이 아크가 내리려던 항이 없다.</strong> 아크 값 정본의 그 레코드가 답할 항의 '
+                        '배열을 비워 두었으므로 처분할 항이 없고, 그 사유는 개막 결정이 든다.'))
     dsp = g['disposal']
     na, nr = len(dsp['all']), len(dsp['retired'])
     if nr == na:
@@ -1408,6 +1414,9 @@ def negative(axes, ops, t, d):
     plan = [(nm, inj[nm]) for nm, _ in axes]
     plan.append(('보간 뒤의 조사', lambda x: ('</div>\n</body>',
                                           '<p><code>funding</code> 가 닫혔다</p></div>\n</body>')))
+    # 한 축에 둘째 주입을 둔 자리는 축 설비의 덧붙인 주입 목록이 든다. 사전으로 읽으면 같은 이름의
+    # 주입이 하나로 접히므로 그 목록을 따로 이어 붙인다
+    plan += list(A.INJECT_EXTRA)
     fns = dict(axes)
     # 앞 판의 조작을 재는 축은 그 목록에 합성 문장을 더한 판으로 잰다. 앞 판이 그 문장을 하나도 들지
     # 않아도 그 축의 꼴이 동작하는지가 그 자리에서 선다

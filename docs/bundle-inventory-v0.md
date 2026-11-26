@@ -649,9 +649,53 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 
 ---
 
+## 소유와 지배의 셈 (5편)
+
+`housekeeper1-7` 을 닫은 뒤에 사용자가 올리고 `housekeeper2-1` 의 초입에 갱신된 압축으로 뭉치에 들어온 문면
+가운데 지분 몫의 셈을 읽는 페이즈가 받을 것이며, 전량 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 미국
+재무부 해외자산통제실의 문항 묶음과 개정 지침과, 영국 금융제재이행청의 일반 지침과, 영국의 러시아 제재 규정과,
+미국 상무부 산업안보국의 계열사 규칙이 그 묶음이다. 소유와 지배의 판정 지침 무리와 다루는 물음이 같으나, 그
+무리의 편 전량을 한 기록이 받았고 이 무리의 편이 그 기록의 유니버스에 들지 않았으므로 새 무리로 들인다. 파일
+하나가 편 하나이며, **아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을
+세우면서 그 표지를 기록 번호로 바꾼다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 차단된 자가 소유한 법인에 관한 50 퍼센트 규칙의 문항 묶음 | 미국 재무부 해외자산통제실. 문항 398 부터 402 까지를 든 웹 면이며 판의 날짜는 확인하지 않았다 | 미추출 |
+| 차단된 자가 소유한 법인에 관한 개정 지침 | 같은 주체. 2014-08-13. 1쪽 | 미추출 |
+| 영국 금융 제재 일반 지침 | 영국 재무부 금융제재이행청. 2026-05-12 에 갱신된 웹 면이며 처음 공표된 날은 2024-02-13 이다 | 미추출 |
+| 러시아 제재 규정 2019 | 영국. 위임 입법 SI 2019/855 의 제정판이며 2019-04-10 에 제정되었다. 68쪽 | 미추출 |
+| 목록에 오른 주체의 계열사로 최종 사용자 통제를 넓히는 규칙 | 미국 상무부 산업안보국. 90 FR 47201 의 잠정 최종 규칙이며 2025-09-30 에 공포되었다. 14쪽 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 증권화 노출의 공시와 의회 조사 (3편)
+
+`housekeeper1-7` 을 닫은 뒤에 사용자가 올리고 `housekeeper2-1` 의 초입에 갱신된 압축으로 뭉치에 들어온 문면
+가운데 팔리지 않은 트랜치의 공표를 읽는 페이즈가 받을 것이며, 전량 뭉치 밖에서 들어와 이 목록에 올랐으므로
+구성원이다. 두 은행이 2007년에 낸 서브프라임 노출의 발표와 실적 발표와 미국 상원 상설조사소위원회의 금융위기
+보고서가 그 묶음이다. 통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시 무리가 증권화 노출의
+공시를 이미 드나, 그 무리의 공시 편을 받은 기록의 유니버스에 이 무리의 편이 들지 않았으므로 새 무리로 들인다.
+파일 하나가 편 하나이며, **아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을
+세우면서 그 표지를 기록 번호로 바꾼다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 증권·은행 부문의 서브프라임 관련 노출에 관한 발표 | 시티그룹. 2007-11-04 의 웹 면 | 미추출 |
+| 2007년 3분기 실적 발표 | 메릴린치. Form 8-K 의 첨부 99.1 이며 보고 기준일이 2007-10-24 다. 24쪽 | 미추출 |
+| 월가와 금융위기에 관한 상원 상설조사소위원회 보고서 | 미국 상원 상설조사소위원회. 2011-04-13 의 다수당과 소수당 직원 보고서. 646쪽 | 미추출 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
 ## 압축의 파일 목록
 
-뭉치의 압축 `macro_models_4.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
+뭉치의 압축 가운데 `housekeeper2-1` 의 초입에 올라온 판의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
 열두 자리와 그 파일이 속한 무리와 편을 세로 막대로 가른다. 무리는 이 문서의 `##` 절 제목에서 괄호를 걷은 꼴이고,
 편은 그 무리의 표의 행이나 나열 문단이 드는 제목을 그대로 옮긴 꼴이다. 해시가 같은 사본의 왼쪽은 무리를 「중복」으로
 들고 편이 그 짝의 편이다. **압축이 아니라 이 목록이 뭉치의 정본이다.** 뒤에 압축이 올라오는 회차는
@@ -795,8 +839,10 @@ BUNDLEFILE=기타/Akoma Ntoso Naming Convention Version 1.0 - OASIS Standard 21 
 BUNDLEFILE=기타/ALI PEB Commentary No 32.pdf|194035|8017c6cf935b|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|PEB 해설 제32호
 BUNDLEFILE=기타/Asset freeze and prohibition to make funds and economic resources available Related provision Council Regulation 269 2014 Frequently asked questions as of 25 September 2026.pdf|330522|d3bcaf252e71|소유와 지배의 판정 지침|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
 BUNDLEFILE=기타/Asset Freeze and Prohibition to Make Funds and Economic Resources Available.pdf|330522|d3bcaf252e71|중복|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
+BUNDLEFILE=기타/BIS Expansion of End-User Controls to Cover Affiliates of Certain Listed Entities - 90 FR 47201 - 30 September 2025.pdf|295275|fba7b32df315|소유와 지배의 셈|목록에 오른 주체의 계열사로 최종 사용자 통제를 넓히는 규칙
 BUNDLEFILE=기타/Citi Details ABCP CDO Exposures.html|158538|fe63d8cdfe4e|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹의 ABCP 와 CDO 노출을 다룬 기사
 BUNDLEFILE=기타/citi Group 2007 Annual Report on Form 10K.pdf|2472494|919f5bc8832c|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹 2007년 연차 보고서 Form 10-K
+BUNDLEFILE=기타/Citi Sub-Prime Related Exposure in Securities and Banking - 4 November 2007.html|1309306|6433321e1186|증권화 노출의 공시와 의회 조사|증권·은행 부문의 서브프라임 관련 노출에 관한 발표
 BUNDLEFILE=기타/commision consolidated faqs on the implementation of council regulation no 833 2014 and council regulation no 269 2014.pdf|3274855|915992d4001d|소유와 지배의 판정 지침|두 규정의 집행에 관한 통합 문항 묶음
 BUNDLEFILE=기타/Commission Delegated Regulation (EU) 2016 341 of 17 December 2015 - Union Customs Code Transitional Rules.pdf|23319706|371cc1a725a8|무역과 만기 보고의 서식|연합 관세법 경과 규정의 위임규칙
 BUNDLEFILE=기타/Commission Opinion of 17 10 2019 on Article 5(1) of Council Regulation No 833 2014.pdf|259236|70dd3d6456eb|집행위원회의 의견서|제833/2014호 규정 제5조 제1항에 관한 집행위원회 의견서
@@ -1085,11 +1131,15 @@ BUNDLEFILE=기타/İhracat Genelgesi.pdf|287227|2bcd84617eb7|무역과 만기 �
 BUNDLEFILE=기타/Lignes directrices conjointes de la Direction générale du Trésor et de l’Autorité de contrôle prudentiel et de résolution sur la mise en œuvre des mesures de gel des avoirs, version mise à jour le 16 mars 2026.pdf|1064630|de0a962ed5a8|소유와 지배의 판정 지침|자산 동결 조치의 집행에 관한 공동 지침
 BUNDLEFILE=기타/Maine Legislature 119 LD 2245.doc|1383936|17872b9b7f11|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|메인주 법안 LD 2245
 BUNDLEFILE=기타/Maine Legislature 124 LD 1403.pdf|2707230|d98235f409d6|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|메인주 법안 LD 1403
+BUNDLEFILE=기타/Merrill Lynch Third Quarter 2007 Earnings Release - Form 8-K Exhibit 99.1 - 24 October 2007.pdf|94755|d281d5910742|증권화 노출의 공시와 의회 조사|2007년 3분기 실적 발표
 BUNDLEFILE=기타/MMF Regulation (EU 2017 1131).pdf|641043|f3f5148f915b|부문 분류와 보유자 통계의 기준|머니마켓펀드 규정
 BUNDLEFILE=기타/NPW Data Dictionary.pdf|430649|6a5cb12a5651|제재와 식별과 법령 문면|일괄 내려받기 자료 사전
+BUNDLEFILE=기타/OFAC Entities Owned by Blocked Persons - 50 Percent Rule - FAQs 398-402.html|25633|a882ca3e2bc0|소유와 지배의 셈|차단된 자가 소유한 법인에 관한 50 퍼센트 규칙의 문항 묶음
+BUNDLEFILE=기타/OFAC Revised Guidance on Entities Owned by Persons Whose Property and Interests in Property Are Blocked - 13 August 2014.pdf|96116|7c8e047151bb|소유와 지배의 셈|차단된 자가 소유한 법인에 관한 개정 지침
 BUNDLEFILE=기타/OFAC_data_specification.txt|15153|8fc7ea2019b5|제재의 문면|특별지정국민 및 차단대상자 목록의 자료 명세
 BUNDLEFILE=기타/OFAC_XML_Schema.xsd|85050|83c7addeee93|제재의 문면|그 목록의 진보된 XML 스키마
 BUNDLEFILE=기타/Official Comment of ALI NCCUSL.html|20984|cbdfb52bf2c9|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|통일상법전 제1편의 공식 주석 면
+BUNDLEFILE=기타/OFSI UK Financial Sanctions General Guidance - 12 May 2026.html|341625|bf10a1994507|소유와 지배의 셈|영국 금융 제재 일반 지침
 BUNDLEFILE=기타/Poultry in Motion A Study of International Trade Finance Practices.pdf|1080136|6866a61f9577|교역 금융과 결제 방식|Poultry in Motion: A Study of International Trade Finance Practices
 BUNDLEFILE=기타/Reporting guidelines for the BIS international banking statistics.pdf|698728|bd6a22740031|부문 분류와 보유자 통계의 기준|국제은행통계 보고 지침
 BUNDLEFILE=기타/Restrictive measures (Sanctions) - Update of the EU Best Practices for the effective implementation of restrictive measures 10572 22.pdf|515311|efe897423315|소유와 지배의 판정 지침|같은 문면의 직전판
@@ -1112,6 +1162,7 @@ BUNDLEFILE=기타/The Basel Framework.pdf|8221405|0f532309acc7|부문 분류와 
 BUNDLEFILE=기타/The Dominant Currency Financing Channel of External Adjustment.pdf|1266291|d5bc2470011a|교역 금융과 결제 방식|The Dominant Currency Financing Channel of External Adjustment
 BUNDLEFILE=기타/The Evolution Of The Federal Reserve Swap Lines Since 1962.pdf|260613|bf692afa6ae1|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|The Evolution of the Federal Reserve Swap Lines since 1962
 BUNDLEFILE=기타/The PEB Comments Proceeds and Possession.pdf|317199|1fd921fcf141|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|PEB 해설 제32호를 소개하는 칼럼
+BUNDLEFILE=기타/The Russia (Sanctions) (EU Exit) Regulations 2019 - SI 2019 855 - As Made.pdf|633167|a6e7e1cc00b4|소유와 지배의 셈|러시아 제재 규정 2019
 BUNDLEFILE=기타/Ticaret EDI XML Referans Mesajlari.html|58592|5d67e86c2870|무역과 만기 보고의 서식|EDI·XML 참조 메시지 메뉴 페이지
 BUNDLEFILE=기타/Trade finance developments and issues.pdf|377515|0f0f4dd84c49|교역 금융과 결제 방식|Trade finance: developments and issues
 BUNDLEFILE=기타/tresor economics swap line.pdf|844310|d4254b0b7309|중앙은행 사이의 통화 공급 약정|중앙은행 스왑 라인의 전역 망
@@ -1119,6 +1170,7 @@ BUNDLEFILE=기타/UCP600 An Exercise in International Private Sector Self Regula
 BUNDLEFILE=기타/UK Sanctions List.pdf|22296218|572c6a364884|제재와 식별과 법령 문면|영국 제재 목록
 BUNDLEFILE=기타/Understanding Trade Finance Theory and Evidence from Transaction-Level Data.pdf|433121|5a76c72cc73f|교역 금융과 결제 방식|Understanding Trade Finance: Theory and Evidence from Transaction-level Data
 BUNDLEFILE=기타/Velocity of Pledged Collateral Analysis and Implications.pdf|773007|070fd7d979ef|담보 속도와 재담보의 계량|Velocity of Pledged Collateral: Analysis and Implications
+BUNDLEFILE=기타/Wall Street and the Financial Crisis Anatomy of a Financial Collapse.pdf|5730350|3dec3dfa6938|증권화 노출의 공시와 의회 조사|월가와 금융위기에 관한 상원 상설조사소위원회 보고서
 BUNDLEFILE=기타/Ödeme Şekli Kodları.xlsx|15897|eba8c8b9c88d|무역과 만기 보고의 서식|결제 방식 부호표
 BUNDLEFILE=기타/기업공시 서식 별지 1.pdf|21031723|a67d36a7735c|조달의 공표와 복원 방법|별지 제24호 서식 증권발행실적보고서
 BUNDLEFILE=기타/기업공시 서식 별지 2.pdf|4634451|dacba90090f1|조달의 공표와 복원 방법|별지 제24호 서식 증권발행실적보고서

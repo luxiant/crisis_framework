@@ -78,13 +78,18 @@ def ax_escape(t):
 
 
 def ax_blank(t):
-    """빈 보간. 자리표와 빈 칸과 빈 굵은 구간."""
+    """빈 보간. 자리표와 빈 칸과 빈 굵은 구간과 굵은 표지 뒤에 마침표만 남은 꼴.
+
+    뒤의 것은 굵은 머리 뒤에 목록을 보간하는 문장에 빈 목록이 들어가 그 자리에 공백과 마침표만 남은
+    꼴이다. 굵은 표지를 닫은 뒤에 공백을 두고 마침표가 바로 서는 자리를 잡으며, 말줄임표는 받지 않는다.
+    """
     v = _nostyle(t)
     bad = []
     for pat, nm in ((r'<<[A-Z_]+>>', '자리표'), (r'<td[^>]*>\s*</td>', '빈 칸'),
                     (r'<strong>\s*</strong>', '빈 굵은 구간'),
                     (r'<code>\s*</code>', '빈 코드 표기'),
-                    (r'<p[^>]*>\s*</p>', '빈 문단')):
+                    (r'<p[^>]*>\s*</p>', '빈 문단'),
+                    (r'</strong>\s+\.(?!\.)', '굵은 표지 뒤의 빈 문장')):
         for m in re.finditer(pat, v):
             bad.append((nm, v[max(0, m.start()-25):m.end()+25].replace('\n', ' ')))
     return bad
@@ -288,6 +293,15 @@ INJECT = [
 ]
 
 
+# 한 축에 둘째 주입을 두는 자리. 축마다 하나를 드는 목록을 사전으로 읽는 호출자가 있으므로 같은 이름을
+# 그 목록에 두 번 두지 않고 이 목록에 따로 둔다. 빈 보간 축의 이 주입은 답할 항을 들지 않는 아크의 처분
+# 문단이 빈 목록으로 조립되어 굵은 표지 뒤에 마침표만 남은 꼴이다
+INJECT_EXTRA = [
+    ('빈 보간', lambda t: ('</div>\n</body>',
+                         '<p><strong>그 항의 처분.</strong> . 그 처분은 원장에서 유도했다.</p></div>\n</body>')),
+]
+
+
 def negative(t, kinds, path_of):
     """축마다 주입을 세워 전량이 한 번씩 터지는지 잰다.
 
@@ -295,7 +309,7 @@ def negative(t, kinds, path_of):
     적발을 내고 다른 축이 함께 터지는 것은 받는다.
     """
     out = []
-    for nm, mk in INJECT:
+    for nm, mk in INJECT + INJECT_EXTRA:
         pair = mk(t)
         if nm == '렌더링의 양식과 표와 행과 빈 보간':
             inj = t.replace('<style>', '<style>/*', 1).replace('</style>', '*/</style>', 1)
