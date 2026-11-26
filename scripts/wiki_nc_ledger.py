@@ -492,6 +492,66 @@ def inj_26(root):
     return ghost
 
 
+def _id_no(cf) -> int:
+    m = wiki_common.ID_FORM.match(str(cf or ""))
+    return int(m.group(1)) if m else -1
+
+
+def inj_26_after(root):
+    """꼬리를 그 대상의 폐기 레코드보다 **뒤**에 쓴다. 잡혀야 한다.
+
+    번호가 가장 큰 꼴의 꼬리를 골라 그 `clarifies` 를 번호가 가장 작은 폐기 레코드의 대상으로
+    바꾼다. 그 꼬리가 그 폐기 레코드보다 뒤에 선 것이 되므로, 이미 폐기된 항목에 읽는 법을 다는
+    것이 그 검사가 처음부터 잡으려던 행위다. 대상과 꼬리를 박지 않고 원장에서 유도하므로 원장이
+    자라면 고르는 자리가 함께 옮긴다. 검사 27 이 폐기된 대상을 건너뛰므로 이 주입이 검사 26
+    하나만 겨눈다."""
+    led = wiki_common.Ledger(root)
+    tails = [e for e in load(root, "decisions")["decisions"] if e.get("clarifies") is not None]
+    if not tails:
+        raise SystemExit("꼬리가 원장에 없어 주입 대상이 없다")
+    tail = max(tails, key=lambda e: _id_no(e.get("id")))
+    rets = load(root, "retirements")["retirements"]
+    first = min(rets, key=lambda q: _id_no(q.get("id")))
+    if _id_no(first.get("id")) >= _id_no(tail.get("id")):
+        raise SystemExit("번호가 가장 작은 폐기 레코드가 꼬리보다 뒤에 서서 조건을 만들지 못한다")
+    dead = first["target"]
+    if dead not in led.by_id:
+        raise SystemExit(f"{dead} 가 원장에 없어 조건을 만들지 못한다")
+    edit(root, "decisions", tail["id"], lambda e: e.__setitem__("clarifies", dead))
+    return dead
+
+
+def inj_26_before(root):
+    """꼬리보다 **뒤**에 그 대상을 폐기한다. 잡히지 않아야 한다.
+
+    대상이 살아 있는 꼬리를 골라 그 대상을 폐기하는 레코드를 원장의 어느 항목보다 큰 번호로
+    더한다. 그 꼬리는 대상이 살아 있던 시점에 선 역사이므로 실패가 아니라 보고로 가야 하며, 이
+    방향을 재지 않으면 「번호를 보지 않고 여전히 전량을 잡는다」와 갈리지 않는다. 대상이 규율의
+    이름을 들지 않는 결정 항목인 꼬리를 고른다. 이름을 든 항목을 폐기하면 그 이름을 드는 문서를
+    재는 검사가 함께 흔들려 사본에 딴 위반이 선다."""
+    led = wiki_common.Ledger(root)
+    decs = {e["id"]: e for e in load(root, "decisions")["decisions"]}
+    tail = None
+    for e in decs.values():
+        tgt = e.get("clarifies")
+        if tgt in decs and tgt not in led.dead and not decs[tgt].get("names"):
+            tail = e
+            break
+    if tail is None:
+        raise SystemExit("대상이 살아 있고 이름을 들지 않는 결정 항목인 꼬리가 없어 주입 대상이 없다")
+    tgt = decs[tail["clarifies"]]
+    top = max(_id_no(x.get("id")) for _n, x in led.entries)
+    eid = f"CF-{max(top + 1, 99260)}"
+    doc = load(root, "retirements")
+    doc["retirements"].append({
+        "id": eid, "origin": dict(doc["retirements"][-1]["origin"]),
+        "target": tgt["id"], "original": str(tgt.get("statement") or "주입"),
+        "reason": "음성 대조가 꼬리보다 뒤에 대상을 폐기한다", "replaced_by": None,
+        "statement": "주입", "basis": "주입", "related": []})
+    save(root, "retirements", doc)
+    return eid
+
+
 def inj_27(root):
     """꼬리의 `resolves` 의 `phrase` 를 대상 항목의 산문에 없는 값으로 바꾼다.
 
@@ -761,6 +821,8 @@ CASES = [
     ("42", "wiki42-session-clause-mirror", "블록에 원장에 없는 이름을 더한다", inj_42_ghost, None),
     ("42", "wiki42-session-clause-mirror", "블록을 비운다", inj_42_empty, None),
     ("26", "wiki26-clarify-target", "clarifies 를 없는 id 로 바꾼다", inj_26, None),
+    ("26", "wiki26-clarify-target", "꼬리를 그 대상의 폐기 레코드보다 뒤에 쓴다", inj_26_after, None),
+    ("26", "wiki26-clarify-target", "꼬리보다 뒤에 그 대상을 폐기한다", inj_26_before, None, "nocatch"),
     ("27", "wiki27-clarify-resolves", "phrase 를 대상의 산문에 없는 값으로 바꾼다", inj_27, None),
     ("30", "wiki30-cq-unclaimed", "어느 아크의 cq 에서 번호를 지워 미배정으로 만든다", inj_30, None),
     ("29", "wiki29-arc-cq", "닫힌 아크의 한 처분 항목의 답할 항 값을 다른 번호로 바꾼다", inj_29, INJ_29_ARC),

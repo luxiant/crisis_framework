@@ -468,6 +468,13 @@ def check_26(led: Ledger) -> Report:
                "꼬리의 clarifies 가 실재하고 폐기되지 않은 항목을 가리키는가",
                "fail")
     n = 0
+    early: list[str] = []
+
+    def id_no(cf) -> int:
+        """`CF-<n>` 의 번호. 형식이 아니면 -1 이라 가름에 쓰이지 않는다."""
+        m = ID_FORM.match(str(cf or ""))
+        return int(m.group(1)) if m else -1
+
     for name, e in led.entries:
         tgt = e.get("clarifies")
         if tgt is None:
@@ -476,8 +483,18 @@ def check_26(led: Ledger) -> Report:
         if tgt not in led.by_id:
             r.bad(f"{e.get('id')}: clarifies 의 `{tgt}` 이 원장에 없다")
         elif tgt in led.dead:
-            r.bad(f"{e.get('id')}: clarifies 의 `{tgt}` 이 폐기된 항목이다")
-    r.note(f"꼬리 {n}건")
+            # 폐기 전에 쓰인 꼬리는 그 시점에 산 대상에 읽는 법을 단 역사이므로 실패가 아니라 보고다.
+            # ID 가 단조 증가하므로 꼬리가 대상의 폐기 레코드보다 번호가 앞서는지로 가르며, 검사 10 이
+            # 폐기 전에 쓰인 지목을 가르는 형을 그대로 쓴다. 가르지 않으면 꼬리가 붙은 항목은 영영
+            # 폐기될 수 없고, 그 항목이 아크에 걸린 구멍이면 그 아크가 닫히지 못한다(SPEC §2.1).
+            retirer = led.retired_by.get(tgt)
+            if retirer is not None and id_no(e.get("id")) < id_no(retirer):
+                early.append(f"{e.get('id')}: clarifies 의 `{tgt}` 을 {retirer} 가 뒤에 폐기했다")
+            else:
+                r.bad(f"{e.get('id')}: clarifies 의 `{tgt}` 이 폐기된 항목이다")
+    r.note(f"꼬리 {n}건 · 폐기 전에 쓰인 꼬리 {len(early)}건")
+    for msg in early:
+        r.note(f"폐기 전에 쓰인 꼬리 — {msg}")
     return r
 
 
