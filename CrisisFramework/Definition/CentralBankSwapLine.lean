@@ -108,7 +108,8 @@ structure AdmissionCriteria (Node : Type) where
 -/
 -- DD:CF-2975
 structure CentralBankSwapLine (Node Currency Num Obs : Type) where
-  /-- 자기 통화를 공급하는 중앙은행. -/
+  /-- 통화를 공급하는 중앙은행. 공급하는 통화가 그 은행의 자기 통화가 아닌 약정이 있으므로 그 통화를
+      `suppliedCurrency` 가 따로 든다. -/
   supplier : Node
   /-- 그 통화를 받는 중앙은행. -/
   recipient : Node

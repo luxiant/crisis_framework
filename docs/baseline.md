@@ -340,7 +340,7 @@ SOURCING_MINLEN=16
 최소 길이를 내리면 그 지목이 느슨해진다. 유니버스와 판정 셋은 `SPEC.md` §2.1 이 든다.
 
 <!-- MIRROR:BEGIN -->
-MIRROR_GHOST=3
+MIRROR_GHOST=2
 <!-- MIRROR:END -->
 
 `MIRROR` 블록은 뭉치 인벤토리의 구성원 행과 추출 기록을 양방향으로 보는 검사가 읽는다. 좌에서

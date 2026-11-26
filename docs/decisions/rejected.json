@@ -13904,6 +13904,61 @@
    "related": [
     "CF-652"
    ]
+  },
+  {
+   "id": "CF-4753",
+   "origin": {
+    "arc": "housekeeper1",
+    "phase": "housekeeper1-5",
+    "kind": "decision_session",
+    "date": "2026-11-26"
+   },
+   "candidate": "옮기는가의 판정을 약정의 유무와 따로 세워 약정 없이 옮겨 가는 꼴을 받게 하는 안.",
+   "reason": "약정 없이 다른 노드가 채워지지 않은 몫을 떠안는 자리를 조달 실패의 하위 꼴로 세우지 않고, 막힌 시점의 계약 상태로 정해지는 하위 꼴과 뒤따르는 새 계약의 두 사건으로 받는다. 그래서 옮기는가를 약정과 따로 세우면 그 판정이 받을 꼴이 열거에 없고, 새 계약이 옮긴 몫을 조달 실패의 판정이 한 번 더 세게 된다.",
+   "for": "정의층의 `FundingFailureKind.borneByCommitment` 가 드는 자리. 그 정의를 어느 꼴로 둘지.",
+   "statement": "옮기는가의 판정을 약정의 유무와 따로 세워 약정 없이 옮겨 가는 꼴을 받게 하는 안을 다시 기각하되, 사유를 꼴을 세울지가 정해지지 않았다는 것에서 떠안음을 두 사건으로 받는다는 판정으로 옮긴다",
+   "basis": "도관의 보증이 명시적 법적 약정이고 자발적인 묵시적 소구가 아니라고 원편이 가르는 것(E-83)과 발동조건을 검증 가능한 신호 위의 문법으로 두는 정의층의 선택에서 나왔다. 재는 자리는 E-83 의 보증 절과 정의층 약정 판정의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Definition.FundingFailureKind.borneByCommitment",
+   "related": [
+    "CF-4578"
+   ]
+  },
+  {
+   "id": "CF-4774",
+   "origin": {
+    "arc": "housekeeper1",
+    "phase": "housekeeper1-5",
+    "kind": "decision_session",
+    "date": "2026-11-26"
+   },
+   "candidate": "공적 풋 칸을 참으로 두는 안. 그 약관이 공적 풋의 접근 조건을 정하는 문면이라는 것을 근거로 한다.",
+   "reason": "접근이 참가 자격과 제도마다의 허락과 거래마다의 내주기의 세 층으로 갈리고 세 층 모두 그 은행의 판단에 걸리며 참가와 그 결정이 기밀이므로, 참으로 두면 조건의 문면을 접근의 관측으로 읽었다고 주장하게 된다.",
+   "for": "관측층의 `participationTermsChannel` 이 드는 자리. 그 경로의 칸을 어느 값으로 둘지.",
+   "statement": "영란은행의 운영 참가 약관을 읽는 경로에서 약관이 접근의 조건을 정한다는 까닭으로 공적 풋 칸을 참으로 두는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 E-78 의 새 원소 절과 기밀 절과 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.participationTermsChannel",
+   "related": [
+    "CF-4764"
+   ]
+  },
+  {
+   "id": "CF-4775",
+   "origin": {
+    "arc": "housekeeper1",
+    "phase": "housekeeper1-5",
+    "kind": "decision_session",
+    "date": "2026-11-26"
+   },
+   "candidate": "이 경로를 세우지 않고 적격담보 공시의 경로로 갈음하는 안.",
+   "reason": "두 경로의 칸이 같아 하나로 보이나 적격담보 공시의 거짓은 적격성이 증권에 붙는 데서 오고 이 약관의 거짓은 약관 자신이 정한 기밀에서 오므로, 갈음하면 약관이 스스로 소스를 지웠다는 사실이 어디에도 남지 않는다.",
+   "for": "관측층의 `participationTermsChannel` 이 드는 자리. 그 경로의 칸을 어느 값으로 둘지.",
+   "statement": "영란은행의 운영 참가 약관을 읽는 경로를 세우지 않고 적격담보 공시의 경로로 갈음하는 안을 기각한다",
+   "basis": "그 자리를 이 페이즈가 채택한 꼴로 두었고 그 사유를 그 선언의 문서화 문면이 든다. 재는 자리는 E-78 의 기밀 절과 그 선언의 문서화 문면의 기각 문단이다.",
+   "for_decl": "CrisisFramework.Observation.participationTermsChannel",
+   "related": [
+    "CF-4764",
+    "CF-1623"
+   ]
   }
  ]
 }

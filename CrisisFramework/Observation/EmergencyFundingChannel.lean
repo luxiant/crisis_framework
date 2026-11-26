@@ -2,16 +2,17 @@
 관측층 — 긴급 조달 접근의 공시 경로
 
 규율: L-14(관측층은 값을 담지 않고 사상의 명세만 담는다), L-10(관측층은 수를 쓰지 않는다),
-      A-3(witness 의무), D-1·D-2(docstring 3항목), D-8(witness 예외),
-      T-2(반증 조건), T-4(가정의 명시).
+      A-3(witness 의무), D-1·D-2(docstring 3항목), D-3(배제 사례의 조달처), D-8(witness 예외),
+      T-2(반증 조건), T-3(기여 분류), T-4(가정의 명시).
 
 **풋을 사적과 공적 두 칸으로 가른다.** 사적 풋은 사적 시장 참가자가 집행하고 공적 풋은 중앙은행이
 집행하므로 그 접근을 내는 공시가 서로 다른 데서 나온다. 한 칸으로 두면 한쪽에 소스가 있는 것이
 다른 쪽의 결손을 덮으며, 그 결손이 이 파일의 산출이다.
 
 **소스 없음을 경로마다 등재하고 전칭으로 등재하지 않는다.** 중앙은행 대출 제도에 접근할 수 있는
-상대방을 참가 자격이 따로 정하는데 그 문면을 아직 열지 않았으므로, 어떤 경로도 그 칸을 내지 못한다는
-단정은 열지 않은 편의 성질을 근거로 쓰는 것이 된다. 그 문면을 읽는 것은 구멍으로 등재되어 있다.
+상대방을 참가 자격이 따로 정하며, 한 중앙은행의 운영 참가 약관을 읽는 경로도 칸을 하나도 내지 못한다.
+그 약관이 참가와 개별 제도의 접근을 기밀로 두기 때문이다. 그러나 한 중앙은행의 약관이므로, 어떤 경로도
+그 칸을 내지 못한다는 단정은 읽지 않은 다른 문면의 성질을 근거로 쓰는 것이 된다.
 
 **주체의 타입을 매개변수로 받는다.** 단계를 드는 칸이 없으므로 이 파일에는 수 타입도 수치 리터럴도
 없다.
@@ -116,6 +117,61 @@ theorem eligibleCollateralDisclosureChannel_resolves_nothing {Entity : Type} :
       (eligibleCollateralDisclosureChannel (Entity := Entity)).coversTierAssignment e = false) ∧
     (eligibleCollateralDisclosureChannel (Entity := Entity)).resolvesPrivatePut = false ∧
     (eligibleCollateralDisclosureChannel (Entity := Entity)).resolvesPublicPut = false := by
+  exact ⟨fun _ => rfl, rfl, rfl⟩
+
+/--
+스털링 통화 체계의 운영 참가 약관을 긴급 조달 접근의 경로로 읽은 것.
+
+**대응 비형식 개념:** 중앙은행이 자기 대출 제도에 닿는 상대방의 자격과 그 접근의 조건을 정한 약관을
+주체의 긴급 조달 접근을 읽는 경로로 세운 것. 그 문면이 주체의 유형을 들어 최후대출자 접근의 재료로
+보이나, 참가와 개별 제도의 접근을 기밀로 두므로 밖에서 읽는 쪽에게 주체를 가르지 않는다.
+
+**세 칸이 모두 거짓인 것이 이 선언의 산출이다.** 적격담보 공시를 읽은 경로와 값이 같으나 거짓의 사유가
+다르다. 앞은 적격성이 증권에 붙어 주체를 가르지 않는 것이고, 이것은 자격이 주체에 붙는데도 약관 자신이
+정한 기밀이 어느 주체가 닿는지를 공개 문면에서 지운 것이다. 그 약관이 주체의 유형을 들어도 그 은행이
+기준을 기관마다 면제하거나 바꿀 수 있고 참가가 기밀이므로, 유형의 목록이 어느 주체가 어느 단계에
+서는지를 정하지 않는다.
+
+**이 정의가 배제하는 사례:**
+참가자가 스스로 밝힌 문면으로 공적 풋의 접근을 읽는 자리. 그 약관이 참가자에게 체계에 받아들여졌다는
+것만 밝히게 하고 개별 제도의 접근이나 거래의 참가는 그 은행의 사전 서면 동의 없이 밝히지 못하게 하므로,
+참가자의 공시가 서도 그것이 드는 것은 체계에의 참가이고 대출 제도의 접근이 아니다.
+조달처: E-78 §2-4 「참가자 자신의 공시가 서는 경우에도 그것이 드는 것은 체계에의 참가이고 대출 제도의 접근이 아니다」
+
+**기각한 대체 정의:**
+공적 풋 칸을 참으로 두는 안. 그 약관이 공적 풋의 접근 조건을 정하는 문면이나, 접근이 참가 자격과
+제도마다의 허락과 거래마다의 내주기의 세 층으로 갈리고 세 층 모두 그 은행의 판단에 걸리며 참가와 그
+결정이 기밀이므로, 참으로 두면 조건의 문면을 접근의 관측으로 읽었다고 주장하게 된다. 이 경로를 세우지
+않고 적격담보 공시의 경로로 갈음하는 안도 기각했다. 두 경로의 칸이 같아 하나로 보이나 거짓의 사유가
+갈리므로, 갈음하면 약관이 스스로 소스를 지웠다는 사실이 어디에도 남지 않는다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-4764
+def participationTermsChannel {Entity : Type} : EmergencyFundingChannel Entity where
+  coversTierAssignment := fun _ => false
+  resolvesPrivatePut := false
+  resolvesPublicPut := false
+
+/--
+스털링 통화 체계의 운영 참가 약관은 긴급 조달 접근의 어느 칸도 내지 못한다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+그 약관이나 그 은행의 공시가 어느 주체가 대출 제도에 닿는지를 밝히거나, 참가자가 개별 제도의 접근을
+공시할 수 있어야 한다. 그 약관이 참가와 개별 제도의 접근을 기밀로 두고 일반 공시가 참가자를 지목하지
+않게 하므로, 이 명제가 거짓이면 그 기밀이 풀렸다는 뜻이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 자격을 주체에 붙이는 문면도 기밀로 칸을 내지 못한다는 것을 구조 안의 명제로 드는
+유일한 자리이고, 경로마다 등재하는 소스 없음이 이 경로에서 선다는 것이 이 정리의 산출이다.
+-/
+-- DD:CF-4764
+theorem participationTermsChannel_resolves_nothing {Entity : Type} :
+    (∀ e : Entity,
+      (participationTermsChannel (Entity := Entity)).coversTierAssignment e = false) ∧
+    (participationTermsChannel (Entity := Entity)).resolvesPrivatePut = false ∧
+    (participationTermsChannel (Entity := Entity)).resolvesPublicPut = false := by
   exact ⟨fun _ => rfl, rfl, rfl⟩
 
 end CrisisFramework.Observation
