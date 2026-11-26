@@ -109,11 +109,12 @@ def ProhibitionTimingSourceSpec.unasked : ProhibitionTimingSourceSpec where
   scopeAtTime := none
   contractConclusion := none
 
-/-- **무엇을 증거하는가.** 조달된 두 기록에서 유도한 명세다. 목록의 주 표에는 발효 시점을 드는 칸이
-없으므로 그 물음을 측정 소스 없음으로 들고, 사건과 조치와 기간을 요소로 두는 스키마에는 발효와 종료와
-눈금과 조치 갈래가 서므로 그 넷을 선 것으로 들며, 조문의 부속서 표에는 발효 시점의 칸과 두 날에 걸리는
-대상이 서므로 그 둘을 선 것으로 든다. 어느 꼴도 묻지 않는 물음은 비우고, 계약의 체결 시점은 세 꼴에서
-다 측정 소스 없음으로 든다. -/
+/-- **무엇을 증거하는가.** 조달된 기록에서 유도한 명세다. 목록의 주 표에는 발효 시점을 드는 칸이
+없으므로 그 물음을 측정 소스 없음으로 든다. 사건과 조치와 기간을 요소로 두는 스키마의 공표 실물에서는 항의
+생성 사건이 날짜를 일까지 들고 조치마다 갈래가 서므로 발효와 눈금과 조치 갈래를 선 것으로 들고, 사건
+갈래가 생성 하나뿐이고 조치의 기간이 비어 있어 해제가 한 판에서 관측되지 않으므로 종료를 측정 소스
+없음으로 든다(E-84). 조문의 부속서 표에는 발효 시점의 칸과 두 날에 걸리는 대상이 서므로 그 둘을 선 것으로
+든다. 어느 꼴도 묻지 않는 물음은 비우고, 계약의 체결 시점은 모든 꼴에서 측정 소스 없음으로 든다. -/
 -- DD:CF-4348
 def prohibitionTimingSpec : TimingPublicationForm → ProhibitionTimingSourceSpec
   | .flatListing =>
@@ -125,7 +126,7 @@ def prohibitionTimingSpec : TimingPublicationForm → ProhibitionTimingSourceSpe
         contractConclusion := some (.undetermined .noMeasurementSource) }
   | .structuredSchema =>
       { effectiveTiming := some .holds,
-        terminationTiming := some .holds,
+        terminationTiming := some (.undetermined .noMeasurementSource),
         timeGranularity := some .holds,
         measureKind := some .holds,
         scopeAtTime := none,

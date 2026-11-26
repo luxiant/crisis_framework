@@ -30,8 +30,8 @@
 | | Liquidity and financial contagion (FSR 특집 내 챕터) | Adrian·Shin 2008 | 190쪽 편집본. 해당 챕터만 미추출 |
 | | The changing nature of financial intermediation and the crisis | Adrian·Shin 2010 (SR 439) | 시장성 조달의 부상 미추출 |
 | | Which financial frictions? | Adrian·Colla·Shin 2012 | 마찰 유형 판별. 은행 vs 시장 미추출 |
-| | Procyclical leverage and endogenous risk | Danielsson·Shin·Zigrand 2012 | 측정 위험 ↔ 실제 위험 되먹임 미추출 |
-| | The impact of risk regulation on price dynamics | Danielsson·Shin·Zigrand 2004 | 규제 제약이 가격 동학에 미치는 영향 미추출 |
+| | Procyclical leverage and endogenous risk | Danielsson·Shin·Zigrand 2012 | E-89. 측정 위험 ↔ 실제 위험 되먹임. `housekeeper1-6` 이 S-7 로 지목해 읽었다 |
+| | The impact of risk regulation on price dynamics | Danielsson·Shin·Zigrand 2004 | E-89. 규제 제약이 가격 동학에 미치는 영향. `housekeeper1-6` 이 S-7 로 지목해 읽었다 |
 | | Intermediary leverage cycles and financial stability | Adrian·Boyarchenko 2012 | DSGE 판본. 대표주체라 노드 없음 — B-3 주의 미추출 |
 | | Financial intermediaries and the cross-section of asset returns | Adrian·Etula·Muir | 레버리지 = 가격 인자. 실증. 구조만 추출 미추출 |
 | | Non-bank financial intermediaries and financial stability | Aramonte·Schrimpf·Shin 2021 | 비은행 노드 유형 목록 미추출 |
@@ -550,23 +550,23 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 뭉치 밖에서 들어와 이 목록에 올랐으므로 구성원이다. 제재 목록과 그 형식 안내와 진보된 XML 자료와 회피를 막는
 실사 지침과 유럽연합 사법재판소의 판결 둘과 법인식별기호의 관계 기록 형식과 미국 감독 당국의 자료 사전과
 유럽연합의 입법 문면 작성 규칙과 법령 문면의 명명 규약이 그 묶음이다. 아직 읽지 않았으므로 행마다 미추출 표지를
-둔다.
+둔다. `housekeeper1-6` 이 이 무리의 편을 전량 읽고 E-84 부터 E-87 까지를 세워 그 표지를 바꾸었다.
 
 | 편 | 발행 주체와 판 | 기록 |
 |---|---|---|
-| 영국 제재 목록 | 영국 정부. 2026-11-24 갱신분 | 미추출 |
-| 영국 제재 목록의 형식 안내 | 같은 주체 | 미추출 |
-| 특별지정국민 목록의 진보된 XML 자료 | 미국 재무부 해외자산통제실. 2026-11-23 발행분 | 미추출 |
-| 러시아 제재 회피를 막는 강화된 실사의 지침 | 유럽연합 집행위원회. 2023년 판 | 미추출 |
-| 아프라시아비 외 사건의 판결 | 유럽연합 사법재판소. 사건 72/11, 2011-12-21 | 미추출 |
-| EM 시스템 사건의 판결 | 같은 주체. 사건 84/24, 2026-03-12 | 미추출 |
-| 관계 기록 형식 2.1 | 글로벌 법인식별기호 재단. 웹 문서 | 미추출 |
-| 관계 기록 형식 2.1 의 기술 문서 | 같은 주체 | 미추출 |
-| 관계 기록 형식 2.1 의 스키마 파일 | 같은 주체. 문서화 갱신 2021-03-04 | 미추출 |
-| 일괄 내려받기 자료 사전 | 연방준비제도이사회 국가정보센터. 2.0 판, 2025년 4월 개정 | 미추출 |
-| 공동 편람 | 유럽의회·이사회·집행위원회. 2025년 11월 영어판 | 미추출 |
-| 공동 실무 지침 | 같은 세 기관. 2015년 판 | 미추출 |
-| Akoma Ntoso 명명 규약 1.0 | OASIS. 2019-02-21 표준 | 미추출 |
+| 영국 제재 목록 | 영국 정부. 2026-11-24 갱신분 | E-84 |
+| 영국 제재 목록의 형식 안내 | 같은 주체 | E-84 |
+| 특별지정국민 목록의 진보된 XML 자료 | 미국 재무부 해외자산통제실. 2026-11-23 발행분 | E-84 |
+| 러시아 제재 회피를 막는 강화된 실사의 지침 | 유럽연합 집행위원회. 2023년 판 | E-85 |
+| 아프라시아비 외 사건의 판결 | 유럽연합 사법재판소. 사건 72/11, 2011-12-21 | E-85 |
+| EM 시스템 사건의 판결 | 같은 주체. 사건 84/24, 2026-03-12 | E-85 |
+| 관계 기록 형식 2.1 | 글로벌 법인식별기호 재단. 웹 문서 | E-86 |
+| 관계 기록 형식 2.1 의 기술 문서 | 같은 주체 | E-86 |
+| 관계 기록 형식 2.1 의 스키마 파일 | 같은 주체. 문서화 갱신 2021-03-04 | E-86 |
+| 일괄 내려받기 자료 사전 | 연방준비제도이사회 국가정보센터. 2.0 판, 2025년 4월 개정 | E-86 |
+| 공동 편람 | 유럽의회·이사회·집행위원회. 2025년 11월 영어판 | E-87 |
+| 공동 실무 지침 | 같은 세 기관. 2015년 판 | E-87 |
+| Akoma Ntoso 명명 규약 1.0 | OASIS. 2019-02-21 표준 | E-87 |
 
 **구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
 압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
@@ -580,15 +580,48 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 명부와 그 부호의 국제 표준의 두 판을 다룬 문서와 그 부호의 운영자가 내는 정책과 등록 절차가 그 묶음이다. 나라별
 명부는 한 공개 리포의 폴더를 나라마다 가른 파일들이어서 한 편으로 세고, 압축의 파일 목록은 파일마다 줄을 둔다.
 **아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 식별 자료를 읽는 페이즈가 추출 기록을 세우면서 그 표지를 기록
-번호로 바꾼다.
+번호로 바꾼다. `housekeeper1-6` 이 이 무리의 편을 전량 읽고 E-88 을 세워 그 표지를 바꾸었다.
 
 | 편 | 발행 주체와 판 | 기록 |
 |---|---|---|
-| 은행 식별 부호의 나라별 공개 명부 | 개인이 공개 리포 SwiftCodes 로 낸 자료의 나라별 폴더. 그 리포의 마지막 커밋이 2019-08-09 이고 MIT 사용권이다 | 미추출 |
-| 은행 식별 부호 표준 2014년 판의 시행 백서 | SWIFT. 파일의 생성일이 2014-06-11 이다 | 미추출 |
-| 은행 식별 부호 표준 2022년 판의 미리보기 | 국제표준화기구. 최종 표준안 단계의 여섯 쪽 미리보기이며 파일의 생성일이 2025-01-04 이다 | 미추출 |
-| 은행 식별 부호 정책 | SWIFT. 2017-08-25 판 | 미추출 |
-| 은행 식별 부호의 등록 절차 | SWIFT. 2021-09-20 제2판 | 미추출 |
+| 은행 식별 부호의 나라별 공개 명부 | 개인이 공개 리포 SwiftCodes 로 낸 자료의 나라별 폴더. 그 리포의 마지막 커밋이 2019-08-09 이고 MIT 사용권이다 | E-88 |
+| 은행 식별 부호 표준 2014년 판의 시행 백서 | SWIFT. 파일의 생성일이 2014-06-11 이다 | E-88 |
+| 은행 식별 부호 표준 2022년 판의 미리보기 | 국제표준화기구. 최종 표준안 단계의 여섯 쪽 미리보기이며 파일의 생성일이 2025-01-04 이다 | E-88 |
+| 은행 식별 부호 정책 | SWIFT. 2017-08-25 판 | E-88 |
+| 은행 식별 부호의 등록 절차 | SWIFT. 2021-09-20 제2판 | E-88 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시 (15편)
+
+`housekeeper1-6` 의 초입에 사용자가 갱신한 압축으로 뭉치에 들어온 문면이며, 되돌리는 다리의 환율을 처음과 다르게
+정하는 중앙은행 통화 교환 약정의 조항과 통상의 영업 과정 매수인의 정의와 맡김을 드는 조문의 공식 주석과 팔리지 않아
+되돌아온 발행분을 의도한 보유분과 갈라 내는 공표를 기다리는 이연 셋의 재료다. 전량 뭉치 밖에서 들어와 이 목록에
+올랐으므로 구성원이다. 연방준비제도의 외화 운용 기록과 스왑망의 이력을 다룬 논문과, 통일상법전 조문의 공식 주석을
+싣는 주 의회 법안과 법령 면과 그 주석의 해설과, 두 은행의 증권화 노출을 드는 공시와 조사 보고서와 기사가 그 묶음이다.
+파일 하나가 편 하나다. **아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을
+세우면서 그 표지를 기록 번호로 바꾼다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 연방준비제도 외화 운용 태스크포스 묶음 | 연방준비제도. 1990-03-09 의 묶음이며 2020-01-31 에 공개되었다. 601쪽 | 미추출 |
+| 벨기에 스왑 약정의 평가절상 조항 발동 메모 | 연방공개시장위원회. 쿰스의 1972-03-20 메모이며 2020년에 공개되었다. 3쪽 | 미추출 |
+| The Evolution of the Federal Reserve Swap Lines since 1962 | Bordo·Humpage·Schwartz (NBER WP 20755). 31쪽 | 미추출 |
+| 컬럼비아 특별구 법령 제28:2-403조의 면 | 컬럼비아 특별구 법령의 웹 면. 통일상법전 제2-403조의 공식 주석의 본문을 싣되 교차 지목이 옛 판이다 | 미추출 |
+| 통일상법전 제1편의 공식 주석 면 | CALI 의 웹 면. 제1-201조의 공식 주석 9 를 싣는다 | 미추출 |
+| 메인주 법안 LD 2245 | 메인주 제119대 의회. 개정 제9편을 채택하는 법안이며 Word 97 파일이다 | 미추출 |
+| 메인주 법안 LD 1403 | 메인주 제124대 의회. 개정 제1편을 채택하는 법안. 55쪽 | 미추출 |
+| PEB 해설 제32호 | 통일상법전 상설 편집위원회. 2025-02-27. 5쪽 | 미추출 |
+| PEB 해설 제32호를 소개하는 칼럼 | Goodstein·Wolk (메이어 브라운). 2025-10-01. 4쪽. PDF 속성의 제목과 저자는 다른 글의 것이 남아 있다 | 미추출 |
+| 시티그룹 2007년 연차 보고서 Form 10-K | 시티그룹. 2007 회계연도. 208쪽 | 미추출 |
+| 시티그룹의 ABCP 와 CDO 노출을 다룬 기사 | Asset Securitization Report. 2008-03-03. 유료 벽으로 첫 문단만 있다 | 미추출 |
+| 금융위기조사위원회 최종 보고서 제8장 | 금융위기조사위원회. 2011년 최종 보고서. 29쪽 | 미추출 |
+| 금융위기조사위원회가 시티그룹에 보낸 추가 질의와 답변 | 금융위기조사위원회. 2010-06-09 의 질의와 그 뒤의 답변. 27쪽 | 미추출 |
+| UBS 의 상각에 관한 주주 보고서 | UBS. 2008-04-18. 50쪽 | 미추출 |
+| UBS 의 상각 원인에 관한 스위스 연방은행위원회 조사 보고서 | 스위스 연방은행위원회. 2008-09-30. 16쪽 | 미추출 |
 
 **구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
 압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
@@ -597,7 +630,7 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 
 ## 압축의 파일 목록
 
-뭉치의 압축 `macro_models_2.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
+뭉치의 압축 `macro_models_3.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
 열두 자리와 그 파일이 속한 무리와 편을 세로 막대로 가른다. 무리는 이 문서의 `##` 절 제목에서 괄호를 걷은 꼴이고,
 편은 그 무리의 표의 행이나 나열 문단이 드는 제목을 그대로 옮긴 꼴이다. 해시가 같은 사본의 왼쪽은 무리를 「중복」으로
 들고 편이 그 짝의 편이다. **압축이 아니라 이 목록이 뭉치의 정본이다.** 뒤에 압축이 올라오는 회차는
@@ -733,10 +766,15 @@ BUNDLEFILE=Zoltan Pozsar/Subprime Lending and Real Estate Markets.pdf|790151|4bd
 BUNDLEFILE=Zoltan Pozsar/The Federal Reserves Term Asset Backed Securities Loan Facility.pdf|479351|d0e5aa2173c2|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Federal Reserve's TALF
 BUNDLEFILE=Zoltan Pozsar/The Nonbank-Bank Nexus and the Shadow Banking System.pdf|1217831|17df60ebe0bc|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Nonbank-Bank Nexus and the Shadow Banking System
 BUNDLEFILE=Zoltan Pozsar/The Rise and Fall of the Shadow Banking System.pdf|222756|656ba4f3dc41|O-2 배관 — 신용중개 연쇄·화폐성 위계·담보|The Rise and Fall of the Shadow Banking System
+BUNDLEFILE=기타/28 2–403 Power to transfer good faith purchase of goods entrusting.html|20526|1b1defede4eb|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|컬럼비아 특별구 법령 제28:2-403조의 면
+BUNDLEFILE=기타/Activation of revaluation clause in Belgian Swap arrangement.pdf|162232|10dcc6c58c41|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|벨기에 스왑 약정의 평가절상 조항 발동 메모
 BUNDLEFILE=기타/ADDENDUM I bij Leidraad Financiële Sanctieregelgeving Veelgestelde vragen i.v.m. territoriale integriteit Oekraïne, Versie [6 maart] 2023.pdf|283342|a90048a7503b|소유와 지배의 판정 지침|금융 제재 규칙 지침의 부록 1
 BUNDLEFILE=기타/AFME Securisation Report 2021Q2.pdf|1314458|1712fcb6a1bf|중앙은행 운영과 자금순환과 증권화와 담보 규범|유럽 증권화 보고서 2021년 2분기
 BUNDLEFILE=기타/Akoma Ntoso Naming Convention Version 1.0 - OASIS Standard 21 February 2019.pdf|632091|104af3c07f48|제재와 식별과 법령 문면|Akoma Ntoso 명명 규약 1.0
+BUNDLEFILE=기타/ALI PEB Commentary No 32.pdf|194035|8017c6cf935b|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|PEB 해설 제32호
 BUNDLEFILE=기타/Asset freeze and prohibition to make funds and economic resources available Related provision Council Regulation 269 2014 Frequently asked questions as of 25 September 2026.pdf|330522|d3bcaf252e71|소유와 지배의 판정 지침|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
+BUNDLEFILE=기타/Citi Details ABCP CDO Exposures.html|158538|fe63d8cdfe4e|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹의 ABCP 와 CDO 노출을 다룬 기사
+BUNDLEFILE=기타/citi Group 2007 Annual Report on Form 10K.pdf|2472494|919f5bc8832c|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹 2007년 연차 보고서 Form 10-K
 BUNDLEFILE=기타/commision consolidated faqs on the implementation of council regulation no 833 2014 and council regulation no 269 2014.pdf|3274855|915992d4001d|소유와 지배의 판정 지침|두 규정의 집행에 관한 통합 문항 묶음
 BUNDLEFILE=기타/Commission Delegated Regulation (EU) 2016 341 of 17 December 2015 - Union Customs Code Transitional Rules.pdf|23319706|371cc1a725a8|무역과 만기 보고의 서식|연합 관세법 경과 규정의 위임규칙
 BUNDLEFILE=기타/Commodities as Collateral.pdf|696048|09ca40a50527|상품 담보 금융|Commodities as Collateral
@@ -763,6 +801,8 @@ BUNDLEFILE=기타/European Commission Guidance for EU operators Implementing enh
 BUNDLEFILE=기타/Evolution of Bilateral Swap Lines.pdf|1239442|58d2b1825540|중앙은행 운영과 자금순환과 증권화와 담보 규범|Evolution of Bilateral Swap Lines
 BUNDLEFILE=기타/Exporter Guide to Documentary Credits under UCP 600.pdf|406070|4c64ed5b069e|교역 금융과 결제 방식|Exporter Guide to Documentary Credits under UCP 600
 BUNDLEFILE=기타/Exports and Financial Shocks.pdf|249538|7803ab3e8e69|교역 금융과 결제 방식|Exports and Financial Shocks
+BUNDLEFILE=기타/FCIC Final Report Chapter 8.pdf|231603|4b88fe288f1d|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|금융위기조사위원회 최종 보고서 제8장
+BUNDLEFILE=기타/FCIC Followup citi 20100409.pdf|5704867|f35c6d58938d|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|금융위기조사위원회가 시티그룹에 보낸 추가 질의와 답변
 BUNDLEFILE=기타/FFIEC 031 041 Instruction 2007.pdf|3878586|8bdd42119a61|무역과 만기 보고의 서식|콜 리포트의 작성 지침
 BUNDLEFILE=기타/Format Guide for the UK Sanctions List.html|110399|816ea8731efd|제재와 식별과 법령 문면|영국 제재 목록의 형식 안내
 BUNDLEFILE=기타/FR 2052a Instrction.pdf|2739328|043d18456e5c|무역과 만기 보고의 서식|복합 기관 유동성 감시 보고서의 작성 지침
@@ -1018,10 +1058,13 @@ BUNDLEFILE=기타/ISO BIC All Countries/ZM.json|10357|4974739bbaa5|금융 전문
 BUNDLEFILE=기타/ISO BIC All Countries/ZW.json|12230|e1710c191ac3|금융 전문 체계의 식별 부호|은행 식별 부호의 나라별 공개 명부
 BUNDLEFILE=기타/İhracat Genelgesi.pdf|287227|2bcd84617eb7|무역과 만기 보고의 서식|수출 대금 반입 회람
 BUNDLEFILE=기타/Lignes directrices conjointes de la Direction générale du Trésor et de l’Autorité de contrôle prudentiel et de résolution sur la mise en œuvre des mesures de gel des avoirs, version mise à jour le 16 mars 2026.pdf|1064630|de0a962ed5a8|소유와 지배의 판정 지침|자산 동결 조치의 집행에 관한 공동 지침
+BUNDLEFILE=기타/Maine Legislature 119 LD 2245.doc|1383936|17872b9b7f11|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|메인주 법안 LD 2245
+BUNDLEFILE=기타/Maine Legislature 124 LD 1403.pdf|2707230|d98235f409d6|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|메인주 법안 LD 1403
 BUNDLEFILE=기타/MMF Regulation (EU 2017 1131).pdf|641043|f3f5148f915b|부문 분류와 보유자 통계의 기준|머니마켓펀드 규정
 BUNDLEFILE=기타/NPW Data Dictionary.pdf|430649|6a5cb12a5651|제재와 식별과 법령 문면|일괄 내려받기 자료 사전
 BUNDLEFILE=기타/OFAC_data_specification.txt|15153|8fc7ea2019b5|제재의 문면|특별지정국민 및 차단대상자 목록의 자료 명세
 BUNDLEFILE=기타/OFAC_XML_Schema.xsd|85050|83c7addeee93|제재의 문면|그 목록의 진보된 XML 스키마
+BUNDLEFILE=기타/Official Comment of ALI NCCUSL.html|20984|cbdfb52bf2c9|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|통일상법전 제1편의 공식 주석 면
 BUNDLEFILE=기타/Poultry in Motion A Study of International Trade Finance Practices.pdf|1080136|6866a61f9577|교역 금융과 결제 방식|Poultry in Motion: A Study of International Trade Finance Practices
 BUNDLEFILE=기타/Reporting guidelines for the BIS international banking statistics.pdf|698728|bd6a22740031|부문 분류와 보유자 통계의 기준|국제은행통계 보고 지침
 BUNDLEFILE=기타/Restrictive measures (Sanctions) - Update of the EU Best Practices for the effective implementation of restrictive measures 10572 22.pdf|515311|efe897423315|소유와 지배의 판정 지침|같은 문면의 직전판
@@ -1030,15 +1073,20 @@ BUNDLEFILE=기타/SC Legislature — Session 113 H 4161.html|1122029|68001c45792
 BUNDLEFILE=기타/sdn_advanced.xml|129071029|0d217ae9abb9|제재와 식별과 법령 문면|특별지정국민 목록의 진보된 XML 자료
 BUNDLEFILE=기타/SEC Rule 2a-7.html|157285|b1d0220288bd|부문 분류와 보유자 통계의 기준|머니마켓펀드 규칙
 BUNDLEFILE=기타/Securitization without risk transfer.pdf|984934|f8d12d4d6a28|중앙은행 운영과 자금순환과 증권화와 담보 규범|Securitization without risk transfer
+BUNDLEFILE=기타/Shareholder Report on UBS's Write Downs.pdf|632453|1540407851f4|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|UBS 의 상각에 관한 주주 보고서
 BUNDLEFILE=기타/State-owned enterprises — Related provision Article 5aa of Council Regulation 833 2014 Frequently asked questions as of 21 November 2025.pdf|77490|ae649fcd56da|소유와 지배의 판정 지침|국영기업에 관한 문항 묶음
+BUNDLEFILE=기타/Subprime Crisis SFBC Investigation Into the Causes of the Write downs of UBS AG.pdf|294194|664e08caaf71|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|UBS 의 상각 원인에 관한 스위스 연방은행위원회 조사 보고서
 BUNDLEFILE=기타/SWIFT BIC Policy.pdf|75367|2c088fa3cc16|금융 전문 체계의 식별 부호|은행 식별 부호 정책
 BUNDLEFILE=기타/SWIFT BIC Registration Procedures.pdf|195594|6d1cffb45d06|금융 전문 체계의 식별 부호|은행 식별 부호의 등록 절차
 BUNDLEFILE=기타/SWIFT.pdf|1047566|1d3712be51bd|교역 금융과 결제 방식|Category 7 — Documentary Credits and Guarantees, Message Reference Guide
 BUNDLEFILE=기타/System of National Accounts.pdf|14478692|5778ffe0350e|부문 분류와 보유자 통계의 기준|국민계정체계
+BUNDLEFILE=기타/Task Force On System Foreign Currency Operations.pdf|25284315|d4e1ee86c61c|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|연방준비제도 외화 운용 태스크포스 묶음
 BUNDLEFILE=기타/Terms and Conditions for Participation in the Bank of England's Operations Under the Sterling Monetary Framework.pdf|620033|846670dafd80|중앙은행 운영과 자금순환과 증권화와 담보 규범|스털링 통화 체계의 운영 참가 약관
 BUNDLEFILE=기타/The (sizable) Role of Rehypothecation in the Shadow Banking System.pdf|1060842|c0bb320fbd3a|담보 속도와 재담보의 계량|The (sizable) Role of Rehypothecation in the Shadow Banking System
 BUNDLEFILE=기타/The Basel Framework.pdf|8221405|0f532309acc7|부문 분류와 보유자 통계의 기준|통합 바젤 프레임워크
 BUNDLEFILE=기타/The Dominant Currency Financing Channel of External Adjustment.pdf|1266291|d5bc2470011a|교역 금융과 결제 방식|The Dominant Currency Financing Channel of External Adjustment
+BUNDLEFILE=기타/The Evolution Of The Federal Reserve Swap Lines Since 1962.pdf|260613|bf692afa6ae1|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|The Evolution of the Federal Reserve Swap Lines since 1962
+BUNDLEFILE=기타/The PEB Comments Proceeds and Possession.pdf|317199|1fd921fcf141|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|PEB 해설 제32호를 소개하는 칼럼
 BUNDLEFILE=기타/Ticaret EDI XML Referans Mesajlari.html|58592|5d67e86c2870|무역과 만기 보고의 서식|EDI·XML 참조 메시지 메뉴 페이지
 BUNDLEFILE=기타/Trade finance developments and issues.pdf|377515|0f0f4dd84c49|교역 금융과 결제 방식|Trade finance: developments and issues
 BUNDLEFILE=기타/tresor economics swap line.pdf|844310|d4254b0b7309|중앙은행 사이의 통화 공급 약정|중앙은행 스왑 라인의 전역 망

@@ -24,6 +24,14 @@
 층에서 잘렸는가는 정의층 술어이고 그 시점열은 동학층의 외생 입력이며 시점열이 데이터이지 모형이
 아니므로, 조립 선언이 그 절단을 함수로 받고 새 정의층 타입을 세우지 않는다.
 
+**금융 전문의 망을 주체마다 읽는 공개 경로가 없다.** 정의층이 두 주체의 전문 변을 주체와 체계 사이의
+접속에서 유도하므로 그 망의 쌍을 읽는 데 필요한 것은 주체마다의 접속인데, 그 접속 상태는 체계 운영자가
+구독으로 내는 참조 자료의 속성으로만 서고 등록 기관이 공개 명부에 싣는 표준의 자료 기록에 들지 않는다
+(E-88). 부호의 여덟째 자리로 비접속을 읽던 관례는 2018년 11월에 거둬졌고, 공표된 부호의 집합이 접속된
+부호의 전량도 아니다. 그래서 공개 명부를 경로로 등재해도 그 망의 쌍을 읽는 경로가 서지 않는다. 이
+결론의 유니버스는 그 부호의 표준과 등록 기관의 정책과 절차와 시행 백서와 최신판의 미리보기와 공개
+사본과 환거래 관계의 공표 집계이며, 운영자의 참조 자료는 그 유니버스에 들지 않는다.
+
 **경로 전량을 훑는 판정을 목록 전칭이 아니라 목록 접기로 둔다.** 전칭으로 두면 목록 멤버십을 푸는
 증명이 명제 외연성을 끌어오는데 접기로 두면 계산으로 닫혀 공리가 비며, 관측층의 공리 기준선이
 비어 있으므로 그 차이가 기준선 초과를 가른다.
@@ -223,6 +231,52 @@ def correspondentBankingStatistics : NetworkIndexChannel Unit where
   provenance := MeasurementProvenance.officialReport
 
 /--
+은행 식별 부호의 공개 명부를 읽는 경로.
+
+**대응 비형식 개념:** 금융 전문 체계의 등록 기관이 은행 식별 부호와 그 표준이 정한 자료 기록을 자기
+누리집에 싣는 명부. 그 부호가 금융 전문의 망을 가리키되, 어느 부호가 그 망에 접속했는지와 어느 쌍이
+이어지는지를 들지 않는다.
+
+**종류만 참인 것이 이 선언의 산출이다.** 접속 상태는 운영자가 구독으로 내는 참조 자료의 속성으로 따로
+서고 표준의 자료 기록에 들지 않으며, 공표된 부호의 집합이 접속된 부호의 전량도 아니다. 그래서 이
+명부가 그 망을 가리키면서도 쌍과 전량과 시점의 칸을 내지 못한다. 값의 성질을 공식 자료로 두는 까닭은
+그 명부가 표준이 지정한 등록 기관의 명부라는 데 있다.
+
+**이 정의가 배제하는 사례:**
+부호의 여덟째 자리로 그 부호가 망에 접속했는지를 읽는 읽기. 그 표준의 시행 백서를 훑은 기록이
+전환기 동안만 여덟째 자리가 1 이면 접속하지 않은 부호라는 관례를 두고 그 끝인 2018년 11월에 거둔다고
+적으므로, 그 자리로 접속을 읽으면 그 뒤에 새로 만든 비접속 부호가 접속한 것으로 읽힌다.
+조달처: E-88 §3-1 「그 뒤에 새로 만드는 비접속 부호는 여덟째 자리가 1 이 아닐 수 있다」
+
+**기각한 대체 정의:**
+여덟째 자리의 관례로 쌍의 칸을 참으로 두는 안. 그 관례가 2018년 11월에 거둬졌고, 뭉치의 공개 사본이
+그 앞의 한 판을 날짜 없이 고정하며 운영자가 낸 명부의 사본이라는 것도 그 문면이 보증하지 않는다.
+공표하지 않은 접속 부호가 있고 부호의 단위가 사업 당사자이므로, 참으로 두면 거둬진 관례로 현재의
+쌍을 읽었다고 주장하게 된다. 운영자의 참조 자료 서비스를 이 목록의 경로로 세우는 안도 기각했다. 그
+서비스가 접속 상태를 기관마다 든다는 것은 백서가 적으나 그 자료가 뭉치에 없고 구독으로만 받으므로,
+세우면 읽지 않은 편의 성질을 근거로 칸을 두게 되고, 공시를 받는 쪽의 열거가 구독자를 들지 않아
+수취인 칸도 지어내게 된다.
+
+**값을 담지 않는다.**
+-/
+-- DD:CF-4803
+def bicDirectoryPublication : NetworkIndexChannel Unit where
+  readsKind := fun k =>
+    match k with
+    | NetworkKind.collateralPledge => false
+    | NetworkKind.ownershipShare => false
+    | NetworkKind.centralBankSwap => false
+    | NetworkKind.currencyMismatchTransmission => false
+    | NetworkKind.tradeFinanceLink => false
+    | NetworkKind.financialMessaging => true
+  readsMembership := false
+  readsCompleteness := false
+  coversOwnPairsOnly := false
+  readsVintage := false
+  recipient := DisclosureRecipient.publicReader
+  provenance := MeasurementProvenance.officialReport
+
+/--
 망의 색인을 내는 경로의 목록.
 
 **대응 비형식 개념:** 외부 관측자가 그 망의 구성을 읽을 수 있는 자리의 전량. 목록 전량을 훑는
@@ -244,7 +298,7 @@ def correspondentBankingStatistics : NetworkIndexChannel Unit where
 -- DD:CF-3743
 def networkIndexChannels : List (NetworkIndexChannel Unit) :=
   [issuerCounterpartyTable, thirdPartyNetworkStudy, tradeFinanceRegistry,
-   correspondentBankingStatistics]
+   correspondentBankingStatistics, bicDirectoryPublication]
 
 /--
 그 경로 목록이 그 종류의 망에서 쌍의 이어짐을 내는가.
@@ -500,6 +554,26 @@ theorem messaging_cut_unread_though_kind_read :
       ∧ readsNetworkCut networkIndexChannels NetworkKind.financialMessaging = false
       ∧ readsNetworkCompleteness networkIndexChannels NetworkKind.financialMessaging = false := by
   -- 경로 목록과 각 경로의 칸이 상수이므로 세 접기가 계산으로 값이 나와 `rfl` 로 닫힌다.
+  exact ⟨rfl, rfl, rfl⟩
+
+/--
+은행 식별 부호의 공개 명부는 금융 전문의 망을 가리키되 그 망의 쌍을 내지 않는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+등록 기관이 공개 명부에 부호마다 접속 상태를 싣거나, 그 명부가 어느 부호가 어느 부호와 전문을
+주고받는지를 내야 한다. 접속 상태가 운영자의 참조 자료 서비스의 속성으로 따로 서고 표준의 자료 기록에
+들지 않으므로, 이 명제가 거짓이면 그 속성이 공개 명부로 옮겨졌다는 뜻이다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 그 망을 가리키는 공개 명부가 서는데도 쌍을 내지 못한다는 것을 구조 안의 명제로
+드는 유일한 자리이고, 경로마다 등재하는 소스 없음이 이 경로에서 선다는 것이 이 정리의 산출이다.
+-/
+-- DD:CF-4803
+theorem bicDirectoryPublication_reads_kind_without_pairs :
+    bicDirectoryPublication.readsKind NetworkKind.financialMessaging = true
+      ∧ bicDirectoryPublication.readsMembership = false
+      ∧ readsNetworkCut [bicDirectoryPublication] NetworkKind.financialMessaging = false := by
   exact ⟨rfl, rfl, rfl⟩
 
 /-- witness (A-3). **무엇을 증거하는가.** 공시 경로 구조체가 비어 있지 않다. 어느 종류도 어느
