@@ -336,6 +336,18 @@ SPEC_BLOCK_NAME = re.compile(r"`([A-Z][A-Z0-9]*)`")
 BLOCK_READ_FORM = re.compile(r"<!--\s*([A-Z][A-Z0-9]*):BEGIN|([A-Z][A-Z0-9]*):BEGIN")
 
 
+# 검사가 읽지 않는 블록을 드는 문장. **값 정본에 실제로 선 블록이 두 목록 가운데 하나에 들어야
+# 한다.** 앞의 목록과 읽는 쪽만 맞대면 어느 검사도 읽지 않는 블록이 값 정본에 서 있어도 그 맞댐의
+# 어느 변에도 들지 않아, 그 블록이 무엇을 위해 서 있는지가 어디서도 재어지지 않는다. 그 문장이
+# 없으면 그 목록을 빈 것으로 받으며, 그러면 그런 블록이 하나라도 서는 자리에서 실패가 선다.
+SPEC_UNREAD_SENTENCE = re.compile(r"어느 검사도 읽지 않는 블록은(.*?)이다")
+
+
+# 값 정본에 선 블록의 여는 표지. 읽는 쪽의 꼴과 달리 주석의 꼴만 받는다. 값 정본에서 블록은 그
+# 꼴로만 서고, 산문이 블록의 이름을 드는 자리가 블록으로 세어지지 않아야 하기 때문이다.
+BASELINE_BLOCK_FORM = re.compile(r"<!--\s*([A-Z][A-Z0-9]*):BEGIN\s*-->")
+
+
 BLOCK_READERS = ((COUNT_WIKI, COUNT_COMMON, COUNT_VERIFY)
                  + WIKI_UNITS + VSTEP_UNITS + VRUN_UNITS)
 
@@ -369,7 +381,22 @@ def check_46(led: Ledger) -> Report:
     for name in sorted(set(read) - listed):
         r.bad(f"블록 `{name}` 를 {' · '.join(sorted(set(read[name])))} 가 읽는데 "
               f"§5 의 목록이 그것을 들지 않는다")
-    r.note(f"목록이 든 블록 {len(listed)} · 읽히는 블록 {len(read)}")
+    um = SPEC_UNREAD_SENTENCE.search(f.read_text(encoding="utf-8"))
+    unread = set(SPEC_BLOCK_NAME.findall(um.group(1))) if um else set()
+    for name in sorted(listed & unread):
+        r.bad(f"블록 `{name}` 가 검사가 읽는 목록과 읽지 않는 목록에 함께 든다")
+    for name in sorted(unread & set(read)):
+        r.bad(f"블록 `{name}` 를 {' · '.join(sorted(set(read[name])))} 가 읽는데 "
+              f"§5 가 그것을 어느 검사도 읽지 않는 블록으로 든다")
+    g = led.root / "docs" / "baseline.md"
+    present = set(BASELINE_BLOCK_FORM.findall(g.read_text(encoding="utf-8"))) \
+        if g.is_file() else set()
+    for name in sorted(present - listed - unread):
+        r.bad(f"docs/baseline.md 에 선 블록 `{name}` 를 §5 의 두 목록 어디에도 들지 않는다")
+    for name in sorted((listed | unread) - present):
+        r.bad(f"§5 가 드는 블록 `{name}` 가 docs/baseline.md 에 서지 않는다")
+    r.note(f"목록이 든 블록 {len(listed)} · 읽히는 블록 {len(read)}"
+           f" · 읽지 않는 블록으로 든 것 {len(unread)} · 값 정본에 선 블록 {len(present)}")
     for name in sorted(read):
         r.note(f"{name} — {' · '.join(sorted(set(read[name])))}")
     return r

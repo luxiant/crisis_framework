@@ -278,6 +278,81 @@ def inj_41_section(root):
     return _inject_pointer(root, "POINTER_SECTION")
 
 
+# 면제를 지목의 대상으로 좁힌 자리를 재는 주입의 절 제목. 사본의 집행 문면에 번호를 든 절 제목을
+# 세워 그 번호가 그 문서 자신의 절 제목에 서게 하며, 그래야 자기 절 제목의 면제가 걸릴 자리가 선다.
+INJ_POINTER_HEADING = "\n## 97. 음성 대조가 주입한 절\n\n## 98. 음성 대조가 주입한 둘째 절\n"
+
+
+def _inject_pointer_text(root, text, delta):
+    """그 문면을 집행 문면의 말미에 더하고 절 번호 갈래만 그 수만큼 움직였음을 단언한다.
+
+    **잡히지 않아야 하는 주입도 이 자리를 지난다.** 그때 그 수가 영이며, 면제가 그대로 서야 하는
+    자리에서 적발이 늘면 그 좁힘이 넘친 것이므로 주입 안에서 터진다.
+    """
+    led = wiki_common.Ledger(root)
+    dist, _exempt = wiki_prose.r11_rules(led)
+    if dist is None:
+        raise SystemExit("R11 블록에 거리가 없어 주입과 판정이 같은 값을 쓰지 못한다")
+    before = {k: len(v) for k, v in
+              wiki_prose.pointer_hits(led.pointer_scan_targets(), dist).items()}
+    f = root / INJ_POINTER_DOC
+    f.write_text(f.read_text(encoding="utf-8") + text, encoding="utf-8")
+    after = {k: len(v) for k, v in
+             wiki_prose.pointer_hits(
+                 wiki_common.Ledger(root).pointer_scan_targets(), dist).items()}
+    for k in before:
+        want = before[k] + delta if k == "POINTER_SECTION" else before[k]
+        if after[k] != want:
+            raise SystemExit(f"주입이 {k} 를 {before[k]} 에서 {after[k]} 로 바꿨다. "
+                             f"{want} 여야 한다")
+    return "POINTER_SECTION"
+
+
+def _extraction_names(root) -> list[str]:
+    return sorted(f.name for f in (root / "docs" / "extractions").glob("extraction-*.md"))
+
+
+def inj_41_outside_named(root):
+    """그 문서 자신의 절 제목에 선 번호를 리포 밖 문서의 이름 바로 뒤에 둔다."""
+    return _inject_pointer_text(
+        root, INJ_POINTER_HEADING + "\n세션 지시 §97 이 그 요구를 든다.\n", 1)
+
+
+def inj_41_outside_chain(root):
+    """리포 밖 문서의 이름 뒤에 그 문서 자신의 절 제목에 선 번호 둘을 잇달아 둔다."""
+    return _inject_pointer_text(
+        root, INJ_POINTER_HEADING + "\n세션 지시 §97 과 §98 이 그 요구를 든다.\n", 2)
+
+
+def inj_41_fabricated_extraction(root):
+    """실재하지 않는 추출 기록의 이름 뒤에 절 번호를 둔다.
+
+    번호를 기존 최대의 다음으로 고른다. 실재하는 번호를 고르면 이름 토막이 그 기록의 머리와 겹쳐
+    면제가 서는 자리를 주입이 고를 수 있다.
+    """
+    nums = [int(m.group(1)) for n in _extraction_names(root)
+            for m in [wiki_common.EXTRACTION_FILE_NO.match(n)] if m]
+    if not nums:
+        raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
+    name = f"extraction-{max(nums) + 1:02d}-negative-control-absent.md"
+    return _inject_pointer_text(root, f"\n`{name}` §3 이 그것을 든다.\n", 1)
+
+
+def inj_41_real_extraction_kept(root):
+    """실재하는 추출 기록의 이름 뒤에 선 절 번호는 면제가 그대로 선다."""
+    names = _extraction_names(root)
+    if not names:
+        raise SystemExit("사본에 추출 기록이 없어 이름을 고를 자리가 없다")
+    return _inject_pointer_text(root, f"\n`{names[0]}` §3 이 그것을 든다.\n", 0)
+
+
+def inj_41_own_heading_kept(root):
+    """리포 밖 문서의 이름이 떨어져 선 자리에서는 자기 절 제목의 면제가 그대로 선다."""
+    return _inject_pointer_text(
+        root, INJ_POINTER_HEADING
+        + "\n세션 지시가 요구하는 자리이며 이 문서의 §97 이 그것을 든다.\n", 0)
+
+
 def inj_49_unpointed(root):
     """어느 docstring 도 지목하지 않는 추출 기록을 하나 더한다.
 
@@ -625,6 +700,11 @@ CASES = [
     ("41", "wiki41-pointer-scope", "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment, None),
     ("41", "wiki41-pointer-scope", "소진 문서의 식별자 꼴을 하나 더한다", inj_41_ephemeral, None),
     ("41", "wiki41-pointer-scope", "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None),
+    ("41", "wiki41-pointer-scope", "그 문서 자신의 절 제목에 선 번호를 리포 밖 문서의 이름 바로 뒤에 둔다", inj_41_outside_named, None),
+    ("41", "wiki41-pointer-scope", "리포 밖 문서의 이름 뒤에 그 문서 자신의 절 번호 둘을 잇달아 둔다", inj_41_outside_chain, None),
+    ("41", "wiki41-pointer-scope", "실재하지 않는 추출 기록의 이름 뒤에 절 번호를 둔다", inj_41_fabricated_extraction, None),
+    ("41", "wiki41-pointer-scope", "실재하는 추출 기록의 이름 뒤에 절 번호를 둔다", inj_41_real_extraction_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "리포 밖 문서의 이름이 떨어져 선 자리에 자기 절 번호를 둔다", inj_41_own_heading_kept, None, "nocatch"),
     ("49", "wiki49-extraction-unpointed", "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
     ("50", "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
     ("50", "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),

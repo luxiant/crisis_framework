@@ -148,6 +148,70 @@ def inj_46_ghost(root):
     return ghost
 
 
+# 값 정본에 세우는 시험 블록의 이름. 두 목록 어디에도 없는 이름이어야 그 주입이 겨눈 자리가 선다.
+PROBE_BLOCK = "NCPROBE"
+
+
+def _plant_probe_block(root):
+    """사본의 값 정본 말미에 시험 블록 하나를 세운다."""
+    g = root / "docs" / "baseline.md"
+    text = g.read_text(encoding="utf-8")
+    if f"{PROBE_BLOCK}:BEGIN" in text:
+        raise SystemExit(f"`{PROBE_BLOCK}` 블록이 값 정본에 이미 있다")
+    g.write_text(text + f"\n<!-- {PROBE_BLOCK}:BEGIN -->\n{PROBE_BLOCK}_X=1\n"
+                 f"<!-- {PROBE_BLOCK}:END -->\n", encoding="utf-8")
+
+
+def _spec_unread_list(root):
+    """사본의 읽지 않는 블록 목록 문장. (파일, 전문, 그 범위) 를 낸다."""
+    f = root.joinpath(*SPEC_IN_COPY)
+    src = f.read_text(encoding="utf-8")
+    m = wiki_meta.SPEC_UNREAD_SENTENCE.search(src)
+    if m is None:
+        raise SystemExit("사본에서 읽지 않는 블록의 목록을 읽지 못했다")
+    return f, src, m
+
+
+def inj_46_unlisted_block(root):
+    """두 목록 어디에도 들지 않는 블록을 값 정본에 세운다."""
+    _plant_probe_block(root)
+    return PROBE_BLOCK
+
+
+def inj_46_unread_drop(root):
+    """읽지 않는 블록의 목록에서 이름 하나를 지운다."""
+    f, src, m = _spec_unread_list(root)
+    names = wiki_meta.SPEC_BLOCK_NAME.findall(m.group(1))
+    if not names:
+        raise SystemExit("읽지 않는 블록의 목록이 비어 지울 자리가 없다")
+    bent = m.group(1).replace(f"`{names[0]}`", "", 1)
+    f.write_text(src[:m.start(1)] + bent + src[m.end(1):], encoding="utf-8")
+    return names[0]
+
+
+def inj_46_prose_mention(root):
+    """시험 블록을 세우고 산문이 그 이름을 두 목록 밖에서 들게 한다.
+
+    **목록의 문장 밖에서 이름을 드는 문면은 목록에 드는 것이 아니다.** 그 문면을 목록으로 받는 꼴이
+    서면 이 주입이 실패를 내지 못한다.
+    """
+    _plant_probe_block(root)
+    f = root.joinpath(*SPEC_IN_COPY)
+    f.write_text(f.read_text(encoding="utf-8")
+                 + f"\n\n음성 대조가 이 자리에서 `{PROBE_BLOCK}` 블록의 이름을 든다.\n",
+                 encoding="utf-8")
+    return PROBE_BLOCK
+
+
+def inj_46_unread_listed(root):
+    """시험 블록을 세우고 읽지 않는 블록의 목록에 그 이름을 더한다. 잡히지 않아야 한다."""
+    _plant_probe_block(root)
+    f, src, m = _spec_unread_list(root)
+    bent = m.group(1).rstrip() + f" 와 `{PROBE_BLOCK}` "
+    f.write_text(src[:m.start(1)] + bent + src[m.end(1):], encoding="utf-8")
+    return PROBE_BLOCK
+
+
 def inj_47_ghost(root):
     """어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다.
 
@@ -217,6 +281,10 @@ CASES = [
     ("44", "wiki44-injection-mirror", "사례 목록의 한 항이 전사한 단계 id 를 다른 값으로 바꾼다", inj_44_step, None),
     ("46", "wiki46-block-list-mirror", "목록에서 블록 이름 하나를 지운다", inj_46_drop, None),
     ("46", "wiki46-block-list-mirror", "어느 검사도 읽지 않는 이름을 더한다", inj_46_ghost, None),
+    ("46", "wiki46-block-list-mirror", "두 목록 어디에도 들지 않는 블록을 값 정본에 세운다", inj_46_unlisted_block, None),
+    ("46", "wiki46-block-list-mirror", "읽지 않는 블록의 목록에서 이름 하나를 지운다", inj_46_unread_drop, None),
+    ("46", "wiki46-block-list-mirror", "그 블록을 세우고 산문이 그 이름을 두 목록 밖에서 들게 한다", inj_46_prose_mention, None),
+    ("46", "wiki46-block-list-mirror", "그 블록을 세우고 읽지 않는 블록의 목록에 그 이름을 더한다", inj_46_unread_listed, None, "nocatch"),
     ("47", "wiki47-spec-field-check-no", "어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다", inj_47_ghost, None),
     ("51", "wiki51-ledger-key-universe", "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
 ]

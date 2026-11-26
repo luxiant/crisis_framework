@@ -204,6 +204,39 @@ POINTER_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z])E-\d{1,2}(?![0-9A-Za-z])")
 POINTER_EXTRACTION_FILE = re.compile(r"(?<![0-9A-Za-z])extraction-[0-9]{2}(?![0-9])")
 
 
+# 그 면제가 받는 이름의 꼴. 번호 뒤에 하이픈으로 이은 이름 토막과 확장자를 함께 받는다. **그 이름이
+# 가리키는 기록이 실재할 때만 면제한다.** 번호의 꼴은 지목의 착지를 재는 다른 검사가 같은 축에서 따로
+# 받으나 파일 이름의 꼴은 그 축에 걸리지 않으므로, 실재를 보지 않으면 지어낸 이름이 면제로 빠진다.
+# 이름 토막이 하이픈의 경계에서 끊긴 꼴도 실재하는 이름의 머리이면 받으며, 번호까지만 줄여 드는 꼴이
+# 그 특수한 경우다.
+POINTER_EXTRACTION_NAME = re.compile(r"extraction-[0-9]{2}(?:-[0-9A-Za-z]+)*(?:\.md)?")
+
+
+# 갈래 3 의 면제를 지목의 대상으로 좁힌다. **리포 밖 문서의 이름이 절 번호 바로 앞에 서면 그 지목은
+# 그 문서의 절을 가리키므로 출처 표지를 뺀 면제 전량에 앞서 적발로 센다.** 그 문서 자신의 절 제목에
+# 같은 번호가 서는 것만 보면 번호가 무엇의 절인지를 보지 않게 되어, 절이 여럿인 문서가 세션 지시의
+# 그 범위를 가리키는 지목이 전부 면제로 빠진다. 이름과 번호 사이에는 공백과 관형격 조사만 둔다. 출처
+# 표지는 규율 조항의 역추적을 붙인 자리라는 설계가 그대로이므로 이 좁힘이 그 면제를 넘지 않는다.
+POINTER_OUTSIDE_DOC = re.compile(
+    r"(?:세션\s*지시|부록|청사진|항해도|회의록|지시서|별지|카드)\s*(?:의\s*)?$")
+
+
+# 절 번호가 잇달아 열거된 자리에서 앞의 지목이 리포 밖 문서를 가리켰으면 뒤의 지목도 그 문서를
+# 가리킨다. 둘 사이에 접속의 낱말이나 가운뎃점이나 쉼표와 공백만 서면 잇달음으로 본다.
+POINTER_CHAIN_GAP = re.compile(r"^\s*(?:과|와|및|·|,|또는|이나)?\s*$")
+
+
+def _extraction_named(head: str, names: set[str]) -> bool:
+    """그 문면이 실재하는 추출 기록의 이름을 드는가."""
+    for m in POINTER_EXTRACTION_FILE.finditer(head):
+        tok = POINTER_EXTRACTION_NAME.match(head, m.start()).group(0)
+        if tok.endswith(".md"):
+            tok = tok[:-3]
+        if any(n == tok + ".md" or n.startswith(tok + "-") for n in names):
+            return True
+    return False
+
+
 def pointer_block(led: Ledger) -> dict[str, int]:
     """`POINTER` 블록이 든 갈래별 적발 계수."""
     got: dict[str, int] = {}
@@ -224,6 +257,11 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
     쓸 때 두 번 읽게 되는 것이다.
     """
     out: dict[str, list[str]] = {k: [] for k in POINTER_KEYS}
+    # 실재하는 추출 기록의 이름. 유니버스가 `docs/` 아래의 마크다운 전량을 들므로 그 목록에서 뽑고
+    # 파일시스템을 따로 읽지 않는다. 블록을 심는 쪽과 맞대는 쪽이 같은 유니버스를 넘기므로 둘이 같은
+    # 이름 집합을 본다.
+    names = {rel.rsplit("/", 1)[-1] for rel, _ in targets
+             if rel.startswith("docs/extractions/")}
     for rel, text in targets:
         lines = text.splitlines()
         # 그 문서 자신의 절 제목에 선 번호. 자기 절을 가리키는 것은 적발이 아니다.
@@ -237,14 +275,21 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
                 out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
             for m in POINTER_EPHEMERAL_FILE.finditer(ln):
                 out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
+            prev_end, prev_out = 0, False
             for m in POINTER_SECTION_NO.finditer(ln):
                 head = ln[:m.start()]
-                if (POINTER_SOURCE_MARK in head or POINTER_DOC_NAME.search(head)
-                        or POINTER_EXTRACTION_NO.search(head)
-                        or POINTER_EXTRACTION_FILE.search(head)):
+                outside = bool(POINTER_OUTSIDE_DOC.search(head)) or (
+                    prev_out and POINTER_CHAIN_GAP.match(ln[prev_end:m.start()]) is not None)
+                prev_end, prev_out = m.end(), outside
+                if POINTER_SOURCE_MARK in head:
                     continue
-                if m.group(1) in own:
-                    continue
+                if not outside:
+                    if (POINTER_DOC_NAME.search(head)
+                            or POINTER_EXTRACTION_NO.search(head)
+                            or _extraction_named(head, names)):
+                        continue
+                    if m.group(1) in own:
+                        continue
                 out["POINTER_SECTION"].append(f"{rel}:{i} `{m.group(0)}`")
     return out
 

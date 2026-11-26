@@ -182,6 +182,12 @@ def _out_of_scope_arc(root) -> str:
 
     **지을 수 없는 전제가 남으면 그때는 그대로 멈춘다.** 조용히 통과하는 것보다 멈추는 것이 옳다는
     이 구성기의 설계는 그대로이고, 바뀐 것은 지을 수 있는 전제의 범위다.
+
+    **바꿀 아크도 없으면 사본에 범위 밖인 아크 하나를 새로 세운다.** 예약된 아크가 다 열리면 바꿀
+    레코드가 남지 않아 그 주입이 건너뛴 항이 되는데, 그 자리가 결손이 아니라 아크의 처분이 낳은 귀결이어도
+    검사 28 의 그 몫이 재어지지 않는 것은 그대로다. 새 레코드는 이름과 상태와 빈 배열만 들고 다른 아크의
+    값을 빌리지 않으므로, 그 레코드가 그 검사에서 내는 위반은 그 주입이 적는 `cq` 뿐이다. 이름은 레코드의
+    이름과 겹치지 않는 것을 고른다.
     """
     doc = arcs(root)
     for x in doc["arcs"]:
@@ -192,8 +198,23 @@ def _out_of_scope_arc(root) -> str:
             x["status"] = wiki_ledger.ARC_OUT_OF_SCOPE
             save_arcs(root, doc)
             return x["name"]
-    raise SystemExit("음성 대조: 범위 밖인 아크를 사본에서도 지을 수 없어 "
-                     "검사 12·28 의 조건을 만들 수 없다")
+    taken = {x.get("name") for x in doc["arcs"]}
+    name = next((f"ncscope{i}" for i in range(1, 100) if f"ncscope{i}" not in taken), None)
+    if name is None:
+        raise SystemExit("음성 대조: 범위 밖인 아크를 사본에서도 지을 수 없어 "
+                         "검사 12·28 의 조건을 만들 수 없다")
+    doc["arcs"].append({
+        "name": name,
+        "discriminator": "음성 대조가 사본에만 세우는 범위 밖 아크",
+        "phases": [],
+        "status": wiki_ledger.ARC_OUT_OF_SCOPE,
+        "opened": None,
+        "closed": None,
+        "holes": [],
+        "cq": [],
+    })
+    save_arcs(root, doc)
+    return name
 
 
 def inj_28_out_of_scope(root):
