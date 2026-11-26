@@ -280,13 +280,14 @@ A Comment on a Model of Vertical Product Differentiation (1992), An approach to 
 대해 더 이상 서지 않는다.** 그 편이 그 망의 노드와 변을 직접 드는 자리이고 같은 사슬 위에 성질이 다른
 층 셋이 겹친다는 것을 드는 유일한 자리다.
 
-## 중복 (3쌍)
+## 중복 (4쌍)
 
-세 쌍 모두 해시가 같은 파일이다. 왼쪽 사본은 구성원을 늘리지 않는다.
+모든 쌍이 해시가 같은 파일이다. 왼쪽 사본은 구성원을 늘리지 않는다.
 
 - `Shin/BIS Bulletin.pdf` = `Shin/Next generation correspondent banking.pdf`
 - `Shin/The shadow banking system implications for financial regulation.pdf` = `Adrian/Shadow Banking System Implications for Financial Regulation.pdf` (Adrian·Shin 2009, SR 382). 유지본은 O-2 보조가 든다
 - `Clack/Smart contract templates the semantics of smart legal agreements.pdf` = `Clack/Smart contract templates foundations, design landscape and research directions.pdf` (Clack·Bakshi·Braine 2016). 앞 파일의 이름이 본문의 제목과 다르다
+- `기타/Asset Freeze and Prohibition to Make Funds and Economic Resources Available.pdf` = `기타/Asset freeze and prohibition to make funds and economic resources available Related provision Council Regulation 269 2014 Frequently asked questions as of 25 September 2026.pdf`. 집행위원회의 자산 동결 문항 묶음이며 유지본은 소유와 지배의 판정 지침 무리가 든다. `housekeeper1-7` 의 초입에 갱신된 압축에 앞 파일이 함께 들었다
 
 ---
 
@@ -603,25 +604,45 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 올랐으므로 구성원이다. 연방준비제도의 외화 운용 기록과 스왑망의 이력을 다룬 논문과, 통일상법전 조문의 공식 주석을
 싣는 주 의회 법안과 법령 면과 그 주석의 해설과, 두 은행의 증권화 노출을 드는 공시와 조사 보고서와 기사가 그 묶음이다.
 파일 하나가 편 하나다. **아직 읽지 않았으므로 행마다 미추출 표지를 둔다.** 그 편을 읽는 페이즈가 추출 기록을
-세우면서 그 표지를 기록 번호로 바꾼다.
+세우면서 그 표지를 기록 번호로 바꾼다. `housekeeper1-7` 이 이 무리의 편을 전량 읽고 E-90 부터 E-92 까지를 세워 그
+표지를 바꾸었다.
 
 | 편 | 발행 주체와 판 | 기록 |
 |---|---|---|
-| 연방준비제도 외화 운용 태스크포스 묶음 | 연방준비제도. 1990-03-09 의 묶음이며 2020-01-31 에 공개되었다. 601쪽 | 미추출 |
-| 벨기에 스왑 약정의 평가절상 조항 발동 메모 | 연방공개시장위원회. 쿰스의 1972-03-20 메모이며 2020년에 공개되었다. 3쪽 | 미추출 |
-| The Evolution of the Federal Reserve Swap Lines since 1962 | Bordo·Humpage·Schwartz (NBER WP 20755). 31쪽 | 미추출 |
-| 컬럼비아 특별구 법령 제28:2-403조의 면 | 컬럼비아 특별구 법령의 웹 면. 통일상법전 제2-403조의 공식 주석의 본문을 싣되 교차 지목이 옛 판이다 | 미추출 |
-| 통일상법전 제1편의 공식 주석 면 | CALI 의 웹 면. 제1-201조의 공식 주석 9 를 싣는다 | 미추출 |
-| 메인주 법안 LD 2245 | 메인주 제119대 의회. 개정 제9편을 채택하는 법안이며 Word 97 파일이다 | 미추출 |
-| 메인주 법안 LD 1403 | 메인주 제124대 의회. 개정 제1편을 채택하는 법안. 55쪽 | 미추출 |
-| PEB 해설 제32호 | 통일상법전 상설 편집위원회. 2025-02-27. 5쪽 | 미추출 |
-| PEB 해설 제32호를 소개하는 칼럼 | Goodstein·Wolk (메이어 브라운). 2025-10-01. 4쪽. PDF 속성의 제목과 저자는 다른 글의 것이 남아 있다 | 미추출 |
-| 시티그룹 2007년 연차 보고서 Form 10-K | 시티그룹. 2007 회계연도. 208쪽 | 미추출 |
-| 시티그룹의 ABCP 와 CDO 노출을 다룬 기사 | Asset Securitization Report. 2008-03-03. 유료 벽으로 첫 문단만 있다 | 미추출 |
-| 금융위기조사위원회 최종 보고서 제8장 | 금융위기조사위원회. 2011년 최종 보고서. 29쪽 | 미추출 |
-| 금융위기조사위원회가 시티그룹에 보낸 추가 질의와 답변 | 금융위기조사위원회. 2010-06-09 의 질의와 그 뒤의 답변. 27쪽 | 미추출 |
-| UBS 의 상각에 관한 주주 보고서 | UBS. 2008-04-18. 50쪽 | 미추출 |
-| UBS 의 상각 원인에 관한 스위스 연방은행위원회 조사 보고서 | 스위스 연방은행위원회. 2008-09-30. 16쪽 | 미추출 |
+| 연방준비제도 외화 운용 태스크포스 묶음 | 연방준비제도. 1990-03-09 의 묶음이며 2020-01-31 에 공개되었다. 601쪽 | E-90 |
+| 벨기에 스왑 약정의 평가절상 조항 발동 메모 | 연방공개시장위원회. 쿰스의 1972-03-20 메모이며 2020년에 공개되었다. 3쪽 | E-90 |
+| The Evolution of the Federal Reserve Swap Lines since 1962 | Bordo·Humpage·Schwartz (NBER WP 20755). 31쪽 | E-90 |
+| 컬럼비아 특별구 법령 제28:2-403조의 면 | 컬럼비아 특별구 법령의 웹 면. 통일상법전 제2-403조의 공식 주석의 본문을 싣되 교차 지목이 옛 판이다 | E-91 |
+| 통일상법전 제1편의 공식 주석 면 | CALI 의 웹 면. 제1-201조의 공식 주석 9 를 싣는다 | E-91 |
+| 메인주 법안 LD 2245 | 메인주 제119대 의회. 개정 제9편을 채택하는 법안이며 Word 97 파일이다 | E-91 |
+| 메인주 법안 LD 1403 | 메인주 제124대 의회. 개정 제1편을 채택하는 법안. 55쪽 | E-91 |
+| PEB 해설 제32호 | 통일상법전 상설 편집위원회. 2025-02-27. 5쪽 | E-91 |
+| PEB 해설 제32호를 소개하는 칼럼 | Goodstein·Wolk (메이어 브라운). 2025-10-01. 4쪽. PDF 속성의 제목과 저자는 다른 글의 것이 남아 있다 | E-91 |
+| 시티그룹 2007년 연차 보고서 Form 10-K | 시티그룹. 2007 회계연도. 208쪽 | E-92 |
+| 시티그룹의 ABCP 와 CDO 노출을 다룬 기사 | Asset Securitization Report. 2008-03-03. 유료 벽으로 첫 문단만 있다 | E-92 |
+| 금융위기조사위원회 최종 보고서 제8장 | 금융위기조사위원회. 2011년 최종 보고서. 29쪽 | E-92 |
+| 금융위기조사위원회가 시티그룹에 보낸 추가 질의와 답변 | 금융위기조사위원회. 2010-06-09 의 질의와 그 뒤의 답변. 27쪽 | E-92 |
+| UBS 의 상각에 관한 주주 보고서 | UBS. 2008-04-18. 50쪽 | E-92 |
+| UBS 의 상각 원인에 관한 스위스 연방은행위원회 조사 보고서 | 스위스 연방은행위원회. 2008-09-30. 16쪽 | E-92 |
+
+**구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
+압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
+
+---
+
+## 집행위원회의 의견서 (3편)
+
+`housekeeper1-6` 을 닫은 뒤에 사용자가 올리고 `housekeeper1-7` 의 초입에 갱신된 압축으로 뭉치에 들어온 문면이며,
+회원국 당국의 질의에 답해 유럽연합 집행위원회가 제재 규정의 조문의 적용을 푼 의견서다. 전량 뭉치 밖에서 들어와 이
+목록에 올랐으므로 구성원이다. 소유와 지배의 판정 지침 무리와 발행 주체가 같으나, 그 무리의 편 전량을 한 기록이 받고
+그 기록이 의견서를 유니버스 밖에 두었으므로 새 무리로 들인다. 파일 하나가 편 하나이며, `housekeeper1-7` 이 이 무리의
+편을 전량 읽고 E-93 을 세웠다.
+
+| 편 | 발행 주체와 판 | 기록 |
+|---|---|---|
+| 제833/2014호 규정 제5조 제1항에 관한 집행위원회 의견서 | 유럽연합 집행위원회. C(2019) 7476, 2019-10-17. 4쪽 | E-93 |
+| 제269/2014호 규정 제2조에 관한 집행위원회 의견서 2020년 판 | 유럽연합 집행위원회. C(2020) 4117, 2020-06-19. 8쪽 | E-93 |
+| 제269/2014호 규정 제2조에 관한 집행위원회 의견서 2021년 판 | 유럽연합 집행위원회. C(2021) 4223, 2021-06-08. 8쪽 | E-93 |
 
 **구성원 합계를 드는 절은 이 조작이 고치지 않으며, 그 값이 앞 판의 셈이고 그 셈법의 정본이 검사 61 이다.**
 압축 대조 문단도 고치지 않으며, 이 판의 압축과의 대조는 압축의 파일 목록 절이 든다.
@@ -630,7 +651,7 @@ zip 밖이 11 에서 13 으로 늘었다. zip 안 구성원과 중복 사본과 
 
 ## 압축의 파일 목록
 
-뭉치의 압축 `macro_models_3.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
+뭉치의 압축 `macro_models_4.zip` 의 파일 전량을 아래 블록이 든다. 줄마다 압축 안의 경로와 바이트와 sha256 앞머리
 열두 자리와 그 파일이 속한 무리와 편을 세로 막대로 가른다. 무리는 이 문서의 `##` 절 제목에서 괄호를 걷은 꼴이고,
 편은 그 무리의 표의 행이나 나열 문단이 드는 제목을 그대로 옮긴 꼴이다. 해시가 같은 사본의 왼쪽은 무리를 「중복」으로
 들고 편이 그 짝의 편이다. **압축이 아니라 이 목록이 뭉치의 정본이다.** 뒤에 압축이 올라오는 회차는
@@ -773,10 +794,14 @@ BUNDLEFILE=기타/AFME Securisation Report 2021Q2.pdf|1314458|1712fcb6a1bf|중�
 BUNDLEFILE=기타/Akoma Ntoso Naming Convention Version 1.0 - OASIS Standard 21 February 2019.pdf|632091|104af3c07f48|제재와 식별과 법령 문면|Akoma Ntoso 명명 규약 1.0
 BUNDLEFILE=기타/ALI PEB Commentary No 32.pdf|194035|8017c6cf935b|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|PEB 해설 제32호
 BUNDLEFILE=기타/Asset freeze and prohibition to make funds and economic resources available Related provision Council Regulation 269 2014 Frequently asked questions as of 25 September 2026.pdf|330522|d3bcaf252e71|소유와 지배의 판정 지침|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
+BUNDLEFILE=기타/Asset Freeze and Prohibition to Make Funds and Economic Resources Available.pdf|330522|d3bcaf252e71|중복|자산 동결과 자금·경제적 자원 제공 금지의 문항 묶음
 BUNDLEFILE=기타/Citi Details ABCP CDO Exposures.html|158538|fe63d8cdfe4e|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹의 ABCP 와 CDO 노출을 다룬 기사
 BUNDLEFILE=기타/citi Group 2007 Annual Report on Form 10K.pdf|2472494|919f5bc8832c|통화 교환 약정의 이력과 매수인 조문의 주석과 증권화 노출의 공시|시티그룹 2007년 연차 보고서 Form 10-K
 BUNDLEFILE=기타/commision consolidated faqs on the implementation of council regulation no 833 2014 and council regulation no 269 2014.pdf|3274855|915992d4001d|소유와 지배의 판정 지침|두 규정의 집행에 관한 통합 문항 묶음
 BUNDLEFILE=기타/Commission Delegated Regulation (EU) 2016 341 of 17 December 2015 - Union Customs Code Transitional Rules.pdf|23319706|371cc1a725a8|무역과 만기 보고의 서식|연합 관세법 경과 규정의 위임규칙
+BUNDLEFILE=기타/Commission Opinion of 17 10 2019 on Article 5(1) of Council Regulation No 833 2014.pdf|259236|70dd3d6456eb|집행위원회의 의견서|제833/2014호 규정 제5조 제1항에 관한 집행위원회 의견서
+BUNDLEFILE=기타/Commission Opinion of 19 6 2020 on Article 2 of Council Regulation No 269 2014.pdf|381516|20cbb43c72e9|집행위원회의 의견서|제269/2014호 규정 제2조에 관한 집행위원회 의견서 2020년 판
+BUNDLEFILE=기타/Commission Opinion of 8 6 2021 on Article 2 of Council Regulation No 269 2014.pdf|148907|9e6c6766f397|집행위원회의 의견서|제269/2014호 규정 제2조에 관한 집행위원회 의견서 2021년 판
 BUNDLEFILE=기타/Commodities as Collateral.pdf|696048|09ca40a50527|상품 담보 금융|Commodities as Collateral
 BUNDLEFILE=기타/Composing contracts an adventure in financial engineering.pdf|386606|50678d86a7f8|계약 표현 — 청구권 타입의 설계 대안|Composing Contracts: An Adventure in Financial Engineering
 BUNDLEFILE=기타/Contract as automaton Representing a simple financial agreement in computational form.pdf|2617189|5b2628900838|계약 표현 — 청구권 타입의 설계 대안|Contract as Automaton

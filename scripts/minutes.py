@@ -177,6 +177,8 @@ def read_kind_home(g):
                     if '갈래는' in sq:
                         if '없음.원장표지묶음의entry가받는다' in sq:
                             kinds.append('흡수:원장표지묶음')
+                        elif '없음.아크개막entry가받는다' in sq:
+                            kinds.append('흡수:아크개막')
                         elif re.search(r'없음\.`낙착-\d+(?:-\(\d+\))?`의entry가받는다', sq):
                             # 흡수의 꼴과 낙착을 지목하는 고정 꼴이 이 자리에서 부딪히므로 둘을 함께 받는다
                             kinds.append('흡수:낙착')
@@ -217,6 +219,8 @@ def apply_decls(g, decls):
             arg = d['arg']
             if squeeze(arg) == squeeze('없음. 원장 표지 묶음의 entry 가 받는다'):
                 g[t]['kind'] = '흡수:원장표지묶음'
+            elif squeeze(arg) == squeeze('없음. 아크 개막 entry 가 받는다'):
+                g[t]['kind'] = '흡수:아크개막'
             elif squeeze(arg) == '없음':
                 g[t]['kind'] = '없음'
             else:
@@ -310,6 +314,7 @@ def detect(g, decls, text, ghosts=()):
         fb0 = fold(mb0.group(1)) if mb0 else ''
         if (DECL_PATTERNS['reinforce'].search(fb0)
                 or '원장 표지 묶음의 entry 가 받는다' in fb0
+                or '아크 개막 entry 가 받는다' in fb0
                 or re.search(r'`낙착-\d+`의entry가받는다', squeeze(fb0))):
             out['reinforce_in_first'].append((k, fb0[:140]))
         # 보강 선언을 든 낙착. 그 선언이 그 낙착의 몸통에 서는 쪽이다
@@ -483,6 +488,9 @@ SELFTEST_BASE = '''# 회의록 — `test-1`
 **`낙착-1-(7)` 설비의 꼴을 고친다.** 몸통 문장이다.
 **갈래는 「없음」이다. 거처는 부록과 설비 코드다.**
 
+**`낙착-1-(8)` 아크를 여는 결정이 받는 낙착이다.** 몸통 문장이다.
+**갈래는 「없음. 아크 개막 entry 가 받는다」이다. 거처는 결정 레지스터다.**
+
 ---
 
 ## 선언
@@ -511,6 +519,12 @@ def selftest():
     assert all(not v for k, v in d0.items() if k not in ('decisions_only', 'gist_count')), d0
     # 설비 코드를 든 낙착이 그 낱말을 거처로 받고, 갈래가 「없음」이어도 적발이 서지 않는다
     assert '설비 코드' in g0[(1, 7)]['homes'] and '부록' in g0[(1, 7)]['homes'], g0[(1, 7)]['homes']
+    # 아크를 여는 결정 entry 가 받는 흡수의 꼴을 갈래 자리에서 읽고, 같은 꼴을 고침 선언으로도 받는다
+    assert g0[(1, 8)]['kind'] == '흡수:아크개막', g0[(1, 8)]['kind']
+    _, g8 = _run(base.replace('**`낙착-1-(6)` 을 폐기한다.**',
+                              '**`낙착-1-(6)` 을 폐기한다.**\n\n'
+                              '**`낙착-1-(7)` 의 갈래를 「없음. 아크 개막 entry 가 받는다」 로 고친다.**'))
+    assert g8[(1, 7)]['kind'] == '흡수:아크개막', g8[(1, 7)]['kind']
     axes = [
         ('고침 선언의 꼴', lambda t: t.replace(
             '`낙착-1-(2)` 의 갈래를 「없음. 원장 표지 묶음의 entry 가 받는다」 로 고친다.',
@@ -545,6 +559,13 @@ def selftest():
         ('요지가 실물의 계수를', lambda t: t.replace(
             '`낙착-1-(3)` 조작의 목록을', '`낙착-1-(3)` 선언 열여섯이 드는 조작의 목록을'),
          'gist_count'),
+        ('아크 개막 흡수의 꼴', lambda t: t.replace(
+            '「없음. 아크 개막 entry 가 받는다」이다', '「없음. 아크 개막의 entry 가 받는다」이다'),
+         'kind_unread'),
+        ('아크 개막 흡수를 첫 굵은 구간에', lambda t: t.replace(
+            '`낙착-1-(5)` 집행 증분이 증명을',
+            '`낙착-1-(5)` 아크 개막 entry 가 받는다. 집행 증분이 증명을'),
+         'reinforce_in_first'),
     ]
     rows, ok = [], True
     for name, mut, axis in axes:
