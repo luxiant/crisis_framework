@@ -37,7 +37,7 @@
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-8` (2026-11-25, `32b49be`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
 | 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `funding-8` (2026-11-25, `32b49be`) |
-| 관측층 | 무차원 | `[]` | `housekeeper1-5` (2026-11-26, `723793f`) |
+| 관측층 | 무차원 | `[]` | `housekeeper1-6` (2026-11-26, `6277b33`) |
 | 용어집 | 없음 | `[]` | `funding-6` (2026-11-24, `b197493`) |
 | 동학층 | `ℝ` | **미측정** | |
 
