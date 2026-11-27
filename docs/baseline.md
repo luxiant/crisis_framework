@@ -36,7 +36,7 @@
 |---|---|---|---|
 | 회계층 | `ℤ` | `[propext, Quot.sound]` | `funding-8` (2026-11-25, `32b49be`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
-| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `funding-8` (2026-11-25, `32b49be`) |
+| 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `bypass1-4` (2026-11-27, `09d6fd1`) |
 | 관측층 | 무차원 | `[]` | `bypass1-3` (2026-11-27, `c887ada`) |
 | 용어집 | 없음 | `[]` | `funding-6` (2026-11-24, `b197493`) |
 | 동학층 | `ℝ` | **미측정** | |
@@ -778,7 +778,7 @@ ubuntu-26.04 의 20261116.202.1 판이고, 같은 로그에서 전량 재빌드 
 수를 옮긴다. 처음 값은 이 블록이 설 때 그 설비의 처음 심기 모드가 그때의 네 파일에서 심었다.
 
 <!-- LEDGERFIX:BEGIN -->
-LEDGERFIX=decisions|3536|3814251|7d3f58ba9f3e
+LEDGERFIX=decisions|3537|3815656|cc44dbb49320
 LEDGERFIX=deferred|270|334250|5b902ceb287a
 LEDGERFIX=retirements|316|472913|c07d9cd70b6f
 LEDGERFIX=rejected|797|910993|1792deb6b5d7
