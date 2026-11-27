@@ -32,11 +32,12 @@
 어긋나며, 그 셈을 체제마다 받는 꼴의 설계를 이연이 든다. 유럽연합의 지정된 주체를 드는 동결에서 그 셈은
 여전히 서지 않는다.
 
-**지분 절반이 낳는 지배의 추정은 번짐의 어느 갈래에도 들지 않는다.** 같은 판결이 열거된 주체가 지분
-절반을 가진 회사의 자금을 그 주체가 보유하거나 지배하는 것으로 반박 가능하게 추정하는데(E-85), 소유의
-갈래는 몫이 문턱을 넘는지를 엄격한 비교로 묻고 대리의 갈래는 지분으로 재어지지 않는 관계를 받는다.
-그래서 정확히 절반인 자리가 그 비교와 어긋나는 것이 아니라 이 판정의 밖에 서며, 그 추정을 받는
-갈래가 없다는 결손을 이연이 든다.
+**지분 절반이 낳는 지배의 추정을 소유의 갈래가 기준의 문턱으로 받고 그 반박을 재량 지위가 받는다.** 같은
+판결이 열거된 주체가 지분 절반을 가진 회사의 자금을 그 주체가 보유하거나 지배하는 것으로 반박 가능하게
+추정하는데(E-85), 그 추정이 지분의 몫으로 서므로 소유의 갈래와 같은 자료로 측정되고 지분으로 재어지지 않는
+관계를 받는 대리의 갈래와는 측정이 갈린다. 소유의 갈래는 문턱을 기준의 칸으로 받으므로 절반 이상을 드는
+규정은 그 칸에 절반 바로 앞의 값을 넣고, 반박은 성문의 자리를 당국이 놓은 자리가 덮는 꼴이어서 지정 파일의
+재량 지위가 받는다. 이 파일의 판정은 그 성문의 자리를 낸다.
 
 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
@@ -168,7 +169,7 @@ def StakeNetFamily.constant {EIdx Entity Num : Type} (N : StakeNet EIdx Entity N
 고리를 거친 사슬에서 이 정의의 곱이 두 체제의 몫보다 작고, 문턱에 닿지 않은 고리를 거친 사슬에서 두 체제는
 그 몫을 영으로 센다. 이 정의를 전개하는 정리들이 반증 조건으로 든 관측 가운데 사슬의 몫이 간선의 몫들의
 곱으로 재어지지 않는다는 것이 그 두 체제에서 서며, 그 정리들의 진술은 이 정의에 대해 참으로 남는다. 그 셈을
-받는 설계는 이 정의를 고치지 않고 `CF-4846` 이 트리거를 쓸 수 없는 이연으로 기다린다.
+받는 설계는 이 정의를 고치지 않고 뒤를 잇는 아크를 가리키는 이연 `CF-4912` 가 기다린다.
 조달처: E-94 §5-1 「어느 쪽도 고리의 몫을 곱하지 않으므로」
 
 **수 체계를 매개변수로 받는다.** 곱이 그 매개변수 위의 연산이며 그 연산을 연산 구조에서 받는다.
@@ -207,6 +208,13 @@ def StakeNet.chainValue {EIdx Entity Num Lvl : Type} [DecidableEq EIdx] [Decidab
 열거로 두면 그 원소를 지어내게 된다. 문턱을 참거짓으로 접어 넘었는지만 받는 안도 기각했다. 그 판정이
 망 위의 몫에서 나오므로 접으면 몫을 비교하는 자리가 구조 밖으로 나가고, 이 구조가 조문의 기준을 드는
 자리라는 성격을 잃는다.
+
+**이상의 문턱은 그 몫 바로 앞의 값으로 받는다.** 지정된 주체를 드는 규정이 소유를 일정 몫 이상의 보유로
+정의하고 사법재판소가 지분 절반에서 지배를 추정하는데, 경로의 판정이 몫을 문턱과 엄격한 비교로 맞대므로 그
+규정의 기준은 문턱의 칸에 그 몫 바로 앞의 값을 넣는다. 그 꼴은 몫이 이산의 눈금 위에 있을 때만 서며, 회계층이
+몫을 스케일된 정수로 넣으므로 그 눈금이 선다. 문턱을 칸으로 받는 꼴이 규정마다 다른 기준을 쓰게 하여, 초과를
+드는 조문의 기준과 이상을 드는 규정의 기준이 한 술어로 접히지 않는다.
+조달처: E-70 §6-2 「지정된 주체를 드는 규정 쪽에서 이상을 들고」
 
 **수 체계를 매개변수로 받는다.** 문턱이 그 매개변수의 값이다.
 -/
@@ -269,7 +277,7 @@ def StakeNet.chainQualifies {EIdx Entity Num Lvl : Type} [DecidableEq EIdx] [Dec
 **미국과 영국의 문면은 경로를 합친다.** 해외자산통제실과 산업안보국은 한 주체에 이르는 경로의 몫과 차단된
 자들의 몫을 더해 문턱과 맞대고, 영국의 규정은 한 사람이 여러 경로로 가진 몫을 더하되 서로 다른 지정된
 사람들의 몫은 공동 약정이 없으면 더하지 않는다. 경로를 더하는 안을 기각한 사유는 이 선언이 딛는 조문에
-대해 그대로 서고, 그 합산을 체제마다 받는 꼴은 이 선언을 고치지 않고 `CF-4846` 이 기다린다.
+대해 그대로 서고, 그 합산을 체제마다 받는 꼴은 이 선언을 고치지 않고 `CF-4912` 가 기다린다.
 조달처: E-94 §5-2 「보유자 사이의 합에서 유럽연합과 미국이 한쪽에 서고」
 
 **수 체계를 매개변수로 받는다.** 문턱과 몫의 비교가 그 매개변수 위의 연산이다.
@@ -533,6 +541,24 @@ def reachWitnessActingFor : ReachWitnessEntity → ReachWitnessEntity → Bool :
 -- DD:CF-4296
 def reachWitnessPrincipals : Finset ReachWitnessEntity := {.listed}
 
+/-- **무엇을 증거하는가.** 이상의 문턱을 받는 증거의 번짐 기준이다. 문턱만 문턱과 같은 몫 바로 앞의 몫으로
+바꾸고 설립지 조건은 증거의 번짐 기준의 것을 그대로 쓴다. -/
+-- DD:CF-4909
+def reachWitnessInclusiveCriteria : ReachCriteria ReachWitnessEntity ReachWitnessNum :=
+  { reachWitnessCriteria with threshold := .small }
+
+/-- **무엇을 증거하는가.** 지분 절반의 추정과 그 반박을 드는 재량 지위다. 성문의 자리를 이상의 문턱을 받은
+소유 갈래로 두고, 문턱과 같은 몫으로 소유된 주체에만 반박을 받아들인 당국의 자리를 거짓으로 놓는다. -/
+-- DD:CF-4909
+def reachWitnessPresumption : DiscretionaryStanding ReachWitnessEntity Bool where
+  statutory := fun e =>
+    reachWitnessNet.reachedByOwnership reachWitnessOps reachWitnessInclusiveCriteria
+      reachWitnessDesignation reachWitnessChains e
+  determined := fun e =>
+    match e with
+    | .ownedBelow => some false
+    | _ => none
+
 /--
 번짐의 세 갈래가 각각 홀로 값을 가른다.
 
@@ -753,5 +779,43 @@ theorem exists_thin_link_blocks_reach :
   -- 내므로, 못 미치는 간선을 품은 사슬의 몫이 그 간선의 몫으로 내려가는 것을 포함해 각 등식이
   -- 계산으로 값이 나와 `rfl` 로 닫힌다.
   exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+/--
+이상의 문턱을 받은 기준이 문턱과 같은 몫으로 소유된 주체를 번짐에 들이고, 그 주체에 놓인 반박이 성문의
+자리를 덮는다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+문턱을 문턱과 같은 몫 바로 앞의 몫으로 둔 기준에서 문턱과 같은 몫으로 소유된 주체가 번짐에 들지 않거나, 반박이
+놓인 그 주체의 자리가 성문의 자리로 나오거나, 반박이 놓이지 않은 주체의 자리가 성문의 자리와 달라야 한다. 앞은
+기준의 칸이 이상의 규정을 받지 못한다는 뜻이고, 뒤의 둘은 재량 지위가 반박 가능한 추정의 꼴을 갖지 않는다는
+뜻이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+엄격한 기준과 이상의 기준을 나란히 두고 반박이 놓인 주체와 놓이지 않은 주체를 함께 들어야 보인다. 성문의 기준이
+개별 주체의 자리를 정하지 않고 당국이 사안마다 반박을 받아들이므로 전칭으로는 서지 않는다.
+
+**가정을 두지 않는다.**
+
+**소유의 번짐은 열거 없이 서므로 당국이 손대지 않은 주체의 자리를 성문의 자리가 정한다.** 지정을 재량 지위로
+내려 보낸 사상은 당국의 열거가 모든 주체의 자리를 채우는 꼴이나, 지분의 몫으로 걸린 주체는 열거를 기다리지 않고
+지분 절반의 자리는 추정되어 동결되어야 하므로, 이 증거는 반박이 놓인 주체에만 재량의 칸을 채운다.
+조달처: E-85 §4-2 「그 주체가 보유하거나 지배하는 것으로 추정되어 동결되어야 한다」
+
+**T-3 분류:** 기여다. 지분 절반의 추정을 기준의 문턱과 재량 지위가 받는다는 것을 구조 안의 명제로 드는 유일한
+자리이고, 그 명제가 없으면 그 추정을 받는 갈래가 따로 서야 한다.
+-/
+-- DD:CF-4909
+theorem inclusive_threshold_reaches_half_and_rebuttal_overrides :
+    reachWitnessNet.reachedByOwnership reachWitnessOps reachWitnessCriteria
+        reachWitnessDesignation reachWitnessChains .ownedBelow = false ∧
+      reachWitnessNet.reachedByOwnership reachWitnessOps reachWitnessInclusiveCriteria
+        reachWitnessDesignation reachWitnessChains .ownedBelow = true ∧
+      reachWitnessPresumption.isDetermined .ownedBelow = true ∧
+      reachWitnessPresumption.resolve .ownedBelow = false ∧
+      reachWitnessPresumption.isDetermined .ownedByListed = false ∧
+      reachWitnessPresumption.resolve .ownedByListed = true := by
+  -- 두 기준과 재량의 배치가 상수이고 소유 갈래와 자리의 판정이 그 위의 계산이므로 각 등식이 계산으로
+  -- 값이 나와 `rfl` 로 닫힌다.
+  exact ⟨rfl, rfl, rfl, rfl, rfl, rfl⟩
 
 end CrisisFramework.Definition

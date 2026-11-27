@@ -15,13 +15,15 @@
 않는다고 적으므로 한 거래의 금지 여부가 그 거래의 시점만으로 정해지지 않는다. 접으면 같은 시점에
 일어난 두 거래가 딛는 계약의 체결 시점이 달라 갈리는 자리가 그 값에서 사라진다.
 
-**개정의 사슬을 구조가 담지 않는다.** 시점의 축이 개정의 사슬과 조문 본문의 날짜 둘로 서는데, 개정의
-사슬은 어느 문면이 어느 문면을 고쳤는가의 관계이고 그것을 담으려면 문면의 동일성이 먼저 서야 한다.
-법령 문면의 명명 규약이 한 조문을 판을 가로질러 가리키는 영구한 식별자를 작품에 매어 두고, 유럽연합의
-작성 규칙이 끼워 넣은 조 뒤의 번호를 다시 매기지 않으며 다시 매기는 성문화와 재제정에서 대조표가 옛
-번호와 새 번호를 잇는다(E-87). 그래서 동일성은 서지만 그 위에서 조문을 작품 단위로 가리키는 색인과
-날짜를 단 개정 조작의 열을 세우는 꼴이 정해지지 않았으며, 그 설계를 이연이 받는다. 이 파일은 조문
-본문의 날짜로 선 축만 담는다.
+**개정의 사슬을 구조가 담지 않고 시점마다 효력이 있는 판의 읽기를 받는다.** 시점의 축이 개정의 사슬과 조문
+본문의 날짜 둘로 서는데, 개정의 사슬은 같은 작품의 조문 위에 날짜를 단 조작이 쌓인 열이고 한 시점에 어느 판이
+효력이 있는지를 정하는 내력이다. 제재 문면의 절단을 묻는 항이 한 시점에 효력이 있는 문면에 따른 절단을 묻고 제재의
+시점열이 외생 입력이므로, 이 파일의 족은 시점마다 그 시점에 효력이 있는 판을 읽은 것을 받고 그 판을 낸 개정의 열을
+담지 않으며, 판을 가로지른 조치의 동일성도 족을 내는 쪽이 정한다. 법령 문면의 명명 규약이 한 조문을 판을 가로질러
+가리키는 영구한 식별자를 작품에 매어 두고, 유럽연합의 작성 규칙이 끼워 넣은 조 뒤의 번호를 다시 매기지 않으며 다시
+매기는 성문화와 재제정에서 대조표가 옛 번호와 새 번호를 잇는다(E-87). 조문의 통합본은 개정 행위를 머리에 열거하고
+개정의 표지를 문면에 두며 정본을 관보에 둔다(E-68). 그래서 효력이 있는 판의 문면과 그 동일성은 공표된 문면에서 받는
+값이다.
 
 **판정 불가의 열거를 이 층에 따로 세운다.** 관측층에도 판정 불가를 품은 열거가 서 있으나 그것을
 끌어오면 적재 방향이 뒤집힌다. 그 열거가 묻는 것은 그 물음을 내는 공표 경로가 있는가이고 이 열거가
@@ -383,7 +385,7 @@ def ProhibitionTiming.trivial : ProhibitionTiming Unit Unit where
 금지 읽기의 시점 족.
 
 **대응 비형식 개념:** 같은 조문이 시점에 따라 다른 것을 금지하는 것. 문면이 바뀌지 않아도 조문 본문의
-날짜가 그 달라짐을 낸다.
+날짜가 그 달라짐을 내고, 개정이 문면을 바꾸면 시점마다 그 시점에 효력이 있는 판이 그 달라짐을 낸다.
 
 **이 정의가 배제하는 사례:**
 읽기를 시점 없는 하나로 두는 읽기. 한 조가 금지를 세우면서 어느 날부터 적용되는지를 두 자리에 각각
@@ -393,9 +395,14 @@ def ProhibitionTiming.trivial : ProhibitionTiming Unit Unit where
 **기각한 대체 정의:**
 시점을 읽기의 칸으로 받는 안. 그러면 한 읽기가 여러 시점을 함께 들어 그 칸의 값이 어느 시점의 것인지가
 서지 않으며, 정의층 대상을 시점 인덱스를 갖는 족으로 정의하라는 요구와도 갈린다. 개정의 사슬을 족의
-색인으로 두는 안도 기각했다. 그 사슬이 어느 문면이 어느 문면을 고쳤는가의 관계이고, 조문을 판을
-가로질러 가리키는 작품 단위의 동일성은 서지만 그 위에서 사슬을 색인으로 세우는 꼴이 정해지지
-않았으므로, 색인으로 두면 그 꼴을 지어내게 된다.
+색인으로 두는 안도 기각했다. 그 사슬은 어느 판이 효력이 있는지를 정하는 내력이고 절단을 묻는 항이 그 판의
+읽기만 쓰므로, 색인으로 두면 답이 쓰지 않는 구조를 세우게 된다.
+
+**한 읽기는 걸렸다 풀렸다 다시 걸리는 절단을 담지 못하고 이 족이 그것을 담는다.** 한 읽기의 구간이 시작과
+끝을 하나씩 받아 그 절단이 시점에서 볼록하므로, 효력을 가진 뒤에 정지되었다가 다시 효력을 갖는 규칙을 한 읽기로
+받으면 그 정지가 사라진다. 산업안보국의 계열사 규칙이 효력을 가진 뒤에 정지되고 그 정지가 늘어났으며, 시점마다
+효력이 있는 판을 읽는 이 족은 정지된 판을 그 시점의 읽기로 두어 그 끊김을 담는다.
+조달처: E-94 §5-6 「한 조치에 시작과 끝을 하나씩 주는 꼴이 그 열을 담지 못한다」
 
 **인덱스가 `ℕ` 인 것은 L-13 의 명시적 예외다.**
 
@@ -680,6 +687,19 @@ def wideningWitness : ProhibitionTimingFamily TimingWitnessMeasure TimingWitness
               (decide (x = .addedLater) &&
                 decide (TimingWitnessInstant.cutoff.index ≤ t)) } }
 
+/-- **무엇을 증거하는가.** 시점마다 그 시점에 효력이 있는 읽기를 두는 족에서 한 조치가 걸렸다가
+풀렸다가 다시 걸린다. 가장 이른 시점까지는 시작이 그 시점인 읽기를 두고 그 뒤로는 시작을 더 늦은 시점으로
+미룬 읽기를 두며, 대상은 어느 시점에서나 같은 집합을 건다. -/
+-- DD:CF-4908
+def suspensionWitness : ProhibitionTimingFamily TimingWitnessMeasure TimingWitnessTarget :=
+  fun t =>
+    { period := fun _ =>
+        { onset := some (if t ≤ TimingWitnessInstant.early.index then
+              TimingWitnessInstant.early.index else TimingWitnessInstant.deadline.index),
+          terminus := none,
+          definiteness := timingDefiniteness .allFixed },
+      scope := timingWitness.scope }
+
 /--
 확정성의 세 축이 각각 홀로 값을 가른다.
 
@@ -899,5 +919,130 @@ theorem exists_strictly_widening_scope :
   -- 순서는 앞의 시점이 영이라는 것에서 나오고, 나머지 등식은 계산으로 값이 나와 `rfl` 로 닫힌다.
   exact ⟨wideningWitness, TimingWitnessInstant.early.index, TimingWitnessInstant.cutoff.index,
     .boundedMeasure, Nat.zero_le _, rfl, rfl, rfl, rfl, rfl, rfl⟩
+
+/--
+한 구간 판정이 앞뒤 두 시점에서 안이면 그 사이의 시점에서도 안이다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+한 구간이 앞뒤 두 시점을 품으면서 그 사이의 시점을 품지 않아야 한다. 그 관측은 그 판정이 시작에 이르렀는지와
+끝을 넘지 않았는지의 곱이 아니라는 뜻이며, 그러면 한 구간이 시작과 끝을 하나씩 받는다는 것이 그 판정에서 서지
+않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 세 시점이 앞뒤로 놓인다는 것과 앞뒤 두 시점이 구간 안이라는 것을 진술문의
+인자로 둔다. 그 가정이 배제하는 것은 가운데 시점이 두 시점의 밖에 서는 배치와 한 시점이라도 구간 밖인 배치이며,
+거기서는 가운데 시점의 값이 이 정리로 정해지지 않는다.
+
+**T-3 분류:** 보조 보정이다. 그 몫은 두 경계의 비교가 시점의 순서를 따른다는 것이고, 그 몫을 절단이 시점에서
+볼록하다는 명제로 드는 자리는 뒤의 정리다.
+-/
+-- DD:CF-4908
+theorem SanctionPeriod.withinBounds_of_between (P : SanctionPeriod) {a b c : ℕ}
+    (hab : a ≤ b) (hbc : b ≤ c)
+    (ha : P.withinBounds a = true) (hc : P.withinBounds c = true) :
+    P.withinBounds b = true := by
+  -- 두 경계의 판정을 펼쳐 논리곱을 가른다. 시작이 있으면 앞의 시점이 시작에 이르렀다는 것과 시점의
+  -- 순서에서 가운데 시점도 이르고, 끝이 있으면 뒤의 시점이 끝을 넘지 않았다는 것과 시점의 순서에서
+  -- 가운데 시점도 넘지 않는다. 경계가 없는 쪽은 그 판정이 정의상 참이다.
+  unfold SanctionPeriod.withinBounds SanctionPeriod.onsetReached
+    SanctionPeriod.terminusNotPassed at *
+  rw [Bool.and_eq_true] at ha hc ⊢
+  obtain ⟨ha1, _⟩ := ha
+  obtain ⟨_, hc2⟩ := hc
+  constructor
+  · cases hon : P.onset with
+    | none => rfl
+    | some x =>
+      rw [hon] at ha1
+      simp only [decide_eq_true_eq] at ha1 ⊢
+      omega
+  · cases hte : P.terminus with
+    | none => rfl
+    | some y =>
+      rw [hte] at hc2
+      simp only [decide_eq_true_eq] at hc2 ⊢
+      omega
+
+/--
+한 읽기에서 한 조치가 앞뒤 두 시점에 한 대상을 자르면 그 사이의 시점에도 자른다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+한 읽기에서 앞뒤 두 시점에 잘리는 대상이 그 사이의 시점에 잘리지 않아야 한다. 그 관측은 한 읽기가 효력을 가진
+뒤에 정지되었다가 다시 효력을 갖는 조치를 담는다는 뜻이며, 그러면 그 끊김을 시점마다 효력이 있는 판의 읽기로
+받는 족이 필요하지 않다.
+
+**가정과 그 배제 사례(T-4·T-5):** 세 시점이 앞뒤로 놓인다는 것과 앞뒤 두 시점에 그 조치가 그 대상을 자른다는
+것을 진술문의 인자로 둔다. 그 가정이 배제하는 것은 가운데 시점이 두 시점의 밖에 서는 배치와 한 시점에서라도
+자르지 않는 배치이며, 거기서는 구간이 정해지지 않거나 대상이 걸리지 않아 가운데 시점의 값이 이 정리로 정해지지
+않는다.
+
+**T-3 분류:** 기여다. 한 읽기가 걸렸다 풀렸다 다시 걸리는 절단을 담지 못한다는 것을 구조 안의 명제로 드는
+유일한 자리이고, 그 명제가 없으면 시점마다 효력이 있는 판을 읽는 족을 세운 까닭이 구조에 서지 않는다.
+-/
+-- DD:CF-4908
+theorem ProhibitionTiming.cutAt_of_between {Measure Target : Type}
+    (R : ProhibitionTiming Measure Target) (m : Measure) (x : Target) {a b c : ℕ}
+    (hab : a ≤ b) (hbc : b ≤ c)
+    (ha : R.cutAt m x a = true) (hc : R.cutAt m x c = true) :
+    R.cutAt m x b = true := by
+  -- 절단을 구간의 판정과 대상의 포함으로 가른다. 대상의 포함은 시점에 매이지 않으므로 앞의 시점의 것을
+  -- 그대로 쓴다. 구간의 판정이 안이면 확정성이 다 고정되고 경계 하나가 서며 두 경계 안이라는 것을 꺼내어
+  -- 앞 정리로 가운데 시점이 두 경계 안임을 얻고, 그 확정성과 경계의 갈래가 시점에 매이지 않으므로 가운데
+  -- 시점의 판정도 안이 된다.
+  unfold ProhibitionTiming.cutAt at *
+  rw [Bool.and_eq_true] at ha hc ⊢
+  obtain ⟨ha1, hcov⟩ := ha
+  obtain ⟨hc1, _⟩ := hc
+  refine ⟨?_, hcov⟩
+  have extract : ∀ t, ((R.period m).contains t).isInside = true →
+      (R.period m).withinBounds t = true := by
+    intro t ht
+    unfold SanctionPeriod.contains at ht
+    split at ht
+    · split at ht
+      · exact absurd ht (by decide)
+      · split at ht
+        · assumption
+        · exact absurd ht (by decide)
+    · exact absurd ht (by decide)
+  have hb := SanctionPeriod.withinBounds_of_between _ hab hbc (extract a ha1) (extract c hc1)
+  unfold SanctionPeriod.contains at ha1 ⊢
+  rw [hb, if_pos rfl]
+  split at ha1
+  · rename_i hfix
+    rw [if_pos hfix]
+    split at ha1
+    · exact absurd ha1 (by decide)
+    · rfl
+  · exact absurd ha1 (by decide)
+
+/--
+시점마다 효력이 있는 읽기를 두는 족에서 한 조치가 한 대상을 잘랐다가 풀었다가 다시 자르는 배치가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+어느 족에서도 앞뒤 두 시점에 잘리는 대상이 그 사이의 시점에 잘리지 않는 배치가 없어야 한다. 그 관측은 시점마다의
+읽기를 두는 족이 한 읽기가 담는 것만 담는다는 뜻이며, 그러면 정지와 그 연장으로 끊긴 규칙을 그 족으로도 받지
+못한다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+끊김은 정지된 판을 그 시점의 읽기로 둔 족을 들어야 보인다. 효력이 있는 판이 시점에 따라 바뀌는지는 조문 일반의
+성질이 아니고 당국의 조작이므로 전칭으로는 서지 않는다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 한 읽기가 담지 못하는 끊김을 시점마다의 읽기를 두는 족이 담는다는 것을 드는 유일한
+자리이고, 앞 정리와 짝을 이루어 그 족을 시점마다 효력이 있는 판의 읽기로 둔 꼴을 받친다.
+-/
+-- DD:CF-4908
+theorem exists_family_cut_lapses_and_resumes :
+    ∃ (F : ProhibitionTimingFamily TimingWitnessMeasure TimingWitnessTarget)
+      (s t u : ℕ) (m : TimingWitnessMeasure),
+      s ≤ t ∧ t ≤ u ∧
+        (F s).cutAt m .inEarly s = true ∧
+        (F t).cutAt m .inEarly t = false ∧
+        (F u).cutAt m .inEarly u = true := by
+  -- 정지의 족을 증거로 들고 세 시점을 가장 이른 시점과 그 다음 시점과 미룬 시작의 시점으로 둔다. 시점의
+  -- 순서와 세 절단의 값이 계산으로 나와 닫힌다.
+  exact ⟨suspensionWitness, TimingWitnessInstant.early.index, TimingWitnessInstant.cutoff.index,
+    TimingWitnessInstant.deadline.index, .boundedMeasure, by decide, by decide, rfl, rfl, rfl⟩
 
 end CrisisFramework.Definition
