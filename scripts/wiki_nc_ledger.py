@@ -261,16 +261,17 @@ def _retired_rule(root) -> tuple[str, str]:
     raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 검사 23 의 주입 대상이 없다")
 
 
-def _inj_23_dated(root, delta: int) -> str:
+def _inj_23_dated(root, delta: int, phase: str = "charter-7") -> str:
     """폐기한 날에서 `delta` 만큼 옮긴 날짜로 폐기된 규율 ID 를 근거로 드는 항을 세운다.
 
     첫 적재(`charter-6`)는 `related` 요건을 면하므로 주입은 그 뒤의 페이즈로 선 항목이어야
-    한다. 그래서 `charter-7` 로 선 항목을 새로 세워 거기에 지목을 넣는다."""
+    한다. 그래서 `charter-7` 로 선 항목을 새로 세워 거기에 지목을 넣는다. 첫 적재의 면제를
+    찌르는 주입만 그 페이즈를 `charter-6` 으로 준다."""
     tok, when = _retired_rule(root)
     doc = load(root, "decisions")
     doc["decisions"].append({
         "id": "CF-9023",
-        "origin": {"arc": "charter", "phase": "charter-7",
+        "origin": {"arc": "charter", "phase": phase,
                    "kind": "decision_session", "date": _shift(when, delta)},
         "names": ["Z-9023"],
         "statement": "음성 대조가 주입한 항이다.",
@@ -305,6 +306,36 @@ def inj_23_same(root):
     통과하고, 같은 카드에서 폐기되는 규율을 새 항목이 이름으로 들지 못하게 한 금지가
     조용히 풀린다."""
     return _inj_23_dated(root, 0)
+
+
+def inj_23_firstload_kept(root):
+    """첫 적재로 선 항목이 폐기한 날 뒤의 날짜로 폐기된 규율 ID 를 든다. 잡히지 않아야 한다.
+
+    첫 적재의 related 면제가 받는 쪽이다. 같은 꼴을 `charter-7` 로 세운 항이 잡히는 것과 짝을 이룬다."""
+    return _inj_23_dated(root, 1, "charter-6")
+
+
+def inj_23_retirement_kept(root):
+    """폐기 레코드의 진술이 폐기된 규율 ID 를 든다. 잡히지 않아야 한다.
+
+    폐기 레코드는 그 꼴상 폐기되는 규율의 ID 를 들므로 면제가 받는다. 같은 문면을 결정 항목에 둔
+    항이 잡히는 것과 짝을 이룬다. 대상은 원장에 없는 ID 로 두어 살아 있음의 유도를 흔들지 않는다."""
+    tok, when = _retired_rule(root)
+    doc = load(root, "retirements")
+    doc["retirements"].append({
+        "id": "CF-9024",
+        "origin": {"arc": "charter", "phase": "charter-7",
+                   "kind": "decision_session", "date": _shift(when, 1)},
+        "target": "CF-9025",
+        "original": "음성 대조가 주입한 폐기 레코드다.",
+        "reason": "음성 대조가 주입한 폐기 레코드다.",
+        "replaced_by": None,
+        "statement": f"음성 대조가 주입한 폐기 레코드이며 {tok} 을 든다.",
+        "basis": "음성 대조가 주입한 폐기 레코드다.",
+        "related": [],
+    })
+    save(root, "retirements", doc)
+    return tok
 
 
 def inj_16(root):
@@ -368,6 +399,52 @@ def inj_31(root):
     doc["deferred"].append(e)
     save(root, "deferred", doc)
     return "CF-9031"
+
+
+def inj_31_firstload_kept(root):
+    """첫 적재로 선 발화하는 이연 항을 쓰고 값 정본의 면제 계수를 하나 올린다. 잡히지 않아야 한다.
+
+    첫 적재 발화의 면제가 받는 쪽이다. 계수를 올리지 않으면 그 계수의 맞댐이 그 항을 잡아 면제의
+    경계가 아니라 계수의 고정을 재게 된다. 열린 아크의 페이즈로 선 같은 항이 잡히는 것과 짝을 이룬다."""
+    doc = load(root, "deferred")
+    doc["deferred"].append(deferred_stub("CF-9033", {"kind": "artifact", "ref": "docs/arcs.json"}))
+    save(root, "deferred", doc)
+    p = root / "docs" / "baseline.md"
+    text = p.read_text(encoding="utf-8")
+    lines = text.split("\n")
+    hit = [i for i, x in enumerate(lines) if x.startswith("FIRED_FIRSTLOAD_EXEMPT=")]
+    if len(hit) != 1:
+        raise SystemExit("FIRED 블록의 면제 계수 줄을 한 번으로 집지 못했다")
+    n = int(lines[hit[0]].split("=", 1)[1])
+    lines[hit[0]] = f"FIRED_FIRSTLOAD_EXEMPT={n + 1}"
+    p.write_text("\n".join(lines), encoding="utf-8")
+    return "CF-9033"
+
+
+def inj_31_retired_kept(root):
+    """열린 아크의 페이즈로 발화하는 이연 항을 쓰고 그 항을 폐기한다. 잡히지 않아야 한다.
+
+    폐기된 이연의 면제가 받는 쪽이다. 폐기하지 않은 같은 항이 잡히는 것과 짝을 이룬다."""
+    doc = load(root, "deferred")
+    e = deferred_stub("CF-9034", {"kind": "artifact", "ref": "docs/arcs.json"})
+    e["origin"]["arc"] = "collateral"
+    e["origin"]["phase"] = "collateral-5"
+    doc["deferred"].append(e)
+    save(root, "deferred", doc)
+    ret = load(root, "retirements")
+    ret["retirements"].append({
+        "id": "CF-9035",
+        "origin": dict(e["origin"]),
+        "target": "CF-9034",
+        "original": "음성 대조가 주입한 이연 항이다.",
+        "reason": "음성 대조가 주입한 폐기 레코드다.",
+        "replaced_by": None,
+        "statement": "음성 대조가 주입한 폐기 레코드다.",
+        "basis": "음성 대조가 주입한 폐기 레코드다.",
+        "related": [],
+    })
+    save(root, "retirements", ret)
+    return "CF-9034"
 
 
 def inj_21(root):
@@ -683,6 +760,22 @@ def inj_45_builds_drop(root):
     return ph["name"]
 
 
+def inj_45_closed_kept(root):
+    """닫힌 아크의 페이즈 객체에서 `builds` 를 지운다. 잡히지 않아야 한다.
+
+    닫힌 아크의 면제가 받는 쪽이다. 열려 있는 아크에서 같은 것을 지운 항이 잡히는 것과 짝을 이룬다."""
+    doc = arcs(root)
+    for a in doc["arcs"]:
+        if a.get("status") == "open":
+            continue
+        ph = next((x for x in a.get("phases") or [] if isinstance(x, dict) and "builds" in x), None)
+        if ph is not None:
+            ph.pop("builds")
+            save_arcs(root, doc)
+            return ph["name"]
+    raise SystemExit("`builds` 를 든 페이즈를 가진 닫힌 아크가 없어 지울 자리가 없다")
+
+
 def inj_45_string(root):
     """닫힌 아크의 페이즈 원소를 문자열로 되돌린다.
 
@@ -789,6 +882,55 @@ def inj_56_drop(root):
 # 붙이며 사례의 손 열거를 들지 않는다. **선언으로 두는 까닭은** 이 목록을 읽는
 # 검사가 뿌리의 소스를 텍스트로 읽으므로 모듈의 값을 모으는 꼴이면 그 검사가
 # 읽을 문면이 없다는 것이다.
+# ------------------------------------------------- 검사 64 · 원장 고정점
+
+def inj_64_early(root):
+    """결정 레지스터의 첫 항목의 진술에 한 글자를 더한다. 고정점이 묶은 접두가 바뀐다."""
+    p = root / "docs" / "decisions" / "decisions.json"
+    s = p.read_text(encoding="utf-8")
+    key = '"statement": "'
+    at = s.find(key)
+    if at < 0:
+        raise SystemExit("결정 레지스터에 진술이 없어 주입 대상이 없다")
+    at += len(key)
+    p.write_text(s[:at] + "가" + s[at:], encoding="utf-8")
+    return "decisions"
+
+
+def inj_64_dropline(root):
+    """고정점 블록에서 이연 레지스터의 줄을 지운다."""
+    p = root / "docs" / "baseline.md"
+    lines = p.read_text(encoding="utf-8").split("\n")
+    hit = [i for i, x in enumerate(lines) if x.startswith("LEDGERFIX=deferred|")]
+    if len(hit) != 1:
+        raise SystemExit("고정점 블록에서 이연 레지스터의 줄을 한 번으로 집지 못했다")
+    del lines[hit[0]]
+    p.write_text("\n".join(lines), encoding="utf-8")
+    return "deferred"
+
+
+def inj_64_append(root):
+    """설비를 거치지 않고 결정 레지스터의 말미에 항목 하나를 덧붙인다.
+
+    **잡히지 않아야 하는 항이다.** 고정점은 항목이 그 수보다 적지 않은지와 접두가 그대로인지만
+    재므로 접두 뒤의 덧붙임은 실패로 서지 않는다. 덧붙임을 받아들일지는 다음 덧붙임에서 설비가
+    수의 어긋남으로 묻는다.
+    """
+    p = root / "docs" / "decisions" / "decisions.json"
+    raw = p.read_bytes()
+    if not raw.endswith(wiki_common.LEDGER_TAIL):
+        raise SystemExit("결정 레지스터의 꼬리가 들여쓰기 하나의 직렬화가 아니어서 덧붙일 자리가 없다")
+    entries = json.loads(raw.decode("utf-8"))["decisions"]
+    top = max(int(m.group(1)) for reg in wiki_common.REGISTERS for e in load(root, reg)[reg]
+              for m in [wiki_common.ID_FORM.match(str(e.get("id", "")))] if m)
+    entry = dict(entries[-1])
+    entry["id"] = f"CF-{top + 1}"
+    text = "\n".join("  " + x for x in json.dumps(entry, ensure_ascii=False, indent=1).split("\n"))
+    p.write_bytes(raw[:-len(wiki_common.LEDGER_TAIL)] + b",\n" + text.encode("utf-8")
+                  + wiki_common.LEDGER_TAIL)
+    return entry["id"]
+
+
 CASES = [
     ("1", "wiki1-id-unique", "같은 id 를 두 파일에 넣는다", inj_01, None),
     ("2", "wiki2-origin-arc", "없는 아크명을 적는다", inj_02, None),
@@ -834,4 +976,31 @@ CASES = [
     ("52", "wiki52-open-arc-deferred-assignment", "그 구멍을 아크의 holes 에는 두고 모든 페이즈의 holes 에서 지운다", inj_52_phase, None),
     ("55", "wiki55-phase-cq-in-arc", "페이즈 레코드에 그 아크의 cq 에 없는 번호를 넣는다", inj_55_foreign, None),
     ("56", "wiki56-arc-cq-phase-assignment", "페이즈 레코드에서 그 번호를 지운다", inj_56_drop, None),
+    ("64", "wiki64-ledger-fixpoint", "결정 레지스터의 첫 항목의 진술에 한 글자를 더한다", inj_64_early, None),
+    ("64", "wiki64-ledger-fixpoint", "고정점 블록에서 한 레지스터의 줄을 지운다", inj_64_dropline, None),
+    ("64", "wiki64-ledger-fixpoint", "설비를 거치지 않고 결정 레지스터의 말미에 항목을 덧붙인다", inj_64_append, None, "nocatch"),
+    ("23", "wiki23-rule-ghost", "첫 적재로 선 항목이 폐기한 날 뒤의 날짜로 폐기된 규율 ID 를 든다", inj_23_firstload_kept, None, "nocatch"),
+    ("23", "wiki23-rule-ghost", "폐기 레코드의 진술이 폐기된 규율 ID 를 든다", inj_23_retirement_kept, None, "nocatch"),
+    ("31", "wiki31-hole-unassigned", "첫 적재로 발화하는 이연 항을 쓰고 면제 계수를 올린다", inj_31_firstload_kept, None, "nocatch"),
+    ("31", "wiki31-hole-unassigned", "열린 아크의 페이즈로 발화하는 이연 항을 쓰고 폐기한다", inj_31_retired_kept, None, "nocatch"),
+    ("45", "wiki45-phase-hole-assignment", "닫힌 아크의 페이즈 객체에서 builds 를 지운다", inj_45_closed_kept, None, "nocatch"),
+]
+
+
+# 면제의 경계 양쪽을 찌르는 사례. (면제의 이름, 쪽, 주입 함수) 이며 쪽은 경계 안쪽에서 잡히지 않아야
+# 하는 「안」과 경계 바로 바깥에서 잡히는 「밖」이다. 검사 65 가 이 목록을 사례 목록과 값 정본의 면제
+# 등록에 맞댄다.
+EXEMPT_EDGES = [
+    ("날짜", "안", inj_23_before),
+    ("날짜", "밖", inj_23_same),
+    ("첫 적재 related", "안", inj_23_firstload_kept),
+    ("첫 적재 related", "밖", inj_23_after),
+    ("폐기 레코드", "안", inj_23_retirement_kept),
+    ("폐기 레코드", "밖", inj_23_after),
+    ("첫 적재 발화", "안", inj_31_firstload_kept),
+    ("첫 적재 발화", "밖", inj_31),
+    ("폐기된 이연", "안", inj_31_retired_kept),
+    ("폐기된 이연", "밖", inj_31),
+    ("닫힌 아크", "안", inj_45_closed_kept),
+    ("닫힌 아크", "밖", inj_45_builds_drop),
 ]

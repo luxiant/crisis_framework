@@ -10,7 +10,9 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 import re
 from pathlib import Path
 from typing import NamedTuple
@@ -69,6 +71,68 @@ class DocDecl(NamedTuple):
     line: int              # 그 선언이 선 줄
     no: int                # `DD:` 표지가 가리키는 번호. `CF-<n>` 형식이 아니면 -1
     paras: list[str]       # docstring 을 빈 줄로 가른 문단
+
+
+# 면제의 등록. `docs/baseline.md` 의 `EXEMPT` 블록이 면제마다 이름과 그 면제가 서는 검사의 번호와 사유를
+# 들고, 사유의 어휘를 같은 블록이 든다. **검증 코드는 등록된 이름으로만 면제한다.** 이름을 거치게 하면
+# 면제의 목록이 낱말의 조사가 아니라 등록과 호출의 대조로 닫히고, 면제를 더하려면 블록을 고쳐야 하므로
+# 면제가 조용히 늘지 못한다(SPEC §2.1).
+EXEMPT_BLOCK = re.compile(r"<!-- EXEMPT:BEGIN -->\n(.*?)<!-- EXEMPT:END -->", re.S)
+EXEMPT_LINE = re.compile(r"^EXEMPT=([^|]+)\|([^|]+)\|([^|]+)$")
+EXEMPT_REASON_LINE = re.compile(r"^EXEMPT_REASON=(.+)$")
+# 블록의 검사 번호를 잇는 기호. 명세의 필드 표가 검사 번호를 잇는 기호와 같다.
+EXEMPT_CHECK_JOIN = "·"
+# 면제를 이름으로 끄는 환경 변수. 쉼표로 이름 여럿을 받는다. 음성 대조의 역방향 몫이 면제를 하나씩 끈
+# 사본의 적발 증가를 잴 때 쓰며, 끄는 쪽으로만 움직이므로 검사를 느슨하게 만들 수 없다.
+EXEMPT_OFF_ENV = "VERIFY_EXEMPT_OFF"
+# 등록된 이름과 끈 이름. 원장 검증기가 뿌리를 읽을 때 그 뿌리의 값 정본에서 채운다.
+_EXEMPT: tuple[frozenset[str], frozenset[str]] | None = None
+
+
+def exempt_rows(body: str) -> tuple[dict[str, tuple[list[str], str]], list[str], list[str]]:
+    """블록 본문에서 이름마다의 (검사 번호의 목록, 사유) 와 사유의 어휘와 꼴에 맞지 않는 줄.
+
+    한 이름의 줄이 둘 이상이면 뒤의 줄도 꼴에 맞지 않는 줄로 낸다. 앞의 줄만 받으면 뒤의 줄이
+    무엇을 들든 조용히 버려진다.
+    """
+    rows: dict[str, tuple[list[str], str]] = {}
+    reasons: list[str] = []
+    bad: list[str] = []
+    for line in body.splitlines():
+        if not line.strip():
+            continue
+        m = EXEMPT_REASON_LINE.match(line)
+        if m:
+            reasons.append(m.group(1).strip())
+            continue
+        m = EXEMPT_LINE.match(line)
+        if m is None or m.group(1).strip() in rows:
+            bad.append(line)
+            continue
+        rows[m.group(1).strip()] = ([x.strip() for x in m.group(2).split(EXEMPT_CHECK_JOIN)],
+                                    m.group(3).strip())
+    return rows, reasons, bad
+
+
+def load_exempt(root: Path) -> None:
+    """그 뿌리의 값 정본에서 등록된 면제의 이름을 읽고 환경 변수에서 끈 이름을 읽는다."""
+    global _EXEMPT
+    p = root / "docs" / "baseline.md"
+    m = EXEMPT_BLOCK.search(p.read_text(encoding="utf-8")) if p.is_file() else None
+    rows, _reasons, _bad = exempt_rows(m.group(1) if m else "")
+    off = {x.strip() for x in os.environ.get(EXEMPT_OFF_ENV, "").split(",") if x.strip()}
+    _EXEMPT = (frozenset(rows), frozenset(off))
+
+
+def exempt(name: str) -> bool:
+    """등록된 면제를 쓴다. 그 면제가 서면 참이고 환경 변수가 그 이름을 끄면 거짓이다.
+
+    **등록되지 않은 이름에서 터진다.** 거짓을 돌려주면 그 자리가 조용히 면제를 잃어 적발이 늘고,
+    그 늚이 면제의 등록을 빠뜨린 것인지 위반이 선 것인지가 출력에서 갈리지 않는다.
+    """
+    if _EXEMPT is None or name not in _EXEMPT[0]:
+        raise KeyError(f"면제 `{name}` 이 docs/baseline.md 의 EXEMPT 블록에 등록되지 않았다")
+    return name not in _EXEMPT[1]
 
 
 class Report:
@@ -132,11 +196,16 @@ class Ledger:
 
     def __init__(self, root: Path):
         self.root = root
+        load_exempt(root)
         self.reg: dict[str, list[dict]] = {}
         self.container_keys: dict[str, list[str]] = {}
+        # 레지스터 파일의 바이트. 검사 64 가 고정점이 묶은 접두를 이것에서 해시하므로 파일을 두 번
+        # 읽지 않는다.
+        self.raw: dict[str, bytes] = {}
         for name in REGISTERS:
             path = root / "docs" / "decisions" / f"{name}.json"
-            doc = json.loads(path.read_text(encoding="utf-8"))
+            self.raw[name] = path.read_bytes()
+            doc = json.loads(self.raw[name].decode("utf-8"))
             self.container_keys[name] = list(doc.keys())
             self.reg[name] = doc[name]
 
@@ -255,6 +324,10 @@ class Ledger:
         for f in self.lean_files:
             out.append((str(f.relative_to(self.root)),
                         _lean_comments(f.read_text(encoding="utf-8"))))
+        # 원장 네 파일은 이 면제가 꺼질 때만 유니버스에 든다. 그때 파일 전량을 문면으로 받는다.
+        if not exempt("원장 네 파일"):
+            for name in REGISTERS:
+                out.append((f"docs/decisions/{name}.json", self.raw[name].decode("utf-8")))
         return out
 
     def doc_decls(self) -> list[DocDecl]:
@@ -349,7 +422,7 @@ def arc_phase_names(a: dict) -> list[str]:
 # `extraction` 트리거의 `ref` 를 추출 기록의 번호로 읽는 사상. 검사 12 와 발화 판정과 검사 43 이
 # 이 하나를 공유한다(SPEC §3.3). 전사하면 한쪽을 고칠 때 다른 쪽이 조용히 낡고, 둘이 다른 수를
 # 내는 것을 어느 검사도 잡지 못한다.
-EXTRACTION_REF_NO = re.compile(r"^(?:E-)?(\d{1,2})$")
+EXTRACTION_REF_NO = re.compile(r"^(?:E-)?(\d{1,3})$")
 
 
 def extraction_ref_number(ref: str) -> int | None:
@@ -436,6 +509,40 @@ HEADING_LINE = re.compile(r"^HEADING=([^|]*)\|([^|]*)\|(.*)$")
 # 읽기 때문이다(SPEC §2.1).
 POINTER_ARCS_FIELDS = (("arcs", "name", "discriminator"), ("patches", None, "why"))
 POINTER_ARCS_MARK = "#"
+
+# 검사 64 와 원장 덧붙임 설비가 읽는 원장 고정점. `docs/baseline.md` 의 `LEDGERFIX` 블록이 레지스터마다
+# 항목의 수와 마지막 항목의 닫는 괄호까지인 접두의 바이트 길이와 그 접두의 sha256 앞 열두 자를 든다.
+# **블록을 심는 설비와 맞대는 검사가 이 꼴과 아래 함수를 함께 쓴다.** 둘이 꼴을 따로 들면 한쪽을
+# 고칠 때 다른 쪽이 조용히 낡고, 그 낡음은 설비가 심은 값을 검사가 읽지 못하는 꼴로만 남는다.
+LEDGERFIX_BLOCK = re.compile(r"<!-- LEDGERFIX:BEGIN -->\n(.*?)<!-- LEDGERFIX:END -->", re.S)
+LEDGERFIX_LINE = re.compile(r"^LEDGERFIX=([a-z]+)\|(\d+)\|(\d+)\|([0-9a-f]{12})$")
+# 레지스터 파일의 꼬리. 들여쓰기 하나의 직렬화에서 항목의 배열과 바깥 객체를 닫는 바이트다.
+LEDGER_TAIL = b"\n ]\n}\n"
+
+
+def ledgerfix_rows(body: str) -> tuple[dict[str, tuple[int, int, str]], list[str]]:
+    """블록 본문에서 레지스터마다의 (항목 수, 접두의 바이트 길이, 해시) 와 꼴에 맞지 않는 줄.
+
+    한 레지스터의 줄이 둘 이상이면 뒤의 줄도 꼴에 맞지 않는 줄로 낸다. 앞의 줄만 받으면 뒤의 줄이
+    무엇을 들든 조용히 버려진다.
+    """
+    rows: dict[str, tuple[int, int, str]] = {}
+    bad: list[str] = []
+    for line in body.splitlines():
+        if not line.strip():
+            continue
+        m = LEDGERFIX_LINE.match(line)
+        if m is None or m.group(1) in rows:
+            bad.append(line)
+            continue
+        rows[m.group(1)] = (int(m.group(2)), int(m.group(3)), m.group(4))
+    return rows, bad
+
+
+def ledger_prefix_digest(raw: bytes, length: int) -> str:
+    """레지스터 파일의 앞 `length` 바이트의 sha256 앞 열두 자."""
+    return hashlib.sha256(raw[:length]).hexdigest()[:12]
+
 
 def _baseline_block(led: Ledger, pattern: re.Pattern) -> str:
     """`docs/baseline.md` 에서 그 블록의 본문. 파일이나 블록이 없으면 빈 문자열이다."""
@@ -599,7 +706,12 @@ def md_cells(line: str) -> list[str] | None:
 # 뒤를 막는 자리가 점으로 이은 꼴을 통째로 밀어낸다. 막지 않으면 그 앞자리만 잡혀 적지 않은
 # 절을 지목한 것으로 읽힌다(SPEC §2.1).
 EXTRACTION_POINTER = re.compile(
-    r"(?<![0-9A-Za-z])E-(\d{1,2})\s*§\s*(\d+(?:-\d+)*)(?![0-9.-])")
+    r"(?<![0-9A-Za-z])E-(\d{1,3})\s*§\s*(\d+(?:-\d+)*)(?![0-9.-])")
+
+# 점으로 이은 절 번호를 든 지목의 꼴. 앞의 꼴이 통째로 밀어내는 그 꼴을 따로 받아, 면제가 서면 빼고
+# 꺼지면 착지를 잰다. 그 꼴은 원 논문의 절을 가리키는 자리여서 기록이 그 절 번호를 갖지 않는다.
+EXTRACTION_POINTER_DOTTED = re.compile(
+    r"(?<![0-9A-Za-z])E-(\d{1,3})\s*§\s*(\d+(?:[.-]\d+)*\.\d+(?:[.-]\d+)*)(?![0-9.-])")
 
 EXTRACTION_FILE_NO = re.compile(r"^extraction-(\d+)-")
 
@@ -627,6 +739,12 @@ def doc_pointers(led: Ledger) -> list[tuple[str, int, int, str]]:
                 at = b.start(1) + m.start()
                 out.append((rel, src.count("\n", 0, at) + 1,
                             int(m.group(1)), m.group(2)))
+            for m in EXTRACTION_POINTER_DOTTED.finditer(b.group(1)):
+                if exempt("점 꼴 지목"):
+                    continue
+                at = b.start(1) + m.start()
+                out.append((rel, src.count("\n", 0, at) + 1,
+                            int(m.group(1)), m.group(2)))
     return out
 
 # 검사 50 이 읽는 뭉치 인벤토리와 `MIRROR` 블록. `docs/baseline.md` §5 가 유령의 계수를 들며 값을
@@ -635,8 +753,9 @@ def doc_pointers(led: Ledger) -> list[tuple[str, int, int, str]]:
 INVENTORY_DOC = "docs/bundle-inventory-v0.md"
 
 # 구성원 행이 드는 기록 번호의 꼴. 앞을 막는 자리가 규율 ID 의 꼴에 섞인 `E` 를 거르고 뒤를 막는
-# 자리가 더 긴 번호를 두 자리에서 자르지 않게 한다. 번호의 자릿수는 검사 48 의 지목 꼴과 같다.
-INVENTORY_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z-])E-(\d{1,2})(?![0-9A-Za-z])")
+# 자리가 더 긴 번호를 받는 자릿수의 끝에서 자르지 않게 한다. 번호의 자릿수는 검사 48 의 지목 꼴과
+# 같다.
+INVENTORY_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z-])E-(\d{1,3})(?![0-9A-Za-z])")
 
 # 검사 53 과 54 가 읽는 `INVENTORYMARK` 블록. `docs/baseline.md` 가 집계 표의 마커와 비고 칸의 표지
 # 낱말 둘을 든다. **블록이 비거나 키 하나가 빠지면 통과시키지 않는다.** 표지의 낱말을 코드에 박으면

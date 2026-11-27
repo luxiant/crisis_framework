@@ -24,6 +24,7 @@ from wiki_common import (
     _baseline_block,
     _lean_code,
     doc_pointers,
+    exempt,
     extraction_record,
     heading_matches,
     heading_rules,
@@ -61,7 +62,7 @@ def check_10(led: Ledger) -> Report:
     def judge(e: dict, ref: str, msg: str) -> None:
         """원장 안의 지목 하나를 가른다. 폐기 전이면 보고하고, 폐기 뒤면 승인하거나 실패시킨다."""
         retirer = led.retired_by.get(ref)
-        if retirer is not None and id_no(e.get("id")) < id_no(retirer):
+        if retirer is not None and id_no(e.get("id")) < id_no(retirer) and exempt("폐기 전 지목"):
             early.append(msg)
             if e.get("id") not in early_owners:
                 early_owners.append(e.get("id"))
@@ -77,7 +78,7 @@ def check_10(led: Ledger) -> Report:
     for name, e in led.entries:
         # 그 자신이 폐기된 항목은 보지 않는다. 폐기된 항목의 지목을 고치는 길이 없고, 그 문면도
         # 폐기 시점의 앎을 담은 역사이기 때문이다.
-        if e.get("id") in dead:
+        if e.get("id") in dead and exempt("폐기된 항목 자신의 지목"):
             continue
         for ref in e.get("related", []) or []:
             if ref in dead:
@@ -86,7 +87,7 @@ def check_10(led: Ledger) -> Report:
         if isinstance(rw, dict) and rw.get("ref") in dead:
             judge(e, rw.get("ref"),
                   f"{e.get('id')}: reopen_when.ref 가 폐기된 {rw.get('ref')} 를 든다")
-        if name == "retirements":
+        if name == "retirements" and exempt("폐기 레코드"):
             continue
         for f in ("statement", "basis", "reason", "candidate", "for"):
             for m in CF_TOKEN.finditer(str(e.get(f) or "")):
@@ -101,7 +102,7 @@ def check_10(led: Ledger) -> Report:
     # 정당하고 소급해 고치지 않는다. 검사 24 가 쓰는 `HISTORY_PATHS` 를 같이 쓴다(SPEC §2.1).
     for f in led.doc_files:
         rel = str(f.relative_to(led.root))
-        if any(rel.startswith(h) for h in HISTORY_PATHS):
+        if any(rel.startswith(h) for h in HISTORY_PATHS) and exempt("역사 기록"):
             continue
         for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
             for m in CF_TOKEN.finditer(line):
@@ -139,7 +140,7 @@ def check_14(led: Ledger) -> Report:
         if e is None:
             continue
         layer = e.get("layer")
-        if layer == "meta":
+        if layer == "meta" and exempt("메타 층 표지"):
             continue          # 층에 갇히지 않으므로 건너뛴다(SPEC §3.2)
         n += 1
         want = LAYER_DIR.get(layer)
@@ -165,7 +166,7 @@ def check_24(led: Ledger) -> Report:
             if m:
                 allow |= {x.group(0) for x in RULE_TOKEN.finditer(m.group(1))}
         for i, line in enumerate(text.splitlines(), 1):
-            if DECLARE_LINE.match(line):
+            if DECLARE_LINE.match(line) and exempt("폐기 지목 선언"):
                 continue                      # 선언 줄 자신은 면제의 근거이지 지목이 아니다
             for m in RULE_TOKEN.finditer(line):
                 tok = m.group(0)
@@ -175,7 +176,7 @@ def check_24(led: Ledger) -> Report:
                     missing += 1
                     r.bad(f"{rel}:{i}: `{tok}` 이 어느 항목의 names 에도 없다")
                 elif owner in led.dead:
-                    if tok in allow:
+                    if tok in allow and exempt("폐기 지목 선언"):
                         declared += 1
                     else:
                         retired += 1
@@ -243,7 +244,7 @@ def check_33(led: Ledger) -> Report:
         r.bad(f"docs/baseline.md 의 HEADING 블록에 예약 낱말 `{REJECTION_WORD}` 이 없다")
         return r
     decls = led.doc_decls()
-    inside = [d for d in decls if d.no >= since]
+    inside = [d for d in decls if d.no >= since or not exempt("머리말 경계")]
 
     def has_rejection(d: DocDecl) -> bool:
         """머리말이 그 예약 낱말을 드는 문단을 하나라도 갖는가.
@@ -317,7 +318,7 @@ def check_34(led: Ledger) -> Report:
 
     n_para = n_res = n_free = outside = 0
     for d in led.doc_decls():
-        inside = d.no >= since
+        inside = d.no >= since or not exempt("머리말 경계")
         for p in d.paras:
             head = para_heading(p)
             if head is None:
@@ -691,7 +692,7 @@ EXCLUSION_WORD = "배제하는 사례"
 # 조달처 줄의 꼴. 배제 사례 문단의 말미에 서고 기록 번호와 절 번호와 낫표로 감싼 구절을 든다.
 # 문단의 공백을 접은 뒤에 맞대므로 줄을 걸쳐 쓴 구절도 한 꼴로 읽힌다.
 SOURCING_LINE = re.compile(
-    r"조달처:\s*E-(\d{1,2})\s*§\s*(\d+(?:-\d+)*)\s*「([^」]+)」[.\s]*$")
+    r"조달처:\s*E-(\d{1,3})\s*§\s*(\d+(?:-\d+)*)\s*「([^」]+)」[.\s]*$")
 
 
 # 추출 기록의 절 제목과 그 파일 이름의 번호. 절 제목은 머리 기호 둘 이상에 번호와 마침표가
@@ -798,7 +799,7 @@ def check_48(led: Ledger) -> Report:
             if head is None or EXCLUSION_WORD not in head:
                 continue
             m = SOURCING_LINE.search(fold(p))
-            if d.no < since:
+            if d.no < since and exempt("조달처 경계"):
                 # 경계 밖은 소급하지 않는다. 그 문면이 영구 문면이고 D-2 가 요구하는 세
                 # 항목이 경계 이전에도 서 있으므로, 조달처만 뒤에 걸린 것이다.
                 if m is None:

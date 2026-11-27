@@ -11,13 +11,18 @@ import re
 from wiki_common import (
     CQ_REF,
     ID_FORM,
+    LEDGERFIX_BLOCK,
     Ledger,
+    REGISTERS,
     RULE_SERIES,
     RULE_TOKEN,
     Report,
     _baseline_block,
     arc_phase_names,
     cq_fixed,
+    exempt,
+    ledger_prefix_digest,
+    ledgerfix_rows,
     phase_cq_records,
     trigger_fired,
 )
@@ -257,13 +262,13 @@ def check_23(led: Ledger) -> Report:
                "폐기됐으면 그 폐기 레코드를 related 가 들거나 그 항목이 폐기보다 앞서 쓰였는가",
                "fail")
     total = 0
-    exempt = 0
+    firstload_n = 0
     by_date = 0
     overlap = 0
     for name, e in led.entries:
         # 폐기 레코드는 통째로 유니버스 밖이다. statement 가 「D-6 을 폐기한다」 꼴이라
         # 형태상 반드시 폐기되는 규율의 ID 를 들기 때문이다(SPEC §2.1).
-        if name == "retirements":
+        if name == "retirements" and exempt("폐기 레코드"):
             continue
         related = set(e.get("related", []) or [])
         # 첫 적재는 related 를 전량 빈 배열로 두었고 원장이 수정 불가라 채울 길이 없다.
@@ -291,19 +296,19 @@ def check_23(led: Ledger) -> Report:
                     early = bool(wrote) and bool(killed) and str(wrote) < str(killed)
                     if retirer in related:
                         pass
-                    elif early:
+                    elif early and exempt("날짜"):
                         by_date += 1
                         if first_load:
                             overlap += 1
-                    elif first_load:
-                        exempt += 1
+                    elif first_load and exempt("첫 적재 related"):
+                        firstload_n += 1
                     else:
                         r.bad(f"{e.get('id')}: {f} 가 폐기된 규율 `{tok}`({owner}) 를 "
                               f"그것을 폐기한 레코드 {retirer} 를 related 에 적지 않고 든다")
     r.note(f"규율 ID 토큰 {total}건을 봤다. 계열은 {list(RULE_SERIES)}")
     r.note(f"폐기보다 앞서 쓰인 항목의 날짜 면제 {by_date}건 "
            f"(그 가운데 첫 적재와 겹치는 것 {overlap}건)")
-    r.note(f"폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 {exempt}건")
+    r.note(f"폐기 레코드는 유니버스 밖이다. 첫 적재(charter-6)의 related 면제 {firstload_n}건")
     return r
 
 
@@ -316,7 +321,7 @@ def check_16(led: Ledger) -> Report:
         if hit:
             # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 함께 실으면 살아 있는 구멍의 수를
             # 밖에서 셀 수 없다(CF-684). 뺀 건수는 출력에 남긴다.
-            if e.get("id") in led.dead:
+            if e.get("id") in led.dead and exempt("폐기된 이연"):
                 dropped.append(str(e.get("id")))
                 continue
             fired.append(f"{e.get('id')} ({kind}) — {why}")
@@ -337,7 +342,7 @@ def check_17(led: Ledger) -> Report:
             continue
         # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 함께 세면 트리거를 쓸 수 없는 항의 수를
         # 밖에서 셀 수 없다(CF-684). 뺀 건수와 그 ID 는 같은 줄에 남긴다.
-        if e.get("id") in led.dead:
+        if e.get("id") in led.dead and exempt("폐기된 이연"):
             dropped.append(str(e.get("id")))
             continue
         nulls.append(e)
@@ -364,7 +369,7 @@ def check_18(led: Ledger) -> Report:
         rw = e.get("reopen_when")
         if isinstance(rw, dict) and rw.get("kind") in ARC_POINTING_KINDS:
             # 폐기된 구멍은 처분이 끝난 것이므로 목록에서 뺀다. 뺀 건수는 출력에 남긴다(CF-684).
-            if e.get("id") in led.dead:
+            if e.get("id") in led.dead and exempt("폐기된 이연"):
                 dropped.append(str(e.get("id")))
                 continue
             rows.setdefault(str(rw.get("ref")), []).append(
@@ -636,14 +641,14 @@ def check_31(led: Ledger) -> Report:
                "발화한 이연 항목이 어느 아크의 holes 에도 들지 않는가", "fail")
     assigned = {h for a in led.arcs.values() for h in (a.get("holes") or [])}
     dropped: list[str] = []
-    n_fired = n_assigned = exempt = 0
+    n_fired = n_assigned = firstload_n = 0
     for e in led.reg["deferred"]:
         hit, kind, _ = trigger_fired(led, e)
         if not hit:
             continue
         # 폐기된 항목은 살아 있는 구멍이 아니므로 유니버스 밖이다. 검사 16 과 같은 형이며,
         # 발화를 먼저 보고 거르므로 뺀 건수와 그 id 가 출력에 남는다(CF-684).
-        if e.get("id") in led.dead:
+        if e.get("id") in led.dead and exempt("폐기된 이연"):
             dropped.append(str(e.get("id")))
             continue
         n_fired += 1
@@ -652,8 +657,8 @@ def check_31(led: Ledger) -> Report:
             continue
         # 첫 적재는 아크 개념 이전에 섰고 `arcs.json` 에 배정될 자리가 없었다. 예외를
         # charter-6 으로 못 박으므로 그 뒤의 항목은 요건을 그대로 받는다(SPEC §2.1).
-        if (e.get("origin") or {}).get("phase") == "charter-6":
-            exempt += 1
+        if (e.get("origin") or {}).get("phase") == "charter-6" and exempt("첫 적재 발화"):
+            firstload_n += 1
             continue
         r.bad(f"{e.get('id')}: 발화한({kind}) 이연 항목이 어느 아크의 holes 에도 없다")
     # 면제가 영구적이므로 그 계수를 값 정본과 맞댄다. 맞대지 않으면 새로 발화하는 첫 적재 항이
@@ -662,11 +667,11 @@ def check_31(led: Ledger) -> Report:
     want = fired_exempt_count(led)
     if want is None:
         r.bad("docs/baseline.md 의 FIRED 블록에 FIRED_FIRSTLOAD_EXEMPT 가 없다")
-    elif exempt != want:
-        r.bad(f"첫 적재 면제가 {exempt}건인데 FIRED 블록의 값은 {want} 이다. "
+    elif firstload_n != want:
+        r.bad(f"첫 적재 면제가 {firstload_n}건인데 FIRED 블록의 값은 {want} 이다. "
               f"늘어난 쪽을 값으로 맞추면 면제가 조용히 넓어지므로 고쳐 맞추지 않는다")
     r.note(f"발화 {n_fired}건 · 그 가운데 배정된 것 {n_assigned}건 "
-           f"· 첫 적재(charter-6) 면제 {exempt}건 (FIRED 블록의 값 {want})"
+           f"· 첫 적재(charter-6) 면제 {firstload_n}건 (FIRED 블록의 값 {want})"
            + (f" · 폐기된 이연 항목 {len(dropped)}건을 뺐다({', '.join(dropped)})"
               if dropped else " · 뺀 폐기분 0건"))
     return r
@@ -759,7 +764,7 @@ def check_45(led: Ledger) -> Report:
     # 이미 닫힌 아크는 그 자리가 없고, 소급해 채우면 그 페이즈가 섰던 시점의 전제가 왜곡된다.
     for name in sorted(led.arcs):
         a = led.arcs[name]
-        if a.get("status") != "open":
+        if a.get("status") != "open" and exempt("닫힌 아크"):
             continue
         n_open += 1
         union: dict[str, list[str]] = {}
@@ -857,7 +862,7 @@ def check_52(led: Ledger) -> Report:
         if not isinstance(ref, str) or ref not in open_arcs:
             continue
         # 폐기된 이연 항목은 살아 있는 구멍이 아니다. 뺀 건수와 그 ID 는 보고 줄에 남긴다(CF-684).
-        if e.get("id") in led.dead:
+        if e.get("id") in led.dead and exempt("폐기된 이연"):
             dropped.append(str(e.get("id")))
             continue
         universe.setdefault(ref, []).append(str(e.get("id")))
@@ -951,6 +956,46 @@ def check_56(led: Ledger) -> Report:
 
 
 # 이 단위가 드는 검사. 러너가 이 목록을 이어 붙여 손 열거를 걷는다.
+def check_64(led: Ledger) -> Report:
+    r = Report("64", "wiki64-ledger-fixpoint",
+               "원장 레지스터마다 값 정본의 고정점이 묶은 접두가 그대로이고 항목이 그 수보다 "
+               "적지 않은가", "fail")
+    body = _baseline_block(led, LEDGERFIX_BLOCK)
+    # 블록이 비어 있으면 통과가 아니라 실패다. 검사 28 과 34 와 35 가 같은 요구를 둔다.
+    if not body.strip():
+        r.bad("docs/baseline.md 의 LEDGERFIX 블록이 없거나 비어 있다")
+        return r
+    rows, bad = ledgerfix_rows(body)
+    for line in bad:
+        r.bad(f"LEDGERFIX 블록의 줄 `{line}` 이 꼴에 맞지 않거나 같은 레지스터를 두 번 든다")
+    for name in sorted(set(rows) - set(REGISTERS)):
+        r.bad(f"LEDGERFIX 블록이 레지스터가 아닌 `{name}` 의 줄을 든다")
+    for name in REGISTERS:
+        if name not in rows:
+            r.bad(f"LEDGERFIX 블록에 {name} 의 줄이 없다")
+            continue
+        want_n, length, digest = rows[name]
+        raw = led.raw[name]
+        have = len(led.reg[name])
+        # 항목 수는 적지 않은지만 본다. 같음을 요구하면 덧붙임 설비를 거치지 않고 덧붙인 항목이 든
+        # 정상인 원장이 실패로 서며, 그 항목은 다음 덧붙임에서 설비가 수의 어긋남으로 거부한다.
+        # 접두 뒤의 꼬리도 재지 않는다. 지난 항목의 수정을 재는 목적에 들지 않는다(SPEC §2.1).
+        if have < want_n:
+            r.bad(f"{name}: 항목이 {have} 인데 고정점의 수는 {want_n} 이다. 고정점이 묶은 항목이 "
+                  f"사라졌다")
+        if len(raw) < length or raw[length - 1:length] != b"}":
+            r.bad(f"{name}: 고정점이 묶은 앞 {length} 바이트의 마지막 바이트가 닫는 괄호가 아니다. "
+                  f"앞 항목의 길이가 바뀌었다")
+        else:
+            got = ledger_prefix_digest(raw, length)
+            if got != digest:
+                r.bad(f"{name}: 고정점이 묶은 앞 {length} 바이트의 해시가 {got} 인데 블록의 값은 "
+                      f"{digest} 이다. 앞 항목이 바뀌었다")
+        r.note(f"{name} — 고정점의 항목 {want_n} · 지금 항목 {have} · 고정점 뒤의 항목 "
+               f"{max(have - want_n, 0)} · 묶은 접두 {length} 바이트")
+    return r
+
+
 CHECKS = (
     check_01,
     check_02,
@@ -983,4 +1028,5 @@ CHECKS = (
     check_52,
     check_55,
     check_56,
+    check_64,
 )

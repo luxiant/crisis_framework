@@ -12,6 +12,89 @@ import wiki_meta
 from wiki_nc_common import edit, ko_word, pick
 
 
+# ------------------------------------------------- 검사 65 · 면제의 등록
+
+def _exempt_lines(root):
+    p = root / "docs" / "baseline.md"
+    text = p.read_text(encoding="utf-8")
+    m = wiki_common.EXEMPT_BLOCK.search(text)
+    if m is None:
+        raise SystemExit("값 정본에 EXEMPT 블록이 없어 주입이 서지 않는다")
+    return p, text, m
+
+
+def inj_65_block_ghost(root):
+    """코드가 쓰지 않는 면제의 이름을 블록에 등록한다."""
+    p, text, m = _exempt_lines(root)
+    line = "EXEMPT=음성 대조 유령|23|소급하지 않음\n"
+    p.write_text(text[:m.end(1)] + line + text[m.end(1):], encoding="utf-8")
+    return "음성 대조 유령"
+
+
+def inj_65_code_ghost(root):
+    """등록되지 않은 이름으로 면제를 부르는 함수를 검사 단위에 더한다.
+
+    그 함수를 부르는 자리를 두지 않는다. 사본의 소스는 검사가 구문 트리로 읽기만 하고 돌지 않으므로
+    공용 함수가 그 이름에서 터지는 일이 이 사본에서 서지 않는다."""
+    f = root / "scripts" / "wiki_meta.py"
+    f.write_text(f.read_text(encoding="utf-8")
+                 + "\n\ndef _nc_unused_exempt():\n    return exempt(\"음성 대조 유령\")\n", encoding="utf-8")
+    return "음성 대조 유령"
+
+
+def _edges_unit(root):
+    """`EXEMPT_EDGES` 를 든 첫 음성 대조 단위의 경로와 문면과 첫 항의 줄."""
+    for rel in wiki_common.WIKI_NC_UNITS:
+        f = root / rel
+        lines = f.read_text(encoding="utf-8").split("\n")
+        try:
+            at = lines.index("EXEMPT_EDGES = [")
+        except ValueError:
+            continue
+        return f, lines, at
+    raise SystemExit("EXEMPT_EDGES 를 든 음성 대조 단위가 없어 주입이 서지 않는다")
+
+
+def inj_65_edge_drop(root):
+    """경계 항 하나를 음성 대조 단위의 목록에서 지운다."""
+    f, lines, at = _edges_unit(root)
+    if not lines[at + 1].strip().startswith("("):
+        raise SystemExit("EXEMPT_EDGES 의 첫 항을 찾지 못했다")
+    gone = lines.pop(at + 1)
+    f.write_text("\n".join(lines), encoding="utf-8")
+    return gone.strip()
+
+
+def inj_65_edge_flip(root):
+    """안쪽 경계 항 하나의 쪽을 바깥쪽으로 바꾼다."""
+    f, lines, at = _edges_unit(root)
+    for i in range(at + 1, len(lines)):
+        if lines[i].startswith("]"):
+            break
+        if ', "안", ' in lines[i]:
+            lines[i] = lines[i].replace(', "안", ', ', "밖", ', 1)
+            f.write_text("\n".join(lines), encoding="utf-8")
+            return lines[i].strip()
+    raise SystemExit("안쪽 경계 항이 없어 주입이 서지 않는다")
+
+
+def inj_65_reason(root):
+    """면제 하나의 사유를 어휘에 없는 낱말로 바꾼다."""
+    p, text, m = _exempt_lines(root)
+    body = m.group(1)
+    rows, _reasons, _bad = wiki_common.exempt_rows(body)
+    if not rows:
+        raise SystemExit("EXEMPT 블록에 면제가 없어 주입이 서지 않는다")
+    name = sorted(rows)[0]
+    checks, reason = rows[name]
+    old = f"EXEMPT={name}|{wiki_common.EXEMPT_CHECK_JOIN.join(checks)}|{reason}\n"
+    if body.count(old) != 1:
+        raise SystemExit(f"EXEMPT 블록에서 `{name}` 의 줄을 한 번으로 집지 못했다")
+    new_body = body.replace(old, old.replace(f"|{reason}\n", "|음성 대조의 사유\n"), 1)
+    p.write_text(text[:m.start(1)] + new_body + text[m.end(1):], encoding="utf-8")
+    return name
+
+
 def inj_40_count(root):
     """계수 자리 가운데 하나의 수를 하나 틀리게 적는다.
 
@@ -287,4 +370,9 @@ CASES = [
     ("46", "wiki46-block-list-mirror", "그 블록을 세우고 읽지 않는 블록의 목록에 그 이름을 더한다", inj_46_unread_listed, None, "nocatch"),
     ("47", "wiki47-spec-field-check-no", "어느 필드 표의 검사 칸에 실재하지 않는 번호를 적는다", inj_47_ghost, None),
     ("51", "wiki51-ledger-key-universe", "원장 entry 하나에 그 유니버스 밖의 키를 더한다", inj_51_key, None),
+    ("65", "wiki65-exemption-registry", "코드가 쓰지 않는 면제의 이름을 블록에 등록한다", inj_65_block_ghost, None),
+    ("65", "wiki65-exemption-registry", "등록되지 않은 이름으로 면제를 부르는 함수를 검사 단위에 더한다", inj_65_code_ghost, None),
+    ("65", "wiki65-exemption-registry", "경계 항 하나를 음성 대조 단위의 목록에서 지운다", inj_65_edge_drop, None),
+    ("65", "wiki65-exemption-registry", "안쪽 경계 항 하나의 쪽을 바깥쪽으로 바꾼다", inj_65_edge_flip, None),
+    ("65", "wiki65-exemption-registry", "면제 하나의 사유를 어휘에 없는 낱말로 바꾼다", inj_65_reason, None),
 ]

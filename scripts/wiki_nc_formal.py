@@ -66,6 +66,17 @@ def inj_14(root):
     f.write_text(f.read_text(encoding="utf-8") + f"\n-- DD:{d['id']}\n", encoding="utf-8")
 
 
+def inj_14_meta_kept(root):
+    """회계층 파일에서 메타 층 항목을 지목한다. 잡히지 않아야 한다.
+
+    메타 층 표지의 면제가 받는 쪽이다. 같은 자리에서 정의층 항목을 지목한 항이 잡히는 것과 짝을
+    이룬다."""
+    d = pick(root, "decisions", lambda e: e.get("layer") == "meta")
+    f = root / "CrisisFramework" / "Accounting" / "Aggregation.lean"
+    f.write_text(f.read_text(encoding="utf-8") + f"\n-- DD:{d['id']}\n", encoding="utf-8")
+    return d["id"]
+
+
 def inj_24_missing(root):
     """상주 문서에 없는 규율 ID 를 적는다. 미실재는 선언으로 면제되지 않는다.
 
@@ -76,8 +87,8 @@ def inj_24_missing(root):
                  + "\n음성 대조가 주입한 줄이며 Q-99 를 든다.\n", encoding="utf-8")
 
 
-def inj_24_retired(root):
-    """선언되지 않은 폐기 규율을 적는다. CLAUDE.md 는 폐기 지목 선언을 두지 않는다."""
+def _retired_token(root) -> str:
+    """첫 폐기 레코드의 대상이 든 규율 ID. 그 대상이 규율 ID 를 들지 않으면 주입 자리가 없다."""
     dead_id = load(root, "retirements")["retirements"][0]["target"]
     tok = None
     for reg in ("decisions", "deferred"):
@@ -86,10 +97,101 @@ def inj_24_retired(root):
                 tok = e["names"][0]
     if not tok:
         raise SystemExit("폐기된 항목이 규율 ID 를 들지 않아 주입 대상이 없다")
+    return tok
+
+
+def inj_24_retired(root):
+    """선언되지 않은 폐기 규율을 적는다. CLAUDE.md 는 폐기 지목 선언을 두지 않는다."""
+    tok = _retired_token(root)
     f = root / "CLAUDE.md"
     f.write_text(f.read_text(encoding="utf-8")
                  + f"\n음성 대조가 주입한 줄이며 {tok} 을 근거로 든다.\n", encoding="utf-8")
     return tok
+
+
+def inj_24_declared_kept(root):
+    """폐기 지목 선언 줄과 함께 그 폐기 규율을 적는다. 잡히지 않아야 한다.
+
+    폐기 지목 선언의 면제가 받는 쪽이다. 선언 없이 같은 규율을 적은 항이 잡히는 것과 짝을 이룬다."""
+    tok = _retired_token(root)
+    f = root / "CLAUDE.md"
+    f.write_text(f.read_text(encoding="utf-8")
+                 + f"\n**폐기 지목:** {tok}\n\n음성 대조가 주입한 줄이며 {tok} 을 근거로 든다.\n",
+                 encoding="utf-8")
+    return tok
+
+
+def _inj_10_prose(root, rel: str) -> str:
+    """그 문서의 말미에 폐기된 원장 ID 를 든 줄을 더한다."""
+    dead = next((q["target"] for q in load(root, "retirements")["retirements"]
+                 if q.get("target")), None)
+    if dead is None:
+        raise SystemExit("폐기 레코드가 대상을 들지 않아 주입 대상이 없다")
+    f = root / rel
+    if not f.is_file():
+        raise SystemExit(f"{rel} 이 없어 주입 대상이 없다")
+    f.write_text(f.read_text(encoding="utf-8")
+                 + f"\n음성 대조가 주입한 줄이며 {dead} 를 든다.\n", encoding="utf-8")
+    return dead
+
+
+def inj_10_history_kept(root):
+    """역사 기록인 종료 문서에 폐기된 원장 ID 를 적는다. 잡히지 않아야 한다.
+
+    역사 기록의 면제가 받는 쪽이다. 같은 줄을 상주 문서에 적은 항이 잡히는 것과 짝을 이룬다."""
+    phases = sorted((root / "docs" / "phases").glob("*-closure.md"))
+    if not phases:
+        raise SystemExit("종료 문서가 없어 주입 대상이 없다")
+    return _inj_10_prose(root, str(phases[0].relative_to(root)))
+
+
+def inj_10_history_neighbor(root):
+    """역사 기록이 아닌 상주 문서에 폐기된 원장 ID 를 적는다."""
+    return _inj_10_prose(root, "docs/reading-queue-v0.md")
+
+
+def inj_10_dead_owner_kept(root):
+    """폐기된 결정 항목의 `related` 에 폐기 뒤의 폐기된 id 를 넣는다. 잡히지 않아야 한다.
+
+    폐기된 항목 자신의 지목을 면제하는 쪽이다. 살아 있는 항목에 같은 것을 넣은 항이 잡히는 것과
+    짝을 이룬다. 폐기 레코드보다 번호가 뒤인 항목을 골라 폐기 전 지목의 면제가 끼지 않게 한다."""
+    rets = load(root, "retirements")["retirements"]
+    first = min(rets, key=lambda q: id_no(q.get("id")))
+    dead = first["target"]
+    retired = {q["target"] for q in rets if q.get("target")}
+    owners = [e for e in load(root, "decisions")["decisions"]
+              if e.get("id") in retired and e.get("id") != dead
+              and id_no(e.get("id")) > id_no(first.get("id"))]
+    if not owners:
+        raise SystemExit("폐기 레코드보다 뒤에 선 폐기된 결정 항목이 없어 주입 대상이 없다")
+    tgt = max(owners, key=lambda e: id_no(e.get("id")))
+    if dead in (tgt.get("related") or []) or first.get("id") in (tgt.get("related") or []):
+        raise SystemExit(f"{tgt['id']} 가 이미 {dead} 나 {first['id']} 를 들어 주입이 조건을 만들지 못한다")
+    edit(root, "decisions", tgt["id"],
+         lambda e: e.__setitem__("related", list(e.get("related") or []) + [dead]))
+    return tgt["id"]
+
+
+def inj_10_early_kept(root):
+    """폐기 레코드보다 번호가 앞선 살아 있는 항목의 `related` 에 그 대상을 넣는다. 잡히지 않아야 한다.
+
+    폐기 전 지목의 면제가 받는 쪽이며 그 지목은 실패가 아니라 보고로 간다. 번호가 뒤인 항목에 같은
+    것을 넣은 항이 잡히는 것과 짝을 이룬다."""
+    rets = load(root, "retirements")["retirements"]
+    last = max(rets, key=lambda q: id_no(q.get("id")))
+    dead = last["target"]
+    retired = {q["target"] for q in rets if q.get("target")}
+    live = [e for e in load(root, "decisions")["decisions"]
+            if id_no(e.get("id")) < id_no(last.get("id")) and e.get("id") not in retired
+            and e.get("id") != dead]
+    if not live:
+        raise SystemExit("폐기 레코드보다 앞선 살아 있는 결정 항목이 없어 주입 대상이 없다")
+    tgt = max(live, key=lambda e: id_no(e.get("id")))
+    if dead in (tgt.get("related") or []) or last.get("id") in (tgt.get("related") or []):
+        raise SystemExit(f"{tgt['id']} 가 이미 {dead} 나 {last['id']} 를 들어 주입이 조건을 만들지 못한다")
+    edit(root, "decisions", tgt["id"],
+         lambda e: e.__setitem__("related", list(e.get("related") or []) + [dead]))
+    return tgt["id"]
 
 
 def inj_25(root):
@@ -196,6 +298,37 @@ def inj_34_period(root):
             f.write_text(text.replace(old, f"**{head[:-1]}**", 1), encoding="utf-8")
             return head
     raise SystemExit("마침표로 닫는 예약 머리말이 경계 안에 없다")
+
+
+def inj_34_boundary_kept(root):
+    """경계 밖 머리말의 마침표를 지운다. 잡히지 않아야 한다.
+
+    머리말 경계의 면제가 받는 쪽이다. 경계 안에서 같은 것을 지운 항이 잡히는 것과 짝을 이룬다.
+    경계와 선언은 검증기의 수집기로 고른다."""
+    led = wiki_common.Ledger(root)
+    since, forms = wiki_common.heading_rules(led)
+    if since is None:
+        raise SystemExit("HEADING 블록에 경계가 없어 주입 대상이 없다")
+    for d in led.doc_decls():
+        if d.no >= since:
+            continue
+        f = root / d.rel
+        text = f.read_text(encoding="utf-8")
+        for p in d.paras:
+            head = wiki_common.para_heading(p)
+            if not head or not head.endswith(".") or not any(w in head for w in forms):
+                continue
+            if not any(wiki_common.heading_matches(x, head) for w in forms if w in head
+                       for x in forms[w]):
+                continue          # 이미 형을 어긴 머리말은 마침표를 지워도 새로 어기지 않는다
+            old = f"**{head}**"
+            # 그 파일에서 한 번만 서는 머리말만 고른다. 여러 번 서면 첫 자리가 문단의 머리가 아닌
+            # 곳일 수 있고, 그러면 고친 자리를 검사가 머리말로 읽지 않아 주입이 공허해진다.
+            if text.count(old) != 1:
+                continue
+            f.write_text(text.replace(old, f"**{head[:-1]}**", 1), encoding="utf-8")
+            return head
+    raise SystemExit("마침표로 닫고 형에 맞는 예약 머리말이 경계 밖에 없다")
 
 
 def inj_34_empty(root):
@@ -451,17 +584,23 @@ def _nc48_material(root):
     raise SystemExit("조달처 줄의 재료가 될 절 둘을 가진 추출 기록이 없다")
 
 
-def _nc48_plant(root, bend):
+def _nc48_plant(root, bend, inside: bool = True):
     """경계 안 표지를 가진 선언을 사본에 세우고 그 조달처 줄을 굽힌다.
 
-    굽히지 않은 꼴은 그 검사를 통과하므로, 굽힌 자리 하나만이 새 위반 줄을 낸다.
+    굽히지 않은 꼴은 그 검사를 통과하므로, 굽힌 자리 하나만이 새 위반 줄을 낸다. `inside` 가
+    거짓이면 표지를 경계 바로 앞의 번호로 두어 조달처 경계의 면제가 받는 자리에 세운다. `dotted`
+    는 조달처 줄을 그대로 두고 점으로 이은 절 번호를 든 문단을 더한다.
     """
     led = wiki_common.Ledger(root)
     since, minlen = wiki_formal.sourcing_rules(led)
     if since is None:
         raise SystemExit("사본의 SOURCING 블록에서 경계를 읽지 못했다")
     rec, sec, phrase, other = _nc48_material(root)
-    if bend == "phrase":
+    extra = ""
+    if bend == "dotted":
+        src = f"조달처: E-{rec:02d} §{sec} 「{phrase}」"
+        extra = f"그 구조는 E-{rec:02d} §{sec}.9 의 꼴을 따른다.\n\n"
+    elif bend == "phrase":
         src = f"조달처: E-{rec:02d} §{sec} 「{other}」"
     elif bend == "section":
         src = f"조달처: E-{rec:02d} §{NC48_GHOST_SECTION} 「{phrase}」"
@@ -483,9 +622,10 @@ def _nc48_plant(root, bend):
         "/--\n음성 대조가 세운 선언.\n\n"
         "**대응 비형식 개념:** 없다.\n\n"
         + "\n".join(para) + "\n\n"
-        "**기각한 대체 정의:**\n기각한 것이 없다.\n\n"
+        + extra
+        + "**기각한 대체 정의:**\n기각한 것이 없다.\n\n"
         "**수 체계를 받지 않는다.**\n-/\n"
-        f"-- DD:CF-{since}\n"
+        f"-- DD:CF-{since if inside else since - 1}\n"
         f"def {NC48_DECL} : Bool := true\n\n"
         "end CrisisFramework.Definition\n", encoding="utf-8")
     return f"CrisisFramework.Definition.{NC48_DECL}: E-{rec:02d} §{sec}"
@@ -509,6 +649,20 @@ def inj_48_section(root):
 def inj_48_short(root):
     """구절을 최소 길이 아래로 줄인다."""
     return _nc48_plant(root, "short")
+
+
+def inj_48_dotted_kept(root):
+    """조달처 줄을 그대로 두고 점으로 이은 절 번호를 든 지목을 더한다. 잡히지 않아야 한다.
+
+    점 꼴 지목의 면제가 받는 쪽이다. 붙임표 꼴로 실재하지 않는 절을 든 항이 잡히는 것과 짝을 이룬다."""
+    return _nc48_plant(root, "dotted")
+
+
+def inj_48_boundary_kept(root):
+    """경계 밖 표지를 가진 선언의 조달처 줄을 지운다. 잡히지 않아야 한다.
+
+    조달처 경계의 면제가 받는 쪽이다. 경계 안 표지로 같은 것을 지운 항이 잡히는 것과 짝을 이룬다."""
+    return _nc48_plant(root, "drop", inside=False)
 
 
 def inj_57_numeral(root):
@@ -605,4 +759,36 @@ CASES = [
     ("60", "wiki60-currency-guard", "타입클래스 바인더와 통화 인자만 더한 선언을 주입한다", inj_60_binder_only, None),
     ("62", "wiki62-overlap-paragraph", "OVERLAP 블록의 한 쌍을 배타 관계가 등록된 쌍으로 바꾼다", inj_62_excl, None),
     ("62", "wiki62-overlap-paragraph", "겹침 문단 하나의 머리말에서 한 개념의 이름을 지운다", inj_62_name, None),
+    ("10", "wiki10-ghost-ref", "역사 기록인 종료 문서에 폐기된 원장 ID 를 적는다", inj_10_history_kept, None, "nocatch"),
+    ("10", "wiki10-ghost-ref", "역사 기록이 아닌 상주 문서에 폐기된 원장 ID 를 적는다", inj_10_history_neighbor, None),
+    ("10", "wiki10-ghost-ref", "폐기된 결정 항목의 related 에 폐기된 id 를 넣는다", inj_10_dead_owner_kept, None, "nocatch"),
+    ("10", "wiki10-ghost-ref", "폐기 레코드보다 앞선 항목의 related 에 그 대상을 넣는다", inj_10_early_kept, None, "nocatch"),
+    ("14", "wiki14-dd-layer", "회계층 파일에서 메타 층 항목을 지목한다", inj_14_meta_kept, None, "nocatch"),
+    ("24", "wiki24-doc-rule-ghost", "폐기 지목 선언 줄과 함께 그 폐기 규율을 적는다", inj_24_declared_kept, None, "nocatch"),
+    ("34", "wiki34-heading-form", "경계 밖 머리말의 마침표를 지운다", inj_34_boundary_kept, None, "nocatch"),
+    ("48", "wiki48-extraction-sourcing", "점으로 이은 절 번호를 든 지목을 더한다", inj_48_dotted_kept, None, "nocatch"),
+    ("48", "wiki48-extraction-sourcing", "경계 밖 표지를 가진 선언의 조달처 줄을 지운다", inj_48_boundary_kept, None, "nocatch"),
+]
+
+
+# 면제의 경계 양쪽을 찌르는 사례. (면제의 이름, 쪽, 주입 함수) 이며 쪽은 경계 안쪽에서 잡히지 않아야
+# 하는 「안」과 경계 바로 바깥에서 잡히는 「밖」이다. 검사 65 가 이 목록을 사례 목록과 값 정본의 면제
+# 등록에 맞댄다.
+EXEMPT_EDGES = [
+    ("역사 기록", "안", inj_10_history_kept),
+    ("역사 기록", "밖", inj_10_history_neighbor),
+    ("폐기된 항목 자신의 지목", "안", inj_10_dead_owner_kept),
+    ("폐기된 항목 자신의 지목", "밖", inj_10),
+    ("폐기 전 지목", "안", inj_10_early_kept),
+    ("폐기 전 지목", "밖", inj_10),
+    ("메타 층 표지", "안", inj_14_meta_kept),
+    ("메타 층 표지", "밖", inj_14),
+    ("폐기 지목 선언", "안", inj_24_declared_kept),
+    ("폐기 지목 선언", "밖", inj_24_retired),
+    ("머리말 경계", "안", inj_34_boundary_kept),
+    ("머리말 경계", "밖", inj_34_period),
+    ("점 꼴 지목", "안", inj_48_dotted_kept),
+    ("점 꼴 지목", "밖", inj_48_section),
+    ("조달처 경계", "안", inj_48_boundary_kept),
+    ("조달처 경계", "밖", inj_48_drop),
 ]

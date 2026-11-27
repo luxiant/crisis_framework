@@ -6,7 +6,9 @@
 """
 from __future__ import annotations
 
+import os
 import re
+import subprocess
 from pathlib import Path
 
 from wiki_common import (
@@ -29,6 +31,7 @@ from wiki_common import (
     _inventory_rows,
     arc_phase_names,
     doc_pointers,
+    exempt,
     extraction_record,
     extraction_ref_number,
     inventory_member_rows,
@@ -168,7 +171,19 @@ POINTER_KEYS = ("POINTER_COMMENT", "POINTER_EPHEMERAL", "POINTER_SECTION")
 POINTER_TAG = re.compile(r"(?<![0-9A-Za-z])[A-Z]\d+-O\d+(?![0-9A-Za-z])")
 
 
-POINTER_EPHEMERAL_FILE = re.compile(r"IMPLEMENTATION_PLAN|ENTRY_CARD")
+# 결정 세션이 커밋과 영구 문면을 직접 쓰게 된 뒤의 소진 문서는 회의록과 청사진이다. 그 파일 이름을
+# 함께 받는다. 회의록은 아크와 페이즈 번호를 붙임표로 이은 꼴만 받고 청사진은 아크 이름을 붙임표로
+# 이은 꼴만 받는다. 그 문서의 종류를 일반명으로 든 문면과 설비의 파일 이름은 특정한 소진 문서를
+# 가리키지 않으므로 잡지 않는다.
+POINTER_EPHEMERAL_FILE = re.compile(
+    r"IMPLEMENTATION_PLAN|ENTRY_CARD"
+    r"|(?<![0-9A-Za-z-])minutes-[a-z][a-z0-9]*-\d+(?:\.md)?(?![0-9A-Za-z])"
+    r"|(?<![0-9A-Za-z-])blueprint-[a-z][a-z0-9]*\.html(?![0-9A-Za-z])")
+
+
+# 회의록이 화두와 낙착에 붙이는 식별자. 번호를 든 꼴만 받으며 그 낱말을 번호 없이 쓴 자리는 잡지
+# 않는다. 그 식별자는 회의록 안에서만 뜻을 가지므로 영구 문면이 그것을 들면 열 수 없다.
+POINTER_MINUTES_ID = re.compile(r"(?<![0-9A-Za-z가-힣])(?:화두|낙착)-\d+(?:-\(\d+\))?")
 
 
 # 갈래 3 의 꼴과 그 면제 둘. 출처 표지가 앞에 오는 자리는 규율 조항의 역추적을 붙인 자리이고,
@@ -193,15 +208,16 @@ POINTER_DOC_NAME = re.compile(
 # 파일에 일대일로 대응하여 리포 안에서 열리므로 애초에 금지의 대상이 아니다. 면제하지 않으면
 # 그 꼴을 쓰는 자리가 전부 적발로 서서 블록의 값이 금지된 지목이 아니라 정상 지목의 계수를
 # 든다(SPEC §2.1).
-POINTER_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z])E-\d{1,2}(?![0-9A-Za-z])")
+POINTER_EXTRACTION_NO = re.compile(r"(?<![0-9A-Za-z])E-\d{1,3}(?![0-9A-Za-z])")
 
 
 # 갈래 3 의 면제가 하나 더 선다. 추출 기록의 파일 이름이 앞에 오면 그 절 번호는 그 이름이 가리키는
 # 기록 파일로 리포 안에서 열리므로, 앞의 번호 꼴과 같은 사유로 애초에 금지의 대상이 아니다. 꼴은
-# 그 파일 이름의 머리인 `extraction-` 과 두 자리 번호까지이며, 그 뒤에 이어지는 이름의 나머지와
-# 확장자는 묻지 않는다. 그래서 번호까지만 줄여 드는 꼴과 이름 전체를 드는 꼴이 함께 면제된다.
+# 그 파일 이름의 머리인 `extraction-` 과 두 자리나 세 자리의 번호까지이며, 그 뒤에 이어지는 이름의
+# 나머지와 확장자는 묻지 않는다. 그래서 번호까지만 줄여 드는 꼴과 이름 전체를 드는 꼴이 함께
+# 면제된다.
 # 번호의 자릿수는 `docs/baseline.md` 의 `DOCFORM` 블록이 추출 기록의 이름에 거는 형과 같다.
-POINTER_EXTRACTION_FILE = re.compile(r"(?<![0-9A-Za-z])extraction-[0-9]{2}(?![0-9])")
+POINTER_EXTRACTION_FILE = re.compile(r"(?<![0-9A-Za-z])extraction-[0-9]{2,3}(?![0-9])")
 
 
 # 그 면제가 받는 이름의 꼴. 번호 뒤에 하이픈으로 이은 이름 토막과 확장자를 함께 받는다. **그 이름이
@@ -209,7 +225,7 @@ POINTER_EXTRACTION_FILE = re.compile(r"(?<![0-9A-Za-z])extraction-[0-9]{2}(?![0-
 # 받으나 파일 이름의 꼴은 그 축에 걸리지 않으므로, 실재를 보지 않으면 지어낸 이름이 면제로 빠진다.
 # 이름 토막이 하이픈의 경계에서 끊긴 꼴도 실재하는 이름의 머리이면 받으며, 번호까지만 줄여 드는 꼴이
 # 그 특수한 경우다.
-POINTER_EXTRACTION_NAME = re.compile(r"extraction-[0-9]{2}(?:-[0-9A-Za-z]+)*(?:\.md)?")
+POINTER_EXTRACTION_NAME = re.compile(r"extraction-[0-9]{2,3}(?:-[0-9A-Za-z]+)*(?:\.md)?")
 
 
 # 갈래 3 의 면제를 지목의 대상으로 좁힌다. **리포 밖 문서의 이름이 절 번호 바로 앞에 서면 그 지목은
@@ -247,7 +263,8 @@ def pointer_block(led: Ledger) -> dict[str, int]:
     return got
 
 
-def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[str]]:
+def pointer_hits(targets: list[tuple[str, str]], dist: int,
+                 detail: dict[str, list[str]] | None = None) -> dict[str, list[str]]:
     """갈래별 적발의 자리. 키는 `POINTER_KEYS` 이고 값은 `<경로>:<줄> <적발한 꼴>` 이다.
 
     **블록을 심는 쪽과 그것을 맞대는 쪽이 이 하나를 함께 쓴다.** 두 자리에 전사하면 한쪽을
@@ -255,6 +272,11 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
 
     유니버스를 인자로 받는 까닭은 그 수집기가 파일 전량을 읽으므로 부르는 쪽이 그 수를 함께
     쓸 때 두 번 읽게 되는 것이다.
+
+    `detail` 을 주면 절 번호 갈래의 적발 가운데 리포 밖 문서의 이름이 앞에 선 것을 `outside` 에,
+    자기 절 제목의 면제로 빠진 지목을 `own` 에 함께 담는다. 커밋 메시지를 재는 몫이 앞의 것만
+    적발로 세고 그 검사의 노트가 뒤의 것의 양을 낸다. 반환하는 갈래의 키는 그대로 두므로 갈래의
+    계수를 맞대는 쪽이 이 인자에 매이지 않는다.
     """
     out: dict[str, list[str]] = {k: [] for k in POINTER_KEYS}
     # 실재하는 추출 기록의 이름. 유니버스가 `docs/` 아래의 마크다운 전량을 들므로 그 목록에서 뽑고
@@ -275,29 +297,69 @@ def pointer_hits(targets: list[tuple[str, str]], dist: int) -> dict[str, list[st
                 out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
             for m in POINTER_EPHEMERAL_FILE.finditer(ln):
                 out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
+            for m in POINTER_MINUTES_ID.finditer(ln):
+                out["POINTER_EPHEMERAL"].append(f"{rel}:{i} `{m.group(0)}`")
             prev_end, prev_out = 0, False
             for m in POINTER_SECTION_NO.finditer(ln):
                 head = ln[:m.start()]
                 outside = bool(POINTER_OUTSIDE_DOC.search(head)) or (
                     prev_out and POINTER_CHAIN_GAP.match(ln[prev_end:m.start()]) is not None)
                 prev_end, prev_out = m.end(), outside
-                if POINTER_SOURCE_MARK in head:
+                if POINTER_SOURCE_MARK in head and exempt("출처 표지"):
                     continue
                 if not outside:
-                    if (POINTER_DOC_NAME.search(head)
-                            or POINTER_EXTRACTION_NO.search(head)
-                            or _extraction_named(head, names)):
+                    if POINTER_DOC_NAME.search(head) and exempt("리포 안 문서 이름"):
                         continue
-                    if m.group(1) in own:
+                    if POINTER_EXTRACTION_NO.search(head) and exempt("추출 기록 번호"):
                         continue
+                    if _extraction_named(head, names) and exempt("추출 기록 파일 이름"):
+                        continue
+                    if m.group(1) in own and exempt("자기 절 제목"):
+                        if detail is not None:
+                            detail.setdefault("own", []).append(f"{rel}:{i} `{m.group(0)}`")
+                        continue
+                if outside and detail is not None:
+                    detail.setdefault("outside", []).append(f"{rel}:{i} `{m.group(0)}`")
                 out["POINTER_SECTION"].append(f"{rel}:{i} `{m.group(0)}`")
     return out
+
+
+# 검사 41 의 커밋 메시지 몫이 메시지를 읽는 환경 변수. 결정 세션이 커밋 앞의 검증에서 커밋할 메시지를
+# 파일로 쓰고 그 경로를 이 변수로 주면 그 메시지가 재어지고, 주지 않으면 리포의 머리 커밋의 메시지가
+# 재어진다. 검증 스크립트는 환경을 그대로 물려주므로 이 변수를 따로 넘기지 않는다.
+COMMIT_MESSAGE_ENV = "VERIFY_COMMIT_MESSAGE"
+
+
+# 커밋 메시지를 드는 자리의 표시 경로. 적발의 자리가 이 이름과 줄 번호로 선다.
+COMMIT_MESSAGE_PLACE = "커밋 메시지"
+
+
+def commit_message(root: Path) -> tuple[str | None, str]:
+    """커밋 메시지와 그 출처. 읽지 못하면 메시지 자리에 None 을 두고 출처 자리에 그 사유를 낸다.
+
+    **출처가 없으면 통과가 아니라 실패다.** 잴 것이 없을 때 통과로 세면 깃 메타 없이 풀린 트리에서
+    이 몫이 조용히 비고, 블록이나 레지스터가 비었을 때 이 리포의 검사들이 실패로 세는 꼴과도 갈린다.
+    """
+    path = os.environ.get(COMMIT_MESSAGE_ENV)
+    if path:
+        try:
+            return Path(path).read_text(encoding="utf-8"), f"환경 변수 {COMMIT_MESSAGE_ENV}"
+        except (OSError, UnicodeDecodeError) as exc:
+            return None, (f"환경 변수 {COMMIT_MESSAGE_ENV} 가 가리키는 `{path}` 를 읽지 못했다 "
+                          f"({exc.__class__.__name__})")
+    if (root / ".git").exists():
+        p = subprocess.run(["git", "-C", str(root), "log", "-1", "--format=%B", "HEAD"],
+                           capture_output=True, text=True)
+        if p.returncode == 0:
+            return p.stdout, "머리 커밋"
+        return None, f"머리 커밋의 메시지를 읽지 못했다: {p.stderr.strip()[:120]}"
+    return None, f"환경 변수 {COMMIT_MESSAGE_ENV} 가 없고 뿌리에 깃 메타가 없다"
 
 
 def r11_rules(led: Ledger) -> tuple[int | None, set[str]]:
     """`R11` 블록이 든 거리와 면제 항목의 id."""
     dist: int | None = None
-    exempt: set[str] = set()
+    waive: set[str] = set()
     for line in _baseline_block(led, R11_BLOCK).splitlines():
         m = R11_DIST_LINE.match(line)
         if m:
@@ -305,8 +367,8 @@ def r11_rules(led: Ledger) -> tuple[int | None, set[str]]:
             continue
         m = R11_EXEMPT_LINE.match(line)
         if m:
-            exempt.add(m.group(1))
-    return dist, exempt
+            waive.add(m.group(1))
+    return dist, waive
 
 
 def check_35(led: Ledger) -> Report:
@@ -494,18 +556,18 @@ def check_36(led: Ledger) -> Report:
 def check_41(led: Ledger) -> Report:
     r = Report("41", "wiki41-pointer-scope",
                "리포의 영구 문면이 리포 밖에서만 뜻을 갖는 식별자를 지목하는가", "fail")
-    dist, exempt = r11_rules(led)
+    dist, r11_waive = r11_rules(led)
     # 블록을 읽지 못하면 통과가 아니라 실패다. 거리가 없으면 재기가 서지 않고 면제가 비면
     # 이미 실린 열여덟이 전부 적발로 나므로, 둘 다 맞댈 상대가 없는 것이다(SPEC §2.1).
     if dist is None:
         r.bad("docs/baseline.md 의 R11 블록에 R11_DIST 가 없다")
         return r
-    if not exempt:
+    if not r11_waive:
         r.bad("docs/baseline.md 의 R11 블록에 R11_EXEMPT 가 하나도 없다")
         return r
     # 면제 항이 원장에 없으면 그 항이 조용히 비어 목록만 넓어진 것을 알 수 없다. 검사 33 이
     # 예약 낱말의 실재를 단언하는 것과 같은 형이다(SPEC §2.1).
-    for eid in sorted(exempt):
+    for eid in sorted(r11_waive):
         if eid not in led.by_id:
             r.bad(f"R11 블록의 면제 항 `{eid}` 이 원장에 없다")
     hit = 0
@@ -520,14 +582,14 @@ def check_41(led: Ledger) -> Report:
             for m in RULE_TOKEN.finditer(s):
                 if R11_WORD not in s[m.end():m.end() + dist]:
                     continue
-                if eid in exempt:
+                if eid in r11_waive and exempt("R-11 면제 목록"):
                     waived.add(eid)
                     continue
                 hit += 1
                 r.bad(f"{eid}: {f} 의 `{m.group(0)}` 뒤 {dist} 자 안에 "
                       f"`{R11_WORD}` 이 따른다")
     r.note(f"R-11 갈래의 유니버스는 네 레지스터의 산문 필드 {len(R11_FIELDS)} "
-           f"· 거리 R11_DIST={dist} · 면제 항 {len(exempt)}")
+           f"· 거리 R11_DIST={dist} · 면제 항 {len(r11_waive)}")
     r.note(f"R-11 갈래의 적발 {hit} · 면제 목록으로 넘긴 항목 {len(waived)}")
 
     # 두 번째 몫. 리포의 영구 문면이 리포 밖에서만 뜻을 갖는 식별자를 지목하는가를 갈래 셋으로
@@ -547,7 +609,8 @@ def check_41(led: Ledger) -> Report:
         r.bad("POINTER 블록에 " + " · ".join(missing) + " 이 없다")
         return r
     targets = led.pointer_scan_targets()
-    hits = pointer_hits(targets, dist)
+    detail: dict[str, list[str]] = {}
+    hits = pointer_hits(targets, dist, detail)
     fields = sum(1 for rel, _ in targets if rel.startswith(ARCS_DOC + POINTER_ARCS_MARK))
     r.note(f"지목 범위 갈래의 유니버스는 영구 문면 {len(targets)} 개"
            f" · 그 가운데 아크 값 정본의 산문 필드 {fields} · 유니버스 밖: 원장 네 파일")
@@ -570,6 +633,29 @@ def check_41(led: Ledger) -> Report:
                    f"키를 같은 회차에 함께 내리는 것은 결정 세션의 조작이다")
         else:
             r.note(f"{key} 의 적발 {got} 가 블록의 값과 같다")
+    # 자기 절 제목의 면제로 빠진 지목의 양을 노트로 낸다. 그 다수는 문서가 자기 절을 가리키는 정당한
+    # 지목이고 일부가 리포 밖 문서의 절을 가리키는데 둘을 기계로 가를 수 없으므로, 그 계수를 늘면
+    # 실패시키는 값으로 두지 않는다. 그렇게 두면 앞으로 쓰는 정당한 자기 지목이 오류로 선다(SPEC §2.1).
+    own = detail.get("own", [])
+    r.note(f"자기 절 제목의 면제로 빠진 절 번호 지목 {len(own)} · 그 파일 "
+           f"{len({p.split(':')[0] for p in own})}. 금지 갈래가 아니므로 값 정본에 심지 않는다")
+
+    # 세 번째 몫. 커밋 메시지를 잰다. 그 금지가 메시지에 걸리는 사유가 원격에 올라간 뒤 고칠 수 없다는
+    # 것이므로 막는 자리는 커밋 앞이고, 이미 쓰인 문면이 아니므로 계수로 가두지 않고 적발 하나로
+    # 실패시킨다. **소진 문서 갈래와 리포 밖 문서의 이름이 바로 앞에 선 절 번호만 적발로 센다.** 이름
+    # 없이 선 절 번호는 메시지가 리포 안 문서를 한국어 이름으로 부른 뒤에 그 절을 가리키는 자리가 많아
+    # 잡으면 정상을 오류로 잡고, 규율 ID 뒤의 주석 지목은 메시지가 이 검사를 다루는 자리를 잡는다.
+    msg, src = commit_message(led.root)
+    if msg is None:
+        r.bad(f"커밋 메시지의 출처가 없다: {src}")
+    else:
+        mdet: dict[str, list[str]] = {}
+        mh = pointer_hits([(COMMIT_MESSAGE_PLACE, msg)], dist, mdet)
+        found = mh["POINTER_EPHEMERAL"] + mdet.get("outside", [])
+        for place in found:
+            r.bad(f"커밋 메시지가 리포 밖에서만 뜻을 갖는 식별자를 지목한다: {place}")
+        r.note(f"커밋 메시지의 출처 {src} · 소진 문서 갈래 {len(mh['POINTER_EPHEMERAL'])} "
+               f"· 리포 밖 문서의 이름이 붙은 절 번호 {len(mdet.get('outside', []))}")
     return r
 
 
@@ -646,7 +732,7 @@ MIRROR_GHOST_LINE = re.compile(r"^MIRROR_GHOST=(\d+)$")
 # 나열 줄의 구성원 꼴. 보조 묶음의 절이 편을 표의 행이 아니라 「제목 (연도, 번호)」 로 들며, 괄호
 # 안의 첫 자리가 네 자리 연도이고 마지막 자리가 기록 번호다. 연도를 요구하는 까닭은 산문 줄이
 # 괄호 안에 기록 번호만 드는 꼴(「기록 하나(E-44)」)을 구성원으로 읽지 않는 것이다.
-INVENTORY_LIST_MEMBER = re.compile(r"\(\s*\d{4}[^()]*?,\s*E-(\d{1,2})\s*\)")
+INVENTORY_LIST_MEMBER = re.compile(r"\(\s*\d{4}[^()]*?,\s*E-(\d{1,3})\s*\)")
 
 
 # 검사 50 의 미추출 축이 읽는 편 제목의 꼴. 추출 기록의 머리 곧 첫 `#` 제목 뒤에 처음 서는 문단에서
@@ -775,7 +861,7 @@ def _check_50_unread(led: Ledger, r: Report, files: dict[int, Path]) -> None:
                 ratio = title_ratio(k, xk)
                 if ratio is None:
                     continue
-                if ratio < INVENTORY_TITLE_RATIO:
+                if ratio < INVENTORY_TITLE_RATIO and exempt("제목 유사도 문턱"):
                     below += 1
                     r.note(f"문턱 아래의 포함 {INVENTORY_DOC}:{line} `{c}` 와 E-{n:02d} `{x}` "
                            f"(비 {ratio:.3f})")

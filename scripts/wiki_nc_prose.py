@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import re
+import shutil
+import subprocess
 from pathlib import Path
 import wiki_common
 import wiki_prose
@@ -26,13 +28,20 @@ def inj_43(root):
 
     그 항이 「발화할 수 없는 항」으로 세어져야 한다. 번호의 꼴을 만족하므로 검사 12 는 그것을
     형식으로 받으며, 그 번호의 기록이 실재하는지를 보는 자리가 검사 43 하나임이 이 주입으로
-    선다. 추출 기록의 번호가 두 자리이고 현행 열이 49 까지이므로 97 을 고른다."""
+    선다. **번호를 기존 기록 최대의 다음으로 고른다.** 번호를 박아 두면 그 번호의 기록이 들어오는
+    회차에 그 항이 발화할 수 있는 항으로 세어지는데, 보고 줄에 식별자가 드는지만 보는 판정이 그
+    어긋남을 가린다. 고른 번호가 세 자리를 넘으면 검사의 꼴이 읽지 못하므로 주입 자리가 없음을 알린다."""
     eid = "CF-9043"
+    nums = [int(m.group(1)) for f in (root / "docs" / "extractions").glob("extraction-*.md")
+            for m in [wiki_common.EXTRACTION_FILE_NO.match(f.name)] if m]
+    n = max(nums, default=0) + 1
+    if n > 999:
+        raise SystemExit("기록 번호가 세 자리를 넘어 검사의 꼴이 그 번호를 읽지 못한다")
     doc = load(root, "deferred")
     doc["deferred"].append(deferred_stub(
-        eid, {"kind": "extraction", "ref": "E-97"}))
+        eid, {"kind": "extraction", "ref": f"E-{n:02d}"}))
     save(root, "deferred", doc)
-    return eid
+    return f"{eid} — 번호 {n:02d} 의 추출 기록이 아직 없다"
 
 
 def inj_32(root):
@@ -160,6 +169,25 @@ def inj_41_pointer(root):
     return f"{target.get('id')}: {tok} 에 붙은 주석"
 
 
+def inj_41_r11_waived_kept(root):
+    """면제 목록에 든 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다. 잡히지 않아야 한다.
+
+    R-11 면제 목록이 받는 쪽이다. 목록 밖의 항목에 같은 꼴을 적은 항이 잡히는 것과 짝을 이룬다."""
+    led = wiki_common.Ledger(root)
+    _dist, waive = wiki_prose.r11_rules(led)
+    live = sorted(tok for tok, owner in led.name_owner.items() if owner not in led.dead)
+    if not waive or not live:
+        raise SystemExit("면제 목록이나 살아 있는 조항이 없어 주입이 서지 않는다")
+    for reg in wiki_common.REGISTERS:
+        doc = load(root, reg)
+        for e in doc[reg]:
+            if e.get("id") in waive and isinstance(e.get("statement"), str):
+                e["statement"] += f" {live[0]} 에 붙은 주석을 지목한다."
+                save(root, reg, doc)
+                return f"{e['id']}: {live[0]} 에 붙은 주석"
+    raise SystemExit("면제 목록의 항목이 원장에 없어 주입 대상이 없다")
+
+
 # ------------------------------------------------- 검사 35 · 추출 기록 번호의 축
 
 def _extraction_pattern(root: Path):
@@ -195,6 +223,20 @@ def inj_35_dupnum(root):
         # 번호를 실물에서 읽는다. 박아 두면 그 번호의 파일이 사라질 때 주입이 조용히 빈다.
     num = sorted(seen)[0]
     return _plant(root, f"{d}/extraction-{num}-duplicate-probe.md")
+
+
+def inj_35_threedigit(root):
+    """쓰이지 않은 세 자리 번호로 추출 기록을 하나 둔다.
+
+    **잡히지 않아야 하는 항이다.** 값 정본이 추출 기록의 이름에 거는 형이 세 자리 번호까지 받으므로
+    새 위반 줄이 나지 않아야 한다. 그 형이 두 자리로 되돌아가면 이 항이 어긋나 드러난다.
+    """
+    d, seen = _extraction_pattern(root)
+    used = {int(k) for k in seen}
+    num = next((k for k in range(100, 1000) if k not in used), None)
+    if num is None:
+        raise SystemExit("세 자리 번호가 전부 쓰여 고를 번호가 없다")
+    return _plant(root, f"{d}/extraction-{num}-three-digit-probe.md")
 
 
 def inj_35_gapnum(root):
@@ -353,6 +395,143 @@ def inj_41_own_heading_kept(root):
         + "\n세션 지시가 요구하는 자리이며 이 문서의 §97 이 그것을 든다.\n", 0)
 
 
+# 커밋 메시지 몫을 찌르는 주입의 문면. 하네스가 사본의 상태에서 메시지의 출처를 고르며, 그 이름의
+# 파일이 사본에 서면 그것을 환경 변수로 넘기고 사본에 깃 메타가 서면 머리 커밋의 메시지를 재게 둔다.
+INJ_MESSAGE_FILE = ".nc-commit-message"
+
+
+def _git_commit(root, message):
+    """사본 안에 깃 저장소를 세우고 그 메시지로 빈 커밋을 만든다."""
+    git = shutil.which("git")
+    if git is None:
+        raise SystemExit("git 이 없어 머리 커밋을 세울 수 없다")
+    base = [git, "-C", str(root), "-c", "user.name=nc", "-c", "user.email=nc@invalid",
+            "-c", "commit.gpgsign=false", "-c", "init.defaultBranch=main"]
+    for args in (["init", "-q"], ["commit", "-q", "--allow-empty", "-m", message]):
+        p = subprocess.run(base + args, capture_output=True, text=True)
+        if p.returncode != 0:
+            raise SystemExit(f"사본에 깃 커밋을 세우지 못했다: {p.stderr.strip()[:120]}")
+
+
+def inj_41_message_head(root):
+    """사본에 깃 저장소를 세우고 회의록의 식별자를 든 메시지로 머리 커밋을 만든다."""
+    _git_commit(root, "음성 대조가 주입한 커밋이다.\n\n낙착-9-(9) 의 고침을 싣는다.\n")
+    return "머리 커밋"
+
+
+def inj_41_message_head_kept(root):
+    """설비의 파일 이름과 번호 없는 낱말만 든 메시지는 잡히지 않는다."""
+    _git_commit(root, "음성 대조가 주입한 커밋이다.\n\nscripts/minutes.py 와 scripts/blueprint.py 를 "
+                      "고치고 그 낙착을 싣는다.\n")
+    return "머리 커밋"
+
+
+def inj_41_message_file(root):
+    """리포 밖 문서의 이름이 바로 앞에 선 절 번호를 든 메시지를 환경 변수로 준다."""
+    (root / INJ_MESSAGE_FILE).write_text(
+        "음성 대조가 주입한 메시지다.\n\n세션 지시 §9.9 의 요구를 싣는다.\n", encoding="utf-8")
+    return INJ_MESSAGE_FILE
+
+
+def inj_41_message_file_kept(root):
+    """이름 없이 선 절 번호와 리포 안 문서의 절 번호만 든 메시지는 잡히지 않는다."""
+    (root / INJ_MESSAGE_FILE).write_text(
+        "음성 대조가 주입한 메시지다.\n\n원장 스키마 §2.1 의 표와 §9.9 를 고친다.\n", encoding="utf-8")
+    return INJ_MESSAGE_FILE
+
+
+def inj_41_message_missing(root):
+    """환경 변수가 가리키는 자리를 읽을 수 없는 디렉터리로 둔다. 메시지의 출처가 없어 실패한다."""
+    (root / INJ_MESSAGE_FILE).mkdir()
+    return INJ_MESSAGE_FILE
+
+
+# 면제의 경계를 찌르는 지목 범위 주입의 문면. 절 번호는 실재하지 않는 값이고 근거가 절 번호의 앞에
+# 서는 꼴과 뒤에 서는 꼴을 짝으로 둔다. 근거가 뒤에 서면 그 지목은 리포 밖 문서의 절을 가리키는 것과
+# 갈리지 않으므로 잡혀야 한다.
+def inj_41_source_mark_kept(root):
+    """출처 표지가 절 번호 앞에 선다. 잡히지 않아야 한다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. 그 요구 ← §99.7 이 든다.\n", 0)
+
+
+def inj_41_source_mark_after(root):
+    """출처 표지가 절 번호 뒤에 선다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. §99.7 ← 그 요구가 든다.\n", 1)
+
+
+def inj_41_doc_name_kept(root):
+    """리포 안 문서의 이름이 절 번호 앞에 선다. 잡히지 않아야 한다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. SPEC.md §99.7 이 그 요구를 든다.\n", 0)
+
+
+def inj_41_doc_name_after(root):
+    """리포 안 문서의 이름이 절 번호 뒤에 선다."""
+    return _inject_pointer_text(
+        root, "\n음성 대조가 주입한 문면이다. §99.7 이 그 요구를 들며 그 요구는 SPEC.md 에 있다.\n", 1)
+
+
+def inj_41_extraction_no_kept(root):
+    """추출 기록의 번호가 절 번호 앞에 선다. 잡히지 않아야 한다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. E-01 §99.7 이 그 요구를 든다.\n", 0)
+
+
+def inj_41_extraction_no_after(root):
+    """추출 기록의 번호가 절 번호 뒤에 선다."""
+    return _inject_pointer_text(
+        root, "\n음성 대조가 주입한 문면이다. §99.7 이 그 요구를 들며 그 근거는 E-01 이다.\n", 1)
+
+
+def inj_41_extraction_no_fourdigit(root):
+    """기록 번호의 꼴이 받는 자릿수를 넘은 번호가 절 번호 앞에 선다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. E-1234 §99.7 이 그 요구를 든다.\n", 1)
+
+
+def inj_41_extraction_no_threedigit_kept(root):
+    """세 자리 기록 번호가 절 번호 앞에 선다. 잡히지 않아야 한다.
+
+    번호의 자릿수를 넓힌 고침이 되돌아가면 이 항이 어긋나 드러난다."""
+    return _inject_pointer_text(root, "\n음성 대조가 주입한 문면이다. E-123 §99.7 이 그 요구를 든다.\n", 0)
+
+
+def _pointer_counts(root) -> dict[str, int]:
+    led = wiki_common.Ledger(root)
+    dist, _waive = wiki_prose.r11_rules(led)
+    if dist is None:
+        raise SystemExit("R11 블록에 거리가 없어 주입과 판정이 같은 값을 쓰지 못한다")
+    return {k: len(v) for k, v in wiki_prose.pointer_hits(led.pointer_scan_targets(), dist).items()}
+
+
+def _assert_pointer_counts(before: dict[str, int], after: dict[str, int], key: str, delta: int) -> None:
+    for k in before:
+        want = before[k] + delta if k == key else before[k]
+        if after[k] != want:
+            raise SystemExit(f"주입이 {k} 를 {before[k]} 에서 {after[k]} 로 바꿨다. {want} 여야 한다")
+
+
+def inj_41_ledger_kept(root):
+    """결정 항목의 진술에 조작 표지를 적는다. 잡히지 않아야 한다.
+
+    원장 네 파일의 면제가 받는 쪽이다. 같은 디렉터리의 명세에 같은 표지를 적은 항이 잡히는 것과
+    짝을 이룬다. 갈래의 계수가 움직이지 않음을 주입 안에서 단언한다."""
+    before = _pointer_counts(root)
+    doc = load(root, "decisions")
+    e = doc["decisions"][-1]
+    e["statement"] = str(e.get("statement") or "") + " 조작 표지 Z9-O9 를 지목한다."
+    save(root, "decisions", doc)
+    _assert_pointer_counts(before, _pointer_counts(root), "POINTER_EPHEMERAL", 0)
+    return e["id"]
+
+
+def inj_41_ledger_neighbor(root):
+    """원장과 같은 디렉터리의 명세에 조작 표지를 적는다."""
+    before = _pointer_counts(root)
+    f = root / "docs" / "decisions" / "SPEC.md"
+    f.write_text(f.read_text(encoding="utf-8")
+                 + "\n음성 대조가 주입한 문면이다. 조작 표지 Z9-O9 를 지목한다.\n", encoding="utf-8")
+    _assert_pointer_counts(before, _pointer_counts(root), "POINTER_EPHEMERAL", 1)
+    return "POINTER_EPHEMERAL"
+
+
 def inj_49_unpointed(root):
     """어느 docstring 도 지목하지 않는 추출 기록을 하나 더한다.
 
@@ -399,8 +578,8 @@ def inj_50_missing(root):
     if not nums:
         raise SystemExit("사본에 추출 기록이 없어 번호를 고를 자리가 없다")
     n = max(nums) + 1
-    if n > 99:
-        raise SystemExit("기록 번호가 두 자리를 넘어 검사의 꼴이 그 번호를 읽지 못한다")
+    if n > 999:
+        raise SystemExit("기록 번호가 세 자리를 넘어 검사의 꼴이 그 번호를 읽지 못한다")
     lines = text.split("\n")
     at = left[min(left)][0] - 1
     m = wiki_common.INVENTORY_EXTRACTION_NO.search(lines[at])
@@ -641,13 +820,20 @@ def inj_63_ref(root):
 
 
 def inj_59_dup(root):
-    """같은 줄기의 파일을 하나 더 둔다. 번호는 실재하는 기록과 겹치지 않는 두 자리로 고른다."""
+    """같은 줄기의 파일을 하나 더 둔다.
+
+    번호는 실재하는 기록과 겹치지 않는 것을 두 자리에서 먼저 찾고 없으면 세 자리에서 고른다.
+    **고를 번호가 없으면 주입 자리가 없음을 알린다.** 생성식이 비면 하네스가 건너뜀으로 받지 못하는
+    예외로 끝나 순회 전체가 멈춘다.
+    """
     d = root / "docs" / "extractions"
     files = [f for f in sorted(d.glob("extraction-*.md")) if wiki_common.EXTRACTION_FILE_NO.match(f.name)]
     if not files:
         raise SystemExit("번호를 든 추출 기록이 없어 주입할 자리가 없다")
     used = {int(wiki_common.EXTRACTION_FILE_NO.match(f.name).group(1)) for f in files}
-    n = next(k for k in range(99, 9, -1) if k not in used)
+    n = next((k for k in [*range(99, 9, -1), *range(999, 99, -1)] if k not in used), None)
+    if n is None:
+        raise SystemExit("두 자리와 세 자리의 번호가 전부 쓰여 고를 번호가 없다")
     src = files[-1]
     stem = src.name[wiki_common.EXTRACTION_FILE_NO.match(src.name).end():]
     dst = d / f"extraction-{n:02d}-{stem}"
@@ -697,6 +883,7 @@ CASES = [
     ("41", "wiki41-pointer-scope", "면제 목록에 없는 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_pointer, None),
     ("35", "wiki35-doc-form", "같은 번호를 가진 추출 기록을 둔다", inj_35_dupnum, None),
     ("35", "wiki35-doc-form", "중간 번호의 추출 기록을 옮겨 결번을 만든다", inj_35_gapnum, None, "nocatch"),
+    ("35", "wiki35-doc-form", "쓰이지 않은 세 자리 번호로 추출 기록을 둔다", inj_35_threedigit, None, "nocatch"),
     ("41", "wiki41-pointer-scope", "규율 ID 뒤 그 거리 안에 그 낱말이 따르는 자리를 하나 더한다", inj_41_comment, None),
     ("41", "wiki41-pointer-scope", "소진 문서의 식별자 꼴을 하나 더한다", inj_41_ephemeral, None),
     ("41", "wiki41-pointer-scope", "앞에 출처 표지도 문서 이름도 오지 않는 절 번호를 하나 더한다", inj_41_section, None),
@@ -705,6 +892,11 @@ CASES = [
     ("41", "wiki41-pointer-scope", "실재하지 않는 추출 기록의 이름 뒤에 절 번호를 둔다", inj_41_fabricated_extraction, None),
     ("41", "wiki41-pointer-scope", "실재하는 추출 기록의 이름 뒤에 절 번호를 둔다", inj_41_real_extraction_kept, None, "nocatch"),
     ("41", "wiki41-pointer-scope", "리포 밖 문서의 이름이 떨어져 선 자리에 자기 절 번호를 둔다", inj_41_own_heading_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "회의록의 식별자를 든 메시지로 사본의 머리 커밋을 만든다", inj_41_message_head, None),
+    ("41", "wiki41-pointer-scope", "설비의 파일 이름과 번호 없는 낱말만 든 메시지로 머리 커밋을 만든다", inj_41_message_head_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "리포 밖 문서의 이름이 바로 앞에 선 절 번호를 든 메시지를 준다", inj_41_message_file, None),
+    ("41", "wiki41-pointer-scope", "이름 없이 선 절 번호와 리포 안 문서의 절 번호만 든 메시지를 준다", inj_41_message_file_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "메시지의 출처를 읽을 수 없는 자리로 둔다", inj_41_message_missing, None),
     ("49", "wiki49-extraction-unpointed", "어느 docstring 도 지목하지 않는 기록을 하나 더한다", inj_49_unpointed, None),
     ("50", "wiki50-inventory-extraction-mirror", "인벤토리의 구성원 행 하나에 실재하지 않는 기록 번호를 적는다", inj_50_missing, None),
     ("50", "wiki50-inventory-extraction-mirror", "추출 기록 하나의 번호를 드는 구성원 행을 인벤토리에서 지운다", inj_50_ghost, None),
@@ -717,4 +909,40 @@ CASES = [
     ("61", "wiki61-inventory-aggregate-sum", "무리 행 하나의 편수를 하나 늘린다", inj_61_sum, None),
     ("63", "wiki63-queue-spent-alive", "소진 표지를 든 행이 가리키는 이연의 폐기 레코드를 지운다", inj_63_retired, None),
     ("63", "wiki63-queue-spent-alive", "한 이연의 ref 를 그 표의 어느 행에도 닿지 않는 값으로 바꾼다", inj_63_ref, None),
+    ("41", "wiki41-pointer-scope", "면제 목록에 든 항목의 산문에 살아 있는 조항의 주석을 지목하는 꼴을 적는다", inj_41_r11_waived_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "출처 표지를 절 번호 앞에 둔다", inj_41_source_mark_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "출처 표지를 절 번호 뒤에 둔다", inj_41_source_mark_after, None),
+    ("41", "wiki41-pointer-scope", "리포 안 문서의 이름을 절 번호 앞에 둔다", inj_41_doc_name_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "리포 안 문서의 이름을 절 번호 뒤에 둔다", inj_41_doc_name_after, None),
+    ("41", "wiki41-pointer-scope", "추출 기록의 번호를 절 번호 앞에 둔다", inj_41_extraction_no_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "추출 기록의 번호를 절 번호 뒤에 둔다", inj_41_extraction_no_after, None),
+    ("41", "wiki41-pointer-scope", "네 자리 기록 번호를 절 번호 앞에 둔다", inj_41_extraction_no_fourdigit, None),
+    ("41", "wiki41-pointer-scope", "세 자리 기록 번호를 절 번호 앞에 둔다", inj_41_extraction_no_threedigit_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "결정 항목의 진술에 조작 표지를 적는다", inj_41_ledger_kept, None, "nocatch"),
+    ("41", "wiki41-pointer-scope", "원장과 같은 디렉터리의 명세에 조작 표지를 적는다", inj_41_ledger_neighbor, None),
+]
+
+
+# 면제의 경계 양쪽을 찌르는 사례. (면제의 이름, 쪽, 주입 함수) 이며 쪽은 경계 안쪽에서 잡히지 않아야
+# 하는 「안」과 경계 바로 바깥에서 잡히는 「밖」이다. 검사 65 가 이 목록을 사례 목록과 값 정본의 면제
+# 등록에 맞댄다.
+EXEMPT_EDGES = [
+    ("R-11 면제 목록", "안", inj_41_r11_waived_kept),
+    ("R-11 면제 목록", "밖", inj_41_pointer),
+    ("출처 표지", "안", inj_41_source_mark_kept),
+    ("출처 표지", "밖", inj_41_source_mark_after),
+    ("리포 안 문서 이름", "안", inj_41_doc_name_kept),
+    ("리포 안 문서 이름", "밖", inj_41_doc_name_after),
+    ("추출 기록 번호", "안", inj_41_extraction_no_kept),
+    ("추출 기록 번호", "안", inj_41_extraction_no_threedigit_kept),
+    ("추출 기록 번호", "밖", inj_41_extraction_no_after),
+    ("추출 기록 번호", "밖", inj_41_extraction_no_fourdigit),
+    ("추출 기록 파일 이름", "안", inj_41_real_extraction_kept),
+    ("추출 기록 파일 이름", "밖", inj_41_fabricated_extraction),
+    ("자기 절 제목", "안", inj_41_own_heading_kept),
+    ("자기 절 제목", "밖", inj_41_outside_named),
+    ("원장 네 파일", "안", inj_41_ledger_kept),
+    ("원장 네 파일", "밖", inj_41_ledger_neighbor),
+    ("제목 유사도 문턱", "안", inj_50_unread_below),
+    ("제목 유사도 문턱", "밖", inj_50_unread),
 ]

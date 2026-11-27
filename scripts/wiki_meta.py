@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import ast
 import re
 
 from wiki_common import (
@@ -15,6 +16,8 @@ from wiki_common import (
     COUNT_SPEC,
     COUNT_VERIFY,
     COUNT_WIKI,
+    EXEMPT_BLOCK,
+    EXEMPT_CHECK_JOIN,
     Ledger,
     REGISTERS,
     REPORT_DECL,
@@ -25,6 +28,8 @@ from wiki_common import (
     VSTEP_UNITS,
     WIKI_NC_UNITS,
     WIKI_UNITS,
+    _baseline_block,
+    exempt_rows,
     md_cells,
 )
 
@@ -603,10 +608,144 @@ def check_51(led: Ledger) -> Report:
 
 
 # 이 단위가 드는 검사. 러너가 이 목록을 이어 붙여 손 열거를 걷는다.
+# 검사 65 가 읽는 면제의 호출. 검증 코드가 면제를 쓰는 자리는 공용 설비의 `exempt` 를 부르는 자리이고
+# 그 첫 인자가 면제의 이름이다. **뿌리의 소스를 구문 트리로 읽는다.** 음성 대조가 사본을 뿌리로
+# 지목하므로 돌고 있는 모듈을 세면 사본에 든 주입을 보지 못하고, 문면의 패턴으로 읽으면 주석과 문자열이
+# 호출로 세어진다. 유니버스는 공용 설비와 검사의 갈래별 단위다.
+EXEMPT_CALL = "exempt"
+
+
+EXEMPT_UNIVERSE = (COUNT_COMMON,) + WIKI_UNITS
+
+
+# 면제의 경계 양쪽을 찌르는 음성 대조의 사례. 음성 대조 단위마다 `EXEMPT_EDGES` 가 (이름, 쪽, 주입
+# 함수) 를 들고, 그 주입 함수가 같은 단위의 사례 목록에 그 쪽의 기대로 서야 한다. 「안」은 경계 안쪽에서
+# 잡히지 않아야 하는 항이고 「밖」은 경계 바로 바깥에서 잡히는 항이다.
+EXEMPT_EDGES_NAME = "EXEMPT_EDGES"
+
+
+EXEMPT_SIDES = {"안": "nocatch", "밖": "catch"}
+
+
+EXEMPT_SIDE_WORD = {"안": "안쪽", "밖": "바깥쪽"}
+
+
+def _top_list(tree: ast.Module, name: str) -> ast.List | None:
+    """모듈의 최상위에서 그 이름에 목록을 매는 대입의 값."""
+    for node in tree.body:
+        if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id == name
+                and isinstance(node.value, ast.List)):
+            return node.value
+    return None
+
+
+def _const_str(node: ast.AST) -> str | None:
+    return node.value if isinstance(node, ast.Constant) and isinstance(node.value, str) else None
+
+
+def check_65(led: Ledger) -> Report:
+    r = Report("65", "wiki65-exemption-registry",
+               "검증 코드가 면제를 쓰는 이름과 값 정본의 등록이 양방향으로 맞고, 이름마다 경계 안쪽과 "
+               "바깥쪽의 음성 대조 항이 그 이름의 검사를 겨누는가", "fail")
+    body = _baseline_block(led, EXEMPT_BLOCK)
+    # 블록이 비어 있으면 통과가 아니라 실패다. 검사 28 과 34 와 35 가 같은 요구를 둔다.
+    if not body.strip():
+        r.bad("docs/baseline.md 의 EXEMPT 블록이 없거나 비어 있다")
+        return r
+    rows, reasons, bad = exempt_rows(body)
+    for line in bad:
+        r.bad(f"EXEMPT 블록의 줄 `{line}` 이 꼴에 맞지 않거나 같은 이름을 두 번 든다")
+    if not reasons:
+        r.bad("EXEMPT 블록에 사유의 어휘를 드는 줄이 없다")
+    declared = unit_declarations(led.root)
+    for name, (checks, reason) in sorted(rows.items()):
+        if reasons and reason not in reasons:
+            r.bad(f"면제 `{name}` 의 사유 `{reason}` 가 블록의 사유 어휘에 없다")
+        for c in checks:
+            if c not in declared:
+                r.bad(f"면제 `{name}` 이 드는 검사 {c} 를 단위 전량의 어느 검사도 선언하지 않는다")
+
+    # ㉠ 코드가 쓰는 이름과 블록의 이름을 양방향으로 맞댄다.
+    used: dict[str, list[str]] = {}
+    for rel in EXEMPT_UNIVERSE:
+        f = led.root / rel
+        if not f.is_file():
+            r.bad(f"{rel} 이 없다")
+            return r
+        for node in ast.walk(ast.parse(f.read_text(encoding="utf-8"))):
+            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                    and node.func.id == EXEMPT_CALL):
+                name = _const_str(node.args[0]) if node.args else None
+                if name is None:
+                    r.bad(f"{rel}:{node.lineno}: `{EXEMPT_CALL}` 의 첫 인자가 문자열 상수가 아니다")
+                    continue
+                used.setdefault(name, []).append(f"{rel}:{node.lineno}")
+    for name in sorted(set(used) - set(rows)):
+        r.bad(f"검증 코드가 등록되지 않은 면제 `{name}` 를 쓴다: " + " · ".join(used[name]))
+    for name in sorted(set(rows) - set(used)):
+        r.bad(f"EXEMPT 블록이 드는 면제 `{name}` 를 검증 코드가 쓰지 않는다")
+
+    # ㉡ 이름마다 경계 양쪽의 음성 대조 항이 그 이름의 검사를 그 쪽의 기대로 겨누는가.
+    sides: dict[str, set[str]] = {}
+    n_edges = 0
+    for rel in WIKI_NC_UNITS:
+        f = led.root / rel
+        if not f.is_file():
+            r.bad(f"{rel} 이 없다")
+            return r
+        tree = ast.parse(f.read_text(encoding="utf-8"))
+        cases: dict[str, list[tuple[str, str]]] = {}
+        listed = _top_list(tree, "CASES")
+        for elt in (listed.elts if listed is not None else []):
+            if (isinstance(elt, ast.Tuple) and len(elt.elts) >= 5
+                    and _const_str(elt.elts[0]) is not None and isinstance(elt.elts[3], ast.Name)):
+                expect = ("nocatch" if len(elt.elts) > 5 and _const_str(elt.elts[5]) == "nocatch"
+                          else "catch")
+                cases.setdefault(elt.elts[3].id, []).append((_const_str(elt.elts[0]), expect))
+        edges = _top_list(tree, EXEMPT_EDGES_NAME)
+        for elt in (edges.elts if edges is not None else []):
+            parts = elt.elts if isinstance(elt, ast.Tuple) else []
+            if (len(parts) != 3 or _const_str(parts[0]) is None or _const_str(parts[1]) is None
+                    or not isinstance(parts[2], ast.Name)):
+                r.bad(f"{rel}:{elt.lineno}: {EXEMPT_EDGES_NAME} 의 항이 (이름, 쪽, 주입 함수) 꼴이 아니다")
+                continue
+            name, side, fn = _const_str(parts[0]), _const_str(parts[1]), parts[2].id
+            n_edges += 1
+            if name not in rows:
+                r.bad(f"{rel}:{elt.lineno}: 경계 항이 등록되지 않은 면제 `{name}` 를 든다")
+                continue
+            if side not in EXEMPT_SIDES:
+                r.bad(f"{rel}:{elt.lineno}: 면제 `{name}` 의 경계 항의 쪽 `{side}` 가 "
+                      + " · ".join(EXEMPT_SIDES) + " 가운데 하나가 아니다")
+                continue
+            want = EXEMPT_SIDES[side]
+            hit = [num for num, expect in cases.get(fn, []) if expect == want and num in rows[name][0]]
+            if not hit:
+                r.bad(f"{rel}:{elt.lineno}: 면제 `{name}` 의 {EXEMPT_SIDE_WORD[side]} 항 `{fn}` 이 그 단위의 사례 "
+                      f"목록에서 검사 {EXEMPT_CHECK_JOIN.join(rows[name][0])} 를 "
+                      + ("잡히지 않아야 하는 항" if want == "nocatch" else "잡히는 항")
+                      + "으로 겨누지 않는다")
+                continue
+            sides.setdefault(name, set()).add(side)
+    for name in sorted(rows):
+        for side in EXEMPT_SIDES:
+            if side not in sides.get(name, set()):
+                r.bad(f"면제 `{name}` 의 경계 {EXEMPT_SIDE_WORD[side]} 음성 대조 항이 없다")
+    r.note(f"등록된 면제 {len(rows)} · 사유의 어휘 {len(reasons)} · 코드가 쓰는 이름 {len(used)} "
+           f"· 호출 {sum(len(v) for v in used.values())} · 경계 항 {n_edges}")
+    for name, (checks, reason) in sorted(rows.items()):
+        r.note(f"{name} — 검사 {EXEMPT_CHECK_JOIN.join(checks)} · {reason} · 호출 "
+               f"{len(used.get(name, []))} · 경계 "
+               + " · ".join(s for s in EXEMPT_SIDES if s in sides.get(name, set())))
+    return r
+
+
 CHECKS = (
     check_40,
     check_44,
     check_46,
     check_47,
     check_51,
+    check_65,
 )
