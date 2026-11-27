@@ -1303,6 +1303,16 @@
         "CF-4818"
       ],
       "cq": []
+    },
+    {
+      "name": "bypass2",
+      "discriminator": null,
+      "phases": [],
+      "status": "reserved",
+      "opened": null,
+      "closed": null,
+      "holes": [],
+      "cq": []
     }
   ],
   "patches": [
