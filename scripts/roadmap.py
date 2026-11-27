@@ -54,7 +54,7 @@ READING = {
     'hierarchy': '하이어라키', 'propagation': '프로퍼게이션', 'holder': '홀더',
     'currency': '커런시', 'harness': '하네스', 'orchestration': '오케스트레이션',
     'network': '네트워크', 'sanction': '생크션', 'funding': '펀딩',
-    'housekeeper1': '하우스키퍼일', 'housekeeper2': '하우스키퍼이',
+    'housekeeper1': '하우스키퍼일', 'housekeeper2': '하우스키퍼이', 'bypass1': '바이패스일',
 }
 
 # 앞 판이 들었으나 이 판이 걷는 절과 그 사유. 키는 절 제목의 비교 키다. 앞 판의 절을 빠뜨리지 않는지
