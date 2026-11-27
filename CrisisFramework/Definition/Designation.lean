@@ -526,4 +526,142 @@ theorem exists_par_strength_moved_by_discretion :
   -- 나와 `rfl` 로 닫힌다.
   exact ⟨rfl, rfl, rfl, rfl, rfl⟩
 
+/--
+재량을 지난 액면가 약속의 강도로 세운 화폐자산.
+
+**대응 비형식 개념:** 성문이 정하는 강도를 당국의 결정이 덮은 뒤에 그 주체에게 화폐인 것의 강도.
+용어집의 당국의 재량이 성문의 기준이 정하는 자리를 당국의 조작이 덮는 것이고, 예금보험의 조문이 부보
+몫을 넘는 예금을 보호하지 못하게 하는 기본값을 체계적 위험 예외의 결정이 덮으므로, 한 주체의 강도가
+성문의 자리와 결정으로 놓인 자리에서 온다.
+
+**이 정의가 배제하는 사례:**
+한 보유자가 한 펀드에 든 지분이 기준일에서 둘로 갈리는 자리. 머니마켓펀드에 대한 임시 보증은 기준일의
+영업 종료 시점에 보유한 지분 수까지만 덮으므로 한 보유자의 한 펀드 지분이 보증된 몫과 보증되지 않은
+몫으로 갈리는데, 이 결합은 보유자마다 강도 하나를 받으므로 그 둘을 함께 담지 못한다.
+조달처: E-98 §5-3 「한 청구권의 한 보유가 두 강도를 갖는 자리이며」
+
+**기각한 대체 정의:**
+화폐자산의 칸을 재량 지위로 바꾸는 안. 그러면 그 칸을 받는 선언 전량의 서명이 바뀌는데, 칸이 주체에서
+강도로 가는 함수이고 재량 지위의 자리를 내는 함수가 같은 타입이므로 그 함수를 칸에 넣는 결합으로
+서명을 건드리지 않고 같은 것을 담는다. 발행 기관을 색인으로 더해 결정이 걸리는 갈래를 담는 안도
+기각했다. 보유 사상이 발행자를 받지 않기로 한 결정과 갈리고, 원문의 표가 그 값을 주지 않는다.
+
+**결정이 걸리는 주체가 보유자보다 가늘다.** 체계적 위험 예외의 결정은 관재인이 지정된 기관 하나의
+예금의 갈래에 걸리고 같은 기관의 주식과 일부 무담보 채무를 덮지 않으므로, 한 보유자의 강도는 그가
+어느 기관의 어느 갈래를 들었는가에서 나온다. 여러 기관의 청구권을 함께 든 보유자에게서 그 가운데
+하나를 고르는 선택은 이 결합의 밖에 서며, 화폐자산의 비교가 은행이 지급준비금과 국채를 함께 드는
+자리로 든 한계와 같은 축이다.
+조달처: E-98 §5-2 「한 보유자의 자리는 그가 어느 기관의 어느 갈래를 들었는가에서 따라 나온다」
+
+**수 체계를 받지 않는다.** 자리의 타입이 강도의 선택이며 수를 들지 않는다.
+-/
+-- DD:CF-4927
+def MoneyAsset.ofStanding {Entity : Type}
+    (S : DiscretionaryStanding Entity (Option ParStrength)) : MoneyAsset Entity :=
+  ⟨S.resolve⟩
+
+/--
+결정이 놓이지 않은 두 주체에서 재량을 지난 화폐자산의 순서는 성문의 강도로 세운 순서와 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+당국이 두 주체 어느 쪽에도 결정을 놓지 않았는데 그 둘의 위계 순서가 성문의 강도가 주는 순서와 달라야
+한다. 그 관측은 결정이 놓이지 않은 자리에서도 재량이 순서를 움직인다는 뜻이며, 그러면 재량을 성문의
+자리를 덮는 결정으로 받는 꼴이 그 순서를 담지 못한다.
+
+**가정과 그 배제 사례(T-4·T-5):**
+두 주체의 재량의 칸이 비어 있음을 가정한다. 그 가정 없이는 명제가 거짓이며, 체계적 위험 예외를 본떠
+예금의 보유자에게만 부보 화폐의 자리를 놓은 배치가 그 배제 사례다.
+
+**T-3 분류:** 기여다. 재량이 놓이지 않은 자리에서 순서를 움직이지 않는다는 것을 모든 배치에서 드는
+유일한 자리이며, 결합의 정의를 펼친 뒤에도 자리를 내는 계산이 성문의 자리를 낸다는 진술을 거쳐야
+닫힌다.
+-/
+-- DD:CF-4927
+theorem aboveOrEqual_ofStanding_eq_statutory {Entity : Type}
+    (S : DiscretionaryStanding Entity (Option ParStrength)) (m n : Entity)
+    (hm : S.determined m = none) (hn : S.determined n = none) :
+    (MoneyAsset.ofStanding S).aboveOrEqual m n =
+      (⟨S.statutory⟩ : MoneyAsset Entity).aboveOrEqual m n := by
+  -- 두 주체의 재량의 칸이 비어 있으므로 결합이 내는 강도가 성문의 강도와 같다. 순서의 판정을
+  -- 펼친 자리의 강도를 그 두 등식으로 바꾸면 양변이 같은 꼴이 된다.
+  have hm' : (MoneyAsset.ofStanding S).heldStrength m = S.statutory m :=
+    resolve_eq_statutory_of_determined_none S m hm
+  have hn' : (MoneyAsset.ofStanding S).heldStrength n = S.statutory n :=
+    resolve_eq_statutory_of_determined_none S n hn
+  unfold MoneyAsset.aboveOrEqual
+  rw [hm', hn']
+
+/--
+재량이 순서를 뒤집는 증거를 드는 보유자의 열거.
+
+**대응 비형식 개념:** 없다. 이 선언은 증거를 들기 위한 색인이며 비형식 개념에 대응하지 않는다.
+
+**이 정의가 배제하는 사례:**
+실재하는 은행과 펀드의 이름을 생성자로 두는 읽기. 체계적 위험 예외의 결정은 기관이 실패해 관재인이
+지정된 뒤에 그 기관 하나에 걸리므로, 이름을 박으면 그 증거가 한 사건의 기록이 되고 실증 결과를
+추출하지 않는다는 요구에도 걸린다.
+조달처: E-98 §2-3 「지금의 예외는 기관이 실패해 관재인이 지정된 뒤에만 쓰이고」
+
+**기각한 대체 정의:**
+지정의 증거에 쓰는 주체의 열거를 다시 쓰는 안. 그 열거의 강도 증거 배치는 성문이 모든 주체에 순수
+공적 화폐를 주고 한 주체에만 순수 사적 화폐의 자리를 놓으므로, 결정이 동급을 가르는 것은 보이나
+엄격한 순서가 뒤집히는 것은 보이지 못한다. 그 주체들이 제재 지정의 사유로 이름 붙어 있어 예금보험의
+결정을 싣기에도 맞지 않는다.
+
+**수 체계를 받지 않는다.** 두 생성자가 열거이며 수를 들지 않는다.
+-/
+-- DD:CF-4927
+inductive DiscretionWitnessHolder where
+  /-- 부보 한도를 넘는 예금의 보유자. 성문에서 그 예금은 보호되지 않는다. -/
+  | uninsuredDepositor
+  /-- 공적 자산만 드는 정부전용 펀드의 지분 보유자. -/
+  | governmentFundHolder
+  deriving DecidableEq, Repr
+
+/-- **무엇을 증거하는가.** 결정이 위계의 순서를 뒤집는 배치가 재량 지위에 선다. 성문에서 무부보 예금이
+순수 사적 화폐이고 정부전용 펀드의 지분이 공적 그림자 화폐인데, 체계적 위험 예외를 본떠 예금의
+보유자에게만 부보 화폐의 자리를 놓은 배치를 든다. -/
+-- DD:CF-4927
+def systemicRiskExceptionStanding :
+    DiscretionaryStanding DiscretionWitnessHolder (Option ParStrength) where
+  statutory := fun h =>
+    match h with
+    | .uninsuredDepositor => some .privateShadowMoney
+    | .governmentFundHolder => some .publicShadowMoney
+  determined := fun h =>
+    match h with
+    | .uninsuredDepositor => some (some .insuredMoney)
+    | .governmentFundHolder => none
+
+/--
+결정이 위계의 순서를 두 방향 모두 뒤집는 배치가 있다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+성문에서 아래에 선 보유자에게 당국이 더 강한 자리를 놓아도 그 보유자가 위에 서지 않아야 한다. 체계적
+위험 예외의 결정이 두 은행의 예금자 전량을 덮어 그 예금의 자리를 사후에 명시적 신용 풋이 받쳤으므로,
+그 관측은 그 결정이 순서에 닿지 않는다는 뜻이다.
+
+**존재 형태로 진술하는 까닭(T-6):**
+뒤집힘은 성문의 순서와 결정 뒤의 순서가 갈리는 배치를 들어야 보인다. 결정이 놓이지 않거나 성문의
+강도와 같은 값을 놓은 배치에서는 두 순서가 같으므로 전칭으로는 서지 않는다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 결정이 성문의 엄격한 순서를 뒤집을 수 있다는 것을 드는 유일한 자리이며, 지정의
+강도 증거 배치는 결정이 동급을 가르는 것만 든다.
+-/
+-- DD:CF-4927
+theorem exists_determination_reverses_order :
+    (⟨systemicRiskExceptionStanding.statutory⟩ : MoneyAsset DiscretionWitnessHolder).aboveOrEqual
+        .uninsuredDepositor .governmentFundHolder = false ∧
+      (⟨systemicRiskExceptionStanding.statutory⟩ : MoneyAsset DiscretionWitnessHolder).aboveOrEqual
+        .governmentFundHolder .uninsuredDepositor = true ∧
+      (MoneyAsset.ofStanding systemicRiskExceptionStanding).aboveOrEqual
+        .uninsuredDepositor .governmentFundHolder = true ∧
+      (MoneyAsset.ofStanding systemicRiskExceptionStanding).aboveOrEqual
+        .governmentFundHolder .uninsuredDepositor = false := by
+  -- 배치가 상수이고 순서의 판정이 강도의 패턴 매칭이므로 각 등식이 계산으로 값이 나와 `rfl` 로
+  -- 닫힌다.
+  exact ⟨rfl, rfl, rfl, rfl⟩
+
 end CrisisFramework.Definition
