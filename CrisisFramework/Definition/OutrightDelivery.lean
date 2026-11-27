@@ -24,7 +24,8 @@
 
 **사슬의 머리를 재는 술어도 새로 세우고 기존 것을 고치지 않는다.** 기존 머리 술어의 문서화 문면이
 담보 속도의 분모가 세는 대상이 그것이라고 적으므로, 그것을 새 관계로 다시 가리키면 분모가 세는 대상이
-조용히 바뀐다. 두 술어가 갈리는 자리가 실재하며 분모가 어느 쪽을 세는지는 구멍으로 등재된다.
+조용히 바뀐다. 두 술어가 갈리는 자리가 실재하고 그 차이가 인도 다리로 이어 들어오는 기존 머리와 정확히 같으며,
+분모를 둘 가운데 하나로 고정하지 않고 두 분모의 순서를 회계층이 든다.
 
 **이 파일은 수를 시점 인덱스와 단계 수로만 쓴다.** 그 밖의 자리에 수가 서지 않는다.
 
@@ -240,8 +241,8 @@ def PledgeSet.reachesWithinVia {PIdx DIdx Idx Asset Party Num Obs Ext Lvl Curren
 
 **이 정의가 배제하는 사례:**
 확정 인도가 앞에 선 제공. 기존 머리 술어에서 그 제공은 머리로 서는데 이 술어에서는 머리가 아니므로
-두 술어가 그 자리에서 갈리고, 담보 속도의 분모가 어느 쪽을 세는지가 이 구조에서 정해지지 않는다. 그
-갈림은 구멍으로 등재되어 있다.
+두 술어가 그 자리에서 갈리고, 그 갈림이 인도 다리로 이어 들어오는 기존 머리와 정확히 같다는 것을 이
+파일의 등식이 든다.
 조달처: E-08 §2-2 「단 하나의 국채가 네 가지 서로 다른 거래를 받친다」
 
 **기각한 대체 정의:**
@@ -275,7 +276,15 @@ def PledgeSet.isChainHeadVia {PIdx DIdx Idx Asset Party Num Obs Ext Lvl Currency
 끊김을 제공 자신의 필드로 두는 안. 처분은 제공 밖의 사건이므로 그 필드가 인도 집합과 어긋날 수 있고
 어긋났을 때 어느 쪽이 참인지를 구조가 말하지 않는다. 요건 전량을 구성적으로 재는 안도 기각했다. 통상의
 영업 과정과 대체 가능 물건의 매매는 분쟁이 서야 법원이 내리는 판정이어서 신호로 받을 수밖에 없고,
-검증 불가능한 조항을 외생 확인 신호로 두라는 요구가 그 자리를 이미 정한다.
+검증 불가능한 조항을 외생 확인 신호로 두라는 요구가 그 자리를 이미 정한다. 범위를 담보물이 청구권인지로
+좁히는 안도 기각했다. 담보물이 청구권인지를 가르는 술어가 창고증권처럼 물건을 가리키는 권리증권에서 참이
+되므로, 잡힌 것이 증권이고 옮겨진 것이 물건인 창고업자의 처분이 범위에서 빠진다.
+
+**범위가 물건의 인도에 그친다.** 이 판정이 다루는 것은 인도가 옮긴 것이 청구권이 아닌 자리다. 유통증권과
+권리증서와 투자증권의 끊김을 정한 조문들은 담보를 잡는 자도 끊는 쪽에 세우고(E-99 §5-1), 투자증권과 전자
+권리증서에서 점유 대신 지배와 그 시점의 선후로 끊김을 가르며(E-99 §5-3), 간접 보유에서 같은 물건의 추적을
+요구하지 않는다(E-99 §5-4). 그 셋이 끊김의 판정들이 받는 사건과 점유와 자산의 같음에 걸려 외생 확인 신호로
+흡수되지 않으므로 그 양도는 이 판정의 범위 밖이다. 어느 역량 질문의 답 조립도 끊김의 판정을 쓰지 않는다.
 
 **논리곱이 넷이다.** 옮겨진 담보물의 자산이 그 제공의 담보물의 자산과 같은 것과, 내놓는 쪽이 반환 청구권의 권리자가
 아닌 것과 의무자가 아닌 것과, 외생 확인 신호다. 앞의 셋이 구성적으로 재어지고 넷째가 재어지지 않는다.
@@ -565,8 +574,8 @@ theorem right_defeat_pins_each_conjunct :
 
 **가정을 두지 않는다.**
 
-**T-3 분류:** 기여다. 분모가 세는 대상이 두 술어에서 갈린다는 것을 보이고, 그 갈림이 구멍으로
-등재되는 근거이므로 기여 목록에 든다.
+**T-3 분류:** 기여다. 분모가 세는 대상이 두 술어에서 갈린다는 것을 보이고, 그 갈림이 실재하므로 두
+술어를 하나로 접을 수 없어 분모를 하나로 고정하지 않는 판정이 이 정리를 딛는다.
 
 **존재 형태로 진술하는 까닭(T-6):** 두 술어가 모든 자리에서 갈리는 것이 아니다. 인도가 앞에 서지
 않은 제공에서는 두 값이 같으므로, 갈리는 자리가 실재함이 이 정리가 드는 것이다.
@@ -601,5 +610,76 @@ theorem exists_chain_head_split_by_delivery :
           , returns := b
           , rehypothecable := true } }
     , true, rfl, rfl⟩
+
+/--
+인도를 거친 머리 판정은 기존 머리 판정과, 어느 제공도 확정 인도 다리로 그 제공에 이어 들어오지 않는다는
+판정의 논리곱과 같다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+기존 머리이고 인도 다리로 이어 들어오는 제공도 없는데 인도를 거친 머리가 아닌 제공이 있거나, 인도를 거친
+머리인데 둘 가운데 하나가 서지 않는 제공이 있어야 한다. 그 관측은 인도를 거친 이어짐이 기존 이어짐과 인도
+다리의 논리합이 아니라는 뜻이며, 그러면 두 머리 술어의 차이를 인도 다리로 셀 수 없다.
+
+**가정을 두지 않는다.**
+
+**T-3 분류:** 기여다. 두 술어가 갈리는 자리가 인도 다리로 이어 들어오는 기존 머리와 정확히 같다는 것을
+드는 유일한 자리이며, 담보 속도의 분모를 하나로 고정하지 않고 두 분모의 순서로 드는 판정이 이 등식을
+딛는다.
+-/
+-- DD:CF-4942
+theorem PledgeSet.isChainHeadVia_eq_isChainHead_and_not_bridged
+    {PIdx DIdx Idx Asset Party Num Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Currency]
+    (S : ClaimSet Idx Party Num Obs Ext Lvl Currency)
+    (D : DeliverySet DIdx Idx Asset Party)
+    (P : PledgeSet PIdx Idx Asset) (i : PIdx) :
+    P.isChainHeadVia S D i
+      = (P.isChainHead S i
+          && !decide (∃ k ∈ P.index, ∃ t ∈ D.index,
+                ((D.assign t).bridges S (P.assign k) (P.assign i)) = true)) := by
+  -- 인도를 거친 이어짐이 두 갈래의 논리합이므로, 이어 들어오는 제공이 있다는 명제를 두 갈래의
+  -- 존재의 논리합으로 가른 뒤 판정의 부정을 두 부정의 논리곱으로 옮긴다. 배중률을 쓰지 않고 판정
+  -- 명제의 동치에서 두 판정의 같음을 얻는다.
+  have hiff : (∃ k ∈ P.index, ((P.assign k).linksVia S D (P.assign i)) = true)
+      ↔ ((∃ k ∈ P.index, ((P.assign k).linksTo S (P.assign i)) = true)
+          ∨ (∃ k ∈ P.index, ∃ t ∈ D.index,
+                ((D.assign t).bridges S (P.assign k) (P.assign i)) = true)) := by
+    constructor
+    · rintro ⟨k, hk, hl⟩
+      simp only [Pledge.linksVia, Bool.or_eq_true, decide_eq_true_eq] at hl
+      rcases hl with hl | ⟨t, ht, hb⟩
+      · exact Or.inl ⟨k, hk, hl⟩
+      · exact Or.inr ⟨k, hk, t, ht, hb⟩
+    · rintro (⟨k, hk, hl⟩ | ⟨k, hk, t, ht, hb⟩)
+      · exact ⟨k, hk, by simp only [Pledge.linksVia, hl, Bool.true_or]⟩
+      · refine ⟨k, hk, ?_⟩
+        simp only [Pledge.linksVia, Bool.or_eq_true, decide_eq_true_eq]
+        exact Or.inr ⟨t, ht, hb⟩
+  simp only [PledgeSet.isChainHeadVia, PledgeSet.isChainHead]
+  rw [decide_eq_decide.mpr hiff, Bool.decide_or, Bool.not_or]
+
+/--
+인도를 거친 머리이면 기존 머리다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:**
+인도를 거친 머리인데 기존 머리가 아닌 제공이 있어야 한다. 그 관측은 기존 이어짐이 참인 자리에서 인도를
+거친 이어짐이 거짓이라는 뜻이며, 그러면 앞 사슬이 새 사슬의 부분으로 남지 않는다.
+
+**가정과 그 배제 사례(T-4·T-5):** 그 제공이 인도를 거친 머리라는 가정을 진술문에 둔다. 그 가정을 빼면
+임의의 제공에 대한 전칭이 되어 거짓이며, 그 가정이 배제하는 것은 다른 제공이 이어 들어오는 제공이다.
+
+**T-3 분류:** 보조 보정이다. 앞의 등식의 논리곱에서 바로 따라 나오므로 기여 목록에서 제외한다. 회계층의
+두 분모의 부등식이 이 진술을 딛는다.
+-/
+-- DD:CF-4942
+theorem PledgeSet.isChainHead_of_isChainHeadVia
+    {PIdx DIdx Idx Asset Party Num Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Currency]
+    (S : ClaimSet Idx Party Num Obs Ext Lvl Currency)
+    (D : DeliverySet DIdx Idx Asset Party)
+    (P : PledgeSet PIdx Idx Asset) (i : PIdx)
+    (h : P.isChainHeadVia S D i = true) : P.isChainHead S i = true := by
+  rw [PledgeSet.isChainHeadVia_eq_isChainHead_and_not_bridged, Bool.and_eq_true] at h
+  exact h.1
 
 end CrisisFramework.Definition

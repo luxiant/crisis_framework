@@ -24,6 +24,7 @@
 
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import CrisisFramework.Definition.Collateral
+import CrisisFramework.Definition.OutrightDelivery
 import CrisisFramework.Definition.Trigger
 
 open Finset
@@ -88,7 +89,8 @@ def pledgedTotal {PIdx Idx Asset Party Obs Ext Lvl Currency : Type}
 머리 합.
 
 **대응 비형식 개념:** 제공 합이 세는 것 가운데 사슬의 머리인 것만 모은 것. 담보 속도의 분모가
-세는 대상이며, 저자가 궁극 원천에서 채굴된 담보라 부르는 자리다.
+세는 대상이며, 저자가 궁극 원천에서 채굴된 담보라 부르는 자리다. 확정 인도를 거쳐서도 머리인 것만 모은
+합이 이 합을 넘지 못하며, 분모를 이 합 하나로 고정하지 않는 까닭을 그 합이 든다.
 
 **이 정의가 배제하는 사례:**
 딜러가 자기 대차대조표로 대는 담보(Singh 2011). 그 딜러가 받는 쪽이기도 하므로 머리 판정이
@@ -223,6 +225,89 @@ theorem exists_pledgedTotal_pos_and_sourceTotal_eq_zero :
   -- 밟지 않는다.
   · decide
   · decide
+
+/--
+인도를 거친 머리 합.
+
+**대응 비형식 개념:** 제공 합이 세는 것 가운데 확정 인도를 거쳐서도 사슬의 머리인 것만 모은 것. 머리 합에서
+인도 다리로 이어 들어오는 제공을 뺀 합이며, 담보 속도의 분모의 아래쪽 경계다.
+
+**이 정의가 배제하는 사례:**
+확정 인도를 받은 쪽이 자산운용자여서 그 뒤의 제공이 1 차 원천으로 세어지는 자리. 저자의 분모는 당사자의
+종류로 재어지므로 그 제공을 원천으로 세는데, 이 합은 인도 다리로 이어 들어온 제공을 빼므로 그 자리에서
+측정값보다 작다. 받은 쪽이 딜러이면 저자도 그 제공을 자기 담보로 빼므로 이 합과 맞는다.
+조달처: E-44 §4-3 「저자의 분모가 당사자의 종류로 재어지나 그 종류가 하는 일은 2 차 보유분을 빼어 사슬의 머리를 가리는 것이다」
+
+**기각한 대체 정의:**
+머리 합을 인도를 거친 머리 술어로 다시 가리키는 안. 그 합의 문서화 문면과 그 합을 딛는 두 정리가 가리키는
+대상이 조용히 바뀐다. 두 머리 술어 가운데 하나를 고른 분모 하나만 두는 안도 기각했다. 저자의 분모가 당사자의
+종류로 재어져 두 술어가 갈리는 자리에서 받은 쪽의 종류를 따라 갈리므로, 어느 하나로 고정하면 그 자리에서
+측정과의 맞음이 술어에서 서지 않는다.
+-/
+-- DD:CF-4954
+def sourceTotalVia {PIdx DIdx Idx Asset Party Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Currency]
+    (e : Env ℤ Obs Ext Lvl)
+    (S : ClaimSet Idx Party ℤ Obs Ext Lvl Currency)
+    (D : DeliverySet DIdx Idx Asset Party)
+    (P : PledgeSet PIdx Idx Asset) (g : Currency) : ℤ :=
+  ∑ i ∈ P.index,
+    (if (P.assign i).carriesRehypothecationRight = true
+          ∧ P.isChainHeadVia S D i = true
+          ∧ (S.assign (P.assign i).returns).currency = g
+     then evalTerm e (S.assign (P.assign i).returns).amount else 0)
+
+/--
+인도를 거친 머리 합은 머리 합을 넘지 못한다.
+
+**이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 확정 인도를 거쳐서도 머리인 제공의 반환 금액을 모은
+값이 머리인 제공의 반환 금액을 모은 값보다 큰 담보 배치. 인도를 거친 머리가 머리의 부분이므로 금액이
+음수가 아닌 동안은 그런 배치가 설 수 없고, 반증은 음수 금액을 지닌 배치에서 온다.
+
+**가정과 그 배제 사례(T-4·T-5):** 반환 청구권의 금액이 음수가 아니라는 가정을 진술에 명시한다. 그 가정이
+배제하는 자리는 머리 합이 제공 합을 넘지 못한다는 정리의 가정이 배제하는 자리와 같다.
+
+**T-3 분류:** 기여다. 담보 속도의 분모를 하나로 고정하지 않고 두 분모의 순서로 드는 유일한 자리이며,
+머리 합이 제공 합을 넘지 못한다는 정리와 이으면 인도를 거친 머리 합과 머리 합과 제공 합이 그 순서로 선다.
+-/
+-- DD:CF-4954
+theorem sourceTotalVia_le_sourceTotal {PIdx DIdx Idx Asset Party Obs Ext Lvl Currency : Type}
+    [DecidableEq Party] [DecidableEq Currency]
+    (e : Env ℤ Obs Ext Lvl)
+    (S : ClaimSet Idx Party ℤ Obs Ext Lvl Currency)
+    (D : DeliverySet DIdx Idx Asset Party)
+    (P : PledgeSet PIdx Idx Asset) (g : Currency)
+    (hnn : ∀ i ∈ P.index,
+      0 ≤ evalTerm e (S.assign (P.assign i).returns).amount) :
+    sourceTotalVia e S D P g ≤ sourceTotal e S P g := by
+  -- 두 합의 조건이 머리 판정 하나만 다르고 인도를 거친 머리이면 머리이므로, 색인의 항마다
+  -- 부등식을 세워 부분합으로 올린다. 머리 합의 부등식과 같은 사유로 `linarith` 와
+  -- `Finset.sum_le_sum` 을 쓰지 않고 부분합 부등식을 색인의 귀납으로 직접 세운다.
+  simp only [sourceTotalVia, sourceTotal]
+  have key : ∀ (s : Finset PIdx) (F G : PIdx → ℤ),
+      (∀ i ∈ s, F i ≤ G i) → ∑ i ∈ s, F i ≤ ∑ i ∈ s, G i := by
+    intro s F G h
+    induction s using Finset.cons_induction with
+    | empty => rw [Finset.sum_empty, Finset.sum_empty]
+    | cons a t ha ih =>
+        rw [Finset.sum_cons, Finset.sum_cons]
+        exact add_le_add (h a (Finset.mem_cons_self a t))
+          (ih fun i hi => h i (Finset.mem_cons_of_mem hi))
+  refine key _ _ _ fun i hi => ?_
+  -- 세 조건이 다 서면 양변이 같은 금액이고, 인도를 거친 머리 판정만 거짓이면 왼쪽이 0 이어서
+  -- 비음수 가정이 받는다. 판정 명제를 `by_cases` 로 가르므로 기준선이 오르지 않는다.
+  by_cases h₁ : (P.assign i).carriesRehypothecationRight = true
+      ∧ P.isChainHeadVia S D i = true
+      ∧ (S.assign (P.assign i).returns).currency = g
+  · rw [if_pos h₁, if_pos (And.intro h₁.1
+      (And.intro (PledgeSet.isChainHead_of_isChainHeadVia S D P i h₁.2.1) h₁.2.2))]
+  · rw [if_neg h₁]
+    by_cases h₂ : (P.assign i).carriesRehypothecationRight = true
+        ∧ P.isChainHead S i = true
+        ∧ (S.assign (P.assign i).returns).currency = g
+    · rw [if_pos h₂]
+      exact hnn i hi
+    · rw [if_neg h₂]
 
 /--
 청구권 담보의 커버리지 합.

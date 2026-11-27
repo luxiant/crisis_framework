@@ -778,10 +778,10 @@ ubuntu-26.04 의 20261116.202.1 판이고, 같은 로그에서 전량 재빌드 
 수를 옮긴다. 처음 값은 이 블록이 설 때 그 설비의 처음 심기 모드가 그때의 네 파일에서 심었다.
 
 <!-- LEDGERFIX:BEGIN -->
-LEDGERFIX=decisions|3545|3831661|0b79a62626dc
+LEDGERFIX=decisions|3551|3842396|2b62622a40e5
 LEDGERFIX=deferred|270|334250|5b902ceb287a
-LEDGERFIX=retirements|325|494378|f06ae1a8f68f
-LEDGERFIX=rejected|800|916595|d831027d304d
+LEDGERFIX=retirements|330|505137|8e3bd92bee5d
+LEDGERFIX=rejected|803|920756|e1ed2ebc87f0
 <!-- LEDGERFIX:END -->
 
 ## 13. 면제의 등록
