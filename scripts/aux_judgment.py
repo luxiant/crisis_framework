@@ -33,7 +33,9 @@
 
 `report` 는 리포의 판정 문단마다 적발을 내고, 적발이 하나라도 있으면 종료 코드 1 로 끝난다. `selftest` 는
 리포의 기록과 원장을 딛는 합성 문단으로 꼴에 맞는 문단의 적발이 영인지와, 어긋남을 하나씩 주입한 사본마다
-적발이 서는지를 잰다.
+적발이 서는지를 잰다. 합성 문단이 판정을 받는 결정과 새 구멍은 원장 번호로 박아 두지 않고 지금의 원장에서
+결정 레지스터와 이연 레지스터의 마지막 살아 있는 항목을 꺼낸다. 박아 두면 그 항목이 폐기되는 회차마다 꼴에
+맞는 문단에서 적발이 서서 자기 시험이 깨진다.
 """
 
 from __future__ import annotations
@@ -252,14 +254,14 @@ def judged(ctx: Ctx) -> list[tuple[str, str, str]]:
 
 
 SAMPLE = """**보조 논증 판정:** 주장은 합성 문단의 주장이며, 그 자리는 이음이다. 이 주장이 거짓이려면
-합성 문단이 그리는 관측이 서야 한다. 이 판정을 원장의 `CF-4963` 이 받는다.
+합성 문단이 그리는 관측이 서야 한다. 이 판정을 원장의 `@RECV@` 이 받는다.
 - 인자 1 · 공표 실측 · 할인율의 격자(E-49 §2-11)
 - 인자 2 · 제한 실측 · 감독 지표(E-56 §2-7)
 - 인자 3 · 측정 불가 · 반사실 미평가(`counterfactualUnevaluated`). 얻지 않은 조달의 액수를 요구한다
 - 결합 · 측정 불가
 - 우회 · 특징짓기 · 인자 3 · 주장을 상한으로 약하게 한다
 - 우회 뒤의 결합 · 제한 실측
-- 새 구멍 · `CF-4898` · 인자 3 · 합성 문단의 남는 독해"""
+- 새 구멍 · `@HOLE@` · 인자 3 · 합성 문단의 남는 독해"""
 
 MUTANTS = (
     ("결합이 가장 낮은 등급과 다르다", "- 결합 · 측정 불가", "- 결합 · 제한 실측"),
@@ -272,23 +274,39 @@ MUTANTS = (
     ("자리의 낱말이 없다", "그 자리는 이음이다", "그 자리는 연결이다"),
     ("우회 뒤의 결합이 다르다", "- 우회 뒤의 결합 · 제한 실측", "- 우회 뒤의 결합 · 공표 실측"),
     ("우회의 꼴이 여섯에 없다", "- 우회 · 특징짓기", "- 우회 · 약화"),
-    ("받는 항목이 결정 레지스터에 없다", "`CF-4963` 이 받는다", "`CF-4898` 이 받는다"),
-    ("새 구멍이 이연 레지스터에 없다", "- 새 구멍 · `CF-4898`", "- 새 구멍 · `CF-4963`"),
+    ("받는 항목이 결정 레지스터에 없다", "`@RECV@` 이 받는다", "`@HOLE@` 이 받는다"),
+    ("새 구멍이 이연 레지스터에 없다", "- 새 구멍 · `@HOLE@`", "- 새 구멍 · `@RECV@`"),
     ("측정 불가에 우회가 없다", "- 우회 · 특징짓기 · 인자 3 · 주장을 상한으로 약하게 한다\n", ""),
 )
 
 
+def _last_live(ctx: Ctx, reg: str) -> str:
+    """그 레지스터의 마지막 살아 있는 항목의 번호. 합성 문단이 박아 둔 번호에 매이지 않게 한다."""
+    for e in reversed(ctx.led.reg[reg]):
+        cid = e.get("id")
+        if cid and cid not in ctx.led.dead:
+            return cid
+    raise AssertionError("%s 레지스터에 살아 있는 항목이 없다" % reg)
+
+
 def selftest(root: Path) -> list[str]:
     ctx = Ctx(root)
-    base = check_paragraph(SAMPLE, ctx)
+    recv, hole = _last_live(ctx, "decisions"), _last_live(ctx, "deferred")
+
+    def fill(s: str) -> str:
+        return s.replace("@RECV@", recv).replace("@HOLE@", hole)
+
+    sample = fill(SAMPLE)
+    base = check_paragraph(sample, ctx)
     assert not base, "꼴에 맞는 합성 문단에서 적발이 섰다: %r" % base
-    out = ["꼴에 맞는 합성 문단의 적발이 영이다"]
+    out = ["꼴에 맞는 합성 문단의 적발이 영이다 (받는 결정 %s · 새 구멍 %s)" % (recv, hole)]
     for name, a, b in MUTANTS:
-        assert SAMPLE.count(a) == 1, "주입 자리가 하나가 아니다: %s" % name
-        got = check_paragraph(SAMPLE.replace(a, b, 1), ctx)
+        a, b = fill(a), fill(b)
+        assert sample.count(a) == 1, "주입 자리가 하나가 아니다: %s" % name
+        got = check_paragraph(sample.replace(a, b, 1), ctx)
         assert got, "주입이 잡히지 않았다: %s" % name
         out.append("주입 %s: 적발 %d" % (name, len(got)))
-    free = SAMPLE.replace("**보조 논증 판정:**", "**합성 문단.**", 1)
+    free = sample.replace("**보조 논증 판정:**", "**합성 문단.**", 1)
     assert para_heading(free) != ctx.form, "자유 머리말 대조의 머리말이 형과 같다"
     out.append("판정 문단이 아닌 문단은 대상에 들지 않는다")
     return out
