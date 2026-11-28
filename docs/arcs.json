@@ -1306,12 +1306,133 @@
     },
     {
       "name": "bypass2",
-      "discriminator": null,
-      "phases": [],
-      "status": "reserved",
-      "opened": null,
+      "discriminator": "형식층이 문헌 사이를 잇는 데 쓴 보조 논증마다 그것이 현실과 맞는지를 무엇으로 확인하는가",
+      "phases": [
+        {
+          "name": "bypass2-1",
+          "builds": "아크를 열고 개막 결정과 아크 값 정본의 레코드를 싣는다. 항해도 생성기가 트리거를 쓸 수 없는 살아 있는 이연이 영인 판과 판별선이 아직 서지 않은 예약 아크를 받도록 고치고 받은 판에서 그 고침을 시험한다. 보조 논증의 정의와 측정 등급과 우회의 꼴과 판정을 남기는 자리와 페이즈 분할을 사용자의 판정을 받아 정하고 청사진을 낸다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-2",
+          "builds": "보조 논증의 후보를 좁히는 설비를 세운다. 선언을 Lean 으로 읽어 정리의 가정 바인더를 타입이 명제인지로 가르고, 구조체의 명제 필드와 조달처 줄이 없는 주장 문단을 뽑는다. 역량 질문의 답 조립이 닿는 선언을 재는 설비를 음성 대조와 함께 세운다. 판정 문단의 꼴과 예약 머리말을 정해 값 정본의 머리말 블록에 등록하고, 그 꼴을 재는 설비를 검증 스크립트 밖에 세우며 전파의 무리에 든 두 예시에 시범으로 건다. 보조 논증을 프로젝트 술어로 등재하는 세션 지시의 고친 전문을 낸다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-3",
+          "builds": "위계의 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/Repayment · Definition/Hierarchy · Observation/MoneyHierarchyChannel · Observation/RepaymentChannel 인 lean 파일이다. 관측층 상환 경로가 표시 통화로 환산된 값을 내는 경로의 현금성 칸과 자산 감소 까닭 칸을 회계층 판정의 통화 조건에 맞추어 다시 재는 구멍을 처분한다. bypass1-5 가 넘긴 물음을 받는다. 결정이 섰다는 것을 공표하는 문면을 관측층의 공시 경로로 세울지가 하나이고, 공적 자산과 명시적 신용 풋의 짝을 강도의 열거가 받지 않는 결손이 다른 하나다",
+          "holes": [
+            "CF-4898"
+          ]
+        },
+        {
+          "name": "bypass2-4",
+          "builds": "전파의 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/AssetReduction · Accounting/DebtCapacity · Accounting/Hierarchy · Accounting/LeverageAdjustment · Definition/AssetReduction · Definition/CreditorUltimacy · Definition/EmergencyFunding · Definition/LeverageAdjustment · Observation/EmergencyFundingChannel · Observation/MaturityMismatchChannel · Observation/NoncoreTotalChannel 인 lean 파일이다. 부채수용력 파일 머리가 담보 여력의 금액 판본과 부채수용력 여지 가운데 작은 쪽이 실제로 물리는 한도라고 적는 이음과, 레버리지 조정 파일이 자본의 세 성분이 공시의 다른 줄에서 읽힌다는 것을 정의의 근거로 드는 정당화를 bypass2-2 의 시범에 이어 판정한다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-5",
+          "builds": "담보의 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/Collateral · Accounting/Ownership · Definition/Collateral · Definition/DebtCapacity · Definition/Margin · Definition/Ownership · Observation/CollateralizedBorrowingChannel · Observation/OwnershipChannel · Observation/PledgeChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-6",
+          "builds": "교역과 토대의 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/Aggregation · Accounting/PaymentShare · Definition/Claim · Definition/Constraint · Definition/TradeFinance · Definition/TradePayment · Definition/Trigger · Observation/CompetencyQuestion · Observation/PaymentMethodChannel · Observation/TradeFinanceChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-7",
+          "builds": "용어집을 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Glossary/Core 인 lean 파일이다. 분할의 배타성 문단과 겹침 문단이 정의에서 따라 나오는지 현실의 주장인지를 묻는다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-8",
+          "builds": "제약과 보유자의 첫째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/HolderMandate · Definition/DecisionUnit · Definition/HolderMandate · Observation/ConstraintInputChannel · Observation/DecisionUnitChannel · Observation/HolderMandate · Observation/MarketFundingChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-9",
+          "builds": "제약과 보유자의 둘째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/CapitalAdjustment · Accounting/PortfolioLimit · Accounting/Rat/AssetComposition · Definition/AssetComposition · Definition/CapitalAdjustment · Definition/PortfolioLimit · Observation/AssetCompositionChannel · Observation/CapitalAdjustmentChannel · Observation/HolderSplitAnswer 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-10",
+          "builds": "통화의 첫째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Definition/CurrencyMismatch · Definition/CurrencyStanding · Definition/DomesticCurrency · Observation/CurrencyMismatchChannel · Observation/CurrencyStandingChannel · Observation/DomesticCurrencyChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-11",
+          "builds": "통화의 둘째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/CentralBankSwapLine · Accounting/Claim · Accounting/CurrencyMismatch · Accounting/PublicPutConstraint · Definition/CentralBankSwapLine · Definition/PublicPutAccess · Observation/PublicPutConstraintChannel · Observation/SwapLineChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-12",
+          "builds": "망의 첫째 무리(종류와 유도 위상)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Definition/BasketObligation · Definition/CapitalRegulation · Definition/InducedTopology · Definition/NetworkKind · Definition/NodeGranularity · Observation/BasketBindingChannel · Observation/InducedLinkChannel · Observation/NetworkIndexChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-13",
+          "builds": "망의 둘째 무리(인도와 담보의 몫)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/CollateralShare · Definition/IssuerIdentity · Definition/OutrightDelivery · Observation/CollateralShareChannel · Observation/OutrightDeliveryChannel · Observation/PledgeDefeatChannel · Observation/SelfCollateralizationChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-14",
+          "builds": "망의 셋째 무리(점유와 순포지션과 손실)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/EnforcerConstraint · Accounting/LossTransmission · Accounting/NetPosition · Definition/AssetBacking · Definition/CollateralPossession · Definition/LossBearer · Observation/CollateralChainDomainChannel · Observation/LossTransmissionChannel · Observation/NetPositionChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-15",
+          "builds": "망의 넷째 무리(신용장 심사)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Definition/AdjudicatedCondition · Definition/AdjudicationAuthority · Definition/AmendmentAcceptance · Definition/BuyerRecovery · Definition/DocumentaryCompliance · Observation/AdjudicatedConditionChannel · Observation/AdjudicationAuthorityChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-16",
+          "builds": "망의 다섯째 무리(신용장 문면과 신호)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Definition/ConflictScope · Definition/ProvisionReading · Definition/SignalOrigin · Observation/CreditTextChannel · Observation/SignalOriginChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-17",
+          "builds": "망의 여섯째 무리(시점과 사건과 한도)를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/NodeEvent · Definition/LiquidityPutTiming · Definition/NodeEvent · Observation/EventAggregationChannel · Observation/FundingTimingChannel · Observation/PortfolioLimitChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-18",
+          "builds": "제재의 첫째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Definition/AltIdentity · Definition/Designation · Definition/OwnershipReach · Observation/DesignationChannel · Observation/ReachChannel 인 lean 파일이다. 번짐의 소유 갈래가 체제마다 다른 셈을 받는 설계와 그것이 서지 않을 때 기존 판정을 두 체제의 판정의 아래 경계로 드는 특징짓기를 다루는 구멍을 처분한다",
+          "holes": [
+            "CF-4912"
+          ]
+        },
+        {
+          "name": "bypass2-19",
+          "builds": "제재의 둘째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/SanctionedCapacity · Definition/MessagingNetwork · Definition/ProhibitionTiming · Definition/SanctionCut · Observation/ProhibitionTimingChannel · Observation/SanctionCutChannel 인 lean 파일이다. 제재 문면의 절단을 묻는 항의 관측층 조립이 소유로 걸린 주체에서 공표 경로가 없는 자리를 측정 소스 없음으로 내는 꼴을 다루는 구멍을 처분한다",
+          "holes": [
+            "CF-4913"
+          ]
+        },
+        {
+          "name": "bypass2-20",
+          "builds": "조달의 첫째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/CurrencyFundingLimit · Accounting/FundingLinkMismatch · Observation/CollateralCurrencyChannel · Observation/FundingSizeAnswer · Observation/FundingSizeChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-21",
+          "builds": "조달의 둘째 무리를 훑어 보조 논증마다 인자를 분해해 등급과 자료나 우회를 판정하고, 그 판정을 주장을 낸 선언의 문서화 문면에 싣는다. 훑는 파일은 CrisisFramework 아래에서 경로가 Accounting/FundingShortfall · Definition/CurrencyMismatchTransmission · Definition/FundingFailure · Observation/FundingShortfallChannel · Observation/TransmissionChannel 인 lean 파일이다",
+          "holes": []
+        },
+        {
+          "name": "bypass2-22",
+          "builds": "무리를 가로지르는 이음을 판정하고, bypass2-3 부터 bypass2-21 까지가 발행해 이 페이즈로 배정한 구멍을 처분한다. 판정 문단을 앞으로 서는 선언에도 요구하는 상주 조항으로 세울지와 그 꼴을 재는 검사를 둘지를 정한다. 개막 커밋의 형식층 파일 전량과 종료 문서들이 든 훑은 파일의 합집합을 양방향으로 맞대고, 항해도를 다시 세우며 아크를 닫는다",
+          "holes": []
+        }
+      ],
+      "status": "open",
+      "opened": "2026-11-28",
       "closed": null,
-      "holes": [],
+      "holes": [
+        "CF-4898",
+        "CF-4912",
+        "CF-4913"
+      ],
       "cq": []
     }
   ],

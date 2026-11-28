@@ -955,6 +955,12 @@ def layer_txt(d):
     return '%s %s 갈린다' % (dot('%s %d' % kv for kv in items), morph.jo(str(items[-1][1]), '으로'))
 
 
+def disc_txt(rec):
+    """판별선을 드는 자리의 문면. 판별선이 아직 서지 않은 예약 아크는 그 사실을 든다."""
+    d = rec.get('discriminator')
+    return esc(d) if d else '아직 서지 않았다'
+
+
 def sec_holes(g):
     n = len(g['live'])
     sp = g['split']
@@ -975,7 +981,7 @@ def sec_holes(g):
             nb = len([e for e in es if (e.get('reopen_when') or {}).get('kind') == 'blocking'])
             rec = [x for x in g['arcs'] if x['name'] == arc][0]
             rows.append((code(arc), nw(nb), '<strong>%s</strong>' % nw(len(es)),
-                         esc(rec.get('discriminator') or '')))
+                         disc_txt(rec)))
         blocks.append(table([('갈래', ''), ('차단', ''), ('합', ''), ('판별선', 'wrap')], rows))
     nn = n - na
     blocks.append(p('아크를 가리키지 않는 것이 %s 용어집과 관측층을 가리키는 %s 갈래가 %s 읽기를 가리키는 %s '
@@ -990,12 +996,17 @@ def sec_holes(g):
         if x.get('status') in ('open', 'reserved'):
             assigned |= set(x.get('holes') or [])
     na_z = len(set(sp.get('none', [])) & assigned)
-    blocks.append(flag(p('<strong>트리거를 쓸 수 없는 %s %s.</strong> 그 항은 기계로 뽑히지 않으므로 '
-                         '아크를 여는 결정이 판별선으로 가려 그 아크의 구멍 배열에 넣는 길밖에 없고, '
-                         '이관의 길이 없어 폐기 레코드가 유일한 처분이다.'
-                         % (nwj(nz, '이'),
-                            '전량 어느 열린 아크나 예약된 아크에도 배정되지 않았다' if na_z == 0
-                            else '가운데 %s 열린 아크나 예약된 아크에 배정되었다' % nwj(na_z, '이')))))
+    if nz == 0:
+        blocks.append(flag(p('<strong>트리거를 쓸 수 없는 살아 있는 이연이 이 판에 없다.</strong> 그 갈래가 '
+                             '다시 서면 기계로 뽑히지 않으므로 아크를 여는 결정이 판별선으로 가려 그 아크의 '
+                             '구멍 배열에 넣는 길밖에 없고, 이관의 길이 없어 폐기 레코드가 유일한 처분이다.')))
+    else:
+        blocks.append(flag(p('<strong>트리거를 쓸 수 없는 %s %s.</strong> 그 항은 기계로 뽑히지 않으므로 '
+                             '아크를 여는 결정이 판별선으로 가려 그 아크의 구멍 배열에 넣는 길밖에 없고, '
+                             '이관의 길이 없어 폐기 레코드가 유일한 처분이다.'
+                             % (nwj(nz, '이'),
+                                '전량 어느 열린 아크나 예약된 아크에도 배정되지 않았다' if na_z == 0
+                                else '가운데 %s 열린 아크나 예약된 아크에 배정되었다' % nwj(na_z, '이')))))
     blocks.append(p('살아 있는 구멍(%s)은 자기를 가리키는 폐기 레코드가 없는 이연이다. 갈래(%s)는 재개 '
                     '트리거의 종류로 갈랐고 층(%s)은 그 항의 층 필드로 갈랐다. 아크를 가리키는 구멍(%s)은 '
                     '그 트리거의 참조가 아크 값 정본의 아크 이름인 것만 센다. <strong>트리거를 쓸 수 없는 '
@@ -1025,19 +1036,20 @@ def sec_next(g):
                          '결정이 판별선과 페이즈 분할과 걸린 구멍과 내리려는 항과 종료 조건을 함께 세워야 '
                          '선다.' if not reserved else
                          '예약된 아크가 %s 다음 아크를 여는 결정이 그것을 열고 그 아크를 가리키는 살아 '
-                         '있는 구멍을 전수로 찾아 구멍 배열에 넣는다.' % ncop(len(reserved)) + '.'))))]
+                         '있는 구멍을 전수로 찾아 구멍 배열에 넣는다.' % (ncop(len(reserved)) + '.')))))]
     if reserved:
         rows = [(code(x['name']), dot(code(c) for c in x.get('cq') or []) or '없음',
-                 esc(x.get('discriminator') or '')) for x in reserved]
+                 disc_txt(x)) for x in reserved]
         blocks.append(table([('예약 아크', ''), ('내리는 항', ''), ('판별선', 'wrap')], rows))
     blocks.append(p('<strong>고르는 일을 이 문서가 하지 않는다.</strong> 아크를 여는 것 자체가 결정이므로 '
                     '그 판별선과 페이즈 분할과 걸린 구멍과 내리려는 항과 종료 조건을 원장의 결정 항목이 '
                     '담고 아크 값 정본이 그 값을 든다. 이 절이 드는 것은 그 결정이 받을 대상의 무게다.'))
+    tail_z = ('<strong>트리거를 쓸 수 없는 살아 있는 이연이 이 판에 없어 개막 결정이 판별선으로 가려야 할 '
+              '목록이 비었다.</strong> 그 목록이 다시 서면 이 문서의 부록이 든다.' if nz == 0 else
+              '<strong>트리거를 쓸 수 없는 %s 어느 아크를 열어도 그 개막 결정이 판별선으로 가려야 할 '
+              '목록이다.</strong> 그 목록은 이 문서의 부록이 든다.' % nwj(nz, '이'))
     blocks.append(p('살아 있는 차단 구멍이 영이면 아크 종료의 관문에 미리 걸리는 항이 없으므로, 분할의 '
-                    '크기를 정하는 것이 판별선으로 가린 몫과 그 아크가 세울 구조물이다. <strong>트리거를 '
-                    '쓸 수 없는 %s 어느 아크를 열어도 그 개막 결정이 판별선으로 가려야 할 목록이다.'
-                    '</strong> 그 목록은 이 문서의 부록이 든다.'
-                    % nwj(nz, '이'), 'note'))
+                    '크기를 정하는 것이 판별선으로 가린 몫과 그 아크가 세울 구조물이다. ' + tail_z, 'note'))
     return section('열려 있는 아크가 없다 — 다음을 고르는 자리', *blocks)
 
 
@@ -1172,6 +1184,13 @@ def hole_rows(g, ids, with_ref=False):
 def sec_notrig(g):
     ids = set(g['split'].get('none', []))
     nz = len(ids)
+    if nz == 0:
+        return section('트리거를 쓸 수 없는 %s' % nw(nz),
+            flag(p('<strong>트리거를 쓸 수 없는 살아 있는 이연이 이 판에 없다.</strong> 그래서 층의 가름과 '
+                   '목록이 이 절에 서지 않는다. 그 갈래가 다시 서면 기계로 뽑히지 않으므로 이 절의 목록이 그 '
+                   '가름의 유일한 출발점이 된다.')),
+            p('그 갈래의 계수(%s)는 재개 트리거의 종류로 가른 것이다.' % code(fn_name(trigger_split)),
+              'note'))
     assigned = set()
     for x in g['arcs']:
         if x.get('status') in ('open', 'reserved'):
@@ -1202,8 +1221,11 @@ def sec_arc_invs(g):
         ids = {h for h in (x.get('holes') or []) if h in live_ids}
         ids |= {e['id'] for e in g['live'] if (e.get('reopen_when') or {}).get('ref') == x['name']}
         cq = x.get('cq') or []
-        blocks = [p('<strong>판별선은 「%s」이다.</strong> %s'
-                    % (esc(x.get('discriminator') or ''),
+        lead = ('<strong>판별선은 「%s」이다.</strong>' % esc(x['discriminator'])
+                if x.get('discriminator') else
+                '<strong>판별선이 아직 서지 않았다.</strong> 그 아크를 여는 결정이 판별선을 세운다.')
+        blocks = [p('%s %s'
+                    % (lead,
                        ('내리는 항 %s 걸린다.' % cws(cq, '이')) if cq else '내리는 항이 걸리지 않는다.'))]
         if ids:
             blocks.append(table([('구멍', ''), ('층', ''), ('섰다', ''), ('무엇', 'wrap')],
@@ -1319,9 +1341,12 @@ def sec_use(g):
             '<strong>조달을 빠뜨렸을 때의 대조 상대가 된다.</strong> 개막 결정이 뽑은 목록과 이 부록을 '
             '맞대면 빠진 것이 그 자리에서 드러난다. 검사가 그것을 잡는 시점은 아크를 열어 페이즈를 '
             '선언한 뒤이므로 늦다.']),
-        p('<strong>트리거를 쓸 수 없는 %s 쓰임이 다르다.</strong> 기계로 뽑히지 않으므로 이 목록이 '
-          '<strong>대조 상대가 아니라 출발점</strong>이며, 어느 아크를 열 때든 그 개막 결정이 이 목록 '
-          '전량을 읽어 판별선으로 가려야 한다.' % nwj(nz, '은')),
+        p(('<strong>트리거를 쓸 수 없는 것이 이 판에 없다.</strong> 그 갈래가 다시 서면 기계로 뽑히지 '
+           '않으므로 그 목록이 <strong>대조 상대가 아니라 출발점</strong>이며, 어느 아크를 열 때든 그 '
+           '개막 결정이 그 목록 전량을 읽어 판별선으로 가려야 한다.') if nz == 0 else
+          ('<strong>트리거를 쓸 수 없는 %s 쓰임이 다르다.</strong> 기계로 뽑히지 않으므로 이 목록이 '
+           '<strong>대조 상대가 아니라 출발점</strong>이며, 어느 아크를 열 때든 그 개막 결정이 이 목록 '
+           '전량을 읽어 판별선으로 가려야 한다.' % nwj(nz, '은'))),
         p('<strong>조달 대기와 독자 연구의 쓰임은 또 다르다.</strong> 그 항은 어느 개막 결정도 자기 몫으로 '
           '받지 않으므로 조달의 대상이 아니고, 사용자가 그 편을 뭉치에 넣을지와 그 연구를 할지를 정하는 '
           '자리다. 그래서 그 두 절은 프로젝트의 경계가 어디인지를 드는 자리다.'),
