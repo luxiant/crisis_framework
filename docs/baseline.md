@@ -352,7 +352,7 @@ MIRROR_GHOST=2
 고쳐 통과시키지 않는다.** 그 값은 이 검사가 처음 설 때 이 검사 자신이 낸 것이다.
 
 <!-- CLAUSEMUT:BEGIN -->
-CLAUSEMUT_UNCOVERED=41
+CLAUSEMUT_UNCOVERED=40
 <!-- CLAUSEMUT:END -->
 
 `CLAUSEMUT` 블록은 정의층과 관측층의 판정 반환 함수 본문에서 논리 결합을 하나씩 뒤집은 사본의
@@ -667,7 +667,7 @@ QUEUEMARK_SPENT=소진
 더하는 조작이 처방 없이 적발된다.
 
 <!-- RULEDOC:BEGIN -->
-RULEDOC_OVER_BYTES_SI=32450
+RULEDOC_OVER_BYTES_SI=27498
 RULEDOC_OVER_BYTES_APPENDIX=0
 RULEDOC_IMPL_BYTES_SI=0
 RULEDOC_REASON_BYTES_SI=1413
@@ -780,10 +780,10 @@ ubuntu-26.04 의 20261116.202.1 판이고, 같은 로그에서 전량 재빌드 
 수를 옮긴다. 처음 값은 이 블록이 설 때 그 설비의 처음 심기 모드가 그때의 네 파일에서 심었다.
 
 <!-- LEDGERFIX:BEGIN -->
-LEDGERFIX=decisions|3567|3892250|dafc6c20af8d
+LEDGERFIX=decisions|3570|3904759|c7bd6cbc353c
 LEDGERFIX=deferred|271|337071|a2b7b23eaccc
 LEDGERFIX=retirements|336|513583|f016a2056232
-LEDGERFIX=rejected|807|929948|e60468e2a0f2
+LEDGERFIX=rejected|808|931456|149ace22b4a7
 <!-- LEDGERFIX:END -->
 
 ## 13. 면제의 등록
@@ -829,3 +829,19 @@ EXEMPT=머리말 경계|33·34|소급하지 않음
 EXEMPT=닫힌 아크|45|소급하지 않음
 EXEMPT=제목 유사도 문턱|50|허용 오차
 <!-- EXEMPT:END -->
+
+---
+
+## 14. 구멍 등재 구절의 계수 (R-7)
+
+<!-- HOLECLAIM:BEGIN -->
+HOLECLAIM_UNCITED=24
+<!-- HOLECLAIM:END -->
+
+`HOLECLAIM` 블록은 형식층 파일의 주석 블록에서 결손이 구멍으로 등재되었다고 적는 구절이 선 문단 가운데
+살아 있는 이연 항목의 번호를 들지 않은 문단의 수를 상한으로 든다. 그 구절이 번호를 들지 않으면 구멍이
+폐기되어도 폐기된 번호를 산 것처럼 드는 자리를 재는 검사가 그 문면을 보지 못하고, 그 문면이 구조의 지금
+상태와 어긋난 채 남는다. **그 값은 줄어들 수 있고 늘어날 수 없다.** 줄어드는 것은 그 문단이 번호를 들거나
+지금의 상태로 고쳐진 것이고, 늘어나는 것은 번호 없는 구절이 새로 선 것이다. **그 값을 고쳐 통과시키지
+않는다.** 그 값은 이 블록을 읽는 검사가 처음 설 때 그 검사 자신이 낸 것이다. 폐기된 번호를 든 문단은
+계수와 별개로 실패다.

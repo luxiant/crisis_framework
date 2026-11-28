@@ -10,7 +10,7 @@
 층의 조정 모드 판정이 고정된 성분이 없거나 둘 이상일 때 값을 갖지 않게 둔 것과 같은 꼴이다.
 
 **이 판정이 관측 경로의 한 칸이 묻는 것을 구조로 받는다.** 상환 경로의 그 칸이 자산이 줄어든 까닭을
-가르는가를 묻고 그 축이 서지 않았다고 자기 docstring 에 적는데, 이 판정이 그 축이다.
+가르는가를 묻고, 그 칸의 문서화 문면이 이 판정을 그 축으로 든다.
 
 원장: 선언마다 표지가 붙는다. 표지가 가리키는 항목의 정본은 `docs/decisions/` 다.
 -/
@@ -26,8 +26,11 @@ open CrisisFramework.Definition
 자산 감소의 까닭을 두 시점의 두 총계로 재는 판정.
 
 **대응 비형식 개념:** 두 시점 사이에 자산 총액이 줄었을 때 부채 총액이 함께 줄었는지로 그 까닭을
-가른다. 함께 줄었으면 상환에 따른 소멸이고 줄지 않았으면 매각이며, 자산 총액이 줄지 않은 배치에서는
-까닭이 서지 않아 값을 갖지 않는다.
+가른다. 함께 줄었으면 부채가 소멸하며 줄어든 감소이고 줄지 않았으면 자기자본이 흡수한 감소이며, 자산
+총액이 줄지 않은 배치에서는 까닭이 서지 않아 값을 갖지 않는다. 자산이 줄고 부채가 줄지 않으면 자산과
+부채와 자기자본의 항등식에서 자기자본이 줄므로 뒤 갈래에 가치 하락과 할인 매각의 손실과 분배가 들고,
+자산을 팔아 그 대금으로 부채를 갚는 축소는 앞 갈래에 든다. 장부금액으로 파는 매각은 자산을 현금으로
+바꿀 뿐 총액을 줄이지 않는다.
 
 **이 정의가 배제하는 사례:**
 롤오버 게임의 손상 함수. 그 함수가 인출량을 받아 대차대조표에 입히는 비용을 내고 그 미분이 자산
@@ -44,7 +47,8 @@ open CrisisFramework.Definition
 가리키는지가 서지 않으며, 같은 층의 조정 모드 판정이 같은 꼴을 따른다.
 
 **네 총액은 같은 통화의 것이다.** 두 시점의 총액이 표시 통화로 환산된 합이면 환율의 움직임이 두
-총액을 움직여, 상환도 매각도 일어나지 않은 자리에서 자산 총액의 감소가 상환이나 매각으로 읽힌다.
+총액을 움직여, 부채의 소멸도 자기자본의 감소도 일어나지 않은 자리에서 자산 총액의 감소가 그 둘
+가운데 하나로 읽힌다.
 가로지르지 않았음을 호출하는 쪽이 보장하며, 관측층의 상환 경로는 액수를 통화별로 가르는 칸이 서야
 이 판정의 입력을 낸다.
 
@@ -54,8 +58,8 @@ open CrisisFramework.Definition
 def assetReductionCauseOf (assetBefore assetAfter liabilityBefore liabilityAfter : ℤ) :
     Option AssetReductionCause :=
   if assetAfter < assetBefore then
-    (if liabilityAfter < liabilityBefore then some AssetReductionCause.repaymentExtinction
-     else some AssetReductionCause.assetSale)
+    (if liabilityAfter < liabilityBefore then some AssetReductionCause.liabilityExtinction
+     else some AssetReductionCause.equityAbsorption)
   else none
 
 /--
@@ -67,8 +71,8 @@ def assetReductionCauseOf (assetBefore assetAfter liabilityBefore liabilityAfter
 
 **가정과 그 배제 사례(T-4·T-5):** 자산 총액이 줄지 않았다는 가정을 진술에 명시한다. 그 가정이
 배제하는 자리는 자산이 줄어든 배치이며 거기서 이 판정이 까닭을 낸다. 자산 총액이 불변인 채 자산의
-구성만 바뀌는 조정이 이 가정 안에 들어오고 그 구성을 가르는 구조가 형식층에 없으므로, 그 결손이
-구멍으로 등재되어 있다.
+구성만 바뀌는 조정이 이 가정 안에 들어오며, 그 구성의 변화는 고유동성자산 등급의 두 배치를 받아 구성
+변화의 갈래를 내는 판정(`compositionChangeOf`)이 가른다.
 
 **T-3 분류:** 정의를 전개하고 분기를 가르면 닫히므로 보조 보정이며 기여 목록에서 뺀다. 판정이
 선택을 내는 자리가 구조에 서 있다는 것을 쓰는 데 이 정리가 필요하므로 선언으로 둔다.
@@ -84,47 +88,47 @@ theorem assetReductionCauseOf_eq_none_of_not_lt
   rw [if_neg h]
 
 /--
-자산과 부채가 함께 줄면 까닭이 상환에 따른 소멸이다.
+자산과 부채가 함께 줄면 까닭이 부채가 소멸하며 줄어든 감소다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 자산 총액과 부채 총액이 둘 다 줄었는데 이 판정이
-매각을 내거나 값을 내지 않는 배치. 조건식의 두 분기가 그 자리를 받으므로 그런 배치가 설 수 없다.
+자기자본이 흡수한 감소를 내거나 값을 내지 않는 배치. 조건식의 두 분기가 그 자리를 받으므로 그런 배치가 설 수 없다.
 
 **가정과 그 배제 사례(T-4·T-5):** 자산 총액이 줄었다는 가정과 부채 총액이 줄었다는 가정을 진술에
-명시한다. 그 둘이 배제하는 자리는 자산만 줄어든 배치이며 거기서 이 판정이 매각을 낸다.
+명시한다. 그 둘이 배제하는 자리는 자산만 줄어든 배치이며 거기서 이 판정이 자기자본이 흡수한 감소를 낸다.
 
 **T-3 분류:** 정의를 전개하고 두 분기를 가르면 닫히므로 보조 보정이며 기여 목록에서 뺀다.
 -/
 -- DD:CF-2006
-theorem assetReductionCauseOf_eq_repaymentExtinction
+theorem assetReductionCauseOf_eq_liabilityExtinction
     (assetBefore assetAfter liabilityBefore liabilityAfter : ℤ)
     (hAsset : assetAfter < assetBefore) (hLiab : liabilityAfter < liabilityBefore) :
     assetReductionCauseOf assetBefore assetAfter liabilityBefore liabilityAfter
-      = some AssetReductionCause.repaymentExtinction := by
+      = some AssetReductionCause.liabilityExtinction := by
   -- 두 분기를 두 가정으로 각각 닫는다. `simp only` 로 판정의 정의만 펼친다.
   simp only [assetReductionCauseOf]
   rw [if_pos hAsset, if_pos hLiab]
 
 /--
-자산만 줄면 까닭이 매각이다.
+자산만 줄면 까닭이 자기자본이 흡수한 감소다.
 
 **이 명제가 거짓이려면 무엇이 관측되어야 하는가:** 자산 총액이 줄고 부채 총액이 줄지 않았는데 이
-판정이 상환에 따른 소멸을 내거나 값을 내지 않는 배치. 조건식의 두 분기가 그 자리를 받으므로 그런
+판정이 부채가 소멸하며 줄어든 감소를 내거나 값을 내지 않는 배치. 조건식의 두 분기가 그 자리를 받으므로 그런
 배치가 설 수 없다.
 
 **가정과 그 배제 사례(T-4·T-5):** 자산 총액이 줄었다는 가정과 부채 총액이 줄지 않았다는 가정을
-진술에 명시한다. 그 둘이 배제하는 자리는 둘이 함께 줄어든 배치이며 거기서 이 판정이 상환에 따른
-소멸을 낸다. **이 정리와 앞 정리가 함께 분할의 완전성을 형식층에서 드러낸다.** 자산이 줄었다는
+진술에 명시한다. 그 둘이 배제하는 자리는 둘이 함께 줄어든 배치이며 거기서 이 판정이 부채가 소멸하며
+줄어든 감소를 낸다. **이 정리와 앞 정리가 함께 분할의 완전성을 형식층에서 드러낸다.** 자산이 줄었다는
 조건 아래에서 부채가 줄었는가의 참과 거짓이 두 부분을 각각 내므로, 용어집이 그 완전성을 여집합의
 귀결로 적은 것이 이 두 정리로 확인된다.
 
 **T-3 분류:** 정의를 전개하고 두 분기를 가르면 닫히므로 보조 보정이며 기여 목록에서 뺀다.
 -/
 -- DD:CF-2006
-theorem assetReductionCauseOf_eq_assetSale
+theorem assetReductionCauseOf_eq_equityAbsorption
     (assetBefore assetAfter liabilityBefore liabilityAfter : ℤ)
     (hAsset : assetAfter < assetBefore) (hLiab : ¬ liabilityAfter < liabilityBefore) :
     assetReductionCauseOf assetBefore assetAfter liabilityBefore liabilityAfter
-      = some AssetReductionCause.assetSale := by
+      = some AssetReductionCause.equityAbsorption := by
   -- 앞 정리와 같은 꼴이며 둘째 분기의 방향만 바뀐다.
   simp only [assetReductionCauseOf]
   rw [if_pos hAsset, if_neg hLiab]

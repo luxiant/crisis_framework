@@ -735,6 +735,47 @@ def inj_60_binder_only(root):
 # 붙이며 사례의 손 열거를 들지 않는다. **선언으로 두는 까닭은** 이 목록을 읽는
 # 검사가 뿌리의 소스를 텍스트로 읽으므로 모듈의 값을 모으는 꼴이면 그 검사가
 # 읽을 문면이 없다는 것이다.
+def _inj_66_put(root, para: str) -> str:
+    """주입할 문단을 수집기가 낸 첫 선언의 docstring 말미에 더한다. 그 선언의 이름을 낸다."""
+    led = wiki_common.Ledger(root)
+    d = next((x for x in led.doc_decls() if x.paras), None)
+    if d is None:
+        raise SystemExit("docstring 을 가진 선언이 없어 주입 대상이 없다")
+    _append_para(root, d, para)
+    return d.full
+
+
+def inj_66_dead(root):
+    """폐기된 원장 번호를 든 구멍 등재 구절을 넣는다. 번호가 가장 작은 폐기 대상을 골라 박지 않는다."""
+    rets = load(root, "retirements")["retirements"]
+    dead = min((q["target"] for q in rets if q.get("target")), key=id_no)
+    return _inj_66_put(root, f"그 결손은 구멍으로 등재되어 있다(`{dead}`).")
+
+
+def inj_66_uncited(root):
+    """번호를 들지 않은 구멍 등재 구절을 넣는다. 계수가 상한을 넘어 실패해야 한다."""
+    return _inj_66_put(root, "그 결손은 구멍으로 등재되어 있다.")
+
+
+def inj_66_wrapped(root):
+    """줄바꿈으로 갈린 구멍 등재 구절을 번호 없이 넣는다. 공백을 접지 않고 찾으면 놓치는 꼴이다."""
+    return _inj_66_put(root, "그 결손은 구멍으로\n등재되어 있다.")
+
+
+def inj_66_live_kept(root):
+    """살아 있는 이연 번호를 든 구멍 등재 구절을 넣는다. 적발이 늘지 않아야 한다."""
+    dead = {q["target"] for q in load(root, "retirements")["retirements"] if q.get("target")}
+    live = [e["id"] for e in load(root, "deferred")["deferred"] if e.get("id") not in dead]
+    if not live:
+        raise SystemExit("살아 있는 이연 항목이 없어 주입이 조건을 만들지 못한다")
+    return _inj_66_put(root, f"그 결손은 구멍으로 등재되어 있다(`{max(live, key=id_no)}`).")
+
+
+def inj_66_other_kept(root):
+    """구멍을 그 구절이 아닌 꼴로 드는 문면을 넣는다. 적발이 늘지 않아야 한다."""
+    return _inj_66_put(root, "그 결손을 구멍으로 남길지는 뒤의 페이즈가 정한다.")
+
+
 CASES = [
     ("10", "wiki10-ghost-ref", "폐기된 id 를 related 에 넣는다", inj_10, None),
     ("13", "wiki13-dd-target", "없는 id 를 줄 주석에 적는다", inj_13, None),
@@ -759,6 +800,11 @@ CASES = [
     ("60", "wiki60-currency-guard", "타입클래스 바인더와 통화 인자만 더한 선언을 주입한다", inj_60_binder_only, None),
     ("62", "wiki62-overlap-paragraph", "OVERLAP 블록의 한 쌍을 배타 관계가 등록된 쌍으로 바꾼다", inj_62_excl, None),
     ("62", "wiki62-overlap-paragraph", "겹침 문단 하나의 머리말에서 한 개념의 이름을 지운다", inj_62_name, None),
+    ("66", "wiki66-hole-claim", "폐기된 원장 번호를 든 구멍 등재 구절을 넣는다", inj_66_dead, None),
+    ("66", "wiki66-hole-claim", "번호를 들지 않은 구멍 등재 구절을 넣는다", inj_66_uncited, None),
+    ("66", "wiki66-hole-claim", "줄바꿈으로 갈린 구멍 등재 구절을 번호 없이 넣는다", inj_66_wrapped, None),
+    ("66", "wiki66-hole-claim", "살아 있는 이연 번호를 든 구멍 등재 구절을 넣는다", inj_66_live_kept, None, "nocatch"),
+    ("66", "wiki66-hole-claim", "구멍을 그 구절이 아닌 꼴로 드는 문면을 넣는다", inj_66_other_kept, None, "nocatch"),
     ("10", "wiki10-ghost-ref", "역사 기록인 종료 문서에 폐기된 원장 ID 를 적는다", inj_10_history_kept, None, "nocatch"),
     ("10", "wiki10-ghost-ref", "역사 기록이 아닌 상주 문서에 폐기된 원장 ID 를 적는다", inj_10_history_neighbor, None),
     ("10", "wiki10-ghost-ref", "폐기된 결정 항목의 related 에 폐기된 id 를 넣는다", inj_10_dead_owner_kept, None, "nocatch"),

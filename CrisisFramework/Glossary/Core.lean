@@ -176,10 +176,10 @@ inductive Concept where
   | debtCapacity
   /-- 자산 감소의 까닭. 그 주체의 자산 총액이 두 시점 사이에 줄었을 때 그것이 무엇 때문인가. -/
   | assetReductionCause
-  /-- 상환에 따른 소멸. 자산이 줄면서 부채가 함께 줄었다. -/
-  | repaymentExtinction
-  /-- 매각. 자산이 줄었는데 부채가 함께 줄지 않았다. -/
-  | assetSaleReduction
+  /-- 부채가 소멸하며 줄어든 감소. 자산이 줄면서 부채가 함께 줄었다. -/
+  | liabilityExtinctionReduction
+  /-- 자기자본이 흡수한 감소. 자산이 줄었는데 부채가 함께 줄지 않아 자기자본이 줄었다. -/
+  | equityAbsorptionReduction
   /-- 보유자 위임. 청구권의 보유자가 자기 대차대조표를 무엇을 위해 운용하는가이며 아래 셋의
       상위 개념이다. -/
   | holderMandate
@@ -791,7 +791,8 @@ D-7 의 판별 시험이 그 선언의 docstring 이 대응 비형식 개념을 
 **자산 감소 까닭 분할의 모든 쌍이 배타적이다.** 부분이 둘이므로 쌍이 하나이고 그 하나를 등록했다.
 **그 배타가 관측이 아니라 여집합에서 따라 나오며 그 분할의 정의역이 자산이 줄어든 배치다.** 정의역을
 적지 않으면 그 열거가 대차대조표가 움직이는 모든 자리를 다한다고 읽히는데, 자산 총액이 불변인 채 자산의
-구성만 바뀌는 조정이 그 정의역 밖이고 그 자리를 담는 구조가 형식층에 없어 구멍으로 등재되어 있다.
+구성만 바뀌는 조정이 그 정의역 밖이고, 그 조정은 고유동성자산 등급의 두 배치를 받는 구성 변화
+판정(`compositionChangeOf`)이 가른다.
 
 **자산 감소 까닭 분할의 V-4 사례.** 2007년 도매조달 은행의 런에서 만기가 온 대출과 예금이 갱신되지
 않아 연간 순유출이 났고 그것이 부채와 자산을 함께 줄인 자리다(Shin 2009). 그와 달리 롤오버 게임의
@@ -1210,8 +1211,8 @@ def registry : List ConceptRel :=
   , .refines .equity .subordinatedInclusiveBookCapital
   , .measuredBy .commonShareBookCapital .regulatoryFiling
   , .measuredBy .subordinatedInclusiveBookCapital .regulatoryFiling
-  , .partitions .assetReductionCause [.repaymentExtinction, .assetSaleReduction]
-  , .excludes .repaymentExtinction .assetSaleReduction
+  , .partitions .assetReductionCause [.liabilityExtinctionReduction, .equityAbsorptionReduction]
+  , .excludes .liabilityExtinctionReduction .equityAbsorptionReduction
   , .partitions .holderMandate
       [.liabilityMatchingMandate, .benchmarkBeatingMandate, .lossAvoidanceMandate]
   , .excludes .liabilityMatchingMandate .benchmarkBeatingMandate

@@ -1058,6 +1058,74 @@ def check_60(led: Ledger) -> Report:
     return r
 
 
+# 형식층 문면이 결손을 구멍으로 등재되었다고 적는 구절. 그 구절이 선 문단이 살아 있는 이연 항목의
+# 번호를 들어야 구멍의 폐기가 그 문면에 닿는다. 번호 없이 서면 구멍이 폐기되어도 폐기된 번호를 산 것처럼
+# 드는 자리를 재는 검사 10 이 그 문면을 보지 못한다(SPEC §2).
+HOLECLAIM_PHRASE = "구멍으로 등재"
+HOLECLAIM_BLOCK = re.compile(r"<!-- HOLECLAIM:BEGIN -->\n(.*?)<!-- HOLECLAIM:END -->", re.S)
+HOLECLAIM_LINE = re.compile(r"^HOLECLAIM_UNCITED=([0-9]+)$", re.M)
+# 주석 블록. 선언의 docstring 과 모듈 문서와 파일 머리의 블록 주석을 함께 받는다. 그 구절이 파일 머리에도
+# 서므로 docstring 만 받으면 그 자리가 그물 밖에 남는다.
+COMMENT_BLOCK = re.compile(r"/-(.*?)-/", re.S)
+PARA_SEP = re.compile(r"\n[ \t]*\n")
+
+
+def hole_claim_paras(led: Ledger) -> list[tuple[str, int, list[str]]]:
+    """형식층 파일의 주석 블록을 빈 줄로 가른 문단 가운데 그 구절이 선 것. (경로, 줄, 그 문단이 든 원장 번호) 다.
+
+    **구절을 공백을 접은 뒤에 찾는다.** 그 구절이 줄바꿈으로 갈린 자리가 있어 접지 않으면 그 문단이 그물
+    밖으로 빠진다. 문단을 단위로 두는 까닭은 요구가 같은 문단이 번호를 드는 것이기 때문이다.
+    """
+    out: list[tuple[str, int, list[str]]] = []
+    for f in led.lean_files:
+        src = f.read_text(encoding="utf-8")
+        rel = str(f.relative_to(led.root))
+        for b in COMMENT_BLOCK.finditer(src):
+            body, base = b.group(1), b.start(1)
+            seps = list(PARA_SEP.finditer(body))
+            starts = [0] + [m.end() for m in seps]
+            ends = [m.start() for m in seps] + [len(body)]
+            for s, e in zip(starts, ends):
+                para = body[s:e]
+                if HOLECLAIM_PHRASE not in fold(para):
+                    continue
+                lead = len(para) - len(para.lstrip())
+                line = src.count("\n", 0, base + s + lead) + 1
+                ids = sorted({f"CF-{m.group(1)}" for m in CF_TOKEN.finditer(para)},
+                             key=lambda x: int(x[3:]))
+                out.append((rel, line, ids))
+    return out
+
+
+def check_66(led: Ledger) -> Report:
+    r = Report("66", "wiki66-hole-claim",
+               "형식층 문면이 결손을 구멍으로 등재되었다고 적는 문단마다 폐기된 원장 번호를 들지 않고, "
+               "살아 있는 이연 항목의 번호를 들지 않은 문단의 계수가 값 정본의 상한을 넘지 않는가", "fail")
+    m = HOLECLAIM_LINE.search(_baseline_block(led, HOLECLAIM_BLOCK))
+    if m is None:
+        r.bad("docs/baseline.md 의 HOLECLAIM 블록에서 HOLECLAIM_UNCITED 를 읽지 못했다")
+        return r
+    cap = int(m.group(1))
+    live_holes = {e.get("id") for e in led.reg["deferred"] if e.get("id") not in led.dead}
+    paras = hole_claim_paras(led)
+    uncited: list[str] = []
+    for rel, line, ids in paras:
+        for i in ids:
+            if i in led.dead:
+                r.bad(f"{rel}:{line}: 구멍으로 등재되었다는 문단이 폐기된 {i} 를 든다")
+        if not any(i in live_holes for i in ids):
+            uncited.append(f"{rel}:{line}")
+    r.note(f"그 구절이 선 문단 {len(paras)} · 살아 있는 이연 번호를 든 문단 {len(paras) - len(uncited)} · "
+           f"번호를 들지 않은 문단 {len(uncited)} · 상한 HOLECLAIM_UNCITED={cap}")
+    if len(uncited) > cap:
+        r.bad(f"번호를 들지 않은 문단 {len(uncited)} 이 HOLECLAIM_UNCITED={cap} 보다 많다. 새로 선 자리에 "
+              f"살아 있는 이연 번호를 든다: " + ", ".join(uncited))
+    elif len(uncited) < cap:
+        r.note(f"번호를 들지 않은 문단 {len(uncited)} 이 HOLECLAIM_UNCITED={cap} 보다 {cap - len(uncited)} 적다. "
+               "그 값은 줄어들 수 있고 늘어날 수 없으므로 블록을 지금의 계수로 다시 심을 수 있다")
+    return r
+
+
 # 이 단위가 드는 검사. 러너가 이 목록을 이어 붙여 손 열거를 걷는다.
 CHECKS = (
     check_10,
@@ -1072,4 +1140,5 @@ CHECKS = (
     check_57,
     check_60,
     check_62,
+    check_66,
 )
