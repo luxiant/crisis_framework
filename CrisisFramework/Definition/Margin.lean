@@ -82,7 +82,7 @@ def Ratio.trivial : Ratio Unit Unit where
 structure PledgeRates (PIdx Num Obs : Type) where
   /-- 비율이 걸리는 담보 제공의 색인. -/
   pledge : PIdx
-  /-- 떠받쳐야 할 것에 요구되는 자기자본의 몫. 개시증거금과 변동증거금이 든다. -/
+  /-- 떠받쳐야 할 것에 대해 증거금으로 예치해야 하는 몫. 개시증거금과 변동증거금이 든다. -/
   exposureMargin : Ratio Num Obs
   /-- 떠받치는 것을 얼마로 쳐 주는가. 차감률이 아니라 곱하는 비율이다. -/
   valuationRate : Ratio Num Obs
@@ -97,7 +97,9 @@ def PledgeRates.trivial : PledgeRates Unit Unit Unit where
 /--
 마진 요구가 충족되는가.
 
-**대응 비형식 개념:** 그 포지션을 잡으려고 묶어야 하는 자기자본이 실제로 예치되어 있는가.
+**대응 비형식 개념:** 그 포지션에 대해 담보 제공자가 내야 하는 증거금이 실제로 예치되어 있는가.
+규범이 마진과 자본을 부담 주체와 지정 범위와 조정 속도로 가르므로, 그 예치액을 그 포지션을 잡으려고
+묶어야 하는 자기자본으로 읽는 것은 노드 하나와 자산 하나로 축약된 모형에서만 서는 읽기다.
 
 **이 정의가 배제하는 사례:**
 같은 규범이 개시증거금을 양쪽이 총액으로 교환하게 하고 각자 받은 것을 상계하지 못하게 하는데,

@@ -776,6 +776,21 @@ def inj_66_other_kept(root):
     return _inj_66_put(root, "그 결손을 구멍으로 남길지는 뒤의 페이즈가 정한다.")
 
 
+def inj_66_spaced(root):
+    """구멍과 조사를 줄바꿈으로 띄어 쓴 등재 구절을 번호 없이 넣는다. 공백을 접으면 띄어 쓴 꼴이 된다."""
+    return _inj_66_put(root, "그 결손은 구멍\n으로 등재되어 있다.")
+
+
+def inj_66_remaining(root):
+    """구멍으로 남아 있다고 적는 구절을 번호 없이 넣는다. 구멍이 서 있다는 주장이므로 적발이 늘어야 한다."""
+    return _inj_66_put(root, "그 결손은 구멍으로 남아 있다.")
+
+
+def inj_66_hypothetical_kept(root):
+    """등재하면 결손이 구멍으로 올라간다는 가정문을 넣는다. 구멍이 서 있다는 주장이 아니므로 적발이 늘지 않아야 한다."""
+    return _inj_66_put(root, "그 관계를 등재하면 그 결손이 구멍으로 올라간다.")
+
+
 CASES = [
     ("10", "wiki10-ghost-ref", "폐기된 id 를 related 에 넣는다", inj_10, None),
     ("13", "wiki13-dd-target", "없는 id 를 줄 주석에 적는다", inj_13, None),
@@ -805,6 +820,9 @@ CASES = [
     ("66", "wiki66-hole-claim", "줄바꿈으로 갈린 구멍 등재 구절을 번호 없이 넣는다", inj_66_wrapped, None),
     ("66", "wiki66-hole-claim", "살아 있는 이연 번호를 든 구멍 등재 구절을 넣는다", inj_66_live_kept, None, "nocatch"),
     ("66", "wiki66-hole-claim", "구멍을 그 구절이 아닌 꼴로 드는 문면을 넣는다", inj_66_other_kept, None, "nocatch"),
+    ("66", "wiki66-hole-claim", "구멍과 조사를 띄어 쓴 등재 구절을 번호 없이 넣는다", inj_66_spaced, None),
+    ("66", "wiki66-hole-claim", "구멍으로 남아 있다고 적는 구절을 번호 없이 넣는다", inj_66_remaining, None),
+    ("66", "wiki66-hole-claim", "등재하면 결손이 구멍으로 올라간다는 가정문을 넣는다", inj_66_hypothetical_kept, None, "nocatch"),
     ("10", "wiki10-ghost-ref", "역사 기록인 종료 문서에 폐기된 원장 ID 를 적는다", inj_10_history_kept, None, "nocatch"),
     ("10", "wiki10-ghost-ref", "역사 기록이 아닌 상주 문서에 폐기된 원장 ID 를 적는다", inj_10_history_neighbor, None),
     ("10", "wiki10-ghost-ref", "폐기된 결정 항목의 related 에 폐기된 id 를 넣는다", inj_10_dead_owner_kept, None, "nocatch"),

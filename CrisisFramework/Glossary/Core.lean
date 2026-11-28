@@ -78,7 +78,7 @@ inductive Concept where
   | rehypothecatableCollateral
   /-- 담보 제공에 붙는 비율. 아래 둘의 상위 개념이다. -/
   | pledgeRate
-  /-- 떠받쳐야 할 것에 요구되는 자기자본의 몫. 개시증거금과 변동증거금이 든다. -/
+  /-- 떠받쳐야 할 것에 대해 증거금으로 예치해야 하는 몫. 개시증거금과 변동증거금이 든다. -/
   | exposureMargin
   /-- 떠받치는 것을 얼마로 쳐 주는가. 차감률이 아니라 곱하는 비율이다. -/
   | valuationRate

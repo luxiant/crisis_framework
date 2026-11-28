@@ -1061,7 +1061,10 @@ def check_60(led: Ledger) -> Report:
 # 형식층 문면이 결손을 구멍으로 등재되었다고 적는 구절. 그 구절이 선 문단이 살아 있는 이연 항목의
 # 번호를 들어야 구멍의 폐기가 그 문면에 닿는다. 번호 없이 서면 구멍이 폐기되어도 폐기된 번호를 산 것처럼
 # 드는 자리를 재는 검사 10 이 그 문면을 보지 못한다(SPEC §2).
-HOLECLAIM_PHRASE = "구멍으로 등재"
+# **구멍과 조사 사이의 공백을 허용하고 구멍으로 남아 있다고 적는 꼴을 함께 받는다**(CF-4987). 줄바꿈이
+# 그 사이에 들어가 공백을 접은 문면에 띄어 쓴 꼴이 서고, 남아 있다고 적는 자리도 구멍이 서 있다는 주장이다.
+# 등재하면 결손이 구멍으로 올라간다는 가정문은 구멍이 서 있다는 주장이 아니므로 받지 않는다.
+HOLECLAIM_PHRASE = re.compile(r"구멍 ?으로 (?:등재|남아 있)")
 HOLECLAIM_BLOCK = re.compile(r"<!-- HOLECLAIM:BEGIN -->\n(.*?)<!-- HOLECLAIM:END -->", re.S)
 HOLECLAIM_LINE = re.compile(r"^HOLECLAIM_UNCITED=([0-9]+)$", re.M)
 # 주석 블록. 선언의 docstring 과 모듈 문서와 파일 머리의 블록 주석을 함께 받는다. 그 구절이 파일 머리에도
@@ -1087,7 +1090,7 @@ def hole_claim_paras(led: Ledger) -> list[tuple[str, int, list[str]]]:
             ends = [m.start() for m in seps] + [len(body)]
             for s, e in zip(starts, ends):
                 para = body[s:e]
-                if HOLECLAIM_PHRASE not in fold(para):
+                if not HOLECLAIM_PHRASE.search(fold(para)):
                     continue
                 lead = len(para) - len(para.lstrip())
                 line = src.count("\n", 0, base + s + lead) + 1
@@ -1099,7 +1102,7 @@ def hole_claim_paras(led: Ledger) -> list[tuple[str, int, list[str]]]:
 
 def check_66(led: Ledger) -> Report:
     r = Report("66", "wiki66-hole-claim",
-               "형식층 문면이 결손을 구멍으로 등재되었다고 적는 문단마다 폐기된 원장 번호를 들지 않고, "
+               "형식층 문면이 결손을 구멍으로 등재되었거나 남아 있다고 적는 문단마다 폐기된 원장 번호를 들지 않고, "
                "살아 있는 이연 항목의 번호를 들지 않은 문단의 계수가 값 정본의 상한을 넘지 않는가", "fail")
     m = HOLECLAIM_LINE.search(_baseline_block(led, HOLECLAIM_BLOCK))
     if m is None:

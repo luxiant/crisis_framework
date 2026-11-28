@@ -780,10 +780,10 @@ ubuntu-26.04 의 20261116.202.1 판이고, 같은 로그에서 전량 재빌드 
 수를 옮긴다. 처음 값은 이 블록이 설 때 그 설비의 처음 심기 모드가 그때의 네 파일에서 심었다.
 
 <!-- LEDGERFIX:BEGIN -->
-LEDGERFIX=decisions|3570|3904759|c7bd6cbc353c
-LEDGERFIX=deferred|271|337071|a2b7b23eaccc
-LEDGERFIX=retirements|336|513583|f016a2056232
-LEDGERFIX=rejected|808|931456|149ace22b4a7
+LEDGERFIX=decisions|3573|3914618|a1aa7fd8a51d
+LEDGERFIX=deferred|272|339819|90f62945e692
+LEDGERFIX=retirements|342|520906|8e671ec3da7c
+LEDGERFIX=rejected|813|942350|cc9502048f6f
 <!-- LEDGERFIX:END -->
 
 ## 13. 면제의 등록
@@ -835,10 +835,10 @@ EXEMPT=제목 유사도 문턱|50|허용 오차
 ## 14. 구멍 등재 구절의 계수 (R-7)
 
 <!-- HOLECLAIM:BEGIN -->
-HOLECLAIM_UNCITED=24
+HOLECLAIM_UNCITED=19
 <!-- HOLECLAIM:END -->
 
-`HOLECLAIM` 블록은 형식층 파일의 주석 블록에서 결손이 구멍으로 등재되었다고 적는 구절이 선 문단 가운데
+`HOLECLAIM` 블록은 형식층 파일의 주석 블록에서 결손이 구멍으로 등재되었거나 남아 있다고 적는 구절이 선 문단 가운데
 살아 있는 이연 항목의 번호를 들지 않은 문단의 수를 상한으로 든다. 그 구절이 번호를 들지 않으면 구멍이
 폐기되어도 폐기된 번호를 산 것처럼 드는 자리를 재는 검사가 그 문면을 보지 못하고, 그 문면이 구조의 지금
 상태와 어긋난 채 남는다. **그 값은 줄어들 수 있고 늘어날 수 없다.** 줄어드는 것은 그 문단이 번호를 들거나
