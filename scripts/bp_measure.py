@@ -96,20 +96,55 @@ def lean_files(repo):
     return out
 
 
-def opening_holes(repo, arc):
-    """그 아크가 처음 선 커밋의 아크 값 정본이 든 그 아크의 구멍 배열.
-
-    패치 레코드가 구멍의 식별자를 필드로 들지 않으므로, 개막이 넣은 구멍을 그 아크의 이름이 아크 값
-    정본에 처음 선 커밋에서 읽고 그 뒤에 아크의 구멍 배열에 든 것을 패치로 든 것으로 센다. 그 커밋을
-    찾지 못하면 그 자리에서 터뜨린다.
-    """
+def _first_named_commit(repo, arc):
+    """그 아크의 이름이 아크 값 정본에 처음 선 커밋. 찾지 못하면 그 자리에서 터뜨린다."""
     shas = _git(repo, 'log', '--reverse', '--format=%H', '-S', '"name": "%s"' % arc,
                 '--', 'docs/arcs.json').split('\n')
     assert shas and shas[0], '아크 %r 가 처음 선 커밋을 찾지 못했다' % arc
-    a = json.loads(_git(repo, 'show', '%s:docs/arcs.json' % shas[0]))
+    return shas[0]
+
+
+def _arc_record_at(repo, sha, arc):
+    """그 커밋의 아크 값 정본에서 그 아크의 레코드. 없으면 `None` 이고 둘 이상이면 터뜨린다."""
+    a = json.loads(_git(repo, 'show', '%s:docs/arcs.json' % sha))
     rec = [x for x in a.get('arcs', []) if x.get('name') == arc]
-    assert len(rec) == 1, '아크 %r 가 처음 선 커밋의 아크 값 정본에 하나로 서지 않는다' % arc
-    return set(rec[0].get('holes') or [])
+    assert len(rec) <= 1, '아크 %r 가 커밋 %s 의 아크 값 정본에 둘 이상 선다' % (arc, sha[:7])
+    return rec[0] if rec else None
+
+
+def opening_commit(repo, arc):
+    """그 아크의 상태가 예약이 아닌 첫 커밋.
+
+    그 아크의 이름이 아크 값 정본에 처음 선 커밋부터 아크 값 정본을 고친 커밋을 차례로 읽는다. 예약 없이
+    선 아크에서는 그 커밋이 이름이 처음 선 커밋과 같고, 예약 뒤에 연 아크에서는 예약 커밋을 지나 개막
+    커밋에 닿는다. 그 커밋을 찾지 못하면 그 자리에서 터뜨린다.
+    """
+    first = _first_named_commit(repo, arc)
+    shas = _git(repo, 'log', '--reverse', '--format=%H', '--', 'docs/arcs.json').split('\n')
+    assert first in shas, '아크 %r 가 처음 선 커밋이 아크 값 정본의 이력에 없다' % arc
+    for sha in shas[shas.index(first):]:
+        rec = _arc_record_at(repo, sha, arc)
+        if rec is not None and rec.get('status') != 'reserved':
+            return sha
+    raise AssertionError('아크 %r 의 상태가 예약이 아닌 커밋을 찾지 못했다' % arc)
+
+
+def opening_holes(repo, arc):
+    """그 아크의 상태가 예약이 아닌 첫 커밋의 아크 값 정본이 든 그 아크의 구멍 배열.
+
+    패치 레코드가 구멍의 식별자를 필드로 들지 않으므로, 개막이 넣은 구멍을 개막 커밋에서 읽고 그 뒤에
+    아크의 구멍 배열에 든 것을 패치로 든 것으로 센다. 예약 커밋의 구멍 배열을 읽으면 예약 뒤에 연
+    아크에서 개막이 재개 트리거로 기계로 뽑아 넣은 구멍이 전부 패치로 든 것으로 세어진다.
+    """
+    rec = _arc_record_at(repo, opening_commit(repo, arc), arc)
+    return set(rec.get('holes') or [])
+
+
+def opening_holes_by_first_name(repo, arc):
+    """그 아크의 이름이 처음 선 커밋의 구멍 배열. 고치기 전의 유도이며 음성 대조가 맞대는 상대다."""
+    rec = _arc_record_at(repo, _first_named_commit(repo, arc), arc)
+    assert rec is not None, '아크 %r 가 처음 선 커밋의 아크 값 정본에 서지 않는다' % arc
+    return set(rec.get('holes') or [])
 
 
 def hole_rows(repo, arc):
@@ -182,3 +217,78 @@ def artifact_rows(repo):
 def norm(s):
     """공백과 대소문자와 구두점을 지운 변."""
     return re.sub(r'[\s·,.\'"“”‘’`()\[\]—–\-/:;]', '', s).lower()
+
+
+def compare_opening(repo):
+    """아크 전량에서 개막 구멍의 두 유도를 맞댄다. 갈리는 아크와 그 상태를 낸다.
+
+    유니버스는 받은 트리의 아크 값 정본이 드는 아크 가운데 예약이 아닌 것이다. 예약 상태의 아크는
+    개막 커밋이 없으므로 고친 유도가 터뜨리고, 그것은 유도의 결함이 아니라 아직 열리지 않았다는 뜻이다.
+    """
+    out = []
+    for rec in arcs(repo)['arcs']:
+        name = rec.get('name')
+        if rec.get('status') == 'reserved':
+            continue
+        old = opening_holes_by_first_name(repo, name)
+        new = opening_holes(repo, name)
+        out.append({'arc': name, 'status': rec.get('status'), 'old': sorted(old),
+                    'new': sorted(new), 'differs': old != new})
+    return out
+
+
+def selftest():
+    """합성 리포로 개막 구멍의 유도를 잰다. 단언이 서지 않으면 그 자리에서 터진다.
+
+    정방향의 대조는 예약 뒤에 연 아크에서 고치기 전의 유도가 예약 커밋의 빈 배열을 내고 고친 유도가
+    개막 커밋의 배열을 내는 것이다. 역방향의 대조는 예약 없이 선 아크에서 두 유도가 같은 값을 내는
+    것이다. 그 위에 개막 뒤의 패치로 든 구멍이 개막 구멍으로 세어지지 않는 것과, 예약만 된 아크에서
+    고친 유도가 터지는 것을 잰다.
+    """
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        root = Path(d)
+        (root / 'docs').mkdir()
+
+        def commit(recs, msg):
+            (root / 'docs' / 'arcs.json').write_text(
+                json.dumps({'arcs': recs, 'patches': []}, ensure_ascii=False, indent=1) + '\n')
+            _git(root, 'add', 'docs/arcs.json')
+            _git(root, '-c', 'user.name=selftest', '-c', 'user.email=selftest@example.invalid',
+                 'commit', '-q', '-m', msg)
+
+        _git(root, 'init', '-q')
+        commit([{'name': 'alpha', 'status': 'reserved', 'holes': []}], 'reserve alpha')
+        commit([{'name': 'alpha', 'status': 'open', 'holes': ['CF-1']},
+                {'name': 'beta', 'status': 'open', 'holes': ['CF-2']},
+                {'name': 'gamma', 'status': 'reserved', 'holes': []}], 'open alpha, beta')
+        commit([{'name': 'alpha', 'status': 'open', 'holes': ['CF-1', 'CF-3']},
+                {'name': 'beta', 'status': 'closed', 'holes': ['CF-2', 'CF-4']},
+                {'name': 'gamma', 'status': 'reserved', 'holes': []}], 'patch alpha, beta')
+        assert opening_holes_by_first_name(root, 'alpha') == set(), '정방향 대조의 출발점이 서지 않는다'
+        assert opening_holes(root, 'alpha') == {'CF-1'}, '예약 뒤에 연 아크의 개막 구멍이 다르다'
+        assert opening_holes_by_first_name(root, 'beta') == opening_holes(root, 'beta') == {'CF-2'}, \
+            '예약 없이 선 아크에서 두 유도가 갈린다'
+        try:
+            opening_holes(root, 'gamma')
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('예약만 된 아크에서 고친 유도가 터지지 않았다')
+    return ['정방향: 예약 뒤에 연 아크에서 빈 배열이 개막 배열로 바뀐다',
+            '역방향: 예약 없이 선 아크에서 두 유도가 같다',
+            '개막 뒤의 패치가 개막 구멍으로 세어지지 않는다',
+            '예약만 된 아크에서 고친 유도가 터진다']
+
+
+if __name__ == '__main__':
+    import sys
+    if sys.argv[1:] == ['selftest']:
+        for line in selftest():
+            print('OK', line)
+    elif sys.argv[1:2] == ['compare'] and len(sys.argv) == 3:
+        for row in compare_opening(sys.argv[2]):
+            print('%s\t%s\t%s\t%s\t%s' % (row['arc'], row['status'], 'differs' if row['differs'] else 'same',
+                                          ','.join(row['old']) or '-', ','.join(row['new']) or '-'))
+    else:
+        sys.exit('쓰는 꼴: python3 scripts/bp_measure.py selftest | compare <리포>')
