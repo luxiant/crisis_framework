@@ -34,7 +34,7 @@
 
 | 층 | 수 체계 | 기준선 | 측정 시점 |
 |---|---|---|---|
-| 회계층 | `ℤ` | `[propext, Quot.sound]` | `bypass1-6` (2026-11-28, `ed372b7`) |
+| 회계층 | `ℤ` | `[propext, Quot.sound]` | `bypass2-2` (2026-11-28, `caa2eff`) |
 | 회계층 | `ℚ` | `[propext, Classical.choice, Quot.sound]` | `holder-4` (2026-11-04, `849b1d1`) |
 | 정의층 | 무차원 + `ℕ` | `[propext, Quot.sound]` | `bypass1-6` (2026-11-28, `ed372b7`) |
 | 관측층 | 무차원 | `[]` | `bypass1-3` (2026-11-27, `c887ada`) |

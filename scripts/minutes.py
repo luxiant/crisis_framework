@@ -57,8 +57,9 @@ def phrase_present(phrase, haystack):
 
 # ---- 선언의 네 꼴. 어간에 활용 어미를 붙인 집합 ----
 NUM = r'`낙착-(\d+)-\((\d+)\)`'
+# 요지는 고정된 꼴을 낫표로 들 수 있으므로 요지를 고치는 꼴만 낫표를 한 겹 품는다
 DECL_PATTERNS = {
-    'amend_gist':  re.compile(NUM + r'\s*의 요지를 「([^」]+)」\s*로 고(?:친다|치고|쳐|치며|침)'),
+    'amend_gist':  re.compile(NUM + r'\s*의 요지를 「((?:[^「」]|「[^「」]*」)+)」\s*로 고(?:친다|치고|쳐|치며|침)'),
     'amend_kind':  re.compile(NUM + r'\s*의 갈래를 「([^」]+)」\s*로 고(?:친다|치고|쳐|치며|침)'),
     'strip_home':  re.compile(NUM + r'\s*의 거처에서 「([^」]+)」\s*를 걷(?:는다|고|어|으며|기)'),
     'retire':      re.compile(NUM + r'\s*[을를]\s*폐기(?:한다|하고|하며|하여|해|함)'),
@@ -86,11 +87,15 @@ HOMES = [
     '항해도 본편','항해도 부록','어디에도 가지 않음',
 ]
 # 긴 이름을 먼저 보아 항해도 부록이 부록으로도 세어지지 않게 한다. 거처를 더하는 회차는
-# 이 목록과 아래의 리포 안 목록을 함께 본다
+# 이 목록과 아래의 리포 안 목록 둘을 함께 본다
 HOMES_ORDERED = sorted(HOMES, key=len, reverse=True)
-IN_REPO = {'결정 레지스터','이연 레지스터','기각 레지스터','폐기 레지스터','CLAUDE.md',
-           'docs/baseline.md','docs/arcs.json','뭉치 인벤토리','읽기 대기열','추출 기록',
+# 원장은 검증기 코드와 Lean 논증 전개 코드를 쓰는 일과 그 설계를 정하는 판단만 받는다. 갈래가
+# 「없음」인데 거처가 앞의 목록을 들면 원장이 받을 부류의 조작이 원장에 서지 않은 것이므로 영을
+# 요구하고, 뒤의 목록을 들면 그 고침이 그 판단에 딸리는지가 요지를 읽어야 갈리므로 사람이 읽는다
+IN_REPO = {'결정 레지스터','이연 레지스터','기각 레지스터','폐기 레지스터','docs/arcs.json',
            'docs/decisions/SPEC.md','형식층의 선언','검증 스크립트','지속적 통합 워크플로'}
+IN_REPO_READ = {'CLAUDE.md','docs/baseline.md','뭉치 인벤토리','읽기 대기열','추출 기록'}
+assert not (IN_REPO & IN_REPO_READ) and (IN_REPO | IN_REPO_READ) <= set(HOMES)
 
 def _split_paragraphs(text):
     return re.split(r'\n\s*\n', text)
@@ -250,7 +255,7 @@ def detect(g, decls, text, ghosts=()):
     """적발 전량. 영을 요구하는 것과 전수로 읽는 것을 가른다."""
     out = {k: [] for k in ('near_decl','gist_count','kind_none_in_repo','reinforce_in_first',
                            'reinforce_gist_refs','gist_particle','decisions_only','ghost_decl',
-                           'kind_unread')}
+                           'kind_unread','kind_none_read')}
     # 폐기된 줄과 꼴에 맞는 선언이 든 짝은 유니버스 밖
     ok_pairs = {(d['target'], d['kind']) for d in decls}
     retired = {k for k, v in g.items() if v.get('retired')}
@@ -302,12 +307,15 @@ def detect(g, decls, text, ghosts=()):
             hits.append('아라비아 숫자')
         if hits:
             out['gist_count'].append((k, sorted(set(hits)), gist[:120]))
-    # (3) 갈래가 「없음」인데 거처가 리포 안. closure 와 회차 기록은 밖
+    # (3) 갈래가 「없음」인데 거처가 리포 안. closure 와 회차 기록과 설비 코드는 밖
     for k, v in sorted(g.items()):
         if v['kind'] in ('없음',) or (v['kind'] or '').startswith('흡수'):
             bad = [h for h in v['homes'] if h in IN_REPO]
             if bad and v['kind'] == '없음':
                 out['kind_none_in_repo'].append((k, bad))
+            rd = [h for h in v['homes'] if h in IN_REPO_READ]
+            if rd and v['kind'] == '없음':
+                out['kind_none_read'].append((k, rd, v['gist'][:100]))
     # (4) 보강·흡수 선언이 첫 굵은 문장에 선 것
     for k, v in sorted(g.items()):
         mb0 = BOLD.search(v['bodies'][0])
@@ -349,7 +357,8 @@ def detect(g, decls, text, ghosts=()):
 # 숫자로 잇는 꼴이 서 있으므로 소문자만 받으면 그 아크의 회의록 머리가 읽히지 않는다
 PHASE_HEAD = re.compile(r'^# 회의록 — `([a-z][a-z0-9]*-\d+)`', re.M)
 SELFNUM = re.compile(r'^`낙착-\d+-\(\d+\)`\s*')
-# 영을 요구하는 적발. 요지의 계수와 결정 레지스터 하나뿐인 거처는 사람이 읽는 목록이다
+# 영을 요구하는 적발. 요지의 계수와 결정 레지스터 하나뿐인 거처와 갈래가 「없음」인 채 읽을 자리를
+# 든 거처는 사람이 읽는 목록이다
 ZERO_AXES = ('near_decl', 'kind_none_in_repo', 'reinforce_in_first', 'reinforce_gist_refs',
              'gist_particle', 'ghost_decl', 'kind_unread')
 
@@ -449,7 +458,8 @@ def report(paths):
             'gates': gt, 'to_ledger': led,
             'findings_zero_required': {a: len(found[a]) for a in ZERO_AXES},
             'findings_to_read': {'gist_count': found['gist_count'],
-                                 'decisions_only': found['decisions_only']},
+                                 'decisions_only': found['decisions_only'],
+                                 'kind_none_read': found['kind_none_read']},
             'violations': zero,
             'decisions_detail': [{'id': '낙착-%d-(%d)' % k, 'kind': v.get('kind'),
                                   'homes': v['homes'], 'retired': bool(v.get('retired')),
@@ -553,6 +563,14 @@ def selftest():
             '**갈래는 「없음」이다. 거처는 「어디에도 가지 않음」이다.**',
             '**갈래는 「없음」이다. 거처는 `docs/arcs.json` 이다.**', 1),
          'kind_none_in_repo'),
+        ('갈래 없음인데 거처가 형식층', lambda t: t.replace(
+            '**갈래는 「없음」이다. 거처는 「어디에도 가지 않음」이다.**',
+            '**갈래는 「없음」이다. 거처는 형식층의 선언이고 회계층이다.**', 1),
+         'kind_none_in_repo'),
+        ('갈래 없음인데 거처가 읽을 자리', lambda t: t.replace(
+            '**갈래는 「없음」이다. 거처는 「어디에도 가지 않음」이다.**',
+            '**갈래는 「없음」이다. 거처는 `docs/baseline.md` 와 페이즈 closure 다.**', 1),
+         'kind_none_read'),
         ('없는 낙착을 드는 선언', lambda t: t.replace(
             '**`낙착-1-(2)` 의 갈래를', '**`낙착-99-(1)` 의 갈래를', 1),
          'ghost_decl'),
@@ -579,6 +597,40 @@ def selftest():
         fired = n1 > n0 or n1 == -1
         rows.append((name, axis, n0, n1, '발화' if fired else '미발화'))
         ok = ok and fired
+    # 읽을 자리를 든 「없음」은 읽을 목록에만 서고 영을 요구하는 축에 서지 않는다. 그 자리를 영을
+    # 요구하는 목록에 두던 판은 같은 주입에서 앞의 축을 세운다
+    t_rd = base.replace('**갈래는 「없음」이다. 거처는 「어디에도 가지 않음」이다.**',
+                        '**갈래는 「없음」이다. 거처는 `docs/baseline.md` 와 페이즈 closure 다.**', 1)
+    n_rd = len(_run(t_rd)[0]['kind_none_in_repo'])
+    saved_in = set(IN_REPO)
+    IN_REPO.update(IN_REPO_READ)
+    try:
+        n_old = len(_run(t_rd)[0]['kind_none_in_repo'])
+    finally:
+        IN_REPO.clear()
+        IN_REPO.update(saved_in)
+    rd_ok = n_rd == len(d0['kind_none_in_repo']) and n_old > n_rd
+    rows.append(('읽을 자리가 영 축 밖', 'kind_none_in_repo', n_rd, n_old, '발화' if rd_ok else '미발화'))
+    ok = ok and rd_ok
+    # 요지를 고치는 선언이 낫표를 한 겹 품은 요지를 받는다. 낫표를 품지 못하던 판은 그 선언을
+    # 적용하지 않고 어긋난 줄로 낸다
+    nested = '「보조 논증 판정:」 을 머리말로 둔 문단 하나로 둔다'
+    t_ng = base + '\n\n**`낙착-1-(5)` 의 요지를 「%s」 로 고친다.**\n' % nested
+    d_ng, g_ng = _run(t_ng)
+    saved_g = DECL_PATTERNS['amend_gist']
+    DECL_PATTERNS['amend_gist'] = re.compile(
+        NUM + r'\s*의 요지를 「([^」]+)」\s*로 고(?:친다|치고|쳐|치며|침)')
+    try:
+        d_og, g_og = _run(t_ng)
+    finally:
+        DECL_PATTERNS['amend_gist'] = saved_g
+    ng_ok = (g_ng[(1, 5)]['gist'] == nested
+             and len(d_ng['near_decl']) == len(d0['near_decl'])
+             and g_og[(1, 5)]['gist'] != nested
+             and len(d_og['near_decl']) > len(d0['near_decl']))
+    rows.append(('낫표를 품은 요지의 고침', 'near_decl', len(d_og['near_decl']),
+                 len(d_ng['near_decl']), '발화' if ng_ok else '미발화'))
+    ok = ok and ng_ok
     # 폐기 선언을 읽는 축. 요지가 그 낱말을 통상의 뜻으로 쓴 낙착이 자기를 폐기한 것으로 읽히지 않는다
     r0 = _retired(base)
     ret_ok = r0 == {(1, 6)}
